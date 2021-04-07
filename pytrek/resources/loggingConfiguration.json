@@ -1,0 +1,36 @@
+{
+    "version": 1,
+    "disable_existing_loggers": "False",
+    "formatters": {
+        "simple": {
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        },
+        "starTrekSimple": {
+            "format": "%(asctime)s.%(msecs)06d - %(levelname)s: %(module)s: %(message)s",
+            "datefmt" : "%H:%M:%S"
+        }
+    },
+    "handlers": {
+        "consoleHandler": {
+            "class":     "logging.StreamHandler",
+            "formatter": "starTrekSimple",
+            "stream":     "ext://sys.stdout"
+        }
+    },
+    "loggers": {
+        "root": {
+            "level": "ERROR",
+            "propagate": "False"
+        },
+        "PyTrek": {
+            "level":     "INFO",
+            "handlers":  ["consoleHandler"],
+            "propagate": "False"
+        },
+        "pytrek": {
+            "level":     "INFO",
+            "handlers":  ["consoleHandler"],
+            "propagate": "False"
+        }
+    }
+}
