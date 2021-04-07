@@ -9,7 +9,8 @@ import logging.config
 from json import load as jsonLoad
 
 import arcade
-from arcade import PhysicsEnginePlatformer
+# from arcade import PhysicsEnginePlatformer
+from arcade import PhysicsEngineSimple
 from arcade import SpriteList
 from arcade import Window
 
@@ -19,11 +20,13 @@ from arcade import key
 from arcade import set_background_color
 from arcade import start_render
 
+from pytrek.Constants import SCREEN_WIDTH
+from pytrek.Constants import SCREEN_HEIGHT
+
 from pytrek.Enterprise import Enterprise
 from pytrek.LocateResources import LocateResources
+from pytrek.QuadrantBackground import QuadrantBackground
 
-SCREEN_WIDTH:  int = 800
-SCREEN_HEIGHT: int = 600
 SCREEN_TITLE:  str = "PyTrek"
 GRAVITY:       int = 0          # We do not want our game pieces falling
 
@@ -46,7 +49,9 @@ class PyTrekWindow(Window):
         self._setupSystemLogging()
         self.logger: Logger = getLogger(PyTrekWindow.MADE_UP_PRETTY_MAIN_NAME)
 
-        set_background_color(color.BLACK)
+        set_background_color(color.LIGHT_GRAY)
+
+        self._backgroundSprite: QuadrantBackground = QuadrantBackground()
 
         self.enterprise: Enterprise = cast(Enterprise, None)
         # If you have sprite lists, you should create them here,
@@ -54,7 +59,8 @@ class PyTrekWindow(Window):
         self.playerList:     SpriteList = cast(SpriteList, None)
         self.hardSpriteList: SpriteList
 
-        self.physicsEngine: PhysicsEnginePlatformer = cast(PhysicsEnginePlatformer, None)
+        # self.physicsEngine: PhysicsEnginePlatformer = cast(PhysicsEnginePlatformer, None)
+        self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
 
     def setup(self):
         # Create your sprites and sprite lists here
@@ -67,7 +73,8 @@ class PyTrekWindow(Window):
         self.playerList.append(self.enterprise)
 
         # Create the 'physics engine'
-        self.physicsEngine = PhysicsEnginePlatformer(self.enterprise, self.hardSpriteList, gravity_constant=GRAVITY)
+        # self.physicsEngine = PhysicsEnginePlatformer(self.enterprise, self.hardSpriteList, gravity_constant=GRAVITY)
+        self.physicsEngine = PhysicsEngineSimple(self.enterprise, self.hardSpriteList)
 
         self.logger.info(f'Setup Complete')
 
@@ -81,6 +88,7 @@ class PyTrekWindow(Window):
         start_render()
 
         # Call draw() on all your sprite lists below
+        self._backgroundSprite.gridSpriteList.draw()
         self.playerList.draw()
 
     def on_update(self, delta_time):
