@@ -32,9 +32,9 @@ class Enterprise(Sprite):
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
                                                            resourcesPath=LocateResources.IMAGE_RESOURCES_PATH,
                                                            bareFileName='EnterpriseD.png')
-        texture = load_texture(fqFileName, flipped_horizontally=True)
-        self.textures.append(texture)
         texture = load_texture(fqFileName)
+        self.textures.append(texture)
+        texture = load_texture(fqFileName, flipped_horizontally=True)
         self.textures.append(texture)
 
         # By default, face right.
