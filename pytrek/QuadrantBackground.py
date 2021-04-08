@@ -10,18 +10,12 @@ from arcade import SpriteList
 from arcade import SpriteSolidColor
 from arcade import color
 
-from Constants import SCREEN_HEIGHT
-
-QUADRANT_GRID_WIDTH:  int = 640
-QUADRANT_GRID_HEIGHT: int = 640
-
-QUADRANT_PIXEL_HEIGHT: int = 64
-QUADRANT_PIXEL_WIDTH:  int = 64
-QUADRANT_Y_ADJUSTMENT: int = SCREEN_HEIGHT - QUADRANT_GRID_HEIGHT   # Adjustment from bottom
-
-QUADRANT_ROWS:    int = 10
-QUADRANT_COLUMNS: int = 10
-MARGIN: int = 1
+from pytrek.Constants import QUADRANT_COLUMNS
+from pytrek.Constants import QUADRANT_MARGIN
+from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
+from pytrek.Constants import QUADRANT_PIXEL_WIDTH
+from pytrek.Constants import QUADRANT_ROWS
+from pytrek.Constants import QUADRANT_Y_ADJUSTMENT
 
 SpriteRow  = NewType('SpriteRow', List[Sprite])
 SpriteGrid = NewType('SpriteGrid', List[SpriteRow])
@@ -41,12 +35,12 @@ class QuadrantBackground:
         # in gridSpriteList, just in a 2D manner.
         self._gridSprites: SpriteGrid = SpriteGrid([])
 
-        # Create a list of solid-color sprites to represent each grid location
+        # Create a list of solid-color sprites to represent each sector location
         for row in range(QUADRANT_ROWS):
             self._gridSprites.append([])
             for column in range(QUADRANT_COLUMNS):
-                x = column * (QUADRANT_PIXEL_WIDTH + MARGIN) + (QUADRANT_PIXEL_WIDTH / 2 + MARGIN)
-                y = row * (QUADRANT_PIXEL_HEIGHT + MARGIN) + (QUADRANT_PIXEL_HEIGHT / 2 + MARGIN)
+                x = column * (QUADRANT_PIXEL_WIDTH + QUADRANT_MARGIN) + (QUADRANT_PIXEL_WIDTH / 2 + QUADRANT_MARGIN)
+                y = row * (QUADRANT_PIXEL_HEIGHT + QUADRANT_MARGIN) + (QUADRANT_PIXEL_HEIGHT / 2 + QUADRANT_MARGIN)
                 y += QUADRANT_Y_ADJUSTMENT
                 sprite: SpriteSolidColor = SpriteSolidColor(QUADRANT_PIXEL_WIDTH, QUADRANT_PIXEL_HEIGHT, color.BLACK)
                 sprite.center_x = x

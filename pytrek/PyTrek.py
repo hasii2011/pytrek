@@ -82,7 +82,6 @@ class PyTrekWindow(Window):
         """
         Render the screen.
         """
-
         # This command should happen before we start drawing. It will clear
         # the screen to the background color, and erase what we drew last frame.
         start_render()

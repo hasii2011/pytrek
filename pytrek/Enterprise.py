@@ -47,7 +47,7 @@ class Enterprise(Sprite):
         # Figure out if we should face left or right
         if self.change_x < 0:
             self.texture = self.textures[TEXTURE_LEFT]
-            self.logger.info(f'TEXTURE_LEFT')
+            self.logger.debug(f'TEXTURE_LEFT')
         elif self.change_x > 0:
             self.texture = self.textures[TEXTURE_RIGHT]
-            self.logger.info(f'TEXTURE_RIGHT')
+            self.logger.debug(f'TEXTURE_RIGHT')
