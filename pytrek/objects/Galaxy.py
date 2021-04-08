@@ -23,11 +23,11 @@ class Galaxy(Singleton):
     Galaxy management
     """
 
-    def init(self, screen, intelligence, gameEngine):
+    def init(self, screen, gameEngine):
         """"""
         self.screen         = screen
-        self.intelligence   = intelligence
         self.gameEngine     = gameEngine
+        self.intelligence: Intelligence   = Intelligence()
 
         # self.stats          = GameStatistics()
         # self.settings       = Settings()
@@ -36,41 +36,30 @@ class Galaxy(Singleton):
         self.starBaseCount: int = 0
         self.planetCount:   int = 0
         # self.gameParameters:  GameStatistics = cast(GameStatistics, None)
-        self.currentQuadrant: Quadrant   = cast(Quadrant, None)
-        self.quadrants:       GalaxyGrid = GalaxyGrid([])  # 2D array aka python list
+        self._currentQuadrant: Quadrant   = cast(Quadrant, None)
+        self.quadrants:        GalaxyGrid = GalaxyGrid([])  # 2D array aka python list
 
-        self.createGalaxy()
+        self._createGalaxy()
 
         # self.placeKlingonsInGalaxy()
         # self.placeCommandersInGalaxy()
         # self.placeStarBasesInGalaxy()
-        # self.setInitialQuadrant()
-
-    def createGalaxy(self):
-
-        self.quadrants = []
-        for y in range(Constants.GALAXY_ROWS):
-            quadrantRow: QuadrantRow = QuadrantRow([])
-            for x in range(Constants.GALAXY_COLUMNS):
-                coordinates = Coordinates(x, y)
-                quadrant = Quadrant(coordinates)
-                quadrantRow.append(quadrant)
-                self.logger.warning(f"Created quadrant: ({x},{y})")
-            self.quadrants.append(quadrantRow)
+        self.setInitialQuadrant()
 
     def updateGalaxy(self):
         """"""
 
     def setInitialQuadrant(self):
         """"""
-        coordinates = self.intelligence.getRandomQuadrantCoordinates()
-        self.logger.info("Current Quadrant set to: %s", coordinates)
-        row = self.quadrants[coordinates.getX()]
-        self.currentQuadrant = row[coordinates.getY()]
+        coordinates: Coordinates = self.intelligence.generateQuadrantCoordinates()
+        self.logger.info(f'Current Quadrant set to: {coordinates}')
 
-    def getCurrentQuadrant(self) -> Quadrant:
-        """"""
-        return self.currentQuadrant
+        row: QuadrantRow = self.quadrants[coordinates.y]
+        self._currentQuadrant = row[coordinates.x]
+
+    @property
+    def currentQuadrant(self) -> Quadrant:
+        return self._currentQuadrant
 
     def placeKlingonsInGalaxy(self):
         """"""
@@ -115,3 +104,15 @@ class Galaxy(Singleton):
             for y in range(Intelligence.GALAXY_WIDTH):
                 quadrant = quadRow[y]
                 self.logger.debug("Quadrant(%s,%s) Klingon Count %s", x, y, str(quadrant.getKlingonCount()))
+
+    def _createGalaxy(self):
+
+        self.quadrants = []
+        for y in range(Constants.GALAXY_ROWS):
+            quadrantRow: QuadrantRow = QuadrantRow([])
+            for x in range(Constants.GALAXY_COLUMNS):
+                coordinates = Coordinates(x, y)
+                quadrant = Quadrant(coordinates)
+                quadrantRow.append(quadrant)
+                self.logger.debug(f"Created quadrant: ({x},{y})")
+            self.quadrants.append(quadrantRow)

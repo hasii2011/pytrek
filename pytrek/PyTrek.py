@@ -29,7 +29,10 @@ from pytrek.Constants import WINDOW_BORDER_HEIGHT
 
 from pytrek.Enterprise import Enterprise
 from pytrek.LocateResources import LocateResources
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.objects.Coordinates import Coordinates
 from pytrek.objects.Galaxy import Galaxy
+from pytrek.objects.Quadrant import Quadrant
 
 SCREEN_TITLE:  str = "PyTrek"
 GRAVITY:       int = 0          # We do not want our game pieces falling
@@ -59,7 +62,7 @@ class PyTrekWindow(Window):
 
         self.background = None
 
-        self.enterprise: Enterprise = cast(Enterprise, None)
+        self._enterprise: Enterprise = cast(Enterprise, None)
         # If you have sprite lists, you should create them here,
         # and set them to None
         self.playerList:     SpriteList = cast(SpriteList, None)
@@ -68,24 +71,37 @@ class PyTrekWindow(Window):
         # self.physicsEngine: PhysicsEnginePlatformer = cast(PhysicsEnginePlatformer, None)
         self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
 
-        self._galaxy: Galaxy = Galaxy(screen=None, intelligence=None, gameEngine=None)
+        self._intelligence: Intelligence = cast(Intelligence, None)
+        self._galaxy:       Galaxy       = cast(Galaxy, None)
+        self._quadrant:     Quadrant      = cast(Quadrant, None)
 
     def setup(self):
         # Create your sprites and sprite lists here
         self.playerList     = SpriteList()
         self.hardSpriteList = SpriteList()
 
-        self.enterprise = Enterprise()
-        self.enterprise.center_x = SCREEN_WIDTH // 2
-        self.enterprise.center_y = SCREEN_HEIGHT // 2
-        self.playerList.append(self.enterprise)
+        self._enterprise = Enterprise()
+        self._enterprise.center_x = SCREEN_WIDTH // 2
+        self._enterprise.center_y = SCREEN_HEIGHT // 2
+        self.playerList.append(self._enterprise)
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
                                                            bareFileName='QuadrantBackground.png')
         self.background = load_texture(fqFileName)
         # Create the 'physics engine'
         # self.physicsEngine = PhysicsEnginePlatformer(self.enterprise, self.hardSpriteList, gravity_constant=GRAVITY)
-        self.physicsEngine = PhysicsEngineSimple(self.enterprise, self.hardSpriteList)
+        self.physicsEngine = PhysicsEngineSimple(self._enterprise, self.hardSpriteList)
+
+        self._intelligence: Intelligence = Intelligence()
+        self._galaxy:       Galaxy       = Galaxy(screen=None, gameEngine=None)
+
+        self._quadrant: Quadrant = self._galaxy.currentQuadrant
+
+        # self.statistics.currentQuadrantCoordinates = self.galaxy.currentQuadrant.coordinates
+        # self.statistics.currentSectorCoordinates   = self.intelligence.getRandomSectorCoordinates()
+        currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
+
+        self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
         self.logger.info(f'Setup Complete')
 
@@ -123,26 +139,26 @@ class PyTrekWindow(Window):
         https://arcade.academy/arcade.key.html
         """
         if pressedKey == arcade.key.UP:
-            self.enterprise.change_y = MOVEMENT_SPEED
+            self._enterprise.change_y = MOVEMENT_SPEED
         elif pressedKey == arcade.key.DOWN:
-            self.enterprise.change_y = -MOVEMENT_SPEED
+            self._enterprise.change_y = -MOVEMENT_SPEED
         elif pressedKey == arcade.key.LEFT:
-            self.enterprise.change_x = -MOVEMENT_SPEED
+            self._enterprise.change_x = -MOVEMENT_SPEED
         elif pressedKey == arcade.key.RIGHT:
-            self.enterprise.change_x = MOVEMENT_SPEED
+            self._enterprise.change_x = MOVEMENT_SPEED
 
     def on_key_release(self, releasedKey, key_modifiers):
         """
         Called whenever the user lets off a previously pressed key.
         """
         if releasedKey == key.LEFT or releasedKey == key.A:
-            self.enterprise.change_x = 0
+            self._enterprise.change_x = 0
         elif releasedKey == key.RIGHT or releasedKey == key.D:
-            self.enterprise.change_x = 0
+            self._enterprise.change_x = 0
         elif releasedKey == key.UP or releasedKey == key.W:
-            self.enterprise.change_y = 0
+            self._enterprise.change_y = 0
         elif releasedKey == key.DOWN or releasedKey == key.X:
-            self.enterprise.change_y = 0
+            self._enterprise.change_y = 0
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         """

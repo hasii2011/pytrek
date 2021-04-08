@@ -4,10 +4,10 @@ from typing import List
 from logging import Logger
 from logging import getLogger
 
-from arcade import Sprite
 from arcade import load_texture
 from arcade import Texture
 
+from GamePiece import GamePiece
 from pytrek.LocateResources import LocateResources
 
 SPRITE_SCALING: float = 1.0
@@ -17,7 +17,7 @@ TEXTURE_LEFT:  int = 0
 TEXTURE_RIGHT: int = 1
 
 
-class Enterprise(Sprite):
+class Enterprise(GamePiece):
 
     def __init__(self):
 
