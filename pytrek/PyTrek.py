@@ -9,23 +9,26 @@ import logging.config
 from json import load as jsonLoad
 
 import arcade
-# from arcade import PhysicsEnginePlatformer
+
 from arcade import PhysicsEngineSimple
 from arcade import SpriteList
 from arcade import Window
 
-from arcade import color
 from arcade import key
 
-from arcade import set_background_color
+from arcade import draw_lrwh_rectangle_textured
+
+from arcade import load_texture
 from arcade import start_render
 
+from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
+from pytrek.Constants import WINDOW_BORDER_HEIGHT
 
 from pytrek.Enterprise import Enterprise
 from pytrek.LocateResources import LocateResources
-from pytrek.QuadrantBackground import QuadrantBackground
 
 SCREEN_TITLE:  str = "PyTrek"
 GRAVITY:       int = 0          # We do not want our game pieces falling
@@ -49,9 +52,11 @@ class PyTrekWindow(Window):
         self._setupSystemLogging()
         self.logger: Logger = getLogger(PyTrekWindow.MADE_UP_PRETTY_MAIN_NAME)
 
-        set_background_color(color.LIGHT_GRAY)
+        # set_background_color(color.LIGHT_GRAY)
 
-        self._backgroundSprite: QuadrantBackground = QuadrantBackground()
+        # self._backgroundSprite: QuadrantBackground = QuadrantBackground()
+
+        self.background = None
 
         self.enterprise: Enterprise = cast(Enterprise, None)
         # If you have sprite lists, you should create them here,
@@ -72,6 +77,10 @@ class PyTrekWindow(Window):
         self.enterprise.center_y = SCREEN_HEIGHT // 2
         self.playerList.append(self.enterprise)
 
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
+                                                           resourcesPath=LocateResources.IMAGE_RESOURCES_PATH,
+                                                           bareFileName='QuadrantBackground.png')
+        self.background = load_texture(fqFileName)
         # Create the 'physics engine'
         # self.physicsEngine = PhysicsEnginePlatformer(self.enterprise, self.hardSpriteList, gravity_constant=GRAVITY)
         self.physicsEngine = PhysicsEngineSimple(self.enterprise, self.hardSpriteList)
@@ -87,7 +96,12 @@ class PyTrekWindow(Window):
         start_render()
 
         # Call draw() on all your sprite lists below
-        self._backgroundSprite.gridSpriteList.draw()
+        # self._backgroundSprite.gridSpriteList.draw()
+        # Draw the background texture
+        draw_lrwh_rectangle_textured(bottom_left_x=0, bottom_left_y=CONSOLE_HEIGHT - WINDOW_BORDER_HEIGHT,
+                                     width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT,
+                                     texture=self.background)
+
         self.playerList.draw()
 
     def on_update(self, delta_time):
