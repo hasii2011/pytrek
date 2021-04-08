@@ -29,6 +29,7 @@ from pytrek.Constants import WINDOW_BORDER_HEIGHT
 
 from pytrek.Enterprise import Enterprise
 from pytrek.LocateResources import LocateResources
+from pytrek.objects.Galaxy import Galaxy
 
 SCREEN_TITLE:  str = "PyTrek"
 GRAVITY:       int = 0          # We do not want our game pieces falling
@@ -66,6 +67,8 @@ class PyTrekWindow(Window):
 
         # self.physicsEngine: PhysicsEnginePlatformer = cast(PhysicsEnginePlatformer, None)
         self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
+
+        self._galaxy: Galaxy = Galaxy(screen=None, intelligence=None, gameEngine=None)
 
     def setup(self):
         # Create your sprites and sprite lists here

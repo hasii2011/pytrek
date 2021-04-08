@@ -26,7 +26,7 @@ class TestIntelligence(TestBase):
 
     def testGetRandomSectorCoordinates(self):
         """"""
-        coordinates = self.smarty.getRandomSectorCoordinates()
+        coordinates = self.smarty.generateSectorCoordinates()
         self.assertIsNotNone(coordinates, "Should not be null")
         self.logger.info("random coordinates: '%s'", coordinates)
 

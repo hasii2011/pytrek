@@ -20,16 +20,25 @@
     "loggers": {
         "root": {
             "level": "ERROR",
-            "propagate": "False"
-        },
-        "IntelligenceTest": {
-            "level": "INFO",
             "handlers": ["consoleHandler"],
             "propagate": "False"
         },
-        "org.hasii.pytrek.engine.Intelligence": {
+        "TestIntelligence": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+        "tests.TestQuadrant": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+        "pytrek.engine.Intelligence": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+        "pytrek.objects.Quadrant": {
             "level": "INFO",
             "propagate": "False"
         }
+
     }
 }

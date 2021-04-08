@@ -11,10 +11,6 @@ from pytrek.Singleton import Singleton
 from pytrek.objects.Coordinates import Coordinates
 
 
-QUADRANT_HEIGHT: int = QUADRANT_ROWS
-QUADRANT_WIDTH:  int = QUADRANT_COLUMNS
-
-
 class Intelligence(Singleton):
 
     def init(self):
@@ -22,11 +18,12 @@ class Intelligence(Singleton):
         """
         self.logger:  Logger = getLogger(__name__)
 
-    def getRandomSectorCoordinates(self) -> Coordinates:
+    def generateSectorCoordinates(self) -> Coordinates:
         """
         Generate a random set of sector coordinates
         """
 
-        x = randrange(QUADRANT_HEIGHT)
-        y = randrange(QUADRANT_WIDTH)
-        return Coordinates(x, y)
+        x = randrange(QUADRANT_COLUMNS)
+        y = randrange(QUADRANT_ROWS)
+
+        return Coordinates(x=x, y=y)

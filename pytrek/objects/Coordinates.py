@@ -1,30 +1,16 @@
 
+from dataclasses import dataclass
+
 from pytrek.engine.Direction import Direction
 
 
+@dataclass
 class Coordinates:
-    """Base class for sector and quadrant coordinates"""
-
-    def __init__(self, x: int, y: int):
-        """"""
-        self._x = x
-        self._y = y
-
-    @property
-    def x(self) -> int:
-        return self._x
-
-    @x.setter
-    def x(self, theNewX: int):
-        self._x = theNewX
-
-    @property
-    def y(self, theNewY: int):
-        self._y = theNewY
-
-    @y.setter
-    def y(self) -> int:
-        return self._y
+    """
+    Base class for sector and quadrant coordinates
+    """
+    x: int = 0
+    y: int = 0
 
     def valid(self) -> bool:
         """
@@ -78,10 +64,10 @@ class Coordinates:
         return newCoordinates
 
     def __repr__(self):
-        return f"({self._x},{self._y})"
+        return f"({self.x},{self.y})"
 
     def __str__(self) -> str:
-        return f"({self._x},{self._y})"
+        return f"({self.x},{self.y})"
 
     def __eq__(self, other) -> bool:
         """"""
