@@ -78,7 +78,6 @@ class PyTrekWindow(Window):
         self.playerList.append(self.enterprise)
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                           resourcesPath=LocateResources.IMAGE_RESOURCES_PATH,
                                                            bareFileName='QuadrantBackground.png')
         self.background = load_texture(fqFileName)
         # Create the 'physics engine'
@@ -162,7 +161,6 @@ class PyTrekWindow(Window):
 
     def _setupSystemLogging(self):
         configFilePath: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.RESOURCES_PACKAGE_NAME,
-                                                               resourcesPath=LocateResources.RESOURCES_PATH,
                                                                bareFileName=LocateResources.JSON_LOGGING_CONFIG_FILENAME)
 
         with open(configFilePath, 'r') as loggingConfigurationFile:

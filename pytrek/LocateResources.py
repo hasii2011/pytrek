@@ -19,8 +19,14 @@ class LocateResources:
 
     JSON_LOGGING_CONFIG_FILENAME: str = "loggingConfiguration.json"
 
+    PACKAGE_TO_PATH_MAP: dict = {RESOURCES_PACKAGE_NAME:       RESOURCES_PATH,
+                                 FONT_RESOURCES_PACKAGE_NAME:  FONT_RESOURCES_PATH,
+                                 IMAGE_RESOURCES_PACKAGE_NAME: IMAGE_RESOURCES_PATH,
+                                 SOUND_RESOURCES_PACKAGE_NAME: SOUND_RESOURCES_PATH
+                                 }
+
     @staticmethod
-    def getResourcesPath(resourcePackageName: str, resourcesPath: str, bareFileName: str) -> str:
+    def getResourcesPath(resourcePackageName: str, bareFileName: str) -> str:
         # Use this method in Python 3.9
         # from importlib_resources import files
         # configFilePath: str  = files('org.hasii.pytrek.resources').joinpath(JSON_LOGGING_CONFIG_FILENAME)
@@ -32,6 +38,7 @@ class LocateResources:
             #
             from os import environ
             pathToResources: str = environ.get(f'{LocateResources.RESOURCE_ENV_VAR}')
+            resourcesPath:   str = LocateResources.PACKAGE_TO_PATH_MAP[resourcePackageName]
             fqFileName:      str = f'{pathToResources}/{resourcesPath}/{bareFileName}'
 
         return fqFileName

@@ -30,7 +30,6 @@ class Enterprise(Sprite):
         # Load a left facing texture and a right facing texture.
         # flipped_horizontally=True will mirror the image we load.
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                           resourcesPath=LocateResources.IMAGE_RESOURCES_PATH,
                                                            bareFileName='EnterpriseD.png')
         texture = load_texture(fqFileName)
         self.textures.append(texture)
