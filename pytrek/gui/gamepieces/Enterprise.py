@@ -32,13 +32,13 @@ class Enterprise(GamePiece):
         # flipped_horizontally=True will mirror the image we load.
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
                                                            bareFileName='EnterpriseD.png')
-        texture = load_texture(fqFileName)
-        self.textures.append(texture)
-        texture = load_texture(fqFileName, flipped_horizontally=True)
-        self.textures.append(texture)
+        leftTexture = load_texture(fqFileName)
+        self.textures.append(leftTexture)
+        rightTexture = load_texture(fqFileName, flipped_horizontally=True)
+        self.textures.append(rightTexture)
 
-        # By default, face right.
-        self.texture = texture
+        # By default, face left.
+        self.texture = leftTexture
 
     def update(self):
         self.center_x += self.change_x

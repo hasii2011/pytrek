@@ -3,8 +3,7 @@ from typing import cast
 
 from dataclasses import dataclass
 
-from arcade.sprite import Sprite
-
+from gui.gamepieces.GamePiece import GamePiece
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.SectorType import SectorType
 
@@ -12,7 +11,7 @@ from pytrek.model.SectorType import SectorType
 @dataclass
 class Sector:
 
-    sprite:      Sprite      = cast(Sprite, None)
+    sprite:      GamePiece   = cast(GamePiece, None)
     type:        SectorType  = SectorType.EMPTY
     coordinates: Coordinates = Coordinates(0, 0)
 

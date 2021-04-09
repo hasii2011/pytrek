@@ -4,14 +4,14 @@ from typing import List
 from typing import NewType
 from typing import cast
 
-from arcade import Sprite
-
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 
 from pytrek.engine.Intelligence import Intelligence
 
+
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Sector import Sector
@@ -64,13 +64,21 @@ class Quadrant:
 
         sector.type        = SectorType.ENTERPRISE
         sector.coordinates = coordinates
-        sector.sprite = enterprise
+        sector.sprite      = enterprise
 
         self.logger.info(f"Enterprise @sector: {coordinates}")
 
         self._enterprise = enterprise
-        enterprise.currentPosition = coordinates
+        enterprise.currentPosition  = coordinates
         self._enterpriseCoordinates = coordinates
+
+    @property
+    def enterpriseCoordinates(self):
+        return self._enterpriseCoordinates
+
+    @enterpriseCoordinates.setter
+    def enterpriseCoordinates(self, newCoordinates: Coordinates):
+        self._enterpriseCoordinates = newCoordinates
 
     def getSector(self, sectorCoordinates: Coordinates) -> Sector:
         """
@@ -107,7 +115,7 @@ class Quadrant:
             for x in range(QUADRANT_COLUMNS):
 
                 coordinates: Coordinates = Coordinates(x=x, y=y)
-                sector: Sector = Sector(sprite=cast(Sprite, None), type=SectorType.EMPTY, coordinates=coordinates)
+                sector: Sector = Sector(sprite=cast(GamePiece, None), type=SectorType.EMPTY, coordinates=coordinates)
                 row.append(sector)
                 self.logger.debug(f'Created empty sector ({x},{y})')
             self._sectors.append(row)

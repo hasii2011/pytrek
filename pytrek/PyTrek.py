@@ -12,12 +12,12 @@ import arcade
 
 from arcade import PhysicsEngineSimple
 from arcade import SpriteList
+from arcade import Texture
 from arcade import Window
 
 from arcade import key
 
 from arcade import draw_lrwh_rectangle_textured
-
 from arcade import load_texture
 from arcade import start_render
 
@@ -25,7 +25,6 @@ from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
-from pytrek.Constants import WINDOW_BORDER_HEIGHT
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 
@@ -36,6 +35,8 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
+
+from pytrek.mediators.MediatorQuadrant import MediatorQuadrant
 
 SCREEN_TITLE:  str = "PyTrek"
 GRAVITY:       int = 0          # We do not want our game pieces falling
@@ -60,11 +61,8 @@ class PyTrekWindow(Window):
         self.logger: Logger = getLogger(PyTrekWindow.MADE_UP_PRETTY_MAIN_NAME)
 
         # set_background_color(color.LIGHT_GRAY)
-
-        # self._backgroundSprite: QuadrantBackground = QuadrantBackground()
-
-        self.background = None
-
+        # self._backgroundSprite: QuadrantBackground = cast(QuadrantBackground, None)
+        self.background:  Texture    = cast(Texture, None)
         self._enterprise: Enterprise = cast(Enterprise, None)
         # If you have sprite lists, you should create them here,
         # and set them to None
@@ -76,16 +74,16 @@ class PyTrekWindow(Window):
 
         self._intelligence: Intelligence = cast(Intelligence, None)
         self._galaxy:       Galaxy       = cast(Galaxy, None)
-        self._quadrant:     Quadrant      = cast(Quadrant, None)
+        self._quadrant:     Quadrant     = cast(Quadrant, None)
 
     def setup(self):
         # Create your sprites and sprite lists here
         self.playerList     = SpriteList()
         self.hardSpriteList = SpriteList()
 
+        # self._backgroundSprite: QuadrantBackground = QuadrantBackground()
+
         self._enterprise = Enterprise()
-        self._enterprise.center_x = SCREEN_WIDTH // 2
-        self._enterprise.center_y = SCREEN_HEIGHT // 2
         self.playerList.append(self._enterprise)
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
@@ -106,6 +104,8 @@ class PyTrekWindow(Window):
 
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
+        self._quadrantMediator: MediatorQuadrant = MediatorQuadrant()
+
         self.logger.info(f'Setup Complete')
 
     def on_draw(self):
@@ -119,9 +119,8 @@ class PyTrekWindow(Window):
         # Call draw() on all your sprite lists below
         # self._backgroundSprite.gridSpriteList.draw()
         # Draw the background texture
-        draw_lrwh_rectangle_textured(bottom_left_x=0, bottom_left_y=CONSOLE_HEIGHT - WINDOW_BORDER_HEIGHT,
-                                     width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT,
-                                     texture=self.background)
+        draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_HEIGHT,
+                                     width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
 
         self.playerList.draw()
 
@@ -132,6 +131,7 @@ class PyTrekWindow(Window):
         need it.
         """
         self.physicsEngine.update()
+        self._quadrantMediator.update(quadrant=self._quadrant)
         self.playerList.update()
 
     def on_key_press(self, pressedKey, key_modifiers):
@@ -168,6 +168,7 @@ class PyTrekWindow(Window):
         Called whenever the mouse moves.
         """
         pass
+        # print(f'Mouse ({x},{y})')
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         """

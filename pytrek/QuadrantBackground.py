@@ -40,7 +40,7 @@ class QuadrantBackground:
             self._gridSprites.append([])
             for column in range(QUADRANT_COLUMNS):
                 x = column * (QUADRANT_PIXEL_WIDTH + QUADRANT_MARGIN) + (QUADRANT_PIXEL_WIDTH / 2 + QUADRANT_MARGIN)
-                y = row * (QUADRANT_PIXEL_HEIGHT + QUADRANT_MARGIN) + (QUADRANT_PIXEL_HEIGHT / 2 + QUADRANT_MARGIN)
+                y = row *    (QUADRANT_PIXEL_HEIGHT + QUADRANT_MARGIN) + (QUADRANT_PIXEL_HEIGHT / 2 + QUADRANT_MARGIN)
                 y += QUADRANT_Y_ADJUSTMENT
                 sprite: SpriteSolidColor = SpriteSolidColor(QUADRANT_PIXEL_WIDTH, QUADRANT_PIXEL_HEIGHT, color.BLACK)
                 sprite.center_x = x
