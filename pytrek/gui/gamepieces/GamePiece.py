@@ -7,7 +7,7 @@ from pytrek.Constants import STANDARD_SPRITE_HEIGHT
 from pytrek.Constants import STANDARD_SPRITE_WIDTH
 from pytrek.Constants import STANDARD_X_ADJUSTMENT
 from pytrek.Constants import STANDARD_Y_ADJUSTMENT
-from pytrek.objects.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 class GamePiece(Sprite):

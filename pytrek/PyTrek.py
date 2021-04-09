@@ -27,12 +27,15 @@ from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import WINDOW_BORDER_HEIGHT
 
-from pytrek.Enterprise import Enterprise
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+
 from pytrek.LocateResources import LocateResources
+
 from pytrek.engine.Intelligence import Intelligence
-from pytrek.objects.Coordinates import Coordinates
-from pytrek.objects.Galaxy import Galaxy
-from pytrek.objects.Quadrant import Quadrant
+
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
 
 SCREEN_TITLE:  str = "PyTrek"
 GRAVITY:       int = 0          # We do not want our game pieces falling

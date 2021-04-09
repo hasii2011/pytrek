@@ -8,11 +8,14 @@ from arcade import Sprite
 
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
-from pytrek.Enterprise import Enterprise
+
 from pytrek.engine.Intelligence import Intelligence
-from pytrek.objects.Coordinates import Coordinates
-from pytrek.objects.Sector import Sector
-from pytrek.objects.SectorType import SectorType
+
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Sector import Sector
+from pytrek.model.SectorType import SectorType
 
 
 SectorRow    = NewType('SectorRow', List[Sector])

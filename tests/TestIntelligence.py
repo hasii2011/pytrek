@@ -6,7 +6,9 @@ from unittest import TestSuite
 from unittest import main as unitTestMain
 
 from pytrek.engine.Intelligence import Intelligence
-from pytrek.objects.Coordinates import Coordinates
+
+from pytrek.model.Coordinates import Coordinates
+
 from tests.TestBase import TestBase
 
 

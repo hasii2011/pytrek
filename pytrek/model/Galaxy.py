@@ -3,14 +3,17 @@ from typing import NewType
 from typing import cast
 from typing import List
 
-import logging
+from logging import Logger
+from logging import getLogger
 
-# from org.hasii.pytrek.Settings import Settings
 from pytrek import Constants
+
 from pytrek.Singleton import Singleton
+
 from pytrek.engine.Intelligence import Intelligence
-from pytrek.objects.Coordinates import Coordinates
-from pytrek.objects.Quadrant import Quadrant
+
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Quadrant import Quadrant
 
 # from org.hasii.pytrek.GameStatistics import GameStatistics
 
@@ -31,7 +34,7 @@ class Galaxy(Singleton):
 
         # self.stats          = GameStatistics()
         # self.settings       = Settings()
-        self.logger         = logging.getLogger(__name__)
+        self.logger: Logger = getLogger(__name__)
 
         self.starBaseCount: int = 0
         self.planetCount:   int = 0

@@ -10,7 +10,7 @@ from pytrek.Constants import QUADRANT_ROWS
 
 from pytrek.Singleton import Singleton
 
-from pytrek.objects.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 class Intelligence(Singleton):

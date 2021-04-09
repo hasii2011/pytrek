@@ -5,8 +5,8 @@ from dataclasses import dataclass
 
 from arcade.sprite import Sprite
 
-from pytrek.objects.Coordinates import Coordinates
-from pytrek.objects.SectorType import SectorType
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.SectorType import SectorType
 
 
 @dataclass

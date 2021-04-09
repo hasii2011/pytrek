@@ -5,12 +5,12 @@ from logging import getLogger
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.objects.Coordinates import Coordinates
-from pytrek.objects.Sector import Sector
-from pytrek.objects.SectorType import SectorType
-from tests.TestBase import TestBase
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Sector import Sector
+from pytrek.model.SectorType import SectorType
+from pytrek.model.Quadrant import Quadrant
 
-from pytrek.objects.Quadrant import Quadrant
+from tests.TestBase import TestBase
 
 
 class TestQuadrant(TestBase):

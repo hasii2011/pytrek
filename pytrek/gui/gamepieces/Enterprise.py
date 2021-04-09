@@ -7,7 +7,8 @@ from logging import getLogger
 from arcade import load_texture
 from arcade import Texture
 
-from GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePiece import GamePiece
+
 from pytrek.LocateResources import LocateResources
 
 SPRITE_SCALING: float = 1.0
