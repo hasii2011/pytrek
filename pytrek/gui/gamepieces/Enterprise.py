@@ -40,6 +40,16 @@ class Enterprise(GamePiece):
         # By default, face left.
         self.texture = leftTexture
 
+        self._destination_point = None
+
+    @property
+    def destination_point(self):
+        return self._destination_point
+
+    @destination_point.setter
+    def destination_point(self, destination_point):
+        self._destination_point = destination_point
+
     def update(self):
         self.center_x += self.change_x
         self.center_y += self.change_y

@@ -3,7 +3,7 @@ from typing import cast
 
 from dataclasses import dataclass
 
-from gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.SectorType import SectorType
 

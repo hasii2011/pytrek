@@ -25,6 +25,7 @@ from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
+from pytrek.engine.Computer import Computer
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 
@@ -73,6 +74,7 @@ class PyTrekWindow(Window):
         self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
 
         self._intelligence: Intelligence = cast(Intelligence, None)
+        self._computer:     Computer     = cast(Computer, None)
         self._galaxy:       Galaxy       = cast(Galaxy, None)
         self._quadrant:     Quadrant     = cast(Quadrant, None)
 
@@ -93,8 +95,9 @@ class PyTrekWindow(Window):
         # self.physicsEngine = PhysicsEnginePlatformer(self.enterprise, self.hardSpriteList, gravity_constant=GRAVITY)
         self.physicsEngine = PhysicsEngineSimple(self._enterprise, self.hardSpriteList)
 
-        self._intelligence: Intelligence = Intelligence()
-        self._galaxy:       Galaxy       = Galaxy(screen=None, gameEngine=None)
+        self._intelligence = Intelligence()
+        self._computer     = Computer()
+        self._galaxy       = Galaxy(screen=None, gameEngine=None)
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
 
@@ -174,7 +177,10 @@ class PyTrekWindow(Window):
         """
         Called when the user presses a mouse button.
         """
-        pass
+        if button == arcade.MOUSE_BUTTON_RIGHT:
+            coordinates: Coordinates = self._computer.computeSectorCoordinates(x=round(x), y=round(y))
+
+            self._quadrant.enterpriseCoordinates = coordinates
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """

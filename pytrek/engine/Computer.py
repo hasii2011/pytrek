@@ -1,7 +1,8 @@
 
-from typing import cast
+from logging import Logger
+from logging import getLogger
 
-from arcade import Sprite
+import math
 
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
@@ -13,21 +14,42 @@ from pytrek.Constants import QUADRANT_ROWS
 
 from pytrek.model.Coordinates import Coordinates
 
+from pytrek.Singleton import Singleton
 
-class GamePiece(Sprite):
 
-    def __init__(self):
-        super().__init__()
+class Computer(Singleton):
+    """
+    Make a computer a singleton so we don't have to pass it around
+    """
+    QUADRANT_TRAVEL_FACTOR = 0.1
+    GALACTIC_TRAVEL_FACTOR = 1.0
 
-        self._currentPosition: Coordinates = cast(Coordinates, None)
+    def init(self):
 
-    @property
-    def currentPosition(self) -> Coordinates:
-        return self._currentPosition
+        #  self.settings = Settings()
+        self.logger: Logger = getLogger(__name__)
 
-    @currentPosition.setter
-    def currentPosition(self, newValue: Coordinates):
-        self._currentPosition = newValue
+    def computeSectorCoordinates(self, x: int, y: int) -> Coordinates:
+        """
+        From an arcade screen position determine which sector in quadrant
+        """
+        return self.computeCoordinates(x=x, y=y)
+
+    def computeQuadrantCoordinates(self, x: int, y: int) -> Coordinates:
+        return self.computeCoordinates(x=x, y=y)
+
+    def computeCoordinates(self, x: int, y: int) -> Coordinates:
+
+        adjustY: int = y - CONSOLE_HEIGHT
+
+        gameX = int(math.floor(x // QUADRANT_PIXEL_WIDTH))
+        gameY = int(math.floor(adjustY // QUADRANT_PIXEL_HEIGHT))
+
+        adjustedGameY: int = (QUADRANT_ROWS - gameY) - 1
+
+        coordinates = Coordinates(gameX, adjustedGameY)
+
+        return coordinates
 
     @classmethod
     def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates):

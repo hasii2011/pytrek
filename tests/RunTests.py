@@ -10,6 +10,7 @@ from unittest.suite import TestSuite
 # from tests.ExplosionColorTest import ExplosionColorTest
 # from tests.GameEngineTest import GameEngineTest
 # from tests.GameStatisticsTest import GameStatisticsTest
+from tests.TestComputer import TestComputer
 from tests.TestQuadrant import TestQuadrant
 # from tests.SettingsTest import SettingsTest
 from tests.TestIntelligence import TestIntelligence
@@ -32,7 +33,7 @@ def createTestSuite() -> TestSuite:
     # testSuite.addTest(loader.loadTestsFromTestCase(GameEngineTest))
     # testSuite.addTest(loader.loadTestsFromTestCase(GameStatisticsTest))
     testSuite.addTest(loader.loadTestsFromTestCase(TestIntelligence))
-    # testSuite.addTest(loader.loadTestsFromTestCase(KlingonPowerTest))
+    testSuite.addTest(loader.loadTestsFromTestCase(TestComputer))
     testSuite.addTest(loader.loadTestsFromTestCase(TestQuadrant))
     # testSuite.addTest(loader.loadTestsFromTestCase(SettingsTest))
 
