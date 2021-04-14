@@ -7,7 +7,9 @@ from logging import getLogger
 from arcade import load_texture
 from arcade import Texture
 
+from pytrek.engine.ArcadePosition import ArcadePosition
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
 from pytrek.LocateResources import LocateResources
 
@@ -18,11 +20,12 @@ TEXTURE_LEFT:  int = 0
 TEXTURE_RIGHT: int = 1
 
 
-class Enterprise(GamePiece):
+class Enterprise(GamePiece, SmoothMotion):
 
     def __init__(self):
 
-        super().__init__()
+        GamePiece.__init__(self)
+        SmoothMotion.__init__(self)
 
         self.scale:    float         = SPRITE_SCALING
         self.textures: List[Texture] = []
@@ -51,13 +54,10 @@ class Enterprise(GamePiece):
         self._destination_point = destination_point
 
     def update(self):
-        self.center_x += self.change_x
-        self.center_y += self.change_y
 
-        # Figure out if we should face left or right
-        if self.change_x < 0:
-            self.texture = self.textures[TEXTURE_LEFT]
-            self.logger.debug(f'TEXTURE_LEFT')
-        elif self.change_x > 0:
-            self.texture = self.textures[TEXTURE_RIGHT]
-            self.logger.debug(f'TEXTURE_RIGHT')
+        if self.inMotion is True:
+            actualAngleRadians, angleDiffRadians = self.computeArcadeMotion(currentPoint=ArcadePosition(x=self.center_x, y=self.center_y),
+                                                                            destinationPoint=self.destination_point,
+                                                                            spriteRotationAngle=self.angle,
+                                                                            rotationalSpeed=self.rotationSpeed)
+            self.doMotion(gamePiece=self, destinationPoint=self.destination_point, angleDiffRadians=angleDiffRadians, actualAngleRadians=actualAngleRadians)

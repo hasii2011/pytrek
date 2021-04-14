@@ -5,11 +5,11 @@ from logging import getLogger
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from tests.TestBase import TestBase
-
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.engine.Computer import Computer
+
+from tests.TestBase import TestBase
 
 
 class TestComputer(TestBase):

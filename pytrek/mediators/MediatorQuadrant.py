@@ -5,6 +5,7 @@ from typing import cast
 
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
+from pytrek.engine.ArcadePosition import ArcadePosition
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 
@@ -35,8 +36,14 @@ class MediatorQuadrant(Singleton):
                 if sectorType != SectorType.EMPTY:
                     if sectorType == SectorType.ENTERPRISE:
                         enterprise: Enterprise = cast(Enterprise, gamePiece)
-                        arcadeX, arcadeY = GamePiece.gamePositionToScreenPosition(quadrant.enterpriseCoordinates)
 
-                        self.logger.debug(f'Enterprise on grid: ({arcadeX},{arcadeY})')
-                        enterprise.center_x = arcadeX
-                        enterprise.center_y = arcadeY
+                        arcadeX, arcadeY = GamePiece.gamePositionToScreenPosition(quadrant.enterpriseCoordinates)
+                        if enterprise.inMotion is True:
+
+                            self.logger.debug(f'Enterprise arcade position: ({arcadeX},{arcadeY})')
+                            enterprise.destination_point = ArcadePosition(x=arcadeX, y=arcadeY)
+                            enterprise.update()
+                        else:
+                            enterprise.center_x = arcadeX
+                            enterprise.center_y = arcadeY
+

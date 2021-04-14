@@ -56,9 +56,11 @@ class PyTrekWindow(Window):
     MADE_UP_PRETTY_MAIN_NAME:     str = "PyTrek"
 
     def __init__(self, width: int, height: int, title: str):
-        super().__init__(width, height, title)
 
         self._setupSystemLogging()
+
+        super().__init__(width, height, title)
+
         self.logger: Logger = getLogger(PyTrekWindow.MADE_UP_PRETTY_MAIN_NAME)
 
         # set_background_color(color.LIGHT_GRAY)
@@ -180,6 +182,7 @@ class PyTrekWindow(Window):
         if button == arcade.MOUSE_BUTTON_RIGHT:
             coordinates: Coordinates = self._computer.computeSectorCoordinates(x=round(x), y=round(y))
 
+            self._quadrant.enterprise.inMotion = True
             self._quadrant.enterpriseCoordinates = coordinates
 
     def on_mouse_release(self, x, y, button, key_modifiers):

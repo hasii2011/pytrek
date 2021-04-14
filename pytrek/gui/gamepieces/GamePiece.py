@@ -21,6 +21,15 @@ class GamePiece(Sprite):
 
         self._currentPosition: Coordinates = cast(Coordinates, None)
 
+        self._speed: float = 2
+        """
+        Max speed
+        """
+        self._rotationSpeed: float = 3
+        """
+        Max speed we can rotate
+        """
+
     @property
     def currentPosition(self) -> Coordinates:
         return self._currentPosition
@@ -28,6 +37,22 @@ class GamePiece(Sprite):
     @currentPosition.setter
     def currentPosition(self, newValue: Coordinates):
         self._currentPosition = newValue
+
+    @property
+    def speed(self) -> float:
+        return self._speed
+
+    @speed.setter
+    def speed(self, newValue: float):
+        self._speed = newValue
+
+    @property
+    def rotationSpeed(self) -> float:
+        return self._rotationSpeed
+
+    @rotationSpeed.setter
+    def rotationSpeed(self, newValue: float):
+        self._rotationSpeed = newValue
 
     @classmethod
     def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates):

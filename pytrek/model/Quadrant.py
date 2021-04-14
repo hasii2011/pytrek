@@ -73,6 +73,15 @@ class Quadrant:
         self._enterpriseCoordinates = coordinates
 
     @property
+    def enterprise(self) -> Enterprise:
+        """
+        Read only property
+
+        Returns:  The Enterprise Sprite
+        """
+        return self._enterprise
+
+    @property
     def enterpriseCoordinates(self):
         return self._enterpriseCoordinates
 

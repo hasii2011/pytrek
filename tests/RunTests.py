@@ -15,6 +15,7 @@ from tests.TestQuadrant import TestQuadrant
 # from tests.SettingsTest import SettingsTest
 from tests.TestIntelligence import TestIntelligence
 # from tests.KlingonPowerTest import KlingonPowerTest
+from tests.TestSmoothMotion import TestSmoothMotion
 
 
 def createTestSuite() -> TestSuite:
@@ -35,7 +36,8 @@ def createTestSuite() -> TestSuite:
     testSuite.addTest(loader.loadTestsFromTestCase(TestIntelligence))
     testSuite.addTest(loader.loadTestsFromTestCase(TestComputer))
     testSuite.addTest(loader.loadTestsFromTestCase(TestQuadrant))
-    # testSuite.addTest(loader.loadTestsFromTestCase(SettingsTest))
+    testSuite.addTest(loader.loadTestsFromTestCase(TestQuadrant))
+    testSuite.addTest(loader.loadTestsFromTestCase(TestSmoothMotion))
 
     return testSuite
 

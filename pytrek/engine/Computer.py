@@ -1,4 +1,6 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
 
@@ -11,6 +13,8 @@ from pytrek.Constants import QUADRANT_MARGIN
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_ROWS
+from pytrek.engine.ArcadePosition import ArcadePosition
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.model.Coordinates import Coordinates
 
@@ -21,8 +25,8 @@ class Computer(Singleton):
     """
     Make a computer a singleton so we don't have to pass it around
     """
-    QUADRANT_TRAVEL_FACTOR = 0.1
-    GALACTIC_TRAVEL_FACTOR = 1.0
+    QUADRANT_TRAVEL_FACTOR: float = 0.1
+    GALACTIC_TRAVEL_FACTOR: float = 1.0
 
     def init(self):
 
@@ -69,3 +73,4 @@ class Computer(Singleton):
         y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + yMargins + CONSOLE_HEIGHT
 
         return x, y
+

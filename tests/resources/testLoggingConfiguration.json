@@ -27,7 +27,15 @@
             "level": "INFO",
             "propagate": "False"
         },
-        "tests.TestQuadrant": {
+        "TestComputer": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+        "TestQuadrant": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+        "TestSmoothMotion": {
             "level": "INFO",
             "propagate": "False"
         },
@@ -36,6 +44,10 @@
             "propagate": "False"
         },
         "pytrek.objects.Quadrant": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+        "pytrek.gui.gamepieces.SmoothMotion": {
             "level": "INFO",
             "propagate": "False"
         }
