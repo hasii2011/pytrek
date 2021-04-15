@@ -4,7 +4,9 @@ from dataclasses import dataclass
 
 @dataclass
 class ArcadePosition:
-
+    """
+    Represent the position of arcade sprites.
+    """
     x: float = 0.0
     y: float = 0.0
 

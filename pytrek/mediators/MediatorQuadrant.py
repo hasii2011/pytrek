@@ -41,7 +41,7 @@ class MediatorQuadrant(Singleton):
                         if enterprise.inMotion is True:
 
                             self.logger.debug(f'Enterprise arcade position: ({arcadeX},{arcadeY})')
-                            enterprise.destination_point = ArcadePosition(x=arcadeX, y=arcadeY)
+                            enterprise.destinationPoint = ArcadePosition(x=arcadeX, y=arcadeY)
                             enterprise.update()
                         else:
                             enterprise.center_x = arcadeX

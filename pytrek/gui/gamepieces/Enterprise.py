@@ -43,21 +43,11 @@ class Enterprise(GamePiece, SmoothMotion):
         # By default, face left.
         self.texture = leftTexture
 
-        self._destination_point = None
-
-    @property
-    def destination_point(self):
-        return self._destination_point
-
-    @destination_point.setter
-    def destination_point(self, destination_point):
-        self._destination_point = destination_point
-
     def update(self):
 
         if self.inMotion is True:
             actualAngleRadians, angleDiffRadians = self.computeArcadeMotion(currentPoint=ArcadePosition(x=self.center_x, y=self.center_y),
-                                                                            destinationPoint=self.destination_point,
+                                                                            destinationPoint=self.destinationPoint,
                                                                             spriteRotationAngle=self.angle,
                                                                             rotationalSpeed=self.rotationSpeed)
-            self.doMotion(gamePiece=self, destinationPoint=self.destination_point, angleDiffRadians=angleDiffRadians, actualAngleRadians=actualAngleRadians)
+            self.doMotion(gamePiece=self, destinationPoint=self.destinationPoint, angleDiffRadians=angleDiffRadians, actualAngleRadians=actualAngleRadians)
