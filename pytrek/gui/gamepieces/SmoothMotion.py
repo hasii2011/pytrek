@@ -29,6 +29,10 @@ class SmoothMotion:
         """
         True if we are moving, else False
         """
+        self._destinationPoint: ArcadePosition = cast(ArcadePosition, None)
+        """
+        The arcade game library final destination screen position if the game piece is in motion
+        """
 
     @property
     def inMotion(self) -> bool:
@@ -37,6 +41,18 @@ class SmoothMotion:
     @inMotion.setter
     def inMotion(self, newValue: bool):
         self._inMotion = newValue
+
+    @property
+    def destinationPoint(self) -> ArcadePosition:
+        """
+        Use for game piece motion.  This this the the ArcadePosition.
+        Returns:
+        """
+        return self._destinationPoint
+
+    @destinationPoint.setter
+    def destinationPoint(self, destinationPoint: ArcadePosition):
+        self._destinationPoint = destinationPoint
 
     def doMotion(self, gamePiece: GamePiece, destinationPoint: ArcadePosition, angleDiffRadians: float, actualAngleRadians: float):
 
@@ -67,9 +83,9 @@ class SmoothMotion:
 
         # If we have arrived, then cancel our destinationPoint point
         if not traveling:
-            self._destination_point = None
-            self._inMotion = False
-            gamePiece.angle = 0
+            self.destinationPoint = None
+            self._inMotion        = False
+            gamePiece.angle       = 0
 
     def computeArcadeMotion(self, currentPoint: ArcadePosition, destinationPoint: ArcadePosition, spriteRotationAngle: float, rotationalSpeed: float):
         """

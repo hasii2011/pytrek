@@ -31,10 +31,6 @@ class GamePiece(Sprite):
         """
         Max speed we can rotate
         """
-        self._destinationPoint: ArcadePosition = cast(ArcadePosition, None)
-        """
-        The arcade game library screen position
-        """
 
     @property
     def currentPosition(self) -> Coordinates:
@@ -63,18 +59,6 @@ class GamePiece(Sprite):
     @rotationSpeed.setter
     def rotationSpeed(self, newValue: float):
         self._rotationSpeed = newValue
-
-    @property
-    def destinationPoint(self) -> ArcadePosition:
-        """
-        Use for game piece motion.  This this the the ArcadePosition.
-        Returns:
-        """
-        return self._destinationPoint
-
-    @destinationPoint.setter
-    def destinationPoint(self, destinationPoint: ArcadePosition):
-        self._destinationPoint = destinationPoint
 
     @classmethod
     def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates):
