@@ -22,7 +22,7 @@ python:
   - "3.9.1"
 
 before_install:
-  - sudo apt install libjpeg-dev zlib1g-dev
+  - sudo apt install libjpeg-dev zlib1g-dev freeglut3-dev
 
 # command to install dependencies
 install:
