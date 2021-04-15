@@ -2,6 +2,14 @@
 # os: osx
 
 # osx_image: xcode11.2
+notifications:
+  email:
+    recipients:
+      - humberto.a.sanchez.ii@gmail.com
+    on_success: change # default: change
+    on_failure: always # default: always
+
+dist: bionic
 
 language: python
 
@@ -13,8 +21,8 @@ python:
 # command to install dependencies
 install:
   - python3 --version
-  - pip3 install arcade
   - pip3 install jsonpickle
+  - pip3 install arcade
 
 # command to run tests
 script: ${TRAVIS_BUILD_DIR}/scripts/runtests.sh
