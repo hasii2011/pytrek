@@ -15,12 +15,19 @@ language: python
 
 cache: pip
 
+services:
+  - xvfb
+
 python:
   - "3.9.1"
+
+before_install:
+  - sudo apt install libjpeg-dev zlib1g-dev
 
 # command to install dependencies
 install:
   - python3 --version
+  - pip3 install pyglet
   - pip3 install jsonpickle
   - pip3 install arcade
 
