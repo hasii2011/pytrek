@@ -12,7 +12,7 @@ from unittest.suite import TestSuite
 from tests.TestGameState import TestGameState
 from tests.TestComputer import TestComputer
 from tests.TestQuadrant import TestQuadrant
-from tests.TestGameSettings import TestGameSettings
+from tests.pytrek.settings.TestGameSettings import TestGameSettings
 from tests.TestIntelligence import TestIntelligence
 # from tests.KlingonPowerTest import KlingonPowerTest
 from tests.TestSmoothMotion import TestSmoothMotion

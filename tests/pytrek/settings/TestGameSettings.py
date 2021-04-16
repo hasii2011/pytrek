@@ -5,11 +5,9 @@ from logging import getLogger
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.GameSettings import GameSettings
 from tests.TestBase import TestBase
 
-# import the class you want to test here
-# from pytrek.tests.TestGameSettings import TestGameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 
 class TestGameSettings(TestBase):
