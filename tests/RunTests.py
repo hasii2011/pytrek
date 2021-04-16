@@ -9,10 +9,10 @@ from unittest.suite import TestSuite
 # from tests.CoordinateTest import CoordinateTest
 # from tests.ExplosionColorTest import ExplosionColorTest
 # from tests.GameEngineTest import GameEngineTest
-# from tests.GameStatisticsTest import GameStatisticsTest
+from tests.TestGameState import TestGameState
 from tests.TestComputer import TestComputer
 from tests.TestQuadrant import TestQuadrant
-# from tests.SettingsTest import SettingsTest
+from tests.TestGameSettings import TestGameSettings
 from tests.TestIntelligence import TestIntelligence
 # from tests.KlingonPowerTest import KlingonPowerTest
 from tests.TestSmoothMotion import TestSmoothMotion
@@ -38,6 +38,8 @@ def createTestSuite() -> TestSuite:
     testSuite.addTest(loader.loadTestsFromTestCase(TestQuadrant))
     testSuite.addTest(loader.loadTestsFromTestCase(TestQuadrant))
     testSuite.addTest(loader.loadTestsFromTestCase(TestSmoothMotion))
+    testSuite.addTest(loader.loadTestsFromTestCase(TestGameState))
+    testSuite.addTest(loader.loadTestsFromTestCase(TestGameSettings))
 
     return testSuite
 

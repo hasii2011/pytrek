@@ -1,0 +1,3 @@
+
+class GameSettingsLocationNotSet(Exception):
+    pass

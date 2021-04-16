@@ -15,7 +15,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
 
-# from org.hasii.pytrek.GameStatistics import GameStatistics
+# from org.hasii.pytrek.GameState import GameState
 
 QuadrantRow = NewType('QuadrantRow', List[Quadrant])
 GalaxyGrid  = NewType('GalaxyGrid', List[QuadrantRow])
@@ -32,13 +32,13 @@ class Galaxy(Singleton):
         self.gameEngine     = gameEngine
         self.intelligence: Intelligence   = Intelligence()
 
-        # self.stats          = GameStatistics()
+        # self.stats          = GameState()
         # self.settings       = Settings()
         self.logger: Logger = getLogger(__name__)
 
         self.starBaseCount: int = 0
         self.planetCount:   int = 0
-        # self.gameParameters:  GameStatistics = cast(GameStatistics, None)
+        # self.gameParameters:  GameState = cast(GameState, None)
         self._currentQuadrant: Quadrant   = cast(Quadrant, None)
         self.quadrants:        GalaxyGrid = GalaxyGrid([])  # 2D array aka python list
 
