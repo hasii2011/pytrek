@@ -50,7 +50,7 @@ def main():
     runner:    TextTestRunner = TextTestRunner(verbosity=2)
     result:    TestResult     = runner.run(testSuite)
 
-    print(f"THE RESULTS ARE IN\n{result}")
+    print(f"The molon labe results are in\n{result}")
 
 
 if __name__ == "__main__":

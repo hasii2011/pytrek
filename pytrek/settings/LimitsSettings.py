@@ -35,16 +35,7 @@ class LimitsSettings(BaseSubSetting):
         self._settingsCommon: SettingsCommon = SettingsCommon(self._config)
 
     def addMissingSettings(self):
-        try:
-            if self._config.has_section(LimitsSettings.LIMITS_SECTION) is False:
-                self._config.add_section(LimitsSettings.LIMITS_SECTION)
-
-            for settingName in LimitsSettings.LIMITS_SETTINGS.keys():
-                if self._config.has_option(LimitsSettings.LIMITS_SECTION, settingName) is False:
-                    self._settingsCommon.addMissingSetting(LimitsSettings.LIMITS_SECTION, settingName, LimitsSettings.LIMITS_SETTINGS[settingName])
-
-        except (ValueError, Exception) as e:
-            self.logger.error(f"Error: {e}")
+        self._settingsCommon.addMissingSettings(sectionName=LimitsSettings.LIMITS_SECTION, nameValues=LimitsSettings.LIMITS_SETTINGS)
 
     @property
     def maximumStars(self) -> int:

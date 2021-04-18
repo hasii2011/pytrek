@@ -31,6 +31,7 @@ class TestGameSettings(TestBase):
         #
         # TODO: Save the game settings file before running unit tests
         #
+        self._settings: GameSettings = GameSettings()
 
     def tearDown(self):
         pass
@@ -39,21 +40,35 @@ class TestGameSettings(TestBase):
         """
         Only tests the existence of settings not their default value
         """
+        pass
 
-        settings = GameSettings()
+    def testMaxStarsExistence(self):
+        self.assertIsNotNone(self._settings.maximumStars)
 
-        self.assertIsNotNone(settings.maximumStars)
-        self.assertIsNotNone(settings.maximumStarBases)
-        self.assertIsNotNone(settings.minimumStarBases)
-        self.assertIsNotNone(settings.maximumPlanets)
+    def testMaxStarBasesExistence(self):
+        self.assertIsNotNone(self._settings.maximumStarBases)
+
+    def testMinStarBasesExistence(self):
+        self.assertIsNotNone(self._settings.minimumStarBases)
+
+    def testMaxPlanetsExistence(self):
+        self.assertIsNotNone(self._settings.maximumPlanets)
+
+    def testInitialEnergyLevelExistence(self):
+        self.assertIsNotNone(self._settings.initialEnergyLevel)
+
+    def testInitialShieldEnergyExistence(self):
+        self.assertIsNotNone(self._settings.initialShieldEnergy)
+
+    def testInitialTorpedoCountExistence(self):
+        self.assertIsNotNone(self._settings.initialTorpedoCount)
+
+    def testMinimumImpulseEnergyExistence(self):
+        self.assertIsNotNone(self._settings.minimumImpulseEnergy)
         #
-        # self.assertIsNotNone(settings.initialEnergyLevel)
-        # self.assertIsNotNone(settings.initialShieldEnergy)
-        # self.assertIsNotNone(settings.minimumImpulseEnergy)
-        #
-        # self.assertIsNotNone(settings.gameLengthFactor)
-        # self.assertIsNotNone(settings.starBaseExtender)
-        # self.assertIsNotNone(settings.starBaseMultiplier)
+        # self.assertIsNotNone(self._settings.gameLengthFactor)
+        # self.assertIsNotNone(self._settings.starBaseExtender)
+        # self.assertIsNotNone(self._settings.starBaseMultiplier)
 
 
 def suite() -> TestSuite:

@@ -8,6 +8,7 @@ from configparser import ConfigParser
 
 from pytrek.Singleton import Singleton
 from pytrek.settings.LimitsSettings import LimitsSettings
+from pytrek.settings.PowerSettings import PowerSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
 
 
@@ -21,6 +22,7 @@ class GameSettings(Singleton):
 
         self._settingsCommon: SettingsCommon = SettingsCommon()
         self._limits:         LimitsSettings = LimitsSettings()
+        self._power:          PowerSettings  = PowerSettings()
 
         self._createEmptySettings()
         self._loadSettings()
@@ -41,12 +43,29 @@ class GameSettings(Singleton):
     def maximumPlanets(self) -> int:
         return self._limits.maximumPlanets
 
+    @property
+    def initialEnergyLevel(self) -> int:
+        return self._power.initialEnergyLevel
+
+    @property
+    def initialShieldEnergy(self) -> int:
+        return self._power.initialShieldEnergy
+
+    @property
+    def initialTorpedoCount(self) -> int:
+        return self._power.initialTorpedoCount
+
+    @property
+    def minimumImpulseEnergy(self) -> int:
+        return self._power.minimumImpulseEnergy
+
     def _createEmptySettings(self):
 
         self._config: ConfigParser = ConfigParser()
 
         self._settingsCommon.configParser = self._config
         self._limits.configParser         = self._config
+        self._power.configParser          = self._config
 
     def _loadSettings(self):
         """
@@ -68,3 +87,4 @@ class GameSettings(Singleton):
                 return
 
         self._limits.addMissingSettings()
+        self._power.addMissingSettings()

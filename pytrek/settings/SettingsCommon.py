@@ -42,6 +42,18 @@ class SettingsCommon(BaseSubSetting):
         else:
             return SettingsCommon.settingsFileLocationAndName
 
+    def addMissingSettings(self, sectionName: str, nameValues: SettingsNameValues):
+        try:
+            if self._config.has_section(sectionName) is False:
+                self._config.add_section(sectionName)
+
+            for settingName in nameValues.keys():
+                if self._config.has_option(sectionName, settingName) is False:
+                    self.addMissingSetting(sectionName, settingName, nameValues[settingName])
+
+        except (ValueError, Exception) as e:
+            self.logger.error(f"Error: {e}")
+
     def addMissingSetting(self, sectionName: str, preferenceName: str, value: str):
         self._config.set(sectionName, preferenceName, value)
         self.saveConfig()
