@@ -7,6 +7,7 @@ from logging import getLogger
 from configparser import ConfigParser
 
 from pytrek.Singleton import Singleton
+from pytrek.settings.GameLevelSettings import GameLevelSettings
 from pytrek.settings.LimitsSettings import LimitsSettings
 from pytrek.settings.PowerSettings import PowerSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
@@ -20,9 +21,10 @@ class GameSettings(Singleton):
 
         self._config: ConfigParser = cast(ConfigParser, None)    # initialized when empty preferences created
 
-        self._settingsCommon: SettingsCommon = SettingsCommon()
-        self._limits:         LimitsSettings = LimitsSettings()
-        self._power:          PowerSettings  = PowerSettings()
+        self._settingsCommon: SettingsCommon    = SettingsCommon()
+        self._limits:         LimitsSettings    = LimitsSettings()
+        self._power:          PowerSettings     = PowerSettings()
+        self._gameLevel:      GameLevelSettings = GameLevelSettings()
 
         self._createEmptySettings()
         self._loadSettings()
@@ -66,6 +68,7 @@ class GameSettings(Singleton):
         self._settingsCommon.configParser = self._config
         self._limits.configParser         = self._config
         self._power.configParser          = self._config
+        self._gameLevel.configParser      = self._config
 
     def _loadSettings(self):
         """
@@ -86,5 +89,9 @@ class GameSettings(Singleton):
                 self.logger.error(f"Error: {e}")
                 return
 
+        # Read data
+        self._config.read(SettingsCommon.getSettingsLocation())
+
         self._limits.addMissingSettings()
         self._power.addMissingSettings()
+        self._gameLevel.addMissingSettings()

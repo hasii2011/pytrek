@@ -1,4 +1,5 @@
-
+from logging import Logger
+from logging import getLogger
 from typing import Dict
 from typing import NewType
 
@@ -23,6 +24,8 @@ class SettingsCommon(BaseSubSetting):
 
     def init(self, *args, **kwds):
 
+        self.logger: Logger = getLogger(__name__)
+
         BaseSubSetting.init(self, *args, **kwds)
 
     @classmethod
@@ -45,10 +48,12 @@ class SettingsCommon(BaseSubSetting):
     def addMissingSettings(self, sectionName: str, nameValues: SettingsNameValues):
         try:
             if self._config.has_section(sectionName) is False:
+                self.logger.warning(f'Missing section: {sectionName}')
                 self._config.add_section(sectionName)
 
             for settingName in nameValues.keys():
                 if self._config.has_option(sectionName, settingName) is False:
+                    self.logger.warning(f'Missing setting: {settingName}')
                     self.addMissingSetting(sectionName, settingName, nameValues[settingName])
 
         except (ValueError, Exception) as e:
