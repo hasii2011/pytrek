@@ -1,0 +1,59 @@
+{
+    "py/object": "pytrek.GameState.GameState",
+    "_energy": 0.0,
+    "_shieldEnergy": 0.0,
+    "_starDate": 40501.0,
+    "_inTime": 0.0,
+    "_opTime": 0.0,
+    "_remainingGameTime": 42.42424242,
+    "_remainingKlingons": 0,
+    "_remainingCommanders": 0,
+    "_torpedoCount": 0,
+    "_shipCondition": {
+        "py/reduce": [
+            {
+                "py/type": "pytrek.engine.ShipCondition.ShipCondition"
+            },
+            {
+                "py/tuple": [
+                    0
+                ]
+            }
+        ]
+    },
+    "_skill": {
+        "py/reduce": [
+            {
+                "py/type": "pytrek.engine.PlayerType.PlayerType"
+            },
+            {
+                "py/tuple": [
+                    5
+                ]
+            }
+        ]
+    },
+    "_gameType": {
+        "py/reduce": [
+            {
+                "py/type": "pytrek.engine.GameType.GameType"
+            },
+            {
+                "py/tuple": [
+                    16
+                ]
+            }
+        ]
+    },
+    "_currentQuadrantCoordinates": {
+        "py/object": "pytrek.model.Coordinates.Coordinates",
+        "x": 4,
+        "y": 4
+    },
+    "_currentSectorCoordinates": {
+        "py/object": "pytrek.model.Coordinates.Coordinates",
+        "x": 9,
+        "y": 9
+    },
+    "gameActive": true
+}

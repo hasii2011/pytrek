@@ -5,9 +5,10 @@ from logging import getLogger
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from tests.TestBase import TestBase
-
+from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.GameSettings import GameSettings
+
+from tests.TestBase import TestBase
 
 
 class TestGameSettings(TestBase):
@@ -23,7 +24,7 @@ class TestGameSettings(TestBase):
     def setUpClass(cls):
         TestBase.setUpLogging()
         TestGameSettings.clsLogger = getLogger(__name__)
-        GameSettings.determineSettingsLocation()
+        SettingsCommon.determineSettingsLocation()
 
     def setUp(self):
         self.logger: Logger = TestGameSettings.clsLogger
@@ -41,9 +42,9 @@ class TestGameSettings(TestBase):
 
         settings = GameSettings()
 
-        self.assertIsNotNone(settings.maximumStarCount)
-        self.assertIsNotNone(settings.maximumStarBase)
-        self.assertIsNotNone(settings.minimumStarBase)
+        self.assertIsNotNone(settings.maximumStars)
+        self.assertIsNotNone(settings.maximumStarBases)
+        self.assertIsNotNone(settings.minimumStarBases)
         self.assertIsNotNone(settings.maximumPlanets)
         #
         # self.assertIsNotNone(settings.initialEnergyLevel)
