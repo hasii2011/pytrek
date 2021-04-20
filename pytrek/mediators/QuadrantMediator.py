@@ -17,7 +17,7 @@ from pytrek.model.SectorType import SectorType
 from pytrek.Singleton import Singleton
 
 
-class MediatorQuadrant(Singleton):
+class QuadrantMediator(Singleton):
 
     def init(self):
 

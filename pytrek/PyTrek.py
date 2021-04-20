@@ -37,7 +37,7 @@ from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
 
-from pytrek.mediators.MediatorQuadrant import MediatorQuadrant
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
 from pytrek.settings.SettingsCommon import SettingsCommon
 
 SCREEN_TITLE:  str = "PyTrek"
@@ -113,7 +113,7 @@ class PyTrekWindow(Window):
 
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
-        self._quadrantMediator: MediatorQuadrant = MediatorQuadrant()
+        self._quadrantMediator: QuadrantMediator = QuadrantMediator()
 
         self.logger.info(f'Setup Complete')
 
