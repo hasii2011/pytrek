@@ -5,31 +5,24 @@ from logging import getLogger
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.settings.SettingsCommon import SettingsCommon
-
 from tests.TestBase import TestBase
 
-# import the class you want to test here
-# from pytrek.tests.TestTemplate import TestTemplate
+from pytrek.engine.GameEngine import GameEngine
 
 
-class TestTemplate(TestBase):
+class TestGameEngine(TestBase):
     """
-    You need to change the name of this class to Test`XXXX`
-    Where `XXXX' is the name of the class that you want to test.
-
-    See existing tests for more information.
     """
     clsLogger: Logger = None
 
     @classmethod
     def setUpClass(cls):
         TestBase.setUpLogging()
-        TestTemplate.clsLogger = getLogger(__name__)
-        SettingsCommon.determineSettingsLocation()
+        TestGameEngine.clsLogger = getLogger(__name__)
 
     def setUp(self):
-        self.logger: Logger = TestTemplate.clsLogger
+        self.logger:      Logger     = TestGameEngine.clsLogger
+        self._gameEngine: GameEngine = GameEngine()
 
     def tearDown(self):
         pass
@@ -48,7 +41,7 @@ def suite() -> TestSuite:
 
     testSuite: TestSuite = TestSuite()
     # noinspection PyUnresolvedReferences
-    testSuite.addTest(unittest.makeSuite(TestTemplate))
+    testSuite.addTest(unittest.makeSuite(TestGameEngine))
 
     return testSuite
 

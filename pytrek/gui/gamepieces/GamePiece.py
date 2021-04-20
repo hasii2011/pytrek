@@ -11,15 +11,14 @@ from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_ROWS
 
-from pytrek.engine.ArcadePosition import ArcadePosition
-
 from pytrek.model.Coordinates import Coordinates
 
 
 class GamePiece(Sprite):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, filename: str = None, scale: float = 1.0):
+
+        super().__init__(filename=filename, scale=scale)
 
         self._currentPosition: Coordinates = cast(Coordinates, None)
 

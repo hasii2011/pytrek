@@ -12,6 +12,7 @@ from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.Klingon import Klingon
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Sector import Sector
@@ -36,6 +37,12 @@ class Quadrant:
         self._sectors:     QuadrantGrid = QuadrantGrid([])
 
         self._intelligence: Intelligence = Intelligence()
+
+        self._klingonCount:   int = 0
+        self._commanderCount: int = 0
+
+        self._klingons:   List[Klingon]   = []
+        # self.commanders: List[Commander] = []
 
         self._enterprise:            Enterprise  = cast(Enterprise, None)
         self._enterpriseCoordinates: Coordinates = cast(Coordinates, None)
@@ -89,6 +96,11 @@ class Quadrant:
     def enterpriseCoordinates(self, newCoordinates: Coordinates):
         self._enterpriseCoordinates = newCoordinates
 
+    @property
+    def klingonCount(self):
+        """"""
+        return self._klingonCount
+
     def getSector(self, sectorCoordinates: Coordinates) -> Sector:
         """
 
@@ -102,6 +114,12 @@ class Quadrant:
         sector:    Sector    = sectorRow[sectorCoordinates.x]
 
         return sector
+
+    def addKlingon(self):
+        """"""
+        self._klingonCount += 1
+        klingon = self.placeAKlingon()
+        self._klingons.append(klingon)
 
     def getRandomEmptySector(self) -> Sector:
         """
@@ -117,6 +135,21 @@ class Quadrant:
             sector = self.getSector(randomSectorCoordinates)
 
         return sector
+
+    def placeAKlingon(self) -> Klingon:
+        """
+
+        """
+        sector            = self.getRandomEmptySector()
+        sector.sectorType = SectorType.KLINGON
+        klingon           = Klingon(coordinates=sector.coordinates)
+        kPower            = self._intelligence.computeKlingonPower()
+
+        klingon.power = kPower
+        sector.sprite = klingon
+
+        self.logger.debug(f"Placed klingon at: quadrant: {self._coordinates} {sector=}, {kPower=}")
+        return klingon
 
     def _createQuadrant(self):
         for y in range(QUADRANT_ROWS):

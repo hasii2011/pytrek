@@ -34,3 +34,28 @@ class GameLevelSettings(BaseSubSetting):
 
     def addMissingSettings(self):
         self._settingsCommon.addMissingSettings(sectionName=GameLevelSettings.GAME_LEVEL_SECTION, nameValues=GameLevelSettings.GAME_LEVEL_SETTINGS)
+
+    @property
+    def playerType(self) -> PlayerType:
+
+        playerTypeStr: str = self._config.get(GameLevelSettings.GAME_LEVEL_SECTION, GameLevelSettings.PLAYER_TYPE)
+
+        return PlayerType[playerTypeStr]
+
+    @playerType.setter
+    def playerType(self, newValue: PlayerType):
+
+        self._config.set(GameLevelSettings.GAME_LEVEL_SECTION, GameLevelSettings.PLAYER_TYPE, newValue.name)
+        self._settingsCommon.saveConfig()
+
+    @property
+    def gameType(self) -> GameType:
+
+        gameTypeStr: str = self._config.get(GameLevelSettings.GAME_LEVEL_SECTION, GameLevelSettings.GAME_TYPE)
+
+        return GameType[gameTypeStr]
+
+    @gameType.setter
+    def gameType(self, newValue: GameType):
+        self._config.set(GameLevelSettings.GAME_LEVEL_SECTION, GameLevelSettings.GAME_TYPE, newValue.name)
+        self._settingsCommon.saveConfig()

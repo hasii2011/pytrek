@@ -8,8 +8,6 @@ import jsonpickle
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.GameState import GameState
-
 from pytrek.engine.GameType import GameType
 from pytrek.engine.PlayerType import PlayerType
 
@@ -17,17 +15,11 @@ from pytrek.model.Coordinates import Coordinates
 
 from tests.TestBase import TestBase
 
-# import the class you want to test here
-# from pytrek.tests.TestGameState import TestGameState
+from pytrek.GameState import GameState
 
 
 class TestGameState(TestBase):
-    """
-    You need to change the name of this class to Test`XXXX`
-    Where `XXXX' is the name of the class that you want to test.
 
-    See existing tests for more information.
-    """
     clsLogger: Logger = None
 
     @classmethod

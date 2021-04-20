@@ -26,8 +26,8 @@ class GameState(Singleton):
         self._torpedoCount:        int   = 0
         self._shipCondition:       ShipCondition = ShipCondition.Green
 
-        self._skill:    PlayerType = cast(PlayerType, None)
-        self._gameType: GameType   = cast(GameType, None)
+        self._playerType: PlayerType = cast(PlayerType, None)
+        self._gameType:   GameType   = cast(GameType, None)
 
         self.currentQuadrantCoordinates: Coordinates = cast(Coordinates, None)
         self.currentSectorCoordinates:   Coordinates = cast(Coordinates, None)
@@ -118,12 +118,12 @@ class GameState(Singleton):
         self._shipCondition = theNewValue
 
     @property
-    def skill(self) -> PlayerType:
-        return self._skill
+    def playerType(self) -> PlayerType:
+        return self._playerType
 
-    @skill.setter
-    def skill(self, theNewValue: PlayerType):
-        self._skill = theNewValue
+    @playerType.setter
+    def playerType(self, theNewValue: PlayerType):
+        self._playerType = theNewValue
 
     @property
     def gameType(self) -> GameType:

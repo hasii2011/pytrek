@@ -38,6 +38,7 @@ from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.mediators.MediatorQuadrant import MediatorQuadrant
+from pytrek.settings.SettingsCommon import SettingsCommon
 
 SCREEN_TITLE:  str = "PyTrek"
 GRAVITY:       int = 0          # We do not want our game pieces falling
@@ -81,6 +82,9 @@ class PyTrekWindow(Window):
         self._quadrant:     Quadrant     = cast(Quadrant, None)
 
     def setup(self):
+
+        SettingsCommon.determineSettingsLocation()
+
         # Create your sprites and sprite lists here
         self.playerList     = SpriteList()
         self.hardSpriteList = SpriteList()
@@ -99,7 +103,7 @@ class PyTrekWindow(Window):
 
         self._intelligence = Intelligence()
         self._computer     = Computer()
-        self._galaxy       = Galaxy(screen=None, gameEngine=None)
+        self._galaxy       = Galaxy()
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
 

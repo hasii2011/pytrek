@@ -65,10 +65,21 @@ class TestGameSettings(TestBase):
 
     def testMinimumImpulseEnergyExistence(self):
         self.assertIsNotNone(self._settings.minimumImpulseEnergy)
-        #
-        # self.assertIsNotNone(self._settings.gameLengthFactor)
-        # self.assertIsNotNone(self._settings.starBaseExtender)
-        # self.assertIsNotNone(self._settings.starBaseMultiplier)
+
+    def testPlayerTypeExistence(self):
+        self.assertIsNotNone(self._settings.playerType)
+
+    def testGameTypeExistence(self):
+        self.assertIsNotNone(self._settings.gameType)
+
+    def testGameLengthFactorExistence(self):
+        self.assertIsNotNone(self._settings.gameLengthFactor)
+
+    def testStarBaseExtenderExistence(self):
+        self.assertIsNotNone(self._settings.starBaseExtender)
+
+    def testStarBaseMultiplierExistence(self):
+        self.assertIsNotNone(self._settings.starBaseMultiplier)
 
 
 def suite() -> TestSuite:

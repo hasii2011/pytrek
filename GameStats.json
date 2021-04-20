@@ -21,18 +21,7 @@
             }
         ]
     },
-    "_skill": {
-        "py/reduce": [
-            {
-                "py/type": "pytrek.engine.PlayerType.PlayerType"
-            },
-            {
-                "py/tuple": [
-                    5
-                ]
-            }
-        ]
-    },
+    "_playerType": null,
     "_gameType": {
         "py/reduce": [
             {
@@ -55,5 +44,17 @@
         "x": 9,
         "y": 9
     },
-    "gameActive": true
+    "gameActive": true,
+    "skill": {
+        "py/reduce": [
+            {
+                "py/type": "pytrek.engine.PlayerType.PlayerType"
+            },
+            {
+                "py/tuple": [
+                    5
+                ]
+            }
+        ]
+    }
 }

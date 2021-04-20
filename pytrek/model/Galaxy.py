@@ -5,10 +5,14 @@ from typing import List
 
 from logging import Logger
 from logging import getLogger
+from logging import DEBUG
 
-from pytrek import Constants
+from pytrek.Constants import GALAXY_COLUMNS
+from pytrek.Constants import GALAXY_ROWS
+from pytrek.GameState import GameState
 
 from pytrek.Singleton import Singleton
+from pytrek.engine.GameEngine import GameEngine
 
 from pytrek.engine.Intelligence import Intelligence
 
@@ -26,11 +30,11 @@ class Galaxy(Singleton):
     Galaxy management
     """
 
-    def init(self, screen, gameEngine):
+    def init(self):
         """"""
-        self.screen         = screen
-        self.gameEngine     = gameEngine
+        self.gameEngine:   GameEngine     = GameEngine()
         self.intelligence: Intelligence   = Intelligence()
+        self._gameState:   GameState      = GameState()
 
         # self.stats          = GameState()
         # self.settings       = Settings()
@@ -42,9 +46,15 @@ class Galaxy(Singleton):
         self._currentQuadrant: Quadrant   = cast(Quadrant, None)
         self.quadrants:        GalaxyGrid = GalaxyGrid([])  # 2D array aka python list
 
+        if self.logger.getEffectiveLevel() == DEBUG:
+            self._debugKlingonQuadrants: List[Coordinates] = []
+        """
+        A list of the coordinates where we place Klingons;  There may be duplicate
+        coordinates if we randomly picked the same quadrant
+        """
         self._createGalaxy()
 
-        # self.placeKlingonsInGalaxy()
+        self.placeKlingonsInGalaxy()
         # self.placeCommandersInGalaxy()
         # self.placeStarBasesInGalaxy()
         self.setInitialQuadrant()
@@ -66,56 +76,68 @@ class Galaxy(Singleton):
 
     def placeKlingonsInGalaxy(self):
         """"""
-        for x in range(self.stats.remainingKlingons):
-            coordinates = self.intelligence.getRandomQuadrantCoordinates()
-            quadrant    = self.getQuadrant(coordinates)
+        self.logger.info(f'Placing {self._gameState.remainingKlingons} Klingons')
+
+        for x in range(self._gameState.remainingKlingons):
+
+            coordinates: Coordinates = self.intelligence.generateQuadrantCoordinates()
+            # self.logger.debug(f'Klingon Random Coordinates: {coordinates}')
+            if self.logger.getEffectiveLevel() == DEBUG:
+                self._debugKlingonQuadrants.append(coordinates)
+                
+            quadrant: Quadrant = self.getQuadrant(coordinates)
+
             quadrant.addKlingon()
+
         self.debugPrintKlingonPlacement()
 
     def placeCommandersInGalaxy(self):
         """"""
-        for x in range(self.stats.remainingCommanders):
-            coordinates = self.intelligence.getRandomQuadrantCoordinates()
-            quadrant    = self.getQuadrant(coordinates)
-            quadrant.addCommander()
+        # for x in range(self.stats.remainingCommanders):
+        #     coordinates = self.intelligence.getRandomQuadrantCoordinates()
+        #     quadrant    = self.getQuadrant(coordinates)
+        #     quadrant.addCommander()
+        pass
 
     def placeStarBasesInGalaxy(self):
         """"""
-        starBaseCount = self.intelligence.getInitialStarBaseCount()
-        while starBaseCount != 0:
-            quadrantCoordinates = self.intelligence.getRandomQuadrantCoordinates()
-            quadrant            = self.getQuadrant(quadrantCoordinates)
-            while quadrant.hasStarBase() is True:
-                quadrantCoordinates = self.intelligence.getRandomQuadrantCoordinates()
-                quadrant = self.getQuadrant(quadrantCoordinates)
-
-            self.logger.debug(f"Starbase at quadrant {quadrantCoordinates}")
-            quadrant.addStarBase()
-            starBaseCount -= 1
+        # starBaseCount = self.intelligence.getInitialStarBaseCount()
+        # while starBaseCount != 0:
+        #     quadrantCoordinates = self.intelligence.getRandomQuadrantCoordinates()
+        #     quadrant            = self.getQuadrant(quadrantCoordinates)
+        #     while quadrant.hasStarBase() is True:
+        #         quadrantCoordinates = self.intelligence.getRandomQuadrantCoordinates()
+        #         quadrant = self.getQuadrant(quadrantCoordinates)
+        #
+        #     self.logger.debug(f"Starbase at quadrant {quadrantCoordinates}")
+        #     quadrant.addStarBase()
+        #     starBaseCount -= 1
+        pass
 
     def getQuadrant(self, quadrantCoordinates: Coordinates) -> Quadrant:
 
         quadrantRow: QuadrantRow = self.quadrants[quadrantCoordinates.y]
-        quadrant:    Quadrant    = quadrantRow[quadrantCoordinates.y]
+        quadrant:    Quadrant    = quadrantRow[quadrantCoordinates.x]
 
         return quadrant
 
     def debugPrintKlingonPlacement(self):
         """"""
-        for x in range(Intelligence.GALAXY_HEIGHT):
-            quadRow = self.quadrants[x]
-            for y in range(Intelligence.GALAXY_WIDTH):
-                quadrant = quadRow[y]
-                self.logger.debug("Quadrant(%s,%s) Klingon Count %s", x, y, str(quadrant.getKlingonCount()))
+        for y in range(GALAXY_ROWS):
+            quadRow = self.quadrants[y]
+            for x in range(GALAXY_COLUMNS):
+                quadrant = quadRow[x]
+                quadrant: Quadrant = cast(Quadrant, quadrant)
+                self.logger.debug(f'Quadrant({x},{y}) Klingon Count: {quadrant.klingonCount}')
 
     def _createGalaxy(self):
 
         self.quadrants = []
-        for y in range(Constants.GALAXY_ROWS):
+        for y in range(GALAXY_ROWS):
             quadrantRow: QuadrantRow = QuadrantRow([])
-            for x in range(Constants.GALAXY_COLUMNS):
+            for x in range(GALAXY_COLUMNS):
                 coordinates = Coordinates(x, y)
                 quadrant = Quadrant(coordinates)
                 quadrantRow.append(quadrant)
-                self.logger.debug(f"Created quadrant: ({x},{y})")
+                # self.logger.debug(f"Created quadrant: ({x},{y})")
             self.quadrants.append(quadrantRow)

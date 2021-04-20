@@ -23,6 +23,10 @@
             "handlers": ["consoleHandler"],
             "propagate": "False"
         },
+        "tests": {
+            "level": "WARNING",
+            "propagate": "False"
+        },
         "TestIntelligence": {
             "level": "INFO",
             "propagate": "False"
@@ -43,8 +47,12 @@
             "level": "INFO",
             "propagate": "False"
         },
-        "pytrek.objects.Quadrant": {
+        "pytrek.model.Quadrant": {
             "level": "INFO",
+            "propagate": "False"
+        },
+        "pytrek.model.Galaxy": {
+            "level": "DEBUG",
             "propagate": "False"
         },
         "pytrek.gui.gamepieces.SmoothMotion": {

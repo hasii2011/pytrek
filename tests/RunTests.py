@@ -8,14 +8,18 @@ from unittest.suite import TestSuite
 # from tests.ComputerTest import ComputerTest
 # from tests.CoordinateTest import CoordinateTest
 # from tests.ExplosionColorTest import ExplosionColorTest
-# from tests.GameEngineTest import GameEngineTest
-from tests.TestGameState import TestGameState
+from pytrek.settings.SettingsCommon import SettingsCommon
 from tests.TestComputer import TestComputer
 from tests.TestQuadrant import TestQuadrant
-from tests.pytrek.settings.TestGameSettings import TestGameSettings
 from tests.TestIntelligence import TestIntelligence
-# from tests.KlingonPowerTest import KlingonPowerTest
 from tests.TestSmoothMotion import TestSmoothMotion
+from tests.TestGameState import TestGameState
+
+from tests.pytrek.settings.TestGameSettings import TestGameSettings
+
+from tests.pytrek.engine.TestGameEngine import TestGameEngine
+
+from tests.pytrek.model.TestGalaxy import TestGalaxy
 
 
 def createTestSuite() -> TestSuite:
@@ -40,11 +44,15 @@ def createTestSuite() -> TestSuite:
     testSuite.addTest(loader.loadTestsFromTestCase(TestSmoothMotion))
     testSuite.addTest(loader.loadTestsFromTestCase(TestGameState))
     testSuite.addTest(loader.loadTestsFromTestCase(TestGameSettings))
+    testSuite.addTest(loader.loadTestsFromTestCase(TestGameEngine))
+    testSuite.addTest(loader.loadTestsFromTestCase(TestGalaxy))
 
     return testSuite
 
 
 def main():
+
+    SettingsCommon.determineSettingsLocation()
 
     testSuite: TestSuite      = createTestSuite()
     runner:    TextTestRunner = TextTestRunner(verbosity=2)

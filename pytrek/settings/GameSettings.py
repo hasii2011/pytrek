@@ -7,6 +7,11 @@ from logging import getLogger
 from configparser import ConfigParser
 
 from pytrek.Singleton import Singleton
+
+from pytrek.engine.GameType import GameType
+from pytrek.engine.PlayerType import PlayerType
+
+from pytrek.settings.FactorsSettings import FactorsSettings
 from pytrek.settings.GameLevelSettings import GameLevelSettings
 from pytrek.settings.LimitsSettings import LimitsSettings
 from pytrek.settings.PowerSettings import PowerSettings
@@ -25,6 +30,7 @@ class GameSettings(Singleton):
         self._limits:         LimitsSettings    = LimitsSettings()
         self._power:          PowerSettings     = PowerSettings()
         self._gameLevel:      GameLevelSettings = GameLevelSettings()
+        self._factors:        FactorsSettings   = FactorsSettings()
 
         self._createEmptySettings()
         self._loadSettings()
@@ -61,6 +67,34 @@ class GameSettings(Singleton):
     def minimumImpulseEnergy(self) -> int:
         return self._power.minimumImpulseEnergy
 
+    @property
+    def playerType(self) -> PlayerType:
+        return self._gameLevel.playerType
+
+    @playerType.setter
+    def playerType(self, newValue: PlayerType):
+        self._gameLevel.playerType = newValue
+
+    @property
+    def gameType(self) -> GameType:
+        return self._gameLevel.gameType
+
+    @gameType.setter
+    def gameType(self, newValue: GameType):
+        self._gameLevel.gameType = newValue
+
+    @property
+    def gameLengthFactor(self) -> float:
+        return self._factors.gameLengthFactor
+
+    @property
+    def starBaseExtender(self) -> float:
+        return self._factors.starBaseExtender
+
+    @property
+    def starBaseMultiplier(self) -> float:
+        return self._factors.starBaseMultiplier
+
     def _createEmptySettings(self):
 
         self._config: ConfigParser = ConfigParser()
@@ -69,6 +103,7 @@ class GameSettings(Singleton):
         self._limits.configParser         = self._config
         self._power.configParser          = self._config
         self._gameLevel.configParser      = self._config
+        self._factors.configParser        = self._config
 
     def _loadSettings(self):
         """
@@ -95,3 +130,4 @@ class GameSettings(Singleton):
         self._limits.addMissingSettings()
         self._power.addMissingSettings()
         self._gameLevel.addMissingSettings()
+        self._factors.addMissingSettings()
