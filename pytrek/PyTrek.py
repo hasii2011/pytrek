@@ -170,6 +170,11 @@ class PyTrekView(View):
             self._enterprise.change_x = -MOVEMENT_SPEED
         elif pressedKey == arcade.key.RIGHT:
             self._enterprise.change_x = MOVEMENT_SPEED
+        elif pressedKey == arcade.key.G:
+            from pytrek.gui.GalaxyView import GalaxyView
+
+            galaxyView: GalaxyView = GalaxyView(gameView=self)
+            self.window.show_view(galaxyView)
 
     def on_key_release(self, releasedKey, key_modifiers):
         """
