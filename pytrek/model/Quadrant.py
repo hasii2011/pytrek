@@ -140,10 +140,10 @@ class Quadrant:
         """
 
         """
-        sector            = self.getRandomEmptySector()
-        sector.sectorType = SectorType.KLINGON
-        klingon           = Klingon(coordinates=sector.coordinates)
-        kPower            = self._intelligence.computeKlingonPower()
+        sector      = self.getRandomEmptySector()
+        sector.type = SectorType.KLINGON
+        klingon     = Klingon(coordinates=sector.coordinates)
+        kPower      = self._intelligence.computeKlingonPower()
 
         klingon.power = kPower
         sector.sprite = klingon

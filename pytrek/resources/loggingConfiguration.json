@@ -32,8 +32,8 @@
             "handlers":  ["consoleHandler"],
             "propagate": "False"
         },
-        "arcade.gl.context": {
-            "level":     "DEBUG",
+        "pytrek.mediators.QuadrantMediator": {
+            "level":     "INFO",
             "handlers":  ["consoleHandler"],
             "propagate": "False"
         }
