@@ -1,13 +1,17 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
-from typing import cast
+from logging import DEBUG
 
 from arcade import SpriteList
 
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
+
 from pytrek.engine.ArcadePosition import ArcadePosition
+
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
@@ -59,9 +63,10 @@ class QuadrantMediator(Singleton):
 
     def update(self, quadrant: Quadrant):
 
-        self.logger.debug(f'{quadrant.enterpriseCoordinates=}')
-        if quadrant.klingonCount > 0:
-            self.logger.info(f'{quadrant.klingonCount=}')
+        if self.logger.getEffectiveLevel() == DEBUG:
+            self.logger.debug(f'{quadrant.enterpriseCoordinates=}')
+            if quadrant.klingonCount > 0:
+                self.logger.debug(f'{quadrant.klingonCount=}')
 
         for y in range(QUADRANT_ROWS):
             for x in range(QUADRANT_COLUMNS):

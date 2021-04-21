@@ -3,6 +3,7 @@ from typing import cast
 
 from logging import Logger
 from logging import getLogger
+from logging import DEBUG
 
 import logging.config
 
@@ -112,6 +113,9 @@ class PyTrekWindow(Window):
         self._quadrantMediator: QuadrantMediator = QuadrantMediator()
 
         self._quadrantMediator.playerList = playerList
+        if self.logger.getEffectiveLevel() == DEBUG:
+            self._quadrant.addKlingon()
+
         if self._quadrant.klingonCount > 0:
             klingonSprites: SpriteList = SpriteList()
             for klingon in self._quadrant._klingons:
