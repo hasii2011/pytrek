@@ -3,6 +3,8 @@ from logging import Logger
 from logging import getLogger
 from typing import cast
 
+from arcade import SpriteList
+
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 from pytrek.engine.ArcadePosition import ArcadePosition
@@ -19,10 +21,41 @@ from pytrek.Singleton import Singleton
 
 
 class QuadrantMediator(Singleton):
+    """
+    This class avoids putting UI logic (arcade) in the model class, Quadrant.
+    """
 
     def init(self):
 
         self.logger: Logger = getLogger(__name__)
+
+        self._playerList:    SpriteList = SpriteList()
+        self._klingonList:   SpriteList = SpriteList()
+        self._commanderList: SpriteList = SpriteList()
+
+    @property
+    def playerList(self) -> SpriteList:
+        return self._playerList
+
+    @playerList.setter
+    def playerList(self, newValues: SpriteList):
+        self._playerList = newValues
+
+    @property
+    def klingonList(self) -> SpriteList:
+        return self._klingonList
+
+    @klingonList.setter
+    def klingonList(self, newValues: SpriteList):
+        self._klingonList = newValues
+
+    @property
+    def commanderList(self) -> SpriteList:
+        return self._commanderList
+
+    @commanderList.setter
+    def commanderList(self, newValues: SpriteList):
+        self._commanderList = newValues
 
     def update(self, quadrant: Quadrant):
 
@@ -43,7 +76,7 @@ class QuadrantMediator(Singleton):
                     if sectorType == SectorType.ENTERPRISE:
                         self._updateEnterprise(quadrant=quadrant, gamePiece=gamePiece)
                     elif sectorType == SectorType.KLINGON:
-                        self._updateKlingon(quadrant=quadrant, gamePiece=gamePiece)
+                        self._updateKlingon(gamePiece=gamePiece)
 
     def _updateEnterprise(self, quadrant: Quadrant, gamePiece: GamePiece):
         """
@@ -64,7 +97,7 @@ class QuadrantMediator(Singleton):
             enterprise.center_x = arcadeX
             enterprise.center_y = arcadeY
 
-    def _updateKlingon(self, quadrant: Quadrant, gamePiece: GamePiece):
+    def _updateKlingon(self, gamePiece: GamePiece):
 
         klingon: Klingon = cast(Klingon, gamePiece)
 

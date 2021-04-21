@@ -70,8 +70,6 @@ class PyTrekWindow(Window):
         self._enterprise: Enterprise = cast(Enterprise, None)
         # If you have sprite lists, you should create them here,
         # and set them to None
-        self.playerList:     SpriteList = cast(SpriteList, None)
-        self.hardSpriteList: SpriteList
 
         # self.physicsEngine: PhysicsEnginePlatformer = cast(PhysicsEnginePlatformer, None)
         self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
@@ -85,21 +83,16 @@ class PyTrekWindow(Window):
 
         SettingsCommon.determineSettingsLocation()
 
-        # Create your sprites and sprite lists here
-        self.playerList     = SpriteList()
-        self.hardSpriteList = SpriteList()
-
         # self._backgroundSprite: QuadrantBackground = QuadrantBackground()
 
-        self._enterprise = Enterprise()
-        self.playerList.append(self._enterprise)
-
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='QuadrantBackground.png')
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='QuadrantBackground.png')
         self.background = load_texture(fqFileName)
         # Create the 'physics engine'
         # self.physicsEngine = PhysicsEnginePlatformer(self.enterprise, self.hardSpriteList, gravity_constant=GRAVITY)
-        self.physicsEngine = PhysicsEngineSimple(self._enterprise, self.hardSpriteList)
+
+        self._enterprise: Enterprise = Enterprise()
+        self._hardSpriteList: SpriteList = SpriteList()
+        self.physicsEngine = PhysicsEngineSimple(self._enterprise, self._hardSpriteList)
 
         self._intelligence = Intelligence()
         self._computer     = Computer()
@@ -111,9 +104,22 @@ class PyTrekWindow(Window):
         # self.statistics.currentSectorCoordinates   = self.intelligence.getRandomSectorCoordinates()
         currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
 
+        playerList: SpriteList = SpriteList()
+        playerList.append(self._enterprise)
+
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
         self._quadrantMediator: QuadrantMediator = QuadrantMediator()
+
+        self._quadrantMediator.playerList = playerList
+        if self._quadrant.klingonCount > 0:
+            klingonSprites: SpriteList = SpriteList()
+            for klingon in self._quadrant._klingons:
+                klingonSprites.append(klingon)
+
+            self._quadrantMediator.klingonList = klingonSprites
+        else:
+            self._quadrantMediator.klingonList = SpriteList()
 
         self.logger.info(f'Setup Complete')
 
@@ -131,7 +137,8 @@ class PyTrekWindow(Window):
         draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_HEIGHT,
                                      width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
 
-        self.playerList.draw()
+        self._quadrantMediator.playerList.draw()
+        self._quadrantMediator.klingonList.draw()
 
     def on_update(self, delta_time):
         """
@@ -141,7 +148,7 @@ class PyTrekWindow(Window):
         """
         self.physicsEngine.update()
         self._quadrantMediator.update(quadrant=self._quadrant)
-        self.playerList.update()
+        self._quadrantMediator.playerList.update()
 
     def on_key_press(self, pressedKey, key_modifiers):
         """

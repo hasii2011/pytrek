@@ -101,6 +101,10 @@ class Quadrant:
         """"""
         return self._klingonCount
 
+    @property
+    def klingons(self) -> List[Klingon]:
+        return self._klingons
+
     def getSector(self, sectorCoordinates: Coordinates) -> Sector:
         """
 
