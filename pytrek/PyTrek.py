@@ -14,6 +14,7 @@ import arcade
 from arcade import PhysicsEngineSimple
 from arcade import SpriteList
 from arcade import Texture
+from arcade import View
 from arcade import Window
 
 from arcade import key
@@ -47,7 +48,7 @@ GRAVITY:       int = 0          # We do not want our game pieces falling
 MOVEMENT_SPEED: int = 2
 
 
-class PyTrekWindow(Window):
+class PyTrekView(View):
     """
     Main application class.
 
@@ -57,13 +58,13 @@ class PyTrekWindow(Window):
     """
     MADE_UP_PRETTY_MAIN_NAME:     str = "PyTrek"
 
-    def __init__(self, width: int, height: int, title: str):
+    def __init__(self):
 
         self._setupSystemLogging()
 
-        super().__init__(width, height, title)
+        super().__init__()
 
-        self.logger: Logger = getLogger(PyTrekWindow.MADE_UP_PRETTY_MAIN_NAME)
+        self.logger: Logger = getLogger(PyTrekView.MADE_UP_PRETTY_MAIN_NAME)
 
         # set_background_color(color.LIGHT_GRAY)
         # self._backgroundSprite: QuadrantBackground = cast(QuadrantBackground, None)
@@ -220,8 +221,12 @@ class PyTrekWindow(Window):
 
 def main():
     """ Main method """
-    game = PyTrekWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    game.setup()
+    arcadeWindow: Window     = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    gameView:     PyTrekView = PyTrekView()
+
+    arcadeWindow.show_view(gameView)
+
+    gameView.setup()
     arcade.run()
 
 
