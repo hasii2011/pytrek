@@ -32,28 +32,28 @@ class TestComputer(TestBase):
     def testKnown1(self):
 
         actualCoordinates:   Coordinates = self.smarty.computeSectorCoordinates(x=163, y=775)
-        expectedCoordinates: Coordinates = Coordinates(x=2, y=1)
+        expectedCoordinates: Coordinates = Coordinates(x=2, y=0)
 
         self.assertEqual(expectedCoordinates, actualCoordinates, 'Computer is broken')
 
     def testKnown2(self):
 
         actualCoordinates:   Coordinates = self.smarty.computeSectorCoordinates(x=293, y=272)
-        expectedCoordinates: Coordinates = Coordinates(x=4, y=9)
+        expectedCoordinates: Coordinates = Coordinates(x=4, y=8)
 
         self.assertEqual(expectedCoordinates, actualCoordinates, 'Computer is broken')
 
     def testKnown3(self):
 
         actualCoordinates:   Coordinates = self.smarty.computeSectorCoordinates(x=553, y=272)
-        expectedCoordinates: Coordinates = Coordinates(x=8, y=9)
+        expectedCoordinates: Coordinates = Coordinates(x=8, y=8)
 
         self.assertEqual(expectedCoordinates, actualCoordinates, 'Computer is broken')
 
     def testKnown4(self):
 
         actualCoordinates:   Coordinates = self.smarty.computeSectorCoordinates(x=553, y=650)
-        expectedCoordinates: Coordinates = Coordinates(x=8, y=3)
+        expectedCoordinates: Coordinates = Coordinates(x=8, y=2)
 
         self.assertEqual(expectedCoordinates, actualCoordinates, 'Computer is broken')
 
