@@ -1,3 +1,5 @@
+from arcade import color
+from arcade import draw_text
 from arcade import start_render
 
 from pytrek.Constants import CONSOLE_HEIGHT
@@ -38,8 +40,12 @@ class GalaxyView(View):
         self.texture.draw_sized(center_x=centerX, center_y=centerY,
                                 width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT)
 
+        start_x = 50
+        start_y = (QUADRANT_GRID_HEIGHT + CONSOLE_HEIGHT) - 24
+        draw_text("Galaxy Scan Coming Soon", start_x, start_y, color.WHITE, 14)
+
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         """
-        If the user presses the mouse button, re-start the game.
+        If the user presses the mouse button, go back to the game
         """
         self.window.show_view(self._gameView)
