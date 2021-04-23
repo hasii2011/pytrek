@@ -61,7 +61,7 @@ class Quadrant:
 
             oldEnterpriseRow = self._sectors[coordinates.y]
             oldSector = oldEnterpriseRow[self._enterpriseCoordinates.x]
-            oldSector.setType(SectorType.EMPTY)
+            oldSector.type = SectorType.EMPTY
             oldSector.sprite = None
 
         self.logger.debug(f"Placing enterprise @quadrant: {coordinates}")

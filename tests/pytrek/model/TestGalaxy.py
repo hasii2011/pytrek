@@ -64,7 +64,7 @@ class TestGalaxy(TestBase):
             kCoordinates: Coordinates = cast(Coordinates, kCoordinates)
             quadrant: Quadrant = galaxy.getQuadrant(kCoordinates)
             self.assertNotEqual(0, quadrant.klingonCount)
-            self.logger.warning(f'{kCoordinates=} {quadrant.klingonCount=}')
+            self.logger.debug(f'{kCoordinates=} {quadrant.klingonCount=}')
 
 
 def suite() -> TestSuite:

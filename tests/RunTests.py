@@ -55,7 +55,7 @@ def main():
     SettingsCommon.determineSettingsLocation()
 
     testSuite: TestSuite      = createTestSuite()
-    runner:    TextTestRunner = TextTestRunner(verbosity=2)
+    runner:    TextTestRunner = TextTestRunner(verbosity=0)
     result:    TestResult     = runner.run(testSuite)
 
     print(f"The molon labe results are in\n{result}")

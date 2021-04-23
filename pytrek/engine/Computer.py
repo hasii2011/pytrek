@@ -13,8 +13,6 @@ from pytrek.Constants import QUADRANT_MARGIN
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_ROWS
-from pytrek.engine.ArcadePosition import ArcadePosition
-from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.model.Coordinates import Coordinates
 
@@ -32,6 +30,25 @@ class Computer(Singleton):
 
         #  self.settings = Settings()
         self.logger: Logger = getLogger(__name__)
+
+    @classmethod
+    def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates):
+
+        sectorX: int = gameCoordinates.x
+        sectorY: int = gameCoordinates.y
+        #
+        # because game coordinates are top L - R and down
+        # and game coordinates are 0-based
+        adjustSectorX: int = sectorX
+        adjustSectorY: int = (QUADRANT_ROWS - sectorY) - 1
+
+        xMargins: int = (sectorX + 1) * QUADRANT_MARGIN
+        yMargins: int = (sectorY + 1) * QUADRANT_MARGIN
+
+        x = (adjustSectorX * QUADRANT_PIXEL_WIDTH) + HALF_QUADRANT_PIXEL_WIDTH + xMargins
+        y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + yMargins + CONSOLE_HEIGHT
+
+        return x, y
 
     def computeSectorCoordinates(self, x: int, y: int) -> Coordinates:
         """
@@ -55,22 +72,52 @@ class Computer(Singleton):
 
         return coordinates
 
-    @classmethod
-    def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates):
+    def computeQuadrantDistance(self, startSector: Coordinates, endSector: Coordinates) -> float:
+        """
 
-        sectorX: int = gameCoordinates.x
-        sectorY: int = gameCoordinates.y
-        #
-        # because game coordinates are top L - R and down
-        # and game coordinates are 0-based
-        adjustSectorX: int = sectorX
-        adjustSectorY: int = (QUADRANT_ROWS - sectorY) - 1
+        Args:
+            startSector:
+            endSector:
 
-        xMargins: int = (sectorX + 1) * QUADRANT_MARGIN
-        yMargins: int = (sectorY + 1) * QUADRANT_MARGIN
+        Returns:
+        """
+        return self._computeDistance(startSector, endSector, Computer.QUADRANT_TRAVEL_FACTOR)
 
-        x = (adjustSectorX * QUADRANT_PIXEL_WIDTH) + HALF_QUADRANT_PIXEL_WIDTH + xMargins
-        y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + yMargins + CONSOLE_HEIGHT
+    def _computeDistance(self, startCoordinates: Coordinates, endCoordinates: Coordinates, travelFactor: float) -> float:
+        """
+        From Java code:
+        ```java
+         x1 = startSector.getX()
+         y1 = startSector.getY()
+         x2 = endSector.getX()
+         y2 = endSector.getY()
 
-        return x, y
+         deltaX = x2 - x1
+         deltaY = y2 - y1
 
+         distance = travelFactor * math.sqrt( (deltaX * deltaX) + (deltaY * deltaY) )
+        ```
+        Args:
+            startCoordinates:
+            endCoordinates:
+            travelFactor:  accounts for quadrant travel or galactic travel
+
+        Returns:    The game distance between the above
+        """
+
+        x1 = startCoordinates.x
+        y1 = startCoordinates.y
+        x2 = endCoordinates.x
+        y2 = endCoordinates.y
+
+        self.logger.debug(f"{x1=} {y1=} {x2=} {y2=}")
+
+        deltaX = x2 - x1
+        deltaY = y2 - y1
+        self.logger.debug(f"{deltaX=} {deltaY=}")
+
+        distance = travelFactor * math.sqrt((deltaX * deltaX) + (deltaY * deltaY))
+
+        self.logger.debug(f"Quadrant Distance: {distance}")
+
+        return distance

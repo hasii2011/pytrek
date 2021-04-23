@@ -31,7 +31,7 @@
             "level": "INFO",
             "propagate": "False"
         },
-        "TestComputer": {
+        "tests.TestComputer": {
             "level": "INFO",
             "propagate": "False"
         },

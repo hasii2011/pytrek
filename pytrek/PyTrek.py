@@ -12,6 +12,7 @@ from json import load as jsonLoad
 import arcade
 
 from arcade import PhysicsEngineSimple
+from arcade import Sound
 from arcade import SpriteList
 from arcade import Texture
 from arcade import View
@@ -27,7 +28,10 @@ from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
+from pytrek.Constants import SOUND_VOLUME_HIGH
+from pytrek.GameState import GameState
 from pytrek.engine.Computer import Computer
+from pytrek.engine.GameEngine import GameEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 
@@ -78,8 +82,12 @@ class PyTrekView(View):
 
         self._intelligence: Intelligence = cast(Intelligence, None)
         self._computer:     Computer     = cast(Computer, None)
+        self._gameEngine:   GameEngine   = cast(GameEngine, None)
+        self._gameState:    GameState    = cast(GameState, None)
         self._galaxy:       Galaxy       = cast(Galaxy, None)
         self._quadrant:     Quadrant     = cast(Quadrant, None)
+
+        self._soundImpulse: Sound        = cast(Sound, None)
 
     def setup(self):
 
@@ -98,6 +106,8 @@ class PyTrekView(View):
 
         self._intelligence = Intelligence()
         self._computer     = Computer()
+        self._gameEngine   = GameEngine()
+        self._gameState    = GameState()
         self._galaxy       = Galaxy()
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
@@ -109,6 +119,7 @@ class PyTrekView(View):
         playerList: SpriteList = SpriteList()
         playerList.append(self._enterprise)
 
+        self._gameState.currentSectorCoordinates = currentSectorCoordinates
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
         self._quadrantMediator: QuadrantMediator = QuadrantMediator()
@@ -126,6 +137,7 @@ class PyTrekView(View):
         else:
             self._quadrantMediator.klingonList = SpriteList()
 
+        self._loadSounds()
         self.logger.info(f'Setup Complete')
 
     def on_draw(self):
@@ -205,6 +217,8 @@ class PyTrekView(View):
 
             self._quadrant.enterprise.inMotion = True
             self._quadrant.enterpriseCoordinates = coordinates
+            self._gameEngine.impulse(newCoordinates=coordinates, quadrant=self._quadrant, enterprise=self._enterprise)
+            self._soundImpulse.play(volume=SOUND_VOLUME_HIGH)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
@@ -222,6 +236,12 @@ class PyTrekView(View):
         logging.config.dictConfig(configurationDictionary)
         logging.logProcesses = False
         logging.logThreads   = False
+
+    def _loadSounds(self):
+
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='probe_launch_1.wav')
+
+        self._soundImpulse = Sound(file_name=fqFileName)
 
 
 def main():
