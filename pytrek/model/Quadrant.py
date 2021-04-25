@@ -51,6 +51,8 @@ class Quadrant:
 
     def placeEnterprise(self, enterprise: Enterprise, coordinates: Coordinates):
         """
+        Explicitly place the Enterprise;   Since only one it is possible to have doppelganger Enterprises'
+        from alternate timelines;  Hopefully, not woke timelines.
 
         Args:
             enterprise:     The fighting ship to place in this quadrant
@@ -80,9 +82,18 @@ class Quadrant:
         self._enterpriseCoordinates = coordinates
 
     @property
+    def coordinates(self) -> Coordinates:
+        """
+        Read-only as set when the quadrant is created
+
+        Returns:  Our coordinates in the Galaxy
+        """
+        return self._coordinates
+
+    @property
     def enterprise(self) -> Enterprise:
         """
-        Read only property
+        Read only property as we cannot have doppelganger Enterprises from other timelines !!!
 
         Returns:  The Enterprise Sprite
         """

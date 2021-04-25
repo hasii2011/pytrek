@@ -1,12 +1,12 @@
 
 from typing import List
 from typing import NewType
+from typing import Union
 
 from logging import Logger
 from logging import getLogger
 
 from enum import Enum
-from typing import Union
 
 from arcade import View
 from arcade import color
@@ -16,8 +16,12 @@ from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_WIDTH
+
 from pytrek.GameState import GameState
+
 from pytrek.engine.ShipCondition import ShipCondition
+
+from pytrek.model.Coordinates import Coordinates
 
 SECTION_LABEL_FONT_SIZE: int = 16
 STATUS_LABEL_FONT_SIZE: int = 11
@@ -122,6 +126,8 @@ class StatusConsole:
                 propertyStr = f'{propertyValue:.2f}'
             elif isinstance(propertyValue, int):
                 propertyStr = str(propertyValue)
+            elif isinstance(propertyValue, Coordinates):
+                propertyStr = self._formatCoordinates(coordinates=propertyValue)
 
             draw_text(propertyStr, statusX, runningY, color=baseTextColor,
                       font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
@@ -140,3 +146,13 @@ class StatusConsole:
             return color.BLUE
         else:
             return color.WHITE
+
+    def _formatCoordinates(self, coordinates: Coordinates) -> str:
+        """
+        Nicely formats the input coordinates in the form:   (x,y)
+        Args:
+            coordinates: Coordinates to format
+
+        Returns:  The formatted coordinates
+        """
+        return f'({coordinates.x},{coordinates.y})'

@@ -97,8 +97,9 @@ class PyTrekView(View):
 
         #
         # I am cheating here because I know arcade use PIL under the covers
-        # Also, I locally installed this font
-        PIL.ImageFont.truetype(FIXED_WIDTH_FONT_FILENAME)
+        #
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.FONT_RESOURCES_PACKAGE_NAME, bareFileName=FIXED_WIDTH_FONT_FILENAME)
+        PIL.ImageFont.truetype(fqFileName)
 
     def setup(self):
 
@@ -123,8 +124,7 @@ class PyTrekView(View):
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
 
-        # self.statistics.currentQuadrantCoordinates = self.galaxy.currentQuadrant.coordinates
-        # self.statistics.currentSectorCoordinates   = self.intelligence.getRandomSectorCoordinates()
+        self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
         currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
 
         playerList: SpriteList = SpriteList()
