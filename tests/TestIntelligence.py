@@ -24,6 +24,8 @@ class TestIntelligence(TestBase):
     EXPECTED_LONG_GAME_LENGTH:   int = 224
     EXPECTED_MEDIUM_GAME_LENGTH: int = 112
 
+    MAX_STAR_DATE_CALLS         = 7
+
     clsLogger: Logger = None
 
     @classmethod
@@ -112,6 +114,20 @@ class TestIntelligence(TestBase):
 
         self.assertIsNotNone(gameTime, "I need some time value back")
         self.assertEqual(TestIntelligence.EXPECTED_MEDIUM_GAME_LENGTH, gameTime, "Looks like game length factor changed")
+
+    def testGetInitialStarDate(self):
+
+        for x in range(0, TestIntelligence.MAX_STAR_DATE_CALLS):
+            starDate: int = self.smarty.generateInitialStarDate()
+            self.assertIsNotNone(starDate)
+            self.assertGreater(starDate, 0, "No such thing as a 0 star date")
+            self.logger.debug(f"Initial stardate '{starDate}'")
+
+    def testRand(self):
+
+        for x in range(0, 100):
+            ans = self.smarty.rand()
+            self.logger.debug(f"testRand - Iteration {x}, answer is {ans}")
 
 
 def suite() -> TestSuite:

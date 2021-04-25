@@ -9,6 +9,7 @@ import logging.config
 
 from json import load as jsonLoad
 
+import PIL
 import arcade
 
 from arcade import PhysicsEngineSimple
@@ -25,6 +26,7 @@ from arcade import load_texture
 from arcade import start_render
 
 from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
@@ -32,6 +34,7 @@ from pytrek.Constants import SOUND_VOLUME_HIGH
 from pytrek.GameState import GameState
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
+from pytrek.gui.StatusConsole import StatusConsole
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 
@@ -87,7 +90,15 @@ class PyTrekView(View):
         self._galaxy:       Galaxy       = cast(Galaxy, None)
         self._quadrant:     Quadrant     = cast(Quadrant, None)
 
+        self._quadrantMediator: QuadrantMediator = cast(QuadrantMediator, None)
+        self._statusConsole:    StatusConsole    = cast(StatusConsole, None)
+
         self._soundImpulse: Sound        = cast(Sound, None)
+
+        #
+        # I am cheating here because I know arcade use PIL under the covers
+        # Also, I locally installed this font
+        PIL.ImageFont.truetype(FIXED_WIDTH_FONT_FILENAME)
 
     def setup(self):
 
@@ -122,7 +133,8 @@ class PyTrekView(View):
         self._gameState.currentSectorCoordinates = currentSectorCoordinates
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
-        self._quadrantMediator: QuadrantMediator = QuadrantMediator()
+        self._quadrantMediator = QuadrantMediator()
+        self._statusConsole    = StatusConsole(gameView=self)
 
         self._quadrantMediator.playerList = playerList
         if self.logger.getEffectiveLevel() == DEBUG:
@@ -156,6 +168,8 @@ class PyTrekView(View):
 
         self._quadrantMediator.playerList.draw()
         self._quadrantMediator.klingonList.draw()
+
+        self._statusConsole.draw()
 
     def on_update(self, delta_time):
         """

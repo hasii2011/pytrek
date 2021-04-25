@@ -87,6 +87,11 @@ class Intelligence(Singleton):
 
         return self.remainingKlingons
 
+    def generateInitialStarDate(self) -> int:
+
+        starDate: int = int(100.0 * (31.0 * random()) * 20.0)
+        return starDate
+
     def computeKlingonPower(self) -> float:
         """
         Regular klingon

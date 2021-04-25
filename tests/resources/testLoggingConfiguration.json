@@ -27,7 +27,7 @@
             "level": "WARNING",
             "propagate": "False"
         },
-        "TestIntelligence": {
+        "tests.TestIntelligence": {
             "level": "INFO",
             "propagate": "False"
         },
