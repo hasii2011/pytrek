@@ -37,6 +37,9 @@ class GameEngine(Singleton):
         self._gameState.remainingKlingons = self._intelligence.generateInitialKlingonCount(remainingGameTime=self._gameState.remainingGameTime)
         # self.stats.remainingCommanders = self.intelligence.getInitialCommanderCount()
 
+        self._accumulatedDelta: float = 0.0
+        self._gameClock:        float = 0.0
+
     def impulse(self, newCoordinates: Coordinates, quadrant: Quadrant, enterprise: Enterprise):
         """
 
@@ -99,3 +102,16 @@ class GameEngine(Singleton):
         self.logger.debug(f"theTravelDistance: '{travelDistance}' quadrantEnergy : '{quadrantEnergy}'")
 
         return quadrantEnergy
+
+    def updateRealTimeClock(self, deltaTime: float):
+        """
+
+        Args:
+            deltaTime:  Diff in time since last time this method was called
+        """
+        self._accumulatedDelta += deltaTime
+
+        if self._accumulatedDelta > 1.0:
+            self._gameClock += self._accumulatedDelta
+            self._accumulatedDelta = 0.0
+            self.logger.debug(f'Game Clock: {self._gameClock:.3f}')

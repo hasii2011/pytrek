@@ -20,6 +20,10 @@ QUADRANT_MARGIN:  int = 1
 GALAXY_ROWS:    int = 10
 GALAXY_COLUMNS: int = 10
 
+MINIMUM_COORDINATE: int = 0     # These should match the galaxy/quadrant size
+MAXIMUM_COORDINATE: int = 9     # Currently assumed that are the same size
+
+
 STANDARD_SPRITE_WIDTH:  int = 32
 STANDARD_SPRITE_HEIGHT: int = 32
 

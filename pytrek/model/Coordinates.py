@@ -1,6 +1,8 @@
 
 from dataclasses import dataclass
 
+from pytrek.Constants import MAXIMUM_COORDINATE
+from pytrek.Constants import MINIMUM_COORDINATE
 from pytrek.engine.Direction import Direction
 
 
@@ -14,12 +16,13 @@ class Coordinates:
 
     def valid(self) -> bool:
         """
+        Assumes that the Galaxy and quadrants are exactly sized
 
-        Returns:    The min/max values should match what is in Intelligence
+        Returns:    The min/max values should match what is in Constants
         """
         ans: bool = False
         # if self.x >= 0 and self.x <= 9 and self.y >=0 and self.y <= 9:
-        if 0 <= self.x <= 9 and 0 <= self.y <= 9:
+        if MINIMUM_COORDINATE <= self.x <= MAXIMUM_COORDINATE and MINIMUM_COORDINATE <= self.y <= MAXIMUM_COORDINATE:
             ans = True
 
         return ans

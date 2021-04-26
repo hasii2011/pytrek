@@ -18,6 +18,7 @@ from tests.TestGameState import TestGameState
 from tests.pytrek.settings.TestGameSettings import TestGameSettings
 
 from tests.pytrek.engine.TestGameEngine import TestGameEngine
+from tests.pytrek.model.TestCoordinates import TestCoordinates
 
 from tests.pytrek.model.TestGalaxy import TestGalaxy
 
@@ -46,6 +47,7 @@ def createTestSuite() -> TestSuite:
     testSuite.addTest(loader.loadTestsFromTestCase(TestGameSettings))
     testSuite.addTest(loader.loadTestsFromTestCase(TestGameEngine))
     testSuite.addTest(loader.loadTestsFromTestCase(TestGalaxy))
+    testSuite.addTest(loader.loadTestsFromTestCase(TestCoordinates))
 
     return testSuite
 

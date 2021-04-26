@@ -32,10 +32,12 @@ from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SOUND_VOLUME_HIGH
 from pytrek.GameState import GameState
-from pytrek.engine.Computer import Computer
-from pytrek.engine.GameEngine import GameEngine
-from pytrek.gui.StatusConsole import StatusConsole
 
+from pytrek.engine.Computer import Computer
+
+from pytrek.engine.GameEngine import GameEngine
+
+from pytrek.gui.StatusConsole import StatusConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 
 from pytrek.LocateResources import LocateResources
@@ -47,6 +49,7 @@ from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
+
 from pytrek.settings.SettingsCommon import SettingsCommon
 
 SCREEN_TITLE:  str = "PyTrek"
@@ -150,6 +153,7 @@ class PyTrekView(View):
             self._quadrantMediator.klingonList = SpriteList()
 
         self._loadSounds()
+
         self.logger.info(f'Setup Complete')
 
     def on_draw(self):
@@ -171,15 +175,21 @@ class PyTrekView(View):
 
         self._statusConsole.draw()
 
-    def on_update(self, delta_time):
+    def on_update(self, delta_time: float):
         """
         All the logic to move, and the game logic goes here.
         Normally, you'll call update() on the sprite lists that
         need it.
+
+        Args:
+            delta_time:  Time interval since the last time the function was called.
         """
         self.physicsEngine.update()
         self._quadrantMediator.update(quadrant=self._quadrant)
         self._quadrantMediator.playerList.update()
+
+        self._gameEngine.updateRealTimeClock(deltaTime=delta_time)
+        self._gameEngine.updateRealTimeClock(deltaTime=delta_time)
 
     def on_key_press(self, pressedKey, key_modifiers):
         """
@@ -198,9 +208,16 @@ class PyTrekView(View):
             self._enterprise.change_x = MOVEMENT_SPEED
         elif pressedKey == arcade.key.G:
             from pytrek.gui.GalaxyView import GalaxyView
-
+            # TODO both of these views should be changed to use a callback;  The callback switches
+            # us back to the game view
+            #
             galaxyView: GalaxyView = GalaxyView(gameView=self)
             self.window.show_view(galaxyView)
+        elif pressedKey == arcade.key.L:
+            from pytrek.gui.LongRangeSensorView import LongRangeSensorView
+
+            longRangeSensorView: LongRangeSensorView = LongRangeSensorView(gameView=self)
+            self.window.show_view(longRangeSensorView)
 
     def on_key_release(self, releasedKey, key_modifiers):
         """

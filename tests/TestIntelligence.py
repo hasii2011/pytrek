@@ -10,6 +10,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.PlayerType import PlayerType
 
 from pytrek.model.Coordinates import Coordinates
+from pytrek.model.DataTypes import CoordinatesList
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
 
@@ -24,7 +25,9 @@ class TestIntelligence(TestBase):
     EXPECTED_LONG_GAME_LENGTH:   int = 224
     EXPECTED_MEDIUM_GAME_LENGTH: int = 112
 
-    MAX_STAR_DATE_CALLS         = 7
+    MAX_STAR_DATE_CALLS: int = 7
+    MAX_COORDINATES_COUNT:        int = 8
+    NORTH_EDGE_COORDINATES_COUNT: int = 5
 
     clsLogger: Logger = None
 
@@ -122,6 +125,28 @@ class TestIntelligence(TestBase):
             self.assertIsNotNone(starDate)
             self.assertGreater(starDate, 0, "No such thing as a 0 star date")
             self.logger.debug(f"Initial stardate '{starDate}'")
+
+    def testGenerateAdjacentCoordinatesBase(self):
+        """
+        No need to test value of coordinates that is done by another unit test
+        """
+        baseCoordinates: Coordinates = Coordinates(x=4, y=4)
+
+        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+
+        self.assertIsNotNone(coordinateList)
+        self.assertEqual(TestIntelligence.MAX_COORDINATES_COUNT, len(coordinateList), "We should get all directional coordinates")
+
+    def testGenerateAdjacentCoordinatesNorth(self):
+        """
+        Place center quadrant on northern edge
+        """
+        baseCoordinates: Coordinates = Coordinates(x=4, y=0)
+
+        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+
+        self.assertIsNotNone(coordinateList)
+        self.assertEqual(TestIntelligence.NORTH_EDGE_COORDINATES_COUNT, len(coordinateList), "We should get all directional coordinates")
 
     def testRand(self):
 

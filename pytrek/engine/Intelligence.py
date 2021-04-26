@@ -5,6 +5,7 @@ from logging import INFO
 
 from random import randrange
 from random import random
+from typing import List
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
@@ -12,8 +13,10 @@ from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 
 from pytrek.Singleton import Singleton
+from pytrek.engine.Direction import Direction
 
 from pytrek.model.Coordinates import Coordinates
+from pytrek.model.DataTypes import CoordinatesList
 
 from pytrek.settings.GameSettings import GameSettings
 
@@ -24,6 +27,9 @@ class Intelligence(Singleton):
     """
 
     RAND_MAX: int = 32767
+    ADJACENT_DIRECTIONS: List[Direction] = [
+        Direction.North, Direction.NorthEast, Direction.East
+    ]
 
     def init(self):
         """
@@ -91,6 +97,18 @@ class Intelligence(Singleton):
 
         starDate: int = int(100.0 * (31.0 * random()) * 20.0)
         return starDate
+
+    def generateAdjacentCoordinates(self, centerCoordinates: Coordinates) -> CoordinatesList:
+
+        coordinatesList: CoordinatesList = CoordinatesList([])
+
+        for direction in Direction:
+            self.logger.info(f'{direction}')
+            newCoordinates: Coordinates = centerCoordinates.newCoordinates(direction)
+            if newCoordinates.valid() is True:
+                coordinatesList.append(newCoordinates)
+
+        return coordinatesList
 
     def computeKlingonPower(self) -> float:
         """
