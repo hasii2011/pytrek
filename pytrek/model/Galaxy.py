@@ -89,7 +89,7 @@ class Galaxy(Singleton):
 
             quadrant.addKlingon()
 
-        self.debugPrintKlingonPlacement()
+        self._debugPrintKlingonPlacement()
 
     def placeCommandersInGalaxy(self):
         """"""
@@ -121,15 +121,6 @@ class Galaxy(Singleton):
 
         return quadrant
 
-    def debugPrintKlingonPlacement(self):
-        """"""
-        for y in range(GALAXY_ROWS):
-            quadRow = self.quadrants[y]
-            for x in range(GALAXY_COLUMNS):
-                quadrant = quadRow[x]
-                quadrant: Quadrant = cast(Quadrant, quadrant)
-                self.logger.debug(f'Quadrant({x},{y}) Klingon Count: {quadrant.klingonCount}')
-
     def _createGalaxy(self):
 
         self.quadrants = []
@@ -139,5 +130,17 @@ class Galaxy(Singleton):
                 coordinates = Coordinates(x, y)
                 quadrant = Quadrant(coordinates)
                 quadrantRow.append(quadrant)
+                # TODO: Control this with a runtime flag
                 # self.logger.debug(f"Created quadrant: ({x},{y})")
             self.quadrants.append(quadrantRow)
+
+    def _debugPrintKlingonPlacement(self):
+        """
+        TODO: Control this with runtime flag
+        """
+        for y in range(GALAXY_ROWS):
+            quadRow = self.quadrants[y]
+            for x in range(GALAXY_COLUMNS):
+                quadrant = quadRow[x]
+                quadrant: Quadrant = cast(Quadrant, quadrant)
+                # self.logger.debug(f'Quadrant({x},{y}) Klingon Count: {quadrant.klingonCount}')

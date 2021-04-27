@@ -10,7 +10,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.PlayerType import PlayerType
 
 from pytrek.model.Coordinates import Coordinates
-from pytrek.model.DataTypes import CoordinatesList
+from pytrek.model.DataTypes import LRScanCoordinatesList
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
 
@@ -141,7 +141,7 @@ class TestIntelligence(TestBase):
         """
         baseCoordinates: Coordinates = Coordinates(x=4, y=4)
 
-        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+        coordinateList: LRScanCoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
 
         self.assertIsNotNone(coordinateList)
         self.assertEqual(TestIntelligence.MAX_COORDINATES_COUNT, len(coordinateList), "We should get all directional coordinates")
@@ -152,7 +152,7 @@ class TestIntelligence(TestBase):
         """
         baseCoordinates: Coordinates = Coordinates(x=4, y=0)
 
-        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+        coordinateList: LRScanCoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
 
         self.assertIsNotNone(coordinateList)
         self.assertEqual(TestIntelligence.NORTH_EDGE_COORDINATES_COUNT, len(coordinateList), "We should get all directional coordinates")
@@ -163,7 +163,7 @@ class TestIntelligence(TestBase):
         """
         baseCoordinates: Coordinates = Coordinates(x=4, y=9)
 
-        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+        coordinateList: LRScanCoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
 
         self.assertIsNotNone(coordinateList)
         self.assertEqual(TestIntelligence.SOUTH_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
@@ -174,7 +174,7 @@ class TestIntelligence(TestBase):
         """
         baseCoordinates: Coordinates = Coordinates(x=9, y=4)
 
-        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+        coordinateList: LRScanCoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
 
         self.assertIsNotNone(coordinateList)
         self.assertEqual(TestIntelligence.EAST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
@@ -185,7 +185,7 @@ class TestIntelligence(TestBase):
         """
         baseCoordinates: Coordinates = Coordinates(x=0, y=4)
 
-        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+        coordinateList: LRScanCoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
 
         self.assertIsNotNone(coordinateList)
         self.assertEqual(TestIntelligence.WEST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
@@ -196,7 +196,7 @@ class TestIntelligence(TestBase):
         """
         baseCoordinates: Coordinates = Coordinates(x=0, y=0)
 
-        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+        coordinateList: LRScanCoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
 
         self.assertIsNotNone(coordinateList)
         self.assertEqual(TestIntelligence.NORTH_WEST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
@@ -207,7 +207,7 @@ class TestIntelligence(TestBase):
         """
         baseCoordinates: Coordinates = Coordinates(x=9, y=0)
 
-        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+        coordinateList: LRScanCoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
 
         self.assertIsNotNone(coordinateList)
         self.assertEqual(TestIntelligence.NORTH_EAST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
@@ -218,7 +218,7 @@ class TestIntelligence(TestBase):
         """
         baseCoordinates: Coordinates = Coordinates(x=0, y=9)
 
-        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+        coordinateList: LRScanCoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
 
         self.assertIsNotNone(coordinateList)
         self.assertEqual(TestIntelligence.SOUTH_EAST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
@@ -229,7 +229,7 @@ class TestIntelligence(TestBase):
         """
         baseCoordinates: Coordinates = Coordinates(x=0, y=9)
 
-        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+        coordinateList: LRScanCoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
 
         self.assertIsNotNone(coordinateList)
         self.assertEqual(TestIntelligence.SOUTH_WEST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")

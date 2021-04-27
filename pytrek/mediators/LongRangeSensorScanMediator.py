@@ -9,7 +9,7 @@ from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Singleton import Singleton
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.model.Coordinates import Coordinates
-from pytrek.model.DataTypes import CoordinatesList
+from pytrek.model.DataTypes import LRScanCoordinatesList
 from pytrek.model.Quadrant import Quadrant
 
 
@@ -23,7 +23,7 @@ class LongRangeSensorScanMediator(Singleton):
 
     def update(self, centerCoordinates: Coordinates):
 
-        coordinatesList: CoordinatesList = self._intelligence.generateAdjacentCoordinates(centerCoordinates=centerCoordinates)
+        coordinatesList: LRScanCoordinatesList = self._intelligence.generateAdjacentCoordinates(centerCoordinates=centerCoordinates)
 
         start_x = 50
         start_y = (QUADRANT_GRID_HEIGHT + CONSOLE_HEIGHT) - 24

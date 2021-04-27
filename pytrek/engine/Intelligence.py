@@ -14,9 +14,10 @@ from pytrek.Constants import QUADRANT_ROWS
 
 from pytrek.Singleton import Singleton
 from pytrek.engine.Direction import Direction
+from pytrek.engine.LRScanCoordinates import LRScanCoordinates
 
 from pytrek.model.Coordinates import Coordinates
-from pytrek.model.DataTypes import CoordinatesList
+from pytrek.model.DataTypes import LRScanCoordinatesList
 
 from pytrek.settings.GameSettings import GameSettings
 
@@ -98,15 +99,20 @@ class Intelligence(Singleton):
         starDate: int = int(100.0 * (31.0 * random()) * 20.0)
         return starDate
 
-    def generateAdjacentCoordinates(self, centerCoordinates: Coordinates) -> CoordinatesList:
+    def generateAdjacentCoordinates(self, centerCoordinates: Coordinates) -> LRScanCoordinatesList:
 
-        coordinatesList: CoordinatesList = CoordinatesList([])
+        coordinatesList: LRScanCoordinatesList = LRScanCoordinatesList([])
 
         for direction in Direction:
             self.logger.debug(f'{direction}')
             newCoordinates: Coordinates = centerCoordinates.newCoordinates(direction)
             if newCoordinates.valid() is True:
-                coordinatesList.append(newCoordinates)
+
+                lrScanCoordinates: LRScanCoordinates = LRScanCoordinates()
+                lrScanCoordinates.coordinates = newCoordinates
+                lrScanCoordinates.direction   = direction
+
+                coordinatesList.append(lrScanCoordinates)
 
         return coordinatesList
 

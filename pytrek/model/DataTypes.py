@@ -2,6 +2,6 @@
 from typing import List
 from typing import NewType
 
-from pytrek.model.Coordinates import Coordinates
+from pytrek.engine.LRScanCoordinates import LRScanCoordinates
 
-CoordinatesList = NewType('Coordinates', List[Coordinates])
+LRScanCoordinatesList = NewType('LRScanCoordinatesList', List[LRScanCoordinates])
