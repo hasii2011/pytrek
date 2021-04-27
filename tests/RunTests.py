@@ -5,10 +5,9 @@ from unittest import TextTestRunner
 
 from unittest.suite import TestSuite
 
-# from tests.ComputerTest import ComputerTest
-# from tests.CoordinateTest import CoordinateTest
-# from tests.ExplosionColorTest import ExplosionColorTest
+
 from pytrek.settings.SettingsCommon import SettingsCommon
+
 from tests.TestComputer import TestComputer
 from tests.TestQuadrant import TestQuadrant
 from tests.TestIntelligence import TestIntelligence
@@ -18,8 +17,8 @@ from tests.TestGameState import TestGameState
 from tests.pytrek.settings.TestGameSettings import TestGameSettings
 
 from tests.pytrek.engine.TestGameEngine import TestGameEngine
-from tests.pytrek.model.TestCoordinates import TestCoordinates
 
+from tests.pytrek.model.TestCoordinates import TestCoordinates
 from tests.pytrek.model.TestGalaxy import TestGalaxy
 
 

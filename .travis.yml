@@ -28,6 +28,7 @@ before_install:
 # command to install dependencies
 install:
   - python3 --version
+  - pip3 install html-testRunner
   - pip3 install pyglet
   - pip3 install jsonpickle
   - pip3 install arcade

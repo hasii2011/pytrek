@@ -161,7 +161,7 @@ def suite() -> TestSuite:
 
     testSuite: TestSuite = TestSuite()
     # noinspection PyUnresolvedReferences
-    testSuite.addTest(unittest.makeSuite(TestPyutVisibilityEnum))
+    testSuite.addTest(unittest.makeSuite(TestIntelligence))
 
     return testSuite
 
