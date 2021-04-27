@@ -103,7 +103,7 @@ class Intelligence(Singleton):
         coordinatesList: CoordinatesList = CoordinatesList([])
 
         for direction in Direction:
-            self.logger.info(f'{direction}')
+            self.logger.debug(f'{direction}')
             newCoordinates: Coordinates = centerCoordinates.newCoordinates(direction)
             if newCoordinates.valid() is True:
                 coordinatesList.append(newCoordinates)

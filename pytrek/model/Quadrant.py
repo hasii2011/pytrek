@@ -129,7 +129,7 @@ class Quadrant:
 
     @scanned.setter
     def scanned(self, newValue: bool):
-        self._scanned= newValue
+        self._scanned = newValue
 
     def getSector(self, sectorCoordinates: Coordinates) -> Sector:
         """

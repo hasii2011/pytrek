@@ -30,7 +30,7 @@ class Galaxy(Singleton):
     Galaxy management
     """
 
-    def init(self):
+    def init(self, *args, **kwds):
         """"""
         self.gameEngine:   GameEngine     = GameEngine()
         self.intelligence: Intelligence   = Intelligence()
@@ -84,7 +84,7 @@ class Galaxy(Singleton):
             # self.logger.debug(f'Klingon Random Coordinates: {coordinates}')
             if self.logger.getEffectiveLevel() == DEBUG:
                 self._debugKlingonQuadrants.append(coordinates)
-                
+
             quadrant: Quadrant = self.getQuadrant(coordinates)
 
             quadrant.addKlingon()
