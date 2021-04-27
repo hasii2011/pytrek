@@ -214,9 +214,9 @@ class PyTrekView(View):
             galaxyView: GalaxyView = GalaxyView(gameView=self)
             self.window.show_view(galaxyView)
         elif pressedKey == arcade.key.L:
-            from pytrek.gui.LongRangeSensorView import LongRangeSensorView
+            from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
 
-            longRangeSensorView: LongRangeSensorView = LongRangeSensorView(gameView=self)
+            longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(gameView=self)
             self.window.show_view(longRangeSensorView)
 
     def on_key_release(self, releasedKey, key_modifiers):

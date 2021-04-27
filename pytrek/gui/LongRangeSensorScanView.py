@@ -19,7 +19,7 @@ from pytrek.mediators.LongRangeSensorScanMediator import LongRangeSensorScanMedi
 from pytrek.model.Coordinates import Coordinates
 
 
-class LongRangeSensorView(View):
+class LongRangeSensorScanView(View):
     """
     Displays a long range sensor scan.  Essentially, only the quadrant adjacent to the on the Enterprise is in
     """
