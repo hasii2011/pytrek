@@ -47,6 +47,8 @@ class Quadrant:
         self._enterprise:            Enterprise  = cast(Enterprise, None)
         self._enterpriseCoordinates: Coordinates = cast(Coordinates, None)
 
+        self._scanned: bool = False
+
         self._createQuadrant()
 
     def placeEnterprise(self, enterprise: Enterprise, coordinates: Coordinates):
@@ -115,6 +117,19 @@ class Quadrant:
     @property
     def klingons(self) -> List[Klingon]:
         return self._klingons
+
+    @property
+    def scanned(self) -> bool:
+        """
+        Returns whether or not this quadrant was part of a long range sensor scan
+
+        Returns:  `True` if this quadrant participated in a long range sensor scan, else `False`
+        """
+        return self._scanned
+
+    @scanned.setter
+    def scanned(self, newValue: bool):
+        self._scanned= newValue
 
     def getSector(self, sectorCoordinates: Coordinates) -> Sector:
         """

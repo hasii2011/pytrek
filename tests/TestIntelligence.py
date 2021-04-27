@@ -29,6 +29,15 @@ class TestIntelligence(TestBase):
     MAX_COORDINATES_COUNT:        int = 8
     NORTH_EDGE_COORDINATES_COUNT: int = 5
 
+    SOUTH_EDGE_COORDINATES_COUNT: int = NORTH_EDGE_COORDINATES_COUNT
+    EAST_EDGE_COORDINATES_COUNT:  int = SOUTH_EDGE_COORDINATES_COUNT
+    WEST_EDGE_COORDINATES_COUNT:  int = EAST_EDGE_COORDINATES_COUNT
+
+    NORTH_WEST_EDGE_COORDINATES_COUNT: int = 3
+    NORTH_EAST_EDGE_COORDINATES_COUNT: int = NORTH_WEST_EDGE_COORDINATES_COUNT
+    SOUTH_EAST_EDGE_COORDINATES_COUNT: int = NORTH_EAST_EDGE_COORDINATES_COUNT
+    SOUTH_WEST_EDGE_COORDINATES_COUNT: int = SOUTH_EAST_EDGE_COORDINATES_COUNT
+
     clsLogger: Logger = None
 
     @classmethod
@@ -147,6 +156,83 @@ class TestIntelligence(TestBase):
 
         self.assertIsNotNone(coordinateList)
         self.assertEqual(TestIntelligence.NORTH_EDGE_COORDINATES_COUNT, len(coordinateList), "We should get all directional coordinates")
+
+    def testGenerateAdjacentCoordinatesSouth(self):
+        """
+        Place center quadrant on southern edge
+        """
+        baseCoordinates: Coordinates = Coordinates(x=4, y=9)
+
+        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+
+        self.assertIsNotNone(coordinateList)
+        self.assertEqual(TestIntelligence.SOUTH_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
+
+    def testGenerateAdjacentCoordinatesEast(self):
+        """
+        Place center quadrant on eastern edge
+        """
+        baseCoordinates: Coordinates = Coordinates(x=9, y=4)
+
+        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+
+        self.assertIsNotNone(coordinateList)
+        self.assertEqual(TestIntelligence.EAST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
+
+    def testGenerateAdjacentCoordinatesWest(self):
+        """
+        Place center quadrant on western edge
+        """
+        baseCoordinates: Coordinates = Coordinates(x=0, y=4)
+
+        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+
+        self.assertIsNotNone(coordinateList)
+        self.assertEqual(TestIntelligence.WEST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
+
+    def testGenerateAdjacentCoordinatesNorthWest(self):
+        """
+        Place center quadrant on north western edge
+        """
+        baseCoordinates: Coordinates = Coordinates(x=0, y=0)
+
+        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+
+        self.assertIsNotNone(coordinateList)
+        self.assertEqual(TestIntelligence.NORTH_WEST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
+
+    def testGenerateAdjacentCoordinatesNorthEast(self):
+        """
+        Place center quadrant on north eastern edge
+        """
+        baseCoordinates: Coordinates = Coordinates(x=9, y=0)
+
+        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+
+        self.assertIsNotNone(coordinateList)
+        self.assertEqual(TestIntelligence.NORTH_EAST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
+
+    def testGenerateAdjacentCoordinatesSouthEast(self):
+        """
+        Place center quadrant on south eastern edge
+        """
+        baseCoordinates: Coordinates = Coordinates(x=0, y=9)
+
+        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+
+        self.assertIsNotNone(coordinateList)
+        self.assertEqual(TestIntelligence.SOUTH_EAST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
+
+    def testGenerateAdjacentCoordinatesSouthWest(self):
+        """
+        Place center quadrant on south western edge
+        """
+        baseCoordinates: Coordinates = Coordinates(x=0, y=9)
+
+        coordinateList: CoordinatesList = self.smarty.generateAdjacentCoordinates(centerCoordinates=baseCoordinates)
+
+        self.assertIsNotNone(coordinateList)
+        self.assertEqual(TestIntelligence.SOUTH_WEST_EDGE_COORDINATES_COUNT, len(coordinateList), "We should not get all directional coordinates")
 
     def testRand(self):
 
