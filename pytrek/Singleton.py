@@ -48,9 +48,6 @@ class Singleton(object):
 
     def init(self, *args, **kwds):
         """
-        Constructor of a singleton class.
-
-        @since 1.0
-        @author Laurent Burgbacher <lb@alawa.ch>
+        Constructor of a singleton class constructor;  Make sure and overrid
         """
         pass

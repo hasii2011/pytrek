@@ -38,20 +38,24 @@ class LongRangeSensorScanView(View):
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
         # set_viewport(0, QUADRANT_GRID_WIDTH - 1, 0, QUADRANT_GRID_HEIGHT - 1)
+        self._graphicCenterX: float = SCREEN_WIDTH / 2
+        self._graphicCenterY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_HEIGHT
 
-        self._lrScanViewMediator: LongRangeSensorScanMediator = LongRangeSensorScanMediator()
+        self._lrScanViewMediator: LongRangeSensorScanMediator = LongRangeSensorScanMediator(view=self,
+                                                                                            graphicCenterX=self._graphicCenterX,
+                                                                                            graphicCenterY=self._graphicCenterY)
         self._gameEngine:         GameEngine                  = GameEngine()
         self._gameState:          GameState                   = GameState()
 
     def on_draw(self):
         """
-        Draw this view
+        Draw this view with the help of the mediator.  We only the the graphics;
+        The mediator interacts with the game engine and the game state which are non-graphical
+        elements
         """
         start_render()
-        centerX: float = SCREEN_WIDTH / 2
-        centerY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_HEIGHT
 
-        self.texture.draw_sized(center_x=centerX, center_y=centerY, width=321, height=322)
+        self.texture.draw_sized(center_x=self._graphicCenterX, center_y=self._graphicCenterY, width=321, height=322)
 
         coordinates: Coordinates = self._gameState.currentQuadrantCoordinates
         self._lrScanViewMediator.update(coordinates)

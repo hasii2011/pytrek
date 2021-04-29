@@ -1,30 +1,104 @@
 from logging import Logger
 from logging import getLogger
+from typing import cast
 
+from arcade import View
 from arcade import color
 from arcade import draw_text
 
-from pytrek.Constants import CONSOLE_HEIGHT
-from pytrek.Constants import QUADRANT_GRID_HEIGHT
+from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
+from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Singleton import Singleton
+from pytrek.engine.Direction import Direction
+
 from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.LRScanCoordinates import LRScanCoordinates
+
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.DataTypes import LRScanCoordinatesList
-from pytrek.model.Quadrant import Quadrant
+
+LR_SCAN_FONT_SIZE: int = 14
 
 
 class LongRangeSensorScanMediator(Singleton):
 
     def init(self, *args, **kwds):
+        """
+        Accepts the following keyword arguments:
+        * view The arcade view for the long range scan
+        * graphicCenterX  The background center X position
+        * graphicCenterY  The background center Y position
+        Args:
+            *args:
+            **kwds:
+
+        """
 
         self.logger: Logger = getLogger(__name__)
 
         self._intelligence: Intelligence = Intelligence()
 
+        self.view: View = cast(View, None)
+        self.graphicCenterX: float = 0
+        self.graphicCenterY: float = 0
+
+        self._setKeywordParameters(**kwds)
+
+        self._windowWidth:  int = self.view.window.width
+        self._windowHeight: int = self.view.window.height
+
     def update(self, centerCoordinates: Coordinates):
 
         coordinatesList: LRScanCoordinatesList = self._intelligence.generateAdjacentCoordinates(centerCoordinates=centerCoordinates)
 
-        start_x = 50
-        start_y = (QUADRANT_GRID_HEIGHT + CONSOLE_HEIGHT) - 24
-        draw_text("Long Range Sensor Scan Coming Soon", start_x, start_y, color.WHITE, 14)
+        graphicCenterX: float = self.graphicCenterX
+        graphicCenterY: float = self.graphicCenterY
+        draw_text("E", graphicCenterX - 4, graphicCenterY - 8, color.YELLOW, LR_SCAN_FONT_SIZE)    # Adjust for font size
+
+        for scanCoordinates in coordinatesList:
+            self.logger.debug(f'{scanCoordinates=}')
+            self._drawQuadrantContents(scanCoordinates=scanCoordinates, centerX=graphicCenterX, centerY=graphicCenterY)
+
+    def _setKeywordParameters(self, **kwds):
+        """
+        Scans the keyword argument input list and attempts to set the defined instance properties;  "Declare"
+        instance variables you wish to accept prior to calling this method
+        Args:
+            **kwds:
+        """
+        for name, value in kwds.items():
+            if not hasattr(self, name):
+                raise TypeError(f"Unexpected keyword argument `{name}`")
+            setattr(self, name, value)
+
+    def _drawQuadrantContents(self, scanCoordinates: LRScanCoordinates, centerX: float, centerY: float):
+
+        drawX: float = centerX
+        drawY: float = centerY
+
+        if scanCoordinates.direction == Direction.North:
+            drawX = drawX - LR_SCAN_FONT_SIZE
+            drawY = drawY + QUADRANT_PIXEL_HEIGHT - LR_SCAN_FONT_SIZE
+        elif scanCoordinates.direction== Direction.South:
+            drawX = drawX - LR_SCAN_FONT_SIZE
+            drawY = drawY - QUADRANT_PIXEL_HEIGHT - LR_SCAN_FONT_SIZE
+        elif scanCoordinates.direction == Direction.West:
+            drawX = drawX - QUADRANT_PIXEL_WIDTH - LR_SCAN_FONT_SIZE
+            drawY = drawY - LR_SCAN_FONT_SIZE + 4
+        elif scanCoordinates.direction == Direction.East:
+            drawX = drawX + QUADRANT_PIXEL_WIDTH - LR_SCAN_FONT_SIZE
+            drawY = drawY - LR_SCAN_FONT_SIZE + 4
+        elif scanCoordinates.direction == Direction.NorthEast:
+            drawX = drawX + QUADRANT_PIXEL_WIDTH - LR_SCAN_FONT_SIZE
+            drawY = drawY + QUADRANT_PIXEL_HEIGHT - LR_SCAN_FONT_SIZE
+        elif scanCoordinates.direction == Direction.NorthWest:
+            drawX = drawX - QUADRANT_PIXEL_WIDTH - LR_SCAN_FONT_SIZE
+            drawY = drawY + QUADRANT_PIXEL_HEIGHT - LR_SCAN_FONT_SIZE
+        elif scanCoordinates.direction == Direction.SouthWest:
+            drawX = drawX - QUADRANT_PIXEL_WIDTH - LR_SCAN_FONT_SIZE
+            drawY = drawY - QUADRANT_PIXEL_HEIGHT - LR_SCAN_FONT_SIZE
+        elif scanCoordinates.direction == Direction.SouthEast:
+            drawX = drawX + QUADRANT_PIXEL_WIDTH - LR_SCAN_FONT_SIZE
+            drawY = drawY - QUADRANT_PIXEL_HEIGHT - LR_SCAN_FONT_SIZE
+
+        draw_text('999', drawX, drawY, color.WHITE, LR_SCAN_FONT_SIZE)
