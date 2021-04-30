@@ -129,6 +129,41 @@ class TestComputer(TestBase):
         distance = self.smarty.computeQuadrantDistance(startSector=startSectorCoordinates, endSector=endSectorCoordinates)
         self.logger.info(f"West/East distance is: {distance}")
 
+    def testValueStringEmptyQuadrant(self):
+
+        strValue = self.smarty.createValueString(klingonCount=0, commanderCount=0, hasStarBase=False)
+
+        self.assertIsNotNone(strValue, "Where is my string")
+        self.assertEqual("000", strValue, "Empty quadrant is all zeroes")
+
+    def testValueStringMultiKlingon(self):
+
+        strValue = self.smarty.createValueString(klingonCount=3, commanderCount=0, hasStarBase=False)
+
+        self.assertIsNotNone(strValue, "Where is my string")
+        self.assertEqual("300", strValue, "Must contain 3 Klingons and no starbase")
+
+    def testValueStringMultiKlingonAndStarbase(self):
+
+        strValue = self.smarty.createValueString(klingonCount=4, commanderCount=0, hasStarBase=True)
+
+        self.assertIsNotNone(strValue, "Where is my string")
+        self.assertEqual("410", strValue, "Must contain 4 Klingons and a starbase")
+
+    def testValueStringMultiKlingonCommanderAndStarbase(self):
+
+        strValue = self.smarty.createValueString(klingonCount=4, commanderCount=1, hasStarBase=True)
+
+        self.assertIsNotNone(strValue, "Where is my string")
+        self.assertEqual("510", strValue, "Must contain 4 Klingons and a starbase")
+
+    def testValueStringMultiKlingonCommanderAndNoStarbase(self):
+
+        strValue = self.smarty.createValueString(klingonCount=4, commanderCount=1, hasStarBase=False)
+
+        self.assertIsNotNone(strValue, "Where is my string")
+        self.assertEqual("500", strValue, "Must contain 4 Klingons and a starbase")
+
 
 def suite() -> TestSuite:
     """You need to change the name of the test class here also."""

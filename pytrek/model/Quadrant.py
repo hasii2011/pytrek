@@ -40,14 +40,14 @@ class Quadrant:
 
         self._klingonCount:   int = 0
         self._commanderCount: int = 0
+        self._hasStarBase:    bool = False
+        self._scanned:        bool = False
 
         self._klingons:   List[Klingon]   = []
         # self.commanders: List[Commander] = []
 
         self._enterprise:            Enterprise  = cast(Enterprise, None)
         self._enterpriseCoordinates: Coordinates = cast(Coordinates, None)
-
-        self._scanned: bool = False
 
         self._createQuadrant()
 
@@ -119,6 +119,14 @@ class Quadrant:
         return self._klingons
 
     @property
+    def commanderCount(self) -> int:
+        return self._commanderCount
+
+    @commanderCount.setter
+    def commanderCount(self, newValue: int):
+        self._commanderCount = newValue
+
+    @property
     def scanned(self) -> bool:
         """
         Returns whether or not this quadrant was part of a long range sensor scan
@@ -130,6 +138,14 @@ class Quadrant:
     @scanned.setter
     def scanned(self, newValue: bool):
         self._scanned = newValue
+
+    @property
+    def hasStarBase(self) -> bool:
+        return self._hasStarBase
+
+    @hasStarBase.setter
+    def hasStarBase(self, newValue: bool):
+        self._hasStarBase = newValue
 
     def getSector(self, sectorCoordinates: Coordinates) -> Sector:
         """

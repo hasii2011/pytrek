@@ -1,5 +1,4 @@
 
-from typing import cast
 
 from logging import Logger
 from logging import getLogger
@@ -82,6 +81,27 @@ class Computer(Singleton):
         Returns:
         """
         return self._computeDistance(startSector, endSector, Computer.QUADRANT_TRAVEL_FACTOR)
+
+    def createValueString(self, klingonCount: int, commanderCount: int, hasStarBase: bool) -> str:
+        """
+        Turn the input parameters into a numeric string that can be used to display
+        as the contents of a quadrant either in the Galaxy View or a long range sensor scan
+        Args:
+            klingonCount:   The Quadrant's klingon count
+            commanderCount: The Quadrant's commander count
+            hasStarBase:    Indicates whether the quadrant has a star bae
+
+        Returns:  A string in the from NNN
+        """
+
+        klingonCount = klingonCount + commanderCount
+        quadrantValue = klingonCount * 100
+        if hasStarBase:
+            quadrantValue += 10
+
+        strValue = str(quadrantValue).rjust(3, '0')
+
+        return strValue
 
     def _computeDistance(self, startCoordinates: Coordinates, endCoordinates: Coordinates, travelFactor: float) -> float:
         """

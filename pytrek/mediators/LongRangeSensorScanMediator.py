@@ -9,6 +9,7 @@ from arcade import draw_text
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Singleton import Singleton
+from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction
 
 from pytrek.engine.Intelligence import Intelligence
@@ -16,6 +17,8 @@ from pytrek.engine.LRScanCoordinates import LRScanCoordinates
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.DataTypes import LRScanCoordinatesList
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
 
 LR_SCAN_FONT_SIZE: int = 14
 
@@ -37,6 +40,8 @@ class LongRangeSensorScanMediator(Singleton):
         self.logger: Logger = getLogger(__name__)
 
         self._intelligence: Intelligence = Intelligence()
+        self._computer:     Computer     = Computer()
+        self._galaxy:       Galaxy       = Galaxy()
 
         self.view: View = cast(View, None)
         self.graphicCenterX: float = 0
@@ -53,6 +58,12 @@ class LongRangeSensorScanMediator(Singleton):
 
         graphicCenterX: float = self.graphicCenterX
         graphicCenterY: float = self.graphicCenterY
+
+        titleX: float = graphicCenterX - (QUADRANT_PIXEL_WIDTH * 2) - (QUADRANT_PIXEL_WIDTH / 2)
+        titleY: float = graphicCenterY + (QUADRANT_PIXEL_HEIGHT * 2) + (QUADRANT_PIXEL_HEIGHT / 2)
+        title:  str = f'Long Range Scan quadrant ({centerCoordinates.x},{centerCoordinates.y})'
+        draw_text(title,  titleX, titleY, color.WHITE, 18)
+
         draw_text("E", graphicCenterX - 4, graphicCenterY - 8, color.YELLOW, LR_SCAN_FONT_SIZE)    # Adjust for font size
 
         for scanCoordinates in coordinatesList:
@@ -79,7 +90,7 @@ class LongRangeSensorScanMediator(Singleton):
         if scanCoordinates.direction == Direction.North:
             drawX = drawX - LR_SCAN_FONT_SIZE
             drawY = drawY + QUADRANT_PIXEL_HEIGHT - LR_SCAN_FONT_SIZE
-        elif scanCoordinates.direction== Direction.South:
+        elif scanCoordinates.direction == Direction.South:
             drawX = drawX - LR_SCAN_FONT_SIZE
             drawY = drawY - QUADRANT_PIXEL_HEIGHT - LR_SCAN_FONT_SIZE
         elif scanCoordinates.direction == Direction.West:
@@ -101,4 +112,11 @@ class LongRangeSensorScanMediator(Singleton):
             drawX = drawX + QUADRANT_PIXEL_WIDTH - LR_SCAN_FONT_SIZE
             drawY = drawY - QUADRANT_PIXEL_HEIGHT - LR_SCAN_FONT_SIZE
 
-        draw_text('999', drawX, drawY, color.WHITE, LR_SCAN_FONT_SIZE)
+        quadrant: Quadrant = self._galaxy.getQuadrant(quadrantCoordinates=scanCoordinates.coordinates)
+
+        quadrant.scanned = True
+
+        contents: str = self._computer.createValueString(klingonCount=quadrant.klingonCount,
+                                                         commanderCount=quadrant.commanderCount,
+                                                         hasStarBase=quadrant.hasStarBase)
+        draw_text(contents, drawX, drawY, color.WHITE, LR_SCAN_FONT_SIZE)
