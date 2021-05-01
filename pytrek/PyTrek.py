@@ -7,9 +7,12 @@ from logging import DEBUG
 
 import logging.config
 
+import os
+
 from json import load as jsonLoad
 
-import PIL
+from PIL import ImageFont
+
 import arcade
 
 from arcade import PhysicsEngineSimple
@@ -18,7 +21,6 @@ from arcade import SpriteList
 from arcade import Texture
 from arcade import View
 from arcade import Window
-
 from arcade import key
 
 from arcade import draw_lrwh_rectangle_textured
@@ -31,10 +33,10 @@ from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SOUND_VOLUME_HIGH
+
 from pytrek.GameState import GameState
 
 from pytrek.engine.Computer import Computer
-
 from pytrek.engine.GameEngine import GameEngine
 
 from pytrek.gui.StatusConsole import StatusConsole
@@ -102,7 +104,7 @@ class PyTrekView(View):
         # I am cheating here because I know arcade use PIL under the covers
         #
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.FONT_RESOURCES_PACKAGE_NAME, bareFileName=FIXED_WIDTH_FONT_FILENAME)
-        PIL.ImageFont.truetype(fqFileName)
+        ImageFont.truetype(fqFileName)
 
     def setup(self):
 
@@ -140,7 +142,7 @@ class PyTrekView(View):
         self._statusConsole    = StatusConsole(gameView=self)
 
         self._quadrantMediator.playerList = playerList
-        if self.logger.getEffectiveLevel() == DEBUG:
+        if self.logger.getEffectiveLevel() == DEBUG:    # TODO make this a runtime debug flag
             self._quadrant.addKlingon()
 
         if self._quadrant.klingonCount > 0:
@@ -206,6 +208,9 @@ class PyTrekView(View):
             self._enterprise.change_x = -MOVEMENT_SPEED
         elif pressedKey == arcade.key.RIGHT:
             self._enterprise.change_x = MOVEMENT_SPEED
+        elif pressedKey == arcade.key.Q:
+            # noinspection PyUnresolvedReferences
+            os._exit(0)
         elif pressedKey == arcade.key.G:
             from pytrek.gui.GalaxyView import GalaxyView
             # TODO both of these views should be changed to use a callback;  The callback switches

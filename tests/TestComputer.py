@@ -9,6 +9,7 @@ from pytrek.Constants import MAX_SECTOR_X_COORDINATE
 from pytrek.Constants import MAX_SECTOR_Y_COORDINATE
 from pytrek.Constants import MIN_SECTOR_X_COORDINATE
 from pytrek.Constants import MIN_SECTOR_Y_COORDINATE
+from pytrek.engine.ArcadePosition import ArcadePosition
 
 from pytrek.model.Coordinates import Coordinates
 
@@ -163,6 +164,41 @@ class TestComputer(TestBase):
 
         self.assertIsNotNone(strValue, "Where is my string")
         self.assertEqual("500", strValue, "Must contain 4 Klingons and a starbase")
+
+    def testGalaxyArcadePosition_212_786(self):
+
+        expectedArcade: ArcadePosition = ArcadePosition(x=212, y=786)
+        actualArcade:   ArcadePosition = Computer.gamePositionToScreenPosition(gameCoordinates=Coordinates(x=3, y=0))
+
+        self.assertEqual(expectedArcade, actualArcade, 'Computer is broken')
+
+    def testGalaxyArcadePosition_20_594(self):
+
+        expectedArcade: ArcadePosition = ArcadePosition(x=20, y=594)
+        actualArcade:   ArcadePosition = Computer.gamePositionToScreenPosition(gameCoordinates=Coordinates(x=0, y=3))
+
+        self.assertEqual(expectedArcade, actualArcade, 'Computer is broken')
+
+    def testGalaxyArcadePosition_276_530(self):
+
+        expectedArcade: ArcadePosition = ArcadePosition(x=276, y=530)
+        actualArcade:   ArcadePosition = Computer.gamePositionToScreenPosition(gameCoordinates=Coordinates(x=4, y=4))
+
+        self.assertEqual(expectedArcade, actualArcade, 'Computer is broken')
+
+    def testGalaxyArcadePosition_84_786(self):
+
+        expectedArcade: ArcadePosition = ArcadePosition(x=84, y=786)
+        actualArcade:   ArcadePosition = Computer.gamePositionToScreenPosition(gameCoordinates=Coordinates(x=1, y=0))
+
+        self.assertEqual(expectedArcade, actualArcade, 'Computer is broken')
+
+    def testGalaxyArcadePosition_596_201(self):
+
+        expectedArcade: ArcadePosition = ArcadePosition(x=596, y=210)
+        actualArcade:   ArcadePosition = Computer.gamePositionToScreenPosition(gameCoordinates=Coordinates(x=9, y=9))
+
+        self.assertEqual(expectedArcade, actualArcade, 'Computer is broken')
 
 
 def suite() -> TestSuite:

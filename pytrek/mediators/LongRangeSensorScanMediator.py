@@ -49,10 +49,7 @@ class LongRangeSensorScanMediator(Singleton):
 
         self._setKeywordParameters(**kwds)
 
-        self._windowWidth:  int = self.view.window.width
-        self._windowHeight: int = self.view.window.height
-
-    def update(self, centerCoordinates: Coordinates):
+    def draw(self, centerCoordinates: Coordinates):
 
         coordinatesList: LRScanCoordinatesList = self._intelligence.generateAdjacentCoordinates(centerCoordinates=centerCoordinates)
 
@@ -61,7 +58,7 @@ class LongRangeSensorScanMediator(Singleton):
 
         titleX: float = graphicCenterX - (QUADRANT_PIXEL_WIDTH * 2) - (QUADRANT_PIXEL_WIDTH / 2)
         titleY: float = graphicCenterY + (QUADRANT_PIXEL_HEIGHT * 2) + (QUADRANT_PIXEL_HEIGHT / 2)
-        title:  str = f'Long Range Scan quadrant ({centerCoordinates.x},{centerCoordinates.y})'
+        title:  str = f'Long Range Scan Quadrant ({centerCoordinates.x},{centerCoordinates.y})'
         draw_text(title,  titleX, titleY, color.WHITE, 18)
 
         draw_text("E", graphicCenterX - 4, graphicCenterY - 8, color.YELLOW, LR_SCAN_FONT_SIZE)    # Adjust for font size

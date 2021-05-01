@@ -41,9 +41,9 @@ class LongRangeSensorScanView(View):
         self._graphicCenterX: float = SCREEN_WIDTH / 2
         self._graphicCenterY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_HEIGHT
 
-        self._lrScanViewMediator: LongRangeSensorScanMediator = LongRangeSensorScanMediator(view=self,
-                                                                                            graphicCenterX=self._graphicCenterX,
-                                                                                            graphicCenterY=self._graphicCenterY)
+        self._mediator: LongRangeSensorScanMediator = LongRangeSensorScanMediator(view=self,
+                                                                                  graphicCenterX=self._graphicCenterX,
+                                                                                  graphicCenterY=self._graphicCenterY)
         self._gameEngine:         GameEngine                  = GameEngine()
         self._gameState:          GameState                   = GameState()
 
@@ -58,7 +58,7 @@ class LongRangeSensorScanView(View):
         self.texture.draw_sized(center_x=self._graphicCenterX, center_y=self._graphicCenterY, width=321, height=322)
 
         coordinates: Coordinates = self._gameState.currentQuadrantCoordinates
-        self._lrScanViewMediator.update(coordinates)
+        self._mediator.draw(coordinates)
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         """

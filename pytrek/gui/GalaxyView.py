@@ -1,5 +1,4 @@
-from arcade import color
-from arcade import draw_text
+
 from arcade import start_render
 
 from pytrek.Constants import CONSOLE_HEIGHT
@@ -9,9 +8,13 @@ from pytrek.Constants import SCREEN_WIDTH
 from arcade import View
 from arcade import load_texture
 
+from pytrek.GameState import GameState
+
 from pytrek.LocateResources import LocateResources
 
 from pytrek.PyTrek import PyTrekView
+
+from pytrek.mediators.GalaxyViewMediator import GalaxyViewMediator
 
 
 class GalaxyView(View):
@@ -28,6 +31,8 @@ class GalaxyView(View):
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
         # set_viewport(0, QUADRANT_GRID_WIDTH - 1, 0, QUADRANT_GRID_HEIGHT - 1)
+        self._gameState: GameState          = GameState()
+        self._mediator:  GalaxyViewMediator = GalaxyViewMediator()
 
     def on_draw(self):
         """
@@ -37,12 +42,9 @@ class GalaxyView(View):
         centerX: float = SCREEN_WIDTH / 2
         centerY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_HEIGHT
 
-        self.texture.draw_sized(center_x=centerX, center_y=centerY,
-                                width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT)
+        self.texture.draw_sized(center_x=centerX, center_y=centerY, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT)
 
-        start_x = 50
-        start_y = (QUADRANT_GRID_HEIGHT + CONSOLE_HEIGHT) - 24
-        draw_text("Galaxy Scan Coming Soon", start_x, start_y, color.WHITE, 14)
+        self._mediator.draw(centerCoordinates=self._gameState.currentQuadrantCoordinates)
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         """

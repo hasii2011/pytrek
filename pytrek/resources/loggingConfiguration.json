@@ -23,7 +23,7 @@
             "propagate": "False"
         },
         "PyTrek": {
-            "level":     "DEBUG",
+            "level":     "INFO",
             "handlers":  ["consoleHandler"],
             "propagate": "False"
         },

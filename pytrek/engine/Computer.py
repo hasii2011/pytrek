@@ -8,10 +8,11 @@ import math
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
-from pytrek.Constants import QUADRANT_MARGIN
+
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_ROWS
+from pytrek.engine.ArcadePosition import ArcadePosition
 
 from pytrek.model.Coordinates import Coordinates
 
@@ -31,7 +32,15 @@ class Computer(Singleton):
         self.logger: Logger = getLogger(__name__)
 
     @classmethod
-    def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates):
+    def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates) -> ArcadePosition:
+        """
+        Computes x,y arcade position within the galaxy
+        Args:
+            gameCoordinates:   The game coordinates
+
+        Returns:  Arcade x,y Position
+
+        """
 
         sectorX: int = gameCoordinates.x
         sectorY: int = gameCoordinates.y
@@ -41,13 +50,13 @@ class Computer(Singleton):
         adjustSectorX: int = sectorX
         adjustSectorY: int = (QUADRANT_ROWS - sectorY) - 1
 
-        xMargins: int = (sectorX + 1) * QUADRANT_MARGIN
-        yMargins: int = (sectorY + 1) * QUADRANT_MARGIN
+        xMargins = -12  # Font Fudge Factor
+        yMargins = -12  # Font Fudge Factor
 
         x = (adjustSectorX * QUADRANT_PIXEL_WIDTH) + HALF_QUADRANT_PIXEL_WIDTH + xMargins
         y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + yMargins + CONSOLE_HEIGHT
 
-        return x, y
+        return ArcadePosition(x=x, y=y)
 
     def computeSectorCoordinates(self, x: int, y: int) -> Coordinates:
         """

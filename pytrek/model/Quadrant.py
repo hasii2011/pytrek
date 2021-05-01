@@ -82,6 +82,7 @@ class Quadrant:
         self._enterprise = enterprise
         enterprise.currentPosition  = coordinates
         self._enterpriseCoordinates = coordinates
+        self.scanned = True     # Naturally, we are here
 
     @property
     def coordinates(self) -> Coordinates:
@@ -207,3 +208,17 @@ class Quadrant:
                 row.append(sector)
                 self.logger.debug(f'Created empty sector ({x},{y})')
             self._sectors.append(row)
+
+    def __str__(self) -> str:
+
+        depiction: str = (
+            f'coordinates={self.coordinates} '
+            f'klingonCount={self.klingonCount} '
+            f'commanderCount={self.commanderCount} '
+            f'hasStarBase={self.hasStarBase}'
+        )
+
+        return depiction
+
+    def __repr__(self) -> str:
+        return self.__str__()
