@@ -34,7 +34,6 @@
         },
         "pytrek.mediators.QuadrantMediator": {
             "level":     "INFO",
-            "handlers":  ["consoleHandler"],
             "propagate": "False"
         }
     }

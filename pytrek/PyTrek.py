@@ -15,7 +15,7 @@ from PIL import ImageFont
 
 import arcade
 
-from arcade import PhysicsEngineSimple
+# from arcade import PhysicsEngineSimple
 from arcade import Sound
 from arcade import SpriteList
 from arcade import Texture
@@ -78,15 +78,13 @@ class PyTrekView(View):
 
         self.logger: Logger = getLogger(PyTrekView.MADE_UP_PRETTY_MAIN_NAME)
 
-        # set_background_color(color.LIGHT_GRAY)
-        # self._backgroundSprite: QuadrantBackground = cast(QuadrantBackground, None)
         self.background:  Texture    = cast(Texture, None)
         self._enterprise: Enterprise = cast(Enterprise, None)
-        # If you have sprite lists, you should create them here,
-        # and set them to None
+        # If you have sprite lists, you should create them here and set them to None
 
+        self.klingonTorpedoes: SpriteList = cast(SpriteList, None)
         # self.physicsEngine: PhysicsEnginePlatformer = cast(PhysicsEnginePlatformer, None)
-        self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
+        # self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
 
         self._intelligence: Intelligence = cast(Intelligence, None)
         self._computer:     Computer     = cast(Computer, None)
@@ -118,8 +116,8 @@ class PyTrekView(View):
         # self.physicsEngine = PhysicsEnginePlatformer(self.enterprise, self.hardSpriteList, gravity_constant=GRAVITY)
 
         self._enterprise: Enterprise = Enterprise()
-        self._hardSpriteList: SpriteList = SpriteList()
-        self.physicsEngine = PhysicsEngineSimple(self._enterprise, self._hardSpriteList)
+
+        # self.physicsEngine = PhysicsEngineSimple(self._enterprise, self._hardSpriteList)
 
         self._intelligence = Intelligence()
         self._computer     = Computer()
@@ -135,13 +133,16 @@ class PyTrekView(View):
         playerList: SpriteList = SpriteList()
         playerList.append(self._enterprise)
 
+        self.klingonTorpedoes = SpriteList()
+
         self._gameState.currentSectorCoordinates = currentSectorCoordinates
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
         self._quadrantMediator = QuadrantMediator()
         self._statusConsole    = StatusConsole(gameView=self)
 
-        self._quadrantMediator.playerList = playerList
+        self._quadrantMediator.playerList       = playerList
+        self._quadrantMediator.klingonTorpedoes = self.klingonTorpedoes
         if self.logger.getEffectiveLevel() == DEBUG:    # TODO make this a runtime debug flag
             self._quadrant.addKlingon()
 
@@ -174,6 +175,7 @@ class PyTrekView(View):
 
         self._quadrantMediator.playerList.draw()
         self._quadrantMediator.klingonList.draw()
+        self._quadrantMediator.klingonTorpedoes.draw()    # TODO put this in mediator
 
         self._statusConsole.draw()
 
@@ -186,11 +188,11 @@ class PyTrekView(View):
         Args:
             delta_time:  Time interval since the last time the function was called.
         """
-        self.physicsEngine.update()
+        # self.physicsEngine.update()
         self._quadrantMediator.update(quadrant=self._quadrant)
         self._quadrantMediator.playerList.update()
+        self._quadrantMediator.klingonTorpedoes.update()
 
-        self._gameEngine.updateRealTimeClock(deltaTime=delta_time)
         self._gameEngine.updateRealTimeClock(deltaTime=delta_time)
 
     def on_key_press(self, pressedKey, key_modifiers):

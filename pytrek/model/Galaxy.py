@@ -9,17 +9,15 @@ from logging import DEBUG
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
+
 from pytrek.GameState import GameState
-
 from pytrek.Singleton import Singleton
-from pytrek.engine.GameEngine import GameEngine
 
+from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
-
-# from org.hasii.pytrek.GameState import GameState
 
 QuadrantRow = NewType('QuadrantRow', List[Quadrant])
 GalaxyGrid  = NewType('GalaxyGrid', List[QuadrantRow])
@@ -138,9 +136,10 @@ class Galaxy(Singleton):
         """
         TODO: Control this with runtime flag
         """
-        for y in range(GALAXY_ROWS):
-            quadRow = self.quadrants[y]
-            for x in range(GALAXY_COLUMNS):
-                quadrant = quadRow[x]
-                quadrant: Quadrant = cast(Quadrant, quadrant)
-                # self.logger.debug(f'Quadrant({x},{y}) Klingon Count: {quadrant.klingonCount}')
+        if self.logger.getEffectiveLevel() == DEBUG:
+            for y in range(GALAXY_ROWS):
+                quadRow = self.quadrants[y]
+                for x in range(GALAXY_COLUMNS):
+                    quadrant = quadRow[x]
+                    quadrant: Quadrant = cast(Quadrant, quadrant)
+                    self.logger.debug(f'Quadrant({x},{y}) Klingon Count: {quadrant.klingonCount}')

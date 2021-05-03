@@ -11,6 +11,7 @@ from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 
 from pytrek.engine.ArcadePosition import ArcadePosition
+from pytrek.engine.GameEngine import GameEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
@@ -29,13 +30,22 @@ class QuadrantMediator(Singleton):
     This class avoids putting UI logic (arcade) in the model class, Quadrant.
     """
 
+    KLINGON_TORPEDO_EVENT_SECONDS = 15
+
     def init(self, *args, **kwds):
 
         self.logger: Logger = getLogger(__name__)
 
+        self._gameEngine: GameEngine = GameEngine()
+
         self._playerList:    SpriteList = SpriteList()
         self._klingonList:   SpriteList = SpriteList()
         self._commanderList: SpriteList = SpriteList()
+
+        self._klingonTorpedoes: SpriteList = cast(SpriteList, None)
+
+        self._lastTimeCheck: float = self._gameEngine.gameClock / 1000
+        self.logger.info(f'{self._lastTimeCheck=}')
 
     @property
     def playerList(self) -> SpriteList:
@@ -61,6 +71,18 @@ class QuadrantMediator(Singleton):
     def commanderList(self, newValues: SpriteList):
         self._commanderList = newValues
 
+    @property
+    def klingonTorpedoes(self) -> SpriteList:
+        return self._klingonTorpedoes
+
+    @klingonTorpedoes.setter
+    def klingonTorpedoes(self, newList: SpriteList):
+        """
+        Args:
+            newList:
+        """
+        self._klingonTorpedoes = newList
+
     def update(self, quadrant: Quadrant):
 
         if self.logger.getEffectiveLevel() == DEBUG:
@@ -68,13 +90,21 @@ class QuadrantMediator(Singleton):
             if quadrant.klingonCount > 0:
                 self.logger.debug(f'{quadrant.klingonCount=}')
 
+        self._updateQuadrant(quadrant)
+        currentTime:    float = self._gameEngine.gameClock
+        deltaClockTime: float = currentTime - self._lastTimeCheck
+        if  deltaClockTime > QuadrantMediator.KLINGON_TORPEDO_EVENT_SECONDS:
+            self.logger.info(f'Time for Klingons to fire torpedoes')
+            self._lastTimeCheck = currentTime
+
+    def _updateQuadrant(self, quadrant):
         for y in range(QUADRANT_ROWS):
             for x in range(QUADRANT_COLUMNS):
 
                 sector: Sector = quadrant.getSector(Coordinates(x, y))
                 self.logger.debug(f'{sector}')
 
-                gamePiece:  GamePiece  = sector.sprite
+                gamePiece: GamePiece = sector.sprite
                 sectorType: SectorType = sector.type
 
                 if sectorType != SectorType.EMPTY:

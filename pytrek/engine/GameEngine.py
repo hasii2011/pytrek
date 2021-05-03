@@ -40,6 +40,15 @@ class GameEngine(Singleton):
         self._accumulatedDelta: float = 0.0
         self._gameClock:        float = 0.0
 
+    @property
+    def gameClock(self) -> float:
+        """
+        Read only property
+
+        Returns:    The current real time since the game started (msecs)
+        """
+        return self._gameClock
+
     def impulse(self, newCoordinates: Coordinates, quadrant: Quadrant, enterprise: Enterprise):
         """
 
