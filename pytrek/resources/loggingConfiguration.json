@@ -20,16 +20,15 @@
     "loggers": {
         "root": {
             "level": "ERROR",
+            "handlers":  ["consoleHandler"],
             "propagate": "False"
         },
         "PyTrek": {
             "level":     "INFO",
-            "handlers":  ["consoleHandler"],
             "propagate": "False"
         },
         "pytrek": {
             "level":     "INFO",
-            "handlers":  ["consoleHandler"],
             "propagate": "False"
         },
         "pytrek.mediators.QuadrantMediator": {

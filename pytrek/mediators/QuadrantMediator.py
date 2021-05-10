@@ -1,21 +1,29 @@
-
+from typing import List
 from typing import cast
 
 from logging import Logger
 from logging import getLogger
 from logging import DEBUG
 
+from arcade import Sound
+from arcade import Sprite
 from arcade import SpriteList
+from arcade import check_for_collision_with_list
 
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
+from pytrek.Constants import SOUND_VOLUME_HIGH
 
+from pytrek.LocateResources import LocateResources
+
+from pytrek.engine.Computer import Computer
 from pytrek.engine.ArcadePosition import ArcadePosition
 from pytrek.engine.GameEngine import GameEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
+from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -30,7 +38,7 @@ class QuadrantMediator(Singleton):
     This class avoids putting UI logic (arcade) in the model class, Quadrant.
     """
 
-    KLINGON_TORPEDO_EVENT_SECONDS = 15
+    KLINGON_TORPEDO_EVENT_SECONDS = 5
 
     def init(self, *args, **kwds):
 
@@ -42,7 +50,12 @@ class QuadrantMediator(Singleton):
         self._klingonList:   SpriteList = SpriteList()
         self._commanderList: SpriteList = SpriteList()
 
-        self._klingonTorpedoes: SpriteList = cast(SpriteList, None)
+        self._klingonTorpedoes:    SpriteList = cast(SpriteList, None)
+
+        self._soundKlingonTorpedo: Sound = cast(Sound, None)
+        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
+                                                      bareFileName='klingon_torpedo.wav')
+        self._soundKlingonTorpedo = Sound(file_name=fqFileName)
 
         self._lastTimeCheck: float = self._gameEngine.gameClock / 1000
         self.logger.info(f'{self._lastTimeCheck=}')
@@ -91,11 +104,25 @@ class QuadrantMediator(Singleton):
                 self.logger.debug(f'{quadrant.klingonCount=}')
 
         self._updateQuadrant(quadrant)
+
         currentTime:    float = self._gameEngine.gameClock
         deltaClockTime: float = currentTime - self._lastTimeCheck
-        if  deltaClockTime > QuadrantMediator.KLINGON_TORPEDO_EVENT_SECONDS:
+        if deltaClockTime > QuadrantMediator.KLINGON_TORPEDO_EVENT_SECONDS:
             self.logger.info(f'Time for Klingons to fire torpedoes')
+            klingons: List[Klingon] = quadrant.klingons
+            for klingon in klingons:
+                self._fireKlingonTorpedo(klingon=klingon, enterprise=quadrant.enterprise)
+
             self._lastTimeCheck = currentTime
+
+        self.playerList.update()
+        self.klingonTorpedoes.update()
+
+        torpedoesThatHit: List[Sprite] = check_for_collision_with_list(sprite=quadrant.enterprise, sprite_list=self.klingonTorpedoes)
+        for torpedoHit in torpedoesThatHit:
+            klingonTorpedo: KlingonTorpedo = cast(KlingonTorpedo, torpedoHit)
+            self.logger.info(f'{klingonTorpedo.uuid} has hit the Enterprise')
+            klingonTorpedo.remove_from_sprite_lists()
 
     def _updateQuadrant(self, quadrant):
         for y in range(QUADRANT_ROWS):
@@ -140,3 +167,19 @@ class QuadrantMediator(Singleton):
 
         klingon.center_x = arcadeX
         klingon.center_y = arcadeY
+
+    def _fireKlingonTorpedo(self, klingon: Klingon, enterprise: Enterprise):
+
+        self.logger.info(f'Klingon @ {klingon.currentPosition} firing; Enterprise @ {enterprise.currentPosition}')
+
+        klingonPoint:    ArcadePosition = Computer.gamePositionToScreenPosition(gameCoordinates=klingon.currentPosition)
+        enterprisePoint: ArcadePosition = Computer.gamePositionToScreenPosition(gameCoordinates=enterprise.currentPosition)
+
+        klingonTorpedo: KlingonTorpedo = KlingonTorpedo()
+        klingonTorpedo.center_x = klingonPoint.x
+        klingonTorpedo.center_y = klingonPoint.y
+        klingonTorpedo.inMotion = True
+        klingonTorpedo.destinationPoint = enterprisePoint
+
+        self.klingonTorpedoes.append(klingonTorpedo)
+        self._soundKlingonTorpedo.play(volume=SOUND_VOLUME_HIGH)

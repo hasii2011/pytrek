@@ -198,6 +198,9 @@ class Quadrant:
         self.logger.debug(f"Placed klingon at: quadrant: {self._coordinates} {sector=}, {kPower=}")
         return klingon
 
+    def placeKlingonTorpedo(self):
+        sector      = self.getRandomEmptySector()
+
     def _createQuadrant(self):
         for y in range(QUADRANT_ROWS):
             row: List[Sector] = []

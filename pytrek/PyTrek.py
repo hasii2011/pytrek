@@ -96,8 +96,7 @@ class PyTrekView(View):
         self._quadrantMediator: QuadrantMediator = cast(QuadrantMediator, None)
         self._statusConsole:    StatusConsole    = cast(StatusConsole, None)
 
-        self._soundImpulse: Sound        = cast(Sound, None)
-
+        self._soundImpulse:        Sound = cast(Sound, None)
         #
         # I am cheating here because I know arcade use PIL under the covers
         #
@@ -143,6 +142,7 @@ class PyTrekView(View):
 
         self._quadrantMediator.playerList       = playerList
         self._quadrantMediator.klingonTorpedoes = self.klingonTorpedoes
+
         if self.logger.getEffectiveLevel() == DEBUG:    # TODO make this a runtime debug flag
             self._quadrant.addKlingon()
 
@@ -190,8 +190,8 @@ class PyTrekView(View):
         """
         # self.physicsEngine.update()
         self._quadrantMediator.update(quadrant=self._quadrant)
-        self._quadrantMediator.playerList.update()
-        self._quadrantMediator.klingonTorpedoes.update()
+        # self._quadrantMediator.playerList.update()
+        # self._quadrantMediator.klingonTorpedoes.update()
 
         self._gameEngine.updateRealTimeClock(deltaTime=delta_time)
 
@@ -278,7 +278,6 @@ class PyTrekView(View):
     def _loadSounds(self):
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='probe_launch_1.wav')
-
         self._soundImpulse = Sound(file_name=fqFileName)
 
 
