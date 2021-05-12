@@ -42,7 +42,7 @@ PropertyNames = NewType('PropertyNames', List[PropertyName])
 class StatusConsole:
     """
     This class is not really a view;  It is essentially a chunk of code
-    that knows where to draw on the game view.  The game view
+    that knows here to draw on the game view.  The game view
     has a reserved portion of the UI set aside for it
     """
 

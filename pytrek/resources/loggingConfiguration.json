@@ -34,6 +34,11 @@
         "pytrek.mediators.QuadrantMediator": {
             "level":     "INFO",
             "propagate": "False"
+        },
+        "pytrek.gui.gamepieces.KlingonTorpedoFollower": {
+            "level":     "INFO",
+            "propagate": "False"
         }
+
     }
 }

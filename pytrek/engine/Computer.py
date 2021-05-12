@@ -58,18 +58,24 @@ class Computer(Singleton):
 
         return ArcadePosition(x=x, y=y)
 
-    def computeSectorCoordinates(self, x: int, y: int) -> Coordinates:
+    def computeSectorCoordinates(self, x: float, y: float) -> Coordinates:
         """
-        From an arcade screen position determine which sector in quadrant
+        From an arcade screen point determine which sector in quadrant
+
+        Args:
+            x: Arcade X
+            y: Arcade Y
+
+        Returns:  Game Sector Coordinates
         """
         return self.computeCoordinates(x=x, y=y)
 
-    def computeQuadrantCoordinates(self, x: int, y: int) -> Coordinates:
+    def computeQuadrantCoordinates(self, x: float, y: float) -> Coordinates:
         return self.computeCoordinates(x=x, y=y)
 
-    def computeCoordinates(self, x: int, y: int) -> Coordinates:
+    def computeCoordinates(self, x: float, y: float) -> Coordinates:
 
-        adjustY: int = y - CONSOLE_HEIGHT
+        adjustY: float = y - CONSOLE_HEIGHT
 
         gameX = int(math.floor(x // QUADRANT_PIXEL_WIDTH))
         gameY = int(math.floor(adjustY // QUADRANT_PIXEL_HEIGHT))

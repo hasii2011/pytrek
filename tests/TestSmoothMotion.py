@@ -83,7 +83,7 @@ class TestSmoothMotion(TestBase):
 
         actualAngleRadians:   float = radians(spriteRotationAngle - SmoothMotion.IMAGE_ROTATION)  # What angle are we at now in radians?
 
-        angleDiffRadians:     float = targetAngleRadians - actualAngleRadians        # What is the difference between what we want, and where we are?
+        angleDiffRadians:     float = targetAngleRadians - actualAngleRadians        # What is the difference between what we want, and here we are?
 
         self.logger.info(f'{angleDiffRadians=}')
 

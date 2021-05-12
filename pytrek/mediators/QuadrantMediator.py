@@ -50,7 +50,8 @@ class QuadrantMediator(Singleton):
         self._klingonList:   SpriteList = SpriteList()
         self._commanderList: SpriteList = SpriteList()
 
-        self._klingonTorpedoes:    SpriteList = cast(SpriteList, None)
+        self._klingonTorpedoes: SpriteList = cast(SpriteList, None)
+        self._torpedoFollowers: SpriteList = cast(SpriteList, None)
 
         self._soundKlingonTorpedo: Sound = cast(Sound, None)
         fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
@@ -96,6 +97,14 @@ class QuadrantMediator(Singleton):
         """
         self._klingonTorpedoes = newList
 
+    @property
+    def torpedoFollowers(self) -> SpriteList:
+        return self._torpedoFollowers
+
+    @torpedoFollowers.setter
+    def torpedoFollowers(self, newValues: SpriteList):
+        self._torpedoFollowers = newValues
+
     def update(self, quadrant: Quadrant):
 
         if self.logger.getEffectiveLevel() == DEBUG:
@@ -117,12 +126,16 @@ class QuadrantMediator(Singleton):
 
         self.playerList.update()
         self.klingonTorpedoes.update()
+        self.torpedoFollowers.update()
 
         torpedoesThatHit: List[Sprite] = check_for_collision_with_list(sprite=quadrant.enterprise, sprite_list=self.klingonTorpedoes)
         for torpedoHit in torpedoesThatHit:
             klingonTorpedo: KlingonTorpedo = cast(KlingonTorpedo, torpedoHit)
             self.logger.info(f'{klingonTorpedo.uuid} has hit the Enterprise')
             klingonTorpedo.remove_from_sprite_lists()
+        #
+        # TODO: Account for torpedo missing when Enterprise moves
+        #
 
     def _updateQuadrant(self, quadrant):
         for y in range(QUADRANT_ROWS):
@@ -179,7 +192,10 @@ class QuadrantMediator(Singleton):
         klingonTorpedo.center_x = klingonPoint.x
         klingonTorpedo.center_y = klingonPoint.y
         klingonTorpedo.inMotion = True
-        klingonTorpedo.destinationPoint = enterprisePoint
+        klingonTorpedo.destinationPoint  = enterprisePoint
+        klingonTorpedo.firedFromPosition = klingon.currentPosition
+        klingonTorpedo.followers  = self.torpedoFollowers
 
         self.klingonTorpedoes.append(klingonTorpedo)
         self._soundKlingonTorpedo.play(volume=SOUND_VOLUME_HIGH)
+        self.logger.info(f'{klingonTorpedo.firedFromPosition=}')

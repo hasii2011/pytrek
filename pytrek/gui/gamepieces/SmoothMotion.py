@@ -114,7 +114,7 @@ class SmoothMotion:
         targetAngleRadians:   float = self.computeTargetAngle(xDiff, yDiff)
         actualAngleRadians:   float = radians(spriteRotationAngle - SmoothMotion.IMAGE_ROTATION)  # What angle are we at now in radians?
         rotationSpeedRadians: float = radians(rotationalSpeed)                  # How fast can we rotate?
-        angleDiffRadians:     float = targetAngleRadians - actualAngleRadians        # What is the difference between what we want, and where we are?
+        angleDiffRadians:     float = targetAngleRadians - actualAngleRadians        # What is the difference between what we want, and here we are?
 
         # Are we close enough to not need to rotate?
         clockwise: bool = cast(bool, None)

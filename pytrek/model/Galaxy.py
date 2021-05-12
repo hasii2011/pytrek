@@ -47,7 +47,7 @@ class Galaxy(Singleton):
         if self.logger.getEffectiveLevel() == DEBUG:
             self._debugKlingonQuadrants: List[Coordinates] = []
         """
-        A list of the coordinates where we place Klingons;  There may be duplicate
+        A list of the coordinates here we place Klingons;  There may be duplicate
         coordinates if we randomly picked the same quadrant
         """
         self._createGalaxy()

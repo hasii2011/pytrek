@@ -83,6 +83,7 @@ class PyTrekView(View):
         # If you have sprite lists, you should create them here and set them to None
 
         self.klingonTorpedoes: SpriteList = cast(SpriteList, None)
+        self.torpedoFollowers: SpriteList = cast(SpriteList, None)
         # self.physicsEngine: PhysicsEnginePlatformer = cast(PhysicsEnginePlatformer, None)
         # self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
 
@@ -133,6 +134,7 @@ class PyTrekView(View):
         playerList.append(self._enterprise)
 
         self.klingonTorpedoes = SpriteList()
+        self.torpedoFollowers = SpriteList()
 
         self._gameState.currentSectorCoordinates = currentSectorCoordinates
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
@@ -142,6 +144,7 @@ class PyTrekView(View):
 
         self._quadrantMediator.playerList       = playerList
         self._quadrantMediator.klingonTorpedoes = self.klingonTorpedoes
+        self._quadrantMediator.torpedoFollowers = self.torpedoFollowers
 
         if self.logger.getEffectiveLevel() == DEBUG:    # TODO make this a runtime debug flag
             self._quadrant.addKlingon()
@@ -175,7 +178,8 @@ class PyTrekView(View):
 
         self._quadrantMediator.playerList.draw()
         self._quadrantMediator.klingonList.draw()
-        self._quadrantMediator.klingonTorpedoes.draw()    # TODO put this in mediator
+        self._quadrantMediator.klingonTorpedoes.draw()      # TODO put this in mediator
+        self._quadrantMediator.torpedoFollowers.draw()      # TODO put this in mediator
 
         self._statusConsole.draw()
 
@@ -190,8 +194,6 @@ class PyTrekView(View):
         """
         # self.physicsEngine.update()
         self._quadrantMediator.update(quadrant=self._quadrant)
-        # self._quadrantMediator.playerList.update()
-        # self._quadrantMediator.klingonTorpedoes.update()
 
         self._gameEngine.updateRealTimeClock(deltaTime=delta_time)
 

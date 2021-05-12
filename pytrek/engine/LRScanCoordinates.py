@@ -10,7 +10,7 @@ class LRScanCoordinates:
     """
     This data object classifies coordinates for the method Intelligence.generateAdjacentCoordinates.
     It indicates the coordinate value and the direction from the center quadrant;  Aka,
-    where the Enterprise is located
+    here the Enterprise is located
 
     """
 
