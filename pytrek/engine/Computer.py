@@ -118,6 +118,23 @@ class Computer(Singleton):
 
         return strValue
 
+    def computeHitValueOnEnterprise(self, klingonPosition: Coordinates, enterprisePosition: Coordinates, klingonPower: float) -> float:
+        """
+        Based on the Klingon power value and the distance between the two
+
+        Args:
+            klingonPosition:
+            enterprisePosition:
+            klingonPower:
+
+        Returns:  The effective energy drainage on the Enterprise
+        """
+
+        distance:  float = self.computeQuadrantDistance(startSector=klingonPosition, endSector=enterprisePosition)
+        hitFactor: float = 1.3 - distance
+        hit:       float = klingonPower * hitFactor
+        return hit
+
     def _computeDistance(self, startCoordinates: Coordinates, endCoordinates: Coordinates, travelFactor: float) -> float:
         """
         From Java code:

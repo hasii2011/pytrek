@@ -16,7 +16,12 @@ class KlingonTorpedoFollower(GamePiece):
 
         GamePiece.__init__(self, filename=fqFileName)
 
+        self._uuid:      uuid4 = uuid4()            # My ID
         self._following: uuid4 = cast(uuid4, None)
+
+    @property
+    def uuid(self) -> uuid4:
+        return self._uuid
 
     @property
     def following(self) -> uuid4:

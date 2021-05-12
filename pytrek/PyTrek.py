@@ -134,7 +134,7 @@ class PyTrekView(View):
         playerList.append(self._enterprise)
 
         self.klingonTorpedoes = SpriteList()
-        self.torpedoFollowers = SpriteList()
+        self.torpedoFollowers = SpriteList(is_static=True)
 
         self._gameState.currentSectorCoordinates = currentSectorCoordinates
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)

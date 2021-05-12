@@ -8,7 +8,6 @@ from logging import DEBUG
 from arcade import Sound
 from arcade import Sprite
 from arcade import SpriteList
-from arcade import check_for_collision_with_list
 
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
@@ -24,6 +23,7 @@ from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
+from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -38,13 +38,14 @@ class QuadrantMediator(Singleton):
     This class avoids putting UI logic (arcade) in the model class, Quadrant.
     """
 
-    KLINGON_TORPEDO_EVENT_SECONDS = 5
+    KLINGON_TORPEDO_EVENT_SECONDS = 10      # TODO  Compute this
 
     def init(self, *args, **kwds):
 
         self.logger: Logger = getLogger(__name__)
 
         self._gameEngine: GameEngine = GameEngine()
+        self._computer:   Computer   = Computer()
 
         self._playerList:    SpriteList = SpriteList()
         self._klingonList:   SpriteList = SpriteList()
@@ -128,11 +129,15 @@ class QuadrantMediator(Singleton):
         self.klingonTorpedoes.update()
         self.torpedoFollowers.update()
 
-        torpedoesThatHit: List[Sprite] = check_for_collision_with_list(sprite=quadrant.enterprise, sprite_list=self.klingonTorpedoes)
-        for torpedoHit in torpedoesThatHit:
-            klingonTorpedo: KlingonTorpedo = cast(KlingonTorpedo, torpedoHit)
-            self.logger.info(f'{klingonTorpedo.uuid} has hit the Enterprise')
-            klingonTorpedo.remove_from_sprite_lists()
+        expendedTorpedoes: List[Sprite] = self._checkTorpedoesArrivedAtDestination()
+        for expendedTorpedo in expendedTorpedoes:
+
+            expendedTorpedo: KlingonTorpedo = cast(KlingonTorpedo, expendedTorpedo)
+            self.logger.info(f'{expendedTorpedo.uuid} arrived at destination')
+            self._removeTorpedoFollowers(klingonTorpedo=expendedTorpedo)
+            if self._didTorpedoHit(klingonTorpedo=expendedTorpedo, enterpriseCoordinates=quadrant.enterpriseCoordinates):
+                self.logger.info(f'*** Enterprise was hit ***')
+            expendedTorpedo.remove_from_sprite_lists()
         #
         # TODO: Account for torpedo missing when Enterprise moves
         #
@@ -199,3 +204,34 @@ class QuadrantMediator(Singleton):
         self.klingonTorpedoes.append(klingonTorpedo)
         self._soundKlingonTorpedo.play(volume=SOUND_VOLUME_HIGH)
         self.logger.info(f'{klingonTorpedo.firedFromPosition=}')
+
+    def _checkTorpedoesArrivedAtDestination(self) -> List[Sprite]:
+
+        spriteList: List[Sprite] = []
+        for klingonTorpedo in self.klingonTorpedoes:
+            klingonTorpedo: KlingonTorpedo = cast(KlingonTorpedo, klingonTorpedo)
+            if klingonTorpedo.inMotion is False:
+                spriteList.append(klingonTorpedo)
+
+        return spriteList
+
+    def _removeTorpedoFollowers(self, klingonTorpedo: KlingonTorpedo):
+
+        followersToRemove: List[Sprite] = []
+        for follower in self.torpedoFollowers:
+            follower: KlingonTorpedoFollower = cast(KlingonTorpedoFollower, follower)
+            if follower.following == klingonTorpedo.uuid:
+                self.logger.debug(f'Removing follower: {follower.uuid}')
+                followersToRemove.append(follower)
+
+        for followerToRemove in followersToRemove:
+            followerToRemove.remove_from_sprite_lists()
+
+    def _didTorpedoHit(self, klingonTorpedo: KlingonTorpedo, enterpriseCoordinates: Coordinates) -> bool:
+
+        ans: bool = False
+        finalTorpedoCoordinates: Coordinates = self._computer.computeSectorCoordinates(x=klingonTorpedo.destinationPoint.x,
+                                                                                       y=klingonTorpedo.destinationPoint.y)
+        if finalTorpedoCoordinates == enterpriseCoordinates:
+            ans = True
+        return ans

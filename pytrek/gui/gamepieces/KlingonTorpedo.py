@@ -69,17 +69,8 @@ class KlingonTorpedo(GamePiece, SmoothMotion):
                                                                             spriteRotationAngle=self.angle,
                                                                             rotationalSpeed=self.rotationSpeed)
             self.doMotion(gamePiece=self, destinationPoint=self.destinationPoint, angleDiffRadians=angleDiffRadians, actualAngleRadians=actualAngleRadians)
-        else:
-            self._removeMyFollowers()
 
-        self._potentiallyCreateAFollower()
-
-    def _removeMyFollowers(self):
-
-        for follower in self._followers:
-            follower: KlingonTorpedoFollower = cast(KlingonTorpedoFollower, follower)
-            if follower.following == self._uuid:
-                self._followers.remove(follower)
+            self._potentiallyCreateAFollower()
 
     def _potentiallyCreateAFollower(self):
         """

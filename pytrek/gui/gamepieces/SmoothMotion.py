@@ -81,9 +81,9 @@ class SmoothMotion:
             gamePiece.center_y += gamePiece.change_y
             traveling = True
 
-        # If we have arrived, then cancel our destinationPoint point
+        # If we have arrived, then way we are not in motion
         if not traveling:
-            self.destinationPoint = None
+            # self.destinationPoint = None      # Leave this set for klingon torpedo hit computation
             self._inMotion        = False
             gamePiece.angle       = 0
 
