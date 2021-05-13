@@ -14,6 +14,7 @@ from pytrek.engine.ArcadePosition import ArcadePosition
 from pytrek.engine.Computer import Computer
 
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePieceTypes import KlingonId
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
@@ -33,7 +34,8 @@ class KlingonTorpedo(GamePiece, SmoothMotion):
 
         self._computer: Computer = Computer()
 
-        self._uuid:              uuid4        = uuid4()
+        self._uuid:              uuid4       = uuid4()
+        self._firedBy:           KlingonId   = cast(KlingonId, None)
         self._firedFromPosition: Coordinates = cast(Coordinates, None)
         self._followers:         SpriteList  = cast(SpriteList, None)
 
@@ -49,6 +51,17 @@ class KlingonTorpedo(GamePiece, SmoothMotion):
     def firedFromPosition(self, newValue: Coordinates):
         self._firedFromPosition = newValue
         self.currentPosition    = newValue
+
+    @property
+    def firedBy(self) -> KlingonId:
+        """
+        Returns: The ID of the Klingon who fire the torpedo
+        """
+        return self._firedBy
+
+    @firedBy.setter
+    def firedBy(self, klingonId: KlingonId):
+        self._firedBy = klingonId
 
     def followers(self, newValues: SpriteList):
         """

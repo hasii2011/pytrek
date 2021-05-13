@@ -4,10 +4,12 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 from logging import DEBUG
+from uuid import uuid4
 
 from arcade import Sound
 from arcade import Sprite
 from arcade import SpriteList
+from arcade import check_for_collision_with_list
 
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
@@ -21,6 +23,7 @@ from pytrek.engine.GameEngine import GameEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePieceTypes import KlingonId
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
@@ -129,18 +132,38 @@ class QuadrantMediator(Singleton):
         self.klingonTorpedoes.update()
         self.torpedoFollowers.update()
 
-        expendedTorpedoes: List[Sprite] = self._checkTorpedoesArrivedAtDestination()
-        for expendedTorpedo in expendedTorpedoes:
-
-            expendedTorpedo: KlingonTorpedo = cast(KlingonTorpedo, expendedTorpedo)
-            self.logger.info(f'{expendedTorpedo.uuid} arrived at destination')
-            self._removeTorpedoFollowers(klingonTorpedo=expendedTorpedo)
-            if self._didTorpedoHit(klingonTorpedo=expendedTorpedo, enterpriseCoordinates=quadrant.enterpriseCoordinates):
-                self.logger.info(f'*** Enterprise was hit ***')
-            expendedTorpedo.remove_from_sprite_lists()
+        self._handleKlingonTorpedoHits(quadrant)
         #
         # TODO: Account for torpedo missing when Enterprise moves
         #
+
+    def _handleKlingonTorpedoHits(self, quadrant: Quadrant):
+        """
+        Uses arcade to determine collision;  For each torpedo that hit
+
+         * Remove it's followers
+         * Determine which Klingon fired it
+         * Determine how severe of a hit it was
+         * Adjust the Enterprise shield power value or the Enterprise power value itself
+        Args:
+            quadrant:  The current quadrant we are in
+        """
+
+        expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=quadrant.enterprise, sprite_list=self.klingonTorpedoes)
+        for expendedTorpedo in expendedTorpedoes:
+            expendedTorpedo: KlingonTorpedo = cast(KlingonTorpedo, expendedTorpedo)
+            self.logger.info(f'{expendedTorpedo.uuid} arrived at destination')
+            self._removeTorpedoFollowers(klingonTorpedo=expendedTorpedo)
+
+            firedBy: KlingonId = expendedTorpedo.firedBy
+            shootingKlingon: Klingon = self._findFiringKlingon(uuid=firedBy)
+
+            hitValue: float = self._computer.computeHitValueOnEnterprise(klingonPosition=shootingKlingon.currentPosition,
+                                                                         enterprisePosition=quadrant.enterpriseCoordinates,
+                                                                         klingonPower=shootingKlingon.power)
+            self.logger.info(f'*** Enterprise was hit ***  {hitValue=} {shootingKlingon}')
+
+            expendedTorpedo.remove_from_sprite_lists()
 
     def _updateQuadrant(self, quadrant):
         for y in range(QUADRANT_ROWS):
@@ -190,8 +213,12 @@ class QuadrantMediator(Singleton):
 
         self.logger.info(f'Klingon @ {klingon.currentPosition} firing; Enterprise @ {enterprise.currentPosition}')
 
+        #
+        # Use the enterprise arcade position rather than compute the sector center;  That way we
+        # can use Arcade collision detection
+        #
         klingonPoint:    ArcadePosition = Computer.gamePositionToScreenPosition(gameCoordinates=klingon.currentPosition)
-        enterprisePoint: ArcadePosition = Computer.gamePositionToScreenPosition(gameCoordinates=enterprise.currentPosition)
+        enterprisePoint: ArcadePosition = ArcadePosition(x=enterprise.center_x, y=enterprise.center_y)
 
         klingonTorpedo: KlingonTorpedo = KlingonTorpedo()
         klingonTorpedo.center_x = klingonPoint.x
@@ -199,21 +226,12 @@ class QuadrantMediator(Singleton):
         klingonTorpedo.inMotion = True
         klingonTorpedo.destinationPoint  = enterprisePoint
         klingonTorpedo.firedFromPosition = klingon.currentPosition
-        klingonTorpedo.followers  = self.torpedoFollowers
+        klingonTorpedo.firedBy           = klingon.id
+        klingonTorpedo.followers         = self.torpedoFollowers
 
         self.klingonTorpedoes.append(klingonTorpedo)
         self._soundKlingonTorpedo.play(volume=SOUND_VOLUME_HIGH)
         self.logger.info(f'{klingonTorpedo.firedFromPosition=}')
-
-    def _checkTorpedoesArrivedAtDestination(self) -> List[Sprite]:
-
-        spriteList: List[Sprite] = []
-        for klingonTorpedo in self.klingonTorpedoes:
-            klingonTorpedo: KlingonTorpedo = cast(KlingonTorpedo, klingonTorpedo)
-            if klingonTorpedo.inMotion is False:
-                spriteList.append(klingonTorpedo)
-
-        return spriteList
 
     def _removeTorpedoFollowers(self, klingonTorpedo: KlingonTorpedo):
 
@@ -227,11 +245,13 @@ class QuadrantMediator(Singleton):
         for followerToRemove in followersToRemove:
             followerToRemove.remove_from_sprite_lists()
 
-    def _didTorpedoHit(self, klingonTorpedo: KlingonTorpedo, enterpriseCoordinates: Coordinates) -> bool:
+    def _findFiringKlingon(self, uuid: uuid4) -> Klingon:
 
-        ans: bool = False
-        finalTorpedoCoordinates: Coordinates = self._computer.computeSectorCoordinates(x=klingonTorpedo.destinationPoint.x,
-                                                                                       y=klingonTorpedo.destinationPoint.y)
-        if finalTorpedoCoordinates == enterpriseCoordinates:
-            ans = True
-        return ans
+        fndKlingon: Klingon = cast(Klingon, None)
+        for klingon in self._klingonList:
+            klingon: Klingon = cast(Klingon, klingon)
+            if klingon.id == uuid:
+                fndKlingon = klingon
+                break
+
+        return fndKlingon

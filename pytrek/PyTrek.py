@@ -38,6 +38,7 @@ from pytrek.GameState import GameState
 
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.gui.StatusConsole import StatusConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
@@ -150,6 +151,7 @@ class PyTrekView(View):
             self._quadrant.addKlingon()
 
         if self._quadrant.klingonCount > 0:
+            self._gameState.shipCondition = ShipCondition.Red
             klingonSprites: SpriteList = SpriteList()
             for klingon in self._quadrant._klingons:
                 klingonSprites.append(klingon)
