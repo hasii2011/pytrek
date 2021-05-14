@@ -112,9 +112,7 @@ class QuadrantMediator(Singleton):
         self.torpedoFollowers.update()
 
         self._kth.handleKlingonTorpedoHits(quadrant)
-        #
-        # TODO: Account for torpedo missing when Enterprise moves
-        #
+        self._kth.handleKlingonTorpedoMisses()
 
     def _updateQuadrant(self, quadrant):
         for y in range(QUADRANT_ROWS):

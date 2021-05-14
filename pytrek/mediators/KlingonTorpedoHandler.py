@@ -105,7 +105,7 @@ class KlingonTorpedoHandler:
             self._removeTorpedoFollowers(klingonTorpedo=expendedTorpedo)
 
             firedBy: KlingonId = expendedTorpedo.firedBy
-            shootingKlingon: Klingon = self._findFiringKlingon(uuid=firedBy)
+            shootingKlingon: Klingon = self._findFiringKlingon(klingonId=firedBy)
 
             hitValue: float = self._computer.computeHitValueOnEnterprise(klingonPosition=shootingKlingon.currentPosition,
                                                                          enterprisePosition=quadrant.enterpriseCoordinates,
@@ -113,6 +113,19 @@ class KlingonTorpedoHandler:
             self.logger.info(f'*** Enterprise was hit ***  {hitValue=} {shootingKlingon}')
 
             expendedTorpedo.remove_from_sprite_lists()
+
+    def handleKlingonTorpedoMisses(self):
+
+        torpedoDuds: List[KlingonTorpedo] = self._findTorpedoMisses()
+
+        for torpedoDud in torpedoDuds:
+            self._removeTorpedoFollowers(klingonTorpedo=torpedoDud)
+
+            firedBy: KlingonId = torpedoDud.firedBy
+
+            shootingKlingon: Klingon = self._findFiringKlingon(klingonId=firedBy)
+            self.logger.info(f'{shootingKlingon} missed !!!!')
+            torpedoDud.remove_from_sprite_lists()
 
     def _fireKlingonTorpedo(self, klingon: Klingon, enterprise: Enterprise):
 
@@ -150,13 +163,22 @@ class KlingonTorpedoHandler:
         for followerToRemove in followersToRemove:
             followerToRemove.remove_from_sprite_lists()
 
-    def _findFiringKlingon(self, uuid: KlingonId) -> Klingon:
+    def _findFiringKlingon(self, klingonId: KlingonId) -> Klingon:
 
         fndKlingon: Klingon = cast(Klingon, None)
         for klingon in self._klingonList:
             klingon: Klingon = cast(Klingon, klingon)
-            if klingon.id == uuid:
+            if klingon.id == klingonId:
                 fndKlingon = klingon
                 break
 
         return fndKlingon
+
+    def _findTorpedoMisses(self):
+
+        torpedoDuds: List[KlingonTorpedo] = []
+        for torpedo in self.klingonTorpedoes:
+            torpedo: KlingonTorpedo = cast(KlingonTorpedo, torpedo)
+            if torpedo.inMotion is False:
+                torpedoDuds.append(torpedo)
+        return torpedoDuds
