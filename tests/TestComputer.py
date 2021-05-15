@@ -245,6 +245,58 @@ class TestComputer(TestBase):
         self.logger.info(f"Novice Up Close.  Klingon hit value: {hitValue}")
         self.assertAlmostEqual(480.0, hitValue, 3)
 
+    def testComputeAngleToTargetDirectNorth(self):
+        """
+        North is up
+        """
+
+        shooter:  ArcadePosition = ArcadePosition(x=100, y=100)
+        deadMeat: ArcadePosition = ArcadePosition(x=100, y=500)
+
+        actualAngle = self.smarty.computeAngleToTarget(shooter=shooter, deadMeat=deadMeat)
+        expectedAngle = 90
+
+        self.assertEqual(expectedAngle, actualAngle, 'Bad computation')
+
+    def testComputeAngleToTargetDirectSouth(self):
+        """
+        South is down
+        """
+
+        shooter:  ArcadePosition = ArcadePosition(x=100.0, y=500.0)
+        deadMeat: ArcadePosition = ArcadePosition(x=100.0, y=100.0)
+
+        actualAngle:   float = self.smarty.computeAngleToTarget(shooter=shooter, deadMeat=deadMeat)
+        expectedAngle: float = -90.0
+
+        self.assertEqual(expectedAngle, actualAngle, 'Bad computation')
+
+    def testComputeAngleToTargetDirectEast(self):
+        """
+        East is right
+        """
+
+        shooter:  ArcadePosition = ArcadePosition(x=100.0, y=100.0)
+        deadMeat: ArcadePosition = ArcadePosition(x=500.0, y=100.0)
+
+        actualAngle:   float = self.smarty.computeAngleToTarget(shooter=shooter, deadMeat=deadMeat)
+        expectedAngle: float = 0.0
+
+        self.assertEqual(expectedAngle, actualAngle, 'Bad computation')
+
+    def testComputeAngleToTargetDirectWest(self):
+        """
+        East is right
+        """
+
+        shooter:  ArcadePosition = ArcadePosition(x=500.0, y=100.0)
+        deadMeat: ArcadePosition = ArcadePosition(x=100.0, y=100.0)
+
+        actualAngle:   float = self.smarty.computeAngleToTarget(shooter=shooter, deadMeat=deadMeat)
+        expectedAngle: float = 180.0
+
+        self.assertEqual(expectedAngle, actualAngle, 'Bad computation')
+
 
 def suite() -> TestSuite:
     """You need to change the name of the test class here also."""

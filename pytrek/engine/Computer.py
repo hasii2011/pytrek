@@ -3,7 +3,10 @@
 from logging import Logger
 from logging import getLogger
 
-import math
+from math import atan2
+from math import degrees
+from math import floor
+from math import sqrt
 
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
@@ -77,8 +80,8 @@ class Computer(Singleton):
 
         adjustY: float = y - CONSOLE_HEIGHT
 
-        gameX = int(math.floor(x // QUADRANT_PIXEL_WIDTH))
-        gameY = int(math.floor(adjustY // QUADRANT_PIXEL_HEIGHT))
+        gameX = int(floor(x // QUADRANT_PIXEL_WIDTH))
+        gameY = int(floor(adjustY // QUADRANT_PIXEL_HEIGHT))
 
         adjustedGameY: int = (QUADRANT_ROWS - gameY) - 1
 
@@ -135,6 +138,28 @@ class Computer(Singleton):
         hit:       float = klingonPower * hitFactor
         return hit
 
+    def computeAngleToTarget(self, shooter: ArcadePosition, deadMeat: ArcadePosition) -> float:
+        """
+        x goes right (as expected)
+        y goes up
+        Adjust degrees since we use Arcade's coordinate system
+
+        Args:
+            shooter:
+            deadMeat:
+
+        Returns:  correct angle in degrees
+
+        """
+
+        deltaX: float = deadMeat.x - shooter.x
+        deltaY: float = deadMeat.y - shooter.y
+
+        angleRadians: float = atan2(deltaY, deltaX)
+        angleDegrees: float = degrees(angleRadians)
+
+        return angleDegrees
+
     def _computeDistance(self, startCoordinates: Coordinates, endCoordinates: Coordinates, travelFactor: float) -> float:
         """
         From Java code:
@@ -168,7 +193,7 @@ class Computer(Singleton):
         deltaY = y2 - y1
         self.logger.debug(f"{deltaX=} {deltaY=}")
 
-        distance = travelFactor * math.sqrt((deltaX * deltaX) + (deltaY * deltaY))
+        distance = travelFactor * sqrt((deltaX * deltaX) + (deltaY * deltaY))
 
         self.logger.debug(f"Quadrant Distance: {distance}")
 

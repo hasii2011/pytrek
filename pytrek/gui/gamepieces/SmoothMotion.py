@@ -21,7 +21,7 @@ class SmoothMotion:
 
     IMAGE_ROTATION: int = 90  # Image might not be lined up right, set this to offset
 
-    def __init__(self):
+    def __init__(self, imageRotation: int = IMAGE_ROTATION):
 
         self.logger: Logger = getLogger(__name__)
 
@@ -33,6 +33,7 @@ class SmoothMotion:
         """
         The arcade game library final destination screen position if the game piece is in motion
         """
+        self._imageRotation: int = imageRotation
 
     @property
     def inMotion(self) -> bool:
@@ -54,12 +55,20 @@ class SmoothMotion:
     def destinationPoint(self, destinationPoint: ArcadePosition):
         self._destinationPoint = destinationPoint
 
+    @property
+    def imageRotation(self) -> int:
+        return self._imageRotation
+
+    @imageRotation.setter
+    def imageRotation(self, newValue: int):
+        self._imageRotation = newValue
+
     def doMotion(self, gamePiece: GamePiece, destinationPoint: ArcadePosition, angleDiffRadians: float, actualAngleRadians: float):
 
         dest_x: float = destinationPoint.x
         dest_y: float = destinationPoint.y
 
-        gamePiece.angle = degrees(actualAngleRadians) + SmoothMotion.IMAGE_ROTATION     # Convert back to degrees
+        gamePiece.angle = degrees(actualAngleRadians) + self.imageRotation     # Convert back to degrees
 
         # Are we close to the correct angle? If so, move forward.
         if abs(angleDiffRadians) < pi / 4:
@@ -112,7 +121,7 @@ class SmoothMotion:
         yDiff: float = destY - startY
 
         targetAngleRadians:   float = self.computeTargetAngle(xDiff, yDiff)
-        actualAngleRadians:   float = radians(spriteRotationAngle - SmoothMotion.IMAGE_ROTATION)  # What angle are we at now in radians?
+        actualAngleRadians:   float = radians(spriteRotationAngle - self.imageRotation)  # What angle are we at now in radians?
         rotationSpeedRadians: float = radians(rotationalSpeed)                  # How fast can we rotate?
         angleDiffRadians:     float = targetAngleRadians - actualAngleRadians        # What is the difference between what we want, and here we are?
 

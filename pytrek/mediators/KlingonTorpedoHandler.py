@@ -29,6 +29,8 @@ class KlingonTorpedoHandler:
 
     KLINGON_TORPEDO_EVENT_SECONDS = 10      # TODO  Compute this
 
+    IMAGE_ROTATION: int = 90  # Image might not be lined up right, set this to offset
+
     def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
@@ -82,6 +84,8 @@ class KlingonTorpedoHandler:
             self.logger.info(f'Time for Klingons to fire torpedoes')
             klingons: List[Klingon] = quadrant.klingons
             for klingon in klingons:
+                self._pointAtEnterprise(klingon=klingon, enterprise=quadrant.enterprise)
+
                 self._fireKlingonTorpedo(klingon=klingon, enterprise=quadrant.enterprise)
 
             self._lastTimeCheck = currentTime
@@ -107,6 +111,7 @@ class KlingonTorpedoHandler:
             firedBy: KlingonId = expendedTorpedo.firedBy
             shootingKlingon: Klingon = self._findFiringKlingon(klingonId=firedBy)
 
+            shootingKlingon.angle = 0
             hitValue: float = self._computer.computeHitValueOnEnterprise(klingonPosition=shootingKlingon.currentPosition,
                                                                          enterprisePosition=quadrant.enterpriseCoordinates,
                                                                          klingonPower=shootingKlingon.power)
@@ -135,7 +140,7 @@ class KlingonTorpedoHandler:
         # Use the enterprise arcade position rather than compute the sector center;  That way we
         # can use Arcade collision detection
         #
-        klingonPoint:    ArcadePosition = Computer.gamePositionToScreenPosition(gameCoordinates=klingon.currentPosition)
+        klingonPoint:    ArcadePosition = ArcadePosition(x=klingon.center_x, y=klingon.center_y)
         enterprisePoint: ArcadePosition = ArcadePosition(x=enterprise.center_x, y=enterprise.center_y)
 
         klingonTorpedo: KlingonTorpedo = KlingonTorpedo()
@@ -182,3 +187,13 @@ class KlingonTorpedoHandler:
             if torpedo.inMotion is False:
                 torpedoDuds.append(torpedo)
         return torpedoDuds
+
+    def _pointAtEnterprise(self, klingon: Klingon, enterprise: Enterprise):
+
+        currentPoint:     ArcadePosition = ArcadePosition(x=klingon.center_x, y=klingon.center_y)
+        destinationPoint: ArcadePosition = ArcadePosition(x=enterprise.center_x, y=enterprise.center_y)
+
+        normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
+        klingon.angle = normalAngle + 125
+
+        self.logger.info(f'{klingon.angle=}')

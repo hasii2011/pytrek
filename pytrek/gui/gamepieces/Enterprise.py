@@ -17,8 +17,9 @@ class Enterprise(GamePiece, SmoothMotion):
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
                                                            bareFileName='EnterpriseD.png')
+        self.imageRotation = 0
         GamePiece.__init__(self, filename=fqFileName)
-        SmoothMotion.__init__(self)
+        SmoothMotion.__init__(self, imageRotation=125)
 
     def update(self):
 
