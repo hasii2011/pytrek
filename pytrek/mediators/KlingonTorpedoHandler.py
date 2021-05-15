@@ -11,10 +11,16 @@ from arcade import SpriteList
 from arcade import check_for_collision_with_list
 
 from pytrek.Constants import SOUND_VOLUME_HIGH
+from pytrek.GameState import GameState
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePosition import ArcadePosition
 from pytrek.engine.Computer import Computer
+from pytrek.engine.DeviceStatus import DeviceStatus
+from pytrek.engine.DeviceType import DeviceType
+from pytrek.engine.Devices import Devices
 from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.ShieldHitData import ShieldHitData
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import KlingonId
 
@@ -35,8 +41,11 @@ class KlingonTorpedoHandler:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._gameEngine: GameEngine = GameEngine()
-        self._computer:   Computer   = Computer()
+        self._gameEngine:   GameEngine   = GameEngine()
+        self._gameState:    GameState    = GameState()
+        self._computer:     Computer     = Computer()
+        self._intelligence: Intelligence = Intelligence()
+        self._devices:      Devices      = Devices()
 
         self._klingonTorpedoes: SpriteList = cast(SpriteList, None)
         self._torpedoFollowers: SpriteList = cast(SpriteList, None)
@@ -115,9 +124,36 @@ class KlingonTorpedoHandler:
             hitValue: float = self._computer.computeHitValueOnEnterprise(klingonPosition=shootingKlingon.currentPosition,
                                                                          enterprisePosition=quadrant.enterpriseCoordinates,
                                                                          klingonPower=shootingKlingon.power)
-            self.logger.info(f'*** Enterprise was hit ***  {hitValue=} {shootingKlingon}')
-
             expendedTorpedo.remove_from_sprite_lists()
+
+            self.logger.debug(f"Original Hit Value: {hitValue:4f} {shootingKlingon=}")
+
+            if self._devices.getDeviceStatus(DeviceType.Shields) == DeviceStatus.Up:
+                shieldHitData: ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=hitValue)
+            else:
+                shieldHitData: ShieldHitData = ShieldHitData(degradedTorpedoHitValue=hitValue, shieldAbsorptionValue=0.0)
+
+            shieldAbsorptionValue   = shieldHitData.shieldAbsorptionValue
+            degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
+
+            # self.messageConsole.addText(f"Shield Hit: {shieldAbsorptionValue:4f}  Enterprise hit: {degradedTorpedoHitValue:4f}")
+            # self.soundShieldHit.play()
+            self._gameEngine.degradeShields(shieldAbsorptionValue)
+
+            self._gameEngine.degradeEnergyLevel(shieldHitData.degradedTorpedoHitValue)
+            if self._gameState.energy <= 0:
+                # alert(theMessage='Game Over!  The Enterprise is out of energy')
+                # sys.exit()
+                pass
+
+        # damagedDeviceType: DeviceType = self._intelligence.fryDevice(shieldHitData.degradedTorpedoHitValue)
+        # if damagedDeviceType is not None:
+        #     self.messageConsole.addText(f"Device: {damagedDeviceType} damaged")
+        #
+        # if damagedDeviceType == DeviceType.Shields:
+        #     self.messageConsole.addText("Shield energy transferred to Enterprise")
+        #     self.statistics.energy += self.statistics.shieldEnergy
+        #     self.statistics.shieldEnergy = 0
 
     def handleKlingonTorpedoMisses(self):
 

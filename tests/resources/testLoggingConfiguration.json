@@ -27,6 +27,10 @@
             "level": "WARNING",
             "propagate": "False"
         },
+        "__main__": {
+            "level": "WARNING",
+            "propagate": "False"
+        },
         "TestIntelligence": {
             "level": "INFO",
             "propagate": "False"
@@ -53,6 +57,10 @@
         },
         "pytrek.model.Galaxy": {
             "level": "DEBUG",
+            "propagate": "False"
+        },
+        "tests.pytrek.engine.TestDevices": {
+            "level": "WARNING",
             "propagate": "False"
         },
         "pytrek.gui.gamepieces.SmoothMotion": {
