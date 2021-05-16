@@ -148,20 +148,16 @@ class GameEngine(Singleton):
 
         Returns: Computed shield hit data
         """
-        changeFactor = 0.25 + (0.5 * self._intelligence.rand())
-        proportionalFactor = 1.0 / DEFAULT_FULL_SHIELDS
-        proportion = proportionalFactor * self._gameState.shieldEnergy
+        changeFactor:       float = 0.25 + (0.5 * self._intelligence.rand())
+        proportionalFactor: float = 1.0 / DEFAULT_FULL_SHIELDS
+        proportion:         float = proportionalFactor * self._gameState.shieldEnergy
 
         if proportion < 0.1:
             proportion = 0.1
-        shieldHit = proportion * changeFactor * torpedoHit + 1.0
+        shieldHit: float = proportion * changeFactor * torpedoHit + 1.0
 
         shieldAbsorptionValue: float = 0.8 * shieldHit
-        # if shieldAbsorptionValue > self.stats.shieldEnergy:
-        #     shieldAbsorptionValue = self.stats.shieldEnergy
-        # self.stats.shieldEnergy -= shieldAbsorptionValue
-
-        torpedoHit -= shieldHit
+        torpedoHit:            float = torpedoHit - shieldHit
 
         shieldHitData: ShieldHitData = ShieldHitData(shieldAbsorptionValue=shieldAbsorptionValue, degradedTorpedoHitValue=torpedoHit)
 

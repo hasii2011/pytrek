@@ -10,9 +10,6 @@ from arcade import Sprite
 from arcade import SpriteList
 from arcade import check_for_collision_with_list
 
-from pytrek.Constants import SOUND_VOLUME_HIGH
-from pytrek.GameState import GameState
-from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePosition import ArcadePosition
 from pytrek.engine.Computer import Computer
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
@@ -21,14 +18,23 @@ from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShieldHitData import ShieldHitData
+
+from pytrek.gui.MessageConsole import MessageConsole
+
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import KlingonId
-
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
 
 from pytrek.model.Quadrant import Quadrant
+
+from pytrek.Constants import DEFAULT_FULL_SHIELDS
+from pytrek.Constants import SOUND_VOLUME_HIGH
+
+from pytrek.GameState import GameState
+
+from pytrek.LocateResources import LocateResources
 
 
 class KlingonTorpedoHandler:
@@ -41,11 +47,12 @@ class KlingonTorpedoHandler:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._gameEngine:   GameEngine   = GameEngine()
-        self._gameState:    GameState    = GameState()
-        self._computer:     Computer     = Computer()
-        self._intelligence: Intelligence = Intelligence()
-        self._devices:      Devices      = Devices()
+        self._gameEngine:     GameEngine     = GameEngine()
+        self._gameState:      GameState      = GameState()
+        self._computer:       Computer       = Computer()
+        self._intelligence:   Intelligence   = Intelligence()
+        self._devices:        Devices        = Devices()
+        self._messageConsole: MessageConsole = MessageConsole()
 
         self._klingonTorpedoes: SpriteList = cast(SpriteList, None)
         self._torpedoFollowers: SpriteList = cast(SpriteList, None)
@@ -118,6 +125,7 @@ class KlingonTorpedoHandler:
 
         expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=quadrant.enterprise, sprite_list=self.klingonTorpedoes)
         for expendedTorpedo in expendedTorpedoes:
+
             expendedTorpedo: KlingonTorpedo = cast(KlingonTorpedo, expendedTorpedo)
             self.logger.info(f'{expendedTorpedo.uuid} arrived at destination')
             self._removeTorpedoFollowers(klingonTorpedo=expendedTorpedo)
@@ -131,7 +139,7 @@ class KlingonTorpedoHandler:
                                                                          klingonPower=shootingKlingon.power)
             expendedTorpedo.remove_from_sprite_lists()
 
-            self.logger.debug(f"Original Hit Value: {hitValue:4f} {shootingKlingon=}")
+            self.logger.debug(f"Original Hit Value: {hitValue:.4f} {shootingKlingon=}")
 
             if self._devices.getDeviceStatus(DeviceType.Shields) == DeviceStatus.Up:
                 shieldHitData: ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=hitValue)
@@ -141,9 +149,11 @@ class KlingonTorpedoHandler:
             shieldAbsorptionValue   = shieldHitData.shieldAbsorptionValue
             degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
 
-            # self.messageConsole.addText(f"Shield Hit: {shieldAbsorptionValue:4f}  Enterprise hit: {degradedTorpedoHitValue:4f}")
             self._soundShieldHit.play()
             self._gameEngine.degradeShields(shieldAbsorptionValue)
+            shieldPercentage: int = round((self._gameState.shieldEnergy / DEFAULT_FULL_SHIELDS) * 100)
+
+            self._messageConsole.displayMessage(f"Shields at {shieldPercentage} percent.  Enterprise energy degraded by: {degradedTorpedoHitValue:.2f}")
 
             self._gameEngine.degradeEnergyLevel(shieldHitData.degradedTorpedoHitValue)
             if self._gameState.energy <= 0:
@@ -170,13 +180,15 @@ class KlingonTorpedoHandler:
             firedBy: KlingonId = torpedoDud.firedBy
 
             shootingKlingon: Klingon = self._findFiringKlingon(klingonId=firedBy)
-            self.logger.info(f'{shootingKlingon} missed !!!!')
+
+            self._messageConsole.displayMessage(f'{shootingKlingon.id} missed !!!!')
+            shootingKlingon.angle = 0
             torpedoDud.remove_from_sprite_lists()
 
     def _fireKlingonTorpedo(self, klingon: Klingon, enterprise: Enterprise):
 
-        self.logger.info(f'Klingon @ {klingon.currentPosition} firing; Enterprise @ {enterprise.currentPosition}')
-
+        self.logger.debug(f'Klingon @ {klingon.currentPosition} firing; Enterprise @ {enterprise.currentPosition}')
+        self._messageConsole.displayMessage(f'Klingon @ {klingon.currentPosition} firing; Enterprise @ {enterprise.currentPosition}')
         #
         # Use the enterprise arcade position rather than compute the sector center;  That way we
         # can use Arcade collision detection

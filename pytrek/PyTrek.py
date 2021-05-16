@@ -1,4 +1,4 @@
-
+from logging import INFO
 from typing import cast
 
 from logging import Logger
@@ -39,6 +39,7 @@ from pytrek.GameState import GameState
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.ShipCondition import ShipCondition
+from pytrek.gui.MessageConsole import MessageConsole
 
 from pytrek.gui.StatusConsole import StatusConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
@@ -97,6 +98,7 @@ class PyTrekView(View):
 
         self._quadrantMediator: QuadrantMediator = cast(QuadrantMediator, None)
         self._statusConsole:    StatusConsole    = cast(StatusConsole, None)
+        self._messageConsole:   MessageConsole   = cast(MessageConsole, None)
 
         self._soundImpulse:        Sound = cast(Sound, None)
         #
@@ -142,12 +144,14 @@ class PyTrekView(View):
 
         self._quadrantMediator = QuadrantMediator()
         self._statusConsole    = StatusConsole(gameView=self)
+        self._messageConsole   = MessageConsole()
 
         self._quadrantMediator.playerList       = playerList
         self._quadrantMediator.klingonTorpedoes = self.klingonTorpedoes
         self._quadrantMediator.torpedoFollowers = self.torpedoFollowers
 
-        if self.logger.getEffectiveLevel() == DEBUG:    # TODO make this a runtime debug flag
+        if self.logger.getEffectiveLevel() == INFO:    # TODO make this a runtime debug flag
+            self._quadrant.addKlingon()
             self._quadrant.addKlingon()
 
         if self._quadrant.klingonCount > 0:
@@ -184,6 +188,7 @@ class PyTrekView(View):
         self._quadrantMediator.torpedoFollowers.draw()      # TODO put this in mediator
 
         self._statusConsole.draw()
+        self._messageConsole.draw()
 
     def on_update(self, delta_time: float):
         """
@@ -229,6 +234,8 @@ class PyTrekView(View):
 
             longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(gameView=self)
             self.window.show_view(longRangeSensorView)
+        elif pressedKey == arcade.key.T:
+            print(f'I am shooting')
 
     def on_key_release(self, releasedKey, key_modifiers):
         """

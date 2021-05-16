@@ -17,6 +17,7 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
+
 from pytrek.mediators.KlingonTorpedoHandler import KlingonTorpedoHandler
 
 from pytrek.model.Coordinates import Coordinates

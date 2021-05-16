@@ -1,5 +1,4 @@
 
-# WINDOW_BORDER_HEIGHT: int = 70
 CONSOLE_HEIGHT:       int = 190
 
 SCREEN_WIDTH:     int = 800
