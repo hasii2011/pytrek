@@ -12,7 +12,7 @@ from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase
 
-from pytrek.engine.Devices import Devices
+from pytrek.engine.devices.Devices import Devices
 
 
 class TestDevices(TestBase):

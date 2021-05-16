@@ -10,7 +10,7 @@ from math import sqrt
 from pytrek.engine.Computer import Computer
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.Devices import Devices
+from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShieldHitData import ShieldHitData
 from pytrek.engine.ShipCondition import ShipCondition

@@ -17,7 +17,7 @@ from pytrek.engine.ArcadePosition import ArcadePosition
 from pytrek.engine.Computer import Computer
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.Devices import Devices
+from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShieldHitData import ShieldHitData
