@@ -237,7 +237,7 @@ class GameEngine(Singleton):
             the hit on the shield
         """
         self._gameState.energy -= degradedTorpedoValue
-        self.logger.info(f"Degraded energy level{self._gameState.energy:.4f}")
+        self.logger.info(f"Degraded energy level: {self._gameState.energy:.4f}")
         if self._gameState.energy < 0:
             self._gameState.energy = 0
 

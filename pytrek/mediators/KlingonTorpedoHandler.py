@@ -50,9 +50,14 @@ class KlingonTorpedoHandler:
         self._klingonTorpedoes: SpriteList = cast(SpriteList, None)
         self._torpedoFollowers: SpriteList = cast(SpriteList, None)
 
-        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
-                                                      bareFileName='klingon_torpedo.wav')
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
+                                                           bareFileName='klingon_torpedo.wav')
         self._soundKlingonTorpedo: Sound = Sound(file_name=fqFileName)
+
+        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
+                                                      bareFileName='ShieldHit.wav')
+
+        self._soundShieldHit: Sound = Sound(file_name=fqFileName)
 
         self._lastTimeCheck: float = self._gameEngine.gameClock / 1000
         self.logger.info(f'{self._lastTimeCheck=}')
@@ -137,7 +142,7 @@ class KlingonTorpedoHandler:
             degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
 
             # self.messageConsole.addText(f"Shield Hit: {shieldAbsorptionValue:4f}  Enterprise hit: {degradedTorpedoHitValue:4f}")
-            # self.soundShieldHit.play()
+            self._soundShieldHit.play()
             self._gameEngine.degradeShields(shieldAbsorptionValue)
 
             self._gameEngine.degradeEnergyLevel(shieldHitData.degradedTorpedoHitValue)
