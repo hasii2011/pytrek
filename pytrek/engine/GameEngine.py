@@ -8,8 +8,8 @@ from math import fabs
 from math import sqrt
 
 from pytrek.engine.Computer import Computer
-from pytrek.engine.DeviceStatus import DeviceStatus
-from pytrek.engine.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.Devices import Devices
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShieldHitData import ShieldHitData

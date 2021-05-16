@@ -3,9 +3,9 @@ from typing import Dict
 
 import logging
 
-from pytrek.engine.Device import Device
-from pytrek.engine.DeviceType import DeviceType
-from pytrek.engine.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.Device import Device
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
 
 from pytrek.Singleton import Singleton
 

@@ -1,8 +1,8 @@
 
 from dataclasses import dataclass
 
-from pytrek.engine.DeviceType import DeviceType
-from pytrek.engine.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
 
 
 @dataclass

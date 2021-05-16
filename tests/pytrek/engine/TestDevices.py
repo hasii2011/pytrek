@@ -5,9 +5,9 @@ from logging import getLogger
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.engine.Device import Device
-from pytrek.engine.DeviceStatus import DeviceStatus
-from pytrek.engine.DeviceType import DeviceType
+from pytrek.engine.devices.Device import Device
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase

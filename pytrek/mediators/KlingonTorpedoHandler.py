@@ -15,8 +15,8 @@ from pytrek.GameState import GameState
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePosition import ArcadePosition
 from pytrek.engine.Computer import Computer
-from pytrek.engine.DeviceStatus import DeviceStatus
-from pytrek.engine.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.Devices import Devices
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
