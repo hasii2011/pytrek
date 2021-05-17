@@ -1,3 +1,4 @@
+from typing import cast
 
 from pytrek.LocateResources import LocateResources
 from pytrek.gui.gamepieces.GamePiece import GamePiece
@@ -24,8 +25,10 @@ class Klingon(GamePiece, SmoothMotion):
 
         self.currentPosition = coordinates
 
-        self._power: float     = 0.0
-        self._id:    KlingonId = KlingonId(f'Klingon-{self.currentPosition}')
+        self._power:          float     = cast(float, None)
+        self._firingInterval: int       = cast(int, None)
+        self._lastTimeCheck:  int       = cast(int, None)
+        self._id:             KlingonId = KlingonId(f'Klingon-{self.currentPosition}')
 
     @property
     def power(self) -> float:
@@ -34,6 +37,22 @@ class Klingon(GamePiece, SmoothMotion):
     @power.setter
     def power(self, theNewValue: float):
         self._power = theNewValue
+
+    @property
+    def firingInterval(self) -> int:
+        return self._firingInterval
+
+    @firingInterval.setter
+    def firingInterval(self, newValue: int):
+        self._firingInterval = newValue
+
+    @property
+    def lastTimeCheck(self) -> int:
+        return self._lastTimeCheck
+
+    @lastTimeCheck.setter
+    def lastTimeCheck(self, newValue: int):
+        self._lastTimeCheck = newValue
 
     @property
     def id(self) -> KlingonId:
@@ -49,6 +68,7 @@ class Klingon(GamePiece, SmoothMotion):
             f'Klingon['
             f'{self.id=} '
             f'power={self.power:.3f} '
+            f'firingInterval={self.firingInterval} '
             f'{self.currentPosition=}'
             ']'
         )

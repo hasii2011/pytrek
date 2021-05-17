@@ -9,7 +9,6 @@ from pytrek.Constants import QUADRANT_ROWS
 
 from pytrek.engine.Intelligence import Intelligence
 
-
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
@@ -32,11 +31,14 @@ class Quadrant:
         """
             Initialize a quadrant
         """
+        from pytrek.engine.GameEngine import GameEngine     # Avoid recursion
+
         self.logger:       Logger       = getLogger(__name__)
         self._coordinates: Coordinates  = coordinates
         self._sectors:     QuadrantGrid = QuadrantGrid([])
 
         self._intelligence: Intelligence = Intelligence()
+        self._gameEngine:   GameEngine   = GameEngine()
 
         self._klingonCount:   int = 0
         self._commanderCount: int = 0
@@ -165,7 +167,7 @@ class Quadrant:
     def addKlingon(self):
         """"""
         self._klingonCount += 1
-        klingon = self.placeAKlingon()
+        klingon: Klingon = self.placeAKlingon()
         self._klingons.append(klingon)
 
     def getRandomEmptySector(self) -> Sector:
@@ -192,14 +194,17 @@ class Quadrant:
         klingon     = Klingon(coordinates=sector.coordinates)
         kPower      = self._intelligence.computeKlingonPower()
 
-        klingon.power = kPower
-        sector.sprite = klingon
+        klingon.power          = kPower
+        klingon.firingInterval = self._intelligence.computeKlingonFiringInterval()
+        klingon.lastTimeCheck  = self._gameEngine.gameClock // 1000
 
-        self.logger.debug(f"Placed klingon at: quadrant: {self._coordinates} {sector=}, {kPower=}")
+        sector.sprite          = klingon
+
+        self.logger.debug(f"Placed klingon at quadrant: {self._coordinates} {klingon=}")
         return klingon
 
-    def placeKlingonTorpedo(self):
-        sector      = self.getRandomEmptySector()
+    # def placeKlingonTorpedo(self):
+    #     sector      = self.getRandomEmptySector()
 
     def _createQuadrant(self):
         for y in range(QUADRANT_ROWS):

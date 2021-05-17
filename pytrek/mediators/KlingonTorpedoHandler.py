@@ -100,16 +100,21 @@ class KlingonTorpedoHandler:
     def fireTorpedoesAtEnterpriseIfNecessary(self, quadrant: Quadrant):
 
         currentTime:    float = self._gameEngine.gameClock
-        deltaClockTime: float = currentTime - self._lastTimeCheck
-        if deltaClockTime > KlingonTorpedoHandler.KLINGON_TORPEDO_EVENT_SECONDS:
-            self.logger.info(f'Time for Klingons to fire torpedoes')
-            klingons: List[Klingon] = quadrant.klingons
-            for klingon in klingons:
+        # # deltaClockTime: float = currentTime - self._lastTimeCheck
+        # # if deltaClockTime > KlingonTorpedoHandler.KLINGON_TORPEDO_EVENT_SECONDS:
+        #     self.logger.info(f'Time for Klingons to fire torpedoes')
+        klingons: List[Klingon] = quadrant.klingons
+        for klingon in klingons:
+            deltaClockTime: float = currentTime - klingon.lastTimeCheck
+            if deltaClockTime > klingon.firingInterval:
+                self.logger.info(f'Time for {klingon} to fire torpedoes')
+
                 self._pointAtEnterprise(klingon=klingon, enterprise=quadrant.enterprise)
 
                 self._fireKlingonTorpedo(klingon=klingon, enterprise=quadrant.enterprise)
+                klingon.lastTimeCheck = currentTime
 
-            self._lastTimeCheck = currentTime
+        # self._lastTimeCheck = currentTime
 
     def handleKlingonTorpedoHits(self, quadrant: Quadrant):
         """

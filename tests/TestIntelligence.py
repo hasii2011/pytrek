@@ -5,6 +5,8 @@ from logging import getLogger
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from pytrek.Constants import MAX_KLINGON_FIRING_INTERVAL
+from pytrek.Constants import MIN_KLINGON_FIRING_INTERVAL
 from pytrek.engine.GameType import GameType
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.PlayerType import PlayerType
@@ -239,6 +241,13 @@ class TestIntelligence(TestBase):
         for x in range(0, 100):
             ans = self.smarty.rand()
             self.logger.debug(f"testRand - Iteration {x}, answer is {ans}")
+
+    def testComputeKlingonFiringInterval(self):
+        for x in range(0, 100):
+            ans: int = self.smarty.computeKlingonFiringInterval()
+            self.assertGreaterEqual(ans, MIN_KLINGON_FIRING_INTERVAL, 'Cannot be below the min')
+            self.assertLessEqual(ans, MAX_KLINGON_FIRING_INTERVAL, 'Cannot be above the  max')
+            self.logger.debug(f'Random klingon firing interval: {ans}')
 
 
 def suite() -> TestSuite:

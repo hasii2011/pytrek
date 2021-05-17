@@ -3,12 +3,16 @@ from logging import Logger
 from logging import getLogger
 from logging import INFO
 
+from random import randint
 from random import randrange
 from random import random
+
 from typing import List
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
+from pytrek.Constants import MAX_KLINGON_FIRING_INTERVAL
+from pytrek.Constants import MIN_KLINGON_FIRING_INTERVAL
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 
@@ -126,6 +130,15 @@ class Intelligence(Singleton):
         """
         kPower: float = (self.rand() * 150.0) + 300.0 + (25.0 * self._gameSettings.playerType.value)
         return kPower
+
+    def computeKlingonFiringInterval(self) -> int:
+        """
+        Klingons fire at different intervals;  Randomly compute something between the
+        MIN_KLINGON_FIRING_INTERVAL and the MAX_KLINGON_FIRING_INTERVAL
+
+        Returns: A random time interval
+        """
+        return randint(MIN_KLINGON_FIRING_INTERVAL, MAX_KLINGON_FIRING_INTERVAL)
 
     def rand(self) -> float:
         """
