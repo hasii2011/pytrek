@@ -46,7 +46,7 @@ class GameLevelSettings(BaseSubSetting):
     def playerType(self, newValue: PlayerType):
 
         self._config.set(GameLevelSettings.GAME_LEVEL_SECTION, GameLevelSettings.PLAYER_TYPE, newValue.name)
-        self._settingsCommon.saveConfig()
+        self._settingsCommon.saveSettings()
 
     @property
     def gameType(self) -> GameType:
@@ -58,4 +58,4 @@ class GameLevelSettings(BaseSubSetting):
     @gameType.setter
     def gameType(self, newValue: GameType):
         self._config.set(GameLevelSettings.GAME_LEVEL_SECTION, GameLevelSettings.GAME_TYPE, newValue.name)
-        self._settingsCommon.saveConfig()
+        self._settingsCommon.saveSettings()

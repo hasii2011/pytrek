@@ -33,6 +33,7 @@ HALF_QUADRANT_PIXEL_HEIGHT: int = QUADRANT_PIXEL_HEIGHT // 2
 
 THE_GREAT_MAC_PLATFORM:  str = 'darwin'
 GAME_SETTINGS_FILE_NAME: str = "pytrek.ini"
+BACKUP_SUFFIX:           str = '.bak'
 
 
 SOUND_VOLUME_LOW:    float = 0.1

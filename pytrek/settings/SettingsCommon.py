@@ -61,11 +61,11 @@ class SettingsCommon(BaseSubSetting):
 
     def addMissingSetting(self, sectionName: str, preferenceName: str, value: str):
         self._config.set(sectionName, preferenceName, value)
-        self.saveConfig()
+        self.saveSettings()
 
-    def saveConfig(self):
+    def saveSettings(self):
         """
-        Save data to the preferences file
+        Save data to the settings file
         """
         f = open(SettingsCommon.getSettingsLocation(), "w")
         self._config.write(f)

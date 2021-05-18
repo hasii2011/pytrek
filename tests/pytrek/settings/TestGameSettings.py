@@ -2,9 +2,15 @@
 from logging import Logger
 from logging import getLogger
 
+from os import remove as osRemove
+from os import path as osPath
+
+from shutil import copyfile
+
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from pytrek import Constants
 from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.GameSettings import GameSettings
 
@@ -13,10 +19,6 @@ from tests.TestBase import TestBase
 
 class TestGameSettings(TestBase):
     """
-    You need to change the name of this class to Test`XXXX`
-    Where `XXXX' is the name of the class that you want to test.
-
-    See existing tests for more information.
     """
     clsLogger: Logger = None
 
@@ -27,10 +29,7 @@ class TestGameSettings(TestBase):
         SettingsCommon.determineSettingsLocation()
 
     def setUp(self):
-        self.logger: Logger = TestGameSettings.clsLogger
-        #
-        # TODO: Save the game settings file before running unit tests
-        #
+        self.logger:    Logger = TestGameSettings.clsLogger
         self._settings: GameSettings = GameSettings()
 
     def tearDown(self):
@@ -80,6 +79,64 @@ class TestGameSettings(TestBase):
 
     def testStarBaseMultiplierExistence(self):
         self.assertIsNotNone(self._settings.starBaseMultiplier)
+
+    def testDebugSettingsAddKlingons(self):
+
+        self._backupSettings()
+        self._emptySettings()
+        self._settings.init()       # create defaults
+
+        self._settings.debugAddKlingons = True
+
+        self.assertTrue(self._settings.debugAddKlingons, 'Supposed to change')
+
+        self._restoreBackup()
+
+    def testDebugSettingsDebugKlingonCount(self):
+
+        self._backupSettings()
+        self._emptySettings()
+        self._settings.init()       # create defaults
+
+        self._settings.debugKlingonCount = 6
+
+        self.assertEqual(6, self._settings.debugKlingonCount, 'Supposed to change')
+
+        self._restoreBackup()
+
+    def _backupSettings(self):
+
+        settingsFileName: str = SettingsCommon.getSettingsLocation()
+
+        source: str = settingsFileName
+        target: str = f"{settingsFileName}{Constants.BACKUP_SUFFIX}"
+        if osPath.exists(source):
+            try:
+                copyfile(source, target)
+            except IOError as e:
+                self.logger.error(f"Unable to copy file. {e}")
+
+    def _restoreBackup(self):
+
+        settingsFileName: str = SettingsCommon.getSettingsLocation()
+
+        source: str = f"{settingsFileName}{Constants.BACKUP_SUFFIX}"
+        target: str = settingsFileName
+        if osPath.exists(source):
+            try:
+                copyfile(source, target)
+            except IOError as e:
+                self.logger.error(f"Unable to copy file. {e}")
+
+            osRemove(source)
+        else:
+            osRemove(target)
+
+    def _emptySettings(self):
+
+        self._settings: GameSettings = GameSettings()
+        self._settings._createEmptySettings()
+        self._settings._settingsCommon.saveSettings()
 
 
 def suite() -> TestSuite:

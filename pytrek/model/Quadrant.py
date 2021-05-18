@@ -187,18 +187,19 @@ class Quadrant:
 
     def placeAKlingon(self) -> Klingon:
         """
-
+        Creates a klingon and places it at a random empty sector
         """
-        sector      = self.getRandomEmptySector()
-        sector.type = SectorType.KLINGON
-        klingon     = Klingon(coordinates=sector.coordinates)
-        kPower      = self._intelligence.computeKlingonPower()
 
-        klingon.power          = kPower
+        sector        = self.getRandomEmptySector()
+        sector.type   = SectorType.KLINGON
+
+        klingon     = Klingon(coordinates=sector.coordinates)
+
+        klingon.power          = self._intelligence.computeKlingonPower()
         klingon.firingInterval = self._intelligence.computeKlingonFiringInterval()
         klingon.lastTimeCheck  = self._gameEngine.gameClock // 1000
 
-        sector.sprite          = klingon
+        sector.sprite = klingon
 
         self.logger.debug(f"Placed klingon at quadrant: {self._coordinates} {klingon=}")
         return klingon

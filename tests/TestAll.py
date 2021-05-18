@@ -117,7 +117,7 @@ class TestAll:
         for dirName, subdirList, fileList in osWalk(rootDir):
             if '__pycache__' in dirName:
                 continue
-            self.logger.warning(f'directory: {dirName}')
+            self.logger.debug(f'directory: {dirName}')
             for fName in fileList:
                 if self.__startsWith('Test', fName) is True:
                     fqFileName: str = f'{dirName}{osSep}{fName}'

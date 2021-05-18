@@ -10,6 +10,7 @@ from pytrek.Singleton import Singleton
 
 from pytrek.engine.GameType import GameType
 from pytrek.engine.PlayerType import PlayerType
+from pytrek.settings.DebugSettings import DebugSettings
 
 from pytrek.settings.FactorsSettings import FactorsSettings
 from pytrek.settings.GameLevelSettings import GameLevelSettings
@@ -31,6 +32,7 @@ class GameSettings(Singleton):
         self._power:          PowerSettings     = PowerSettings()
         self._gameLevel:      GameLevelSettings = GameLevelSettings()
         self._factors:        FactorsSettings   = FactorsSettings()
+        self._debug:          DebugSettings     = DebugSettings()
 
         self._createEmptySettings()
         self._loadSettings()
@@ -95,6 +97,22 @@ class GameSettings(Singleton):
     def starBaseMultiplier(self) -> float:
         return self._factors.starBaseMultiplier
 
+    @property
+    def debugKlingonCount(self) -> int:
+        return self._debug.debugKlingonCount
+
+    @debugKlingonCount.setter
+    def debugKlingonCount(self, newValue: int):
+        self._debug.debugKlingonCount = newValue
+
+    @property
+    def debugAddKlingons(self) -> bool:
+        return self._debug.debugAddKlingons
+
+    @debugAddKlingons.setter
+    def debugAddKlingons(self, newValue: bool):
+        self._debug.debugAddKlingons = newValue
+
     def _createEmptySettings(self):
 
         self._config: ConfigParser = ConfigParser()
@@ -104,6 +122,7 @@ class GameSettings(Singleton):
         self._power.configParser          = self._config
         self._gameLevel.configParser      = self._config
         self._factors.configParser        = self._config
+        self._debug.configParser          = self._config
 
     def _loadSettings(self):
         """
@@ -131,3 +150,4 @@ class GameSettings(Singleton):
         self._power.addMissingSettings()
         self._gameLevel.addMissingSettings()
         self._factors.addMissingSettings()
+        self._debug.addMissingSettings()

@@ -1,9 +1,8 @@
-from logging import INFO
+
 from typing import cast
 
 from logging import Logger
 from logging import getLogger
-from logging import DEBUG
 
 import logging.config
 
@@ -34,19 +33,14 @@ from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SOUND_VOLUME_HIGH
 
-from pytrek.GameState import GameState
-
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.ShipCondition import ShipCondition
-from pytrek.gui.MessageConsole import MessageConsole
+from pytrek.engine.Intelligence import Intelligence
 
+from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
-
-from pytrek.LocateResources import LocateResources
-
-from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -54,7 +48,12 @@ from pytrek.model.Quadrant import Quadrant
 
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
+from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
+
+from pytrek.GameState import GameState
+
+from pytrek.LocateResources import LocateResources
 
 SCREEN_TITLE:  str = "PyTrek"
 GRAVITY:       int = 0          # We do not want our game pieces falling
@@ -93,6 +92,8 @@ class PyTrekView(View):
         self._computer:     Computer     = cast(Computer, None)
         self._gameEngine:   GameEngine   = cast(GameEngine, None)
         self._gameState:    GameState    = cast(GameState, None)
+        self._gameSettings: GameSettings = cast(GameSettings, None)
+
         self._galaxy:       Galaxy       = cast(Galaxy, None)
         self._quadrant:     Quadrant     = cast(Quadrant, None)
 
@@ -126,6 +127,8 @@ class PyTrekView(View):
         self._computer     = Computer()
         self._gameEngine   = GameEngine()
         self._gameState    = GameState()
+        self._gameSettings = GameSettings()
+
         self._galaxy       = Galaxy()
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
@@ -150,9 +153,9 @@ class PyTrekView(View):
         self._quadrantMediator.klingonTorpedoes = self.klingonTorpedoes
         self._quadrantMediator.torpedoFollowers = self.torpedoFollowers
 
-        if self.logger.getEffectiveLevel() == INFO:    # TODO make this a runtime debug flag
-            self._quadrant.addKlingon()
-            self._quadrant.addKlingon()
+        if self._gameSettings.debugAddKlingons is True:
+            for x in range(self._gameSettings.debugAddKlingons + 1):
+                self._quadrant.addKlingon()
 
         if self._quadrant.klingonCount > 0:
             self._gameState.shipCondition = ShipCondition.Red
