@@ -15,11 +15,15 @@ class FactorsSettings(BaseSubSetting):
     STAR_BASE_EXTENDER:   str = 'star_base_extender'
     STAR_BASE_MULTIPLIER: str = 'star_base_multiplier'
 
+    MIN_KLINGON_FIRING_INTERVAL: str = 'min_klingon_firing_interval'
+    MAX_KLINGON_FIRING_INTERVAL: str = 'max_klingon_firing_interval'
+
     FACTORS_SETTINGS: SettingsNameValues = {
         GAME_LENGTH_FACTOR:     '7.0',
         STAR_BASE_EXTENDER:     '2.0',
-        STAR_BASE_MULTIPLIER:   '3.0'
-
+        STAR_BASE_MULTIPLIER:   '3.0',
+        MIN_KLINGON_FIRING_INTERVAL: '7',
+        MAX_KLINGON_FIRING_INTERVAL: '15'
     }
 
     def init(self, *args, **kwds):
@@ -46,3 +50,11 @@ class FactorsSettings(BaseSubSetting):
     @property
     def starBaseMultiplier(self) -> float:
         return self._config.getfloat(FactorsSettings.FACTORS_SECTION, FactorsSettings.STAR_BASE_MULTIPLIER)
+
+    @property
+    def minKlingonFiringInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MIN_KLINGON_FIRING_INTERVAL)
+
+    @property
+    def maxKlingonFiringInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_KLINGON_FIRING_INTERVAL)

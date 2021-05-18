@@ -98,6 +98,14 @@ class GameSettings(Singleton):
         return self._factors.starBaseMultiplier
 
     @property
+    def minKlingonFiringInterval(self) -> int:
+        return self._factors.minKlingonFiringInterval
+
+    @property
+    def maxKlingonFiringInterval(self) -> int:
+        return self._factors.maxKlingonFiringInterval
+
+    @property
     def debugKlingonCount(self) -> int:
         return self._debug.debugKlingonCount
 

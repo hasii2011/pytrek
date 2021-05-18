@@ -80,6 +80,12 @@ class TestGameSettings(TestBase):
     def testStarBaseMultiplierExistence(self):
         self.assertIsNotNone(self._settings.starBaseMultiplier)
 
+    def testMinKlingonFiringInterval(self):
+        self.assertIsNotNone(self._settings.minKlingonFiringInterval)
+
+    def testMaxKlingonFiringInterval(self):
+        self.assertIsNotNone(self._settings.maxKlingonFiringInterval)
+
     def testDebugSettingsAddKlingons(self):
 
         self._backupSettings()

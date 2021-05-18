@@ -11,8 +11,6 @@ from typing import List
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
-from pytrek.Constants import MAX_KLINGON_FIRING_INTERVAL
-from pytrek.Constants import MIN_KLINGON_FIRING_INTERVAL
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 
@@ -138,7 +136,10 @@ class Intelligence(Singleton):
 
         Returns: A random time interval
         """
-        return randint(MIN_KLINGON_FIRING_INTERVAL, MAX_KLINGON_FIRING_INTERVAL)
+        minFiringInterval: int = self._gameSettings.minKlingonFiringInterval
+        maxFiringInterval: int = self._gameSettings.maxKlingonFiringInterval
+
+        return randint(minFiringInterval, maxFiringInterval)
 
     def rand(self) -> float:
         """
