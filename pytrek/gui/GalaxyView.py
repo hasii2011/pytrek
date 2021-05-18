@@ -12,7 +12,7 @@ from pytrek.GameState import GameState
 
 from pytrek.LocateResources import LocateResources
 
-from pytrek.PyTrek import PyTrekView
+from pytrek.PyTrekView import PyTrekView
 
 from pytrek.mediators.GalaxyViewMediator import GalaxyViewMediator
 

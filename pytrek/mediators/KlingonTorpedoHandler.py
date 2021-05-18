@@ -39,10 +39,6 @@ from pytrek.LocateResources import LocateResources
 
 class KlingonTorpedoHandler:
 
-    KLINGON_TORPEDO_EVENT_SECONDS = 10      # TODO  Compute this
-
-    IMAGE_ROTATION: int = 90  # Image might not be lined up right, set this to offset
-
     def __init__(self):
 
         self.logger: Logger = getLogger(__name__)

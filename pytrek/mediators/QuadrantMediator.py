@@ -33,8 +33,6 @@ class QuadrantMediator(Singleton):
     This class avoids putting UI logic (arcade) in the model class, Quadrant.
     """
 
-    KLINGON_TORPEDO_EVENT_SECONDS = 10      # TODO  Compute this
-
     def init(self, *args, **kwds):
 
         self.logger: Logger = getLogger(__name__)
