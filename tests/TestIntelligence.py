@@ -240,6 +240,22 @@ class TestIntelligence(TestBase):
             ans = self.smarty.rand()
             self.logger.debug(f"testRand - Iteration {x}, answer is {ans}")
 
+    def testRandomFloat(self):
+
+        for x in range(0, 99):
+            answer: float = self.smarty.randomFloat()
+            self.logger.debug(f'testRandomFloat - Iteration {x}, {answer=}')
+
+            self.assertGreater(answer, 0.0, 'Follow the specification please')
+            self.assertLess(answer, 1.0, 'Follow the specification please')
+
+    def testComputePlanetsInGalaxy(self):
+        maxPlanets: int = self._settings.maximumPlanets
+        for x in range(0, 10):
+            answer: int = self.smarty.computePlanetsInGalaxy()
+            self.logger.debug(f'testComputePlanetsInGalaxy1 - Iteration {x}, {answer=}')
+            self.assertLessEqual(answer, maxPlanets, 'We cannot have too many')
+
     def testComputeKlingonFiringInterval(self):
 
         minFiringInterval: int = self._settings.minKlingonFiringInterval

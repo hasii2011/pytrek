@@ -20,7 +20,7 @@ class LimitsSettings(BaseSubSetting):
         MAXIMUM_STARS:      '4',
         MINIMUM_STAR_BASES: '2',
         MAXIMUM_STAR_BASES: '5',
-        MAXIMUM_PLANETS:    '5'
+        MAXIMUM_PLANETS:    '10'
     }
 
     """

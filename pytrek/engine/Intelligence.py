@@ -1,4 +1,6 @@
 
+from typing import List
+
 from logging import Logger
 from logging import getLogger
 from logging import INFO
@@ -7,7 +9,6 @@ from random import randint
 from random import randrange
 from random import random
 
-from typing import List
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
@@ -30,6 +31,7 @@ class Intelligence(Singleton):
     """
 
     RAND_MAX: int = 32767
+
     ADJACENT_DIRECTIONS: List[Direction] = [
         Direction.North, Direction.NorthEast, Direction.East
     ]
@@ -141,6 +143,23 @@ class Intelligence(Singleton):
 
         return randint(minFiringInterval, maxFiringInterval)
 
+    def computePlanetsInGalaxy(self) -> int:
+        """
+        Will some times generate 1 more than maximumPlanets;  Hence my patch
+        ```C
+            nplan = (PLNETMAX/2) + (PLNETMAX/2+1)*Rand();
+        ```
+        Returns:  The planets to position in the Galaxy
+        """
+        maxPlanets:  int = self._gameSettings.maximumPlanets
+
+        rb: float = (maxPlanets/2) + (maxPlanets/2 + 1) * self.randomFloat()
+
+        planetCount: int = round(rb)
+        if planetCount >= maxPlanets:
+            planetCount = maxPlanets
+        return planetCount
+
     def rand(self) -> float:
         """
 
@@ -155,3 +174,13 @@ class Intelligence(Singleton):
         ans: float = intermediateAns / (1.0 + Intelligence.RAND_MAX)
 
         return ans
+
+    def randomFloat(self) -> float:
+        """
+
+        Returns:  0.0 .. 0.9999
+
+        """
+
+        weeNumber: float = random()
+        return weeNumber
