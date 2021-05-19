@@ -38,6 +38,8 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.engine.Intelligence import Intelligence
 
+from pytrek.gui.GalaxyView import GalaxyView
+from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
@@ -226,16 +228,10 @@ class PyTrekView(View):
             # noinspection PyUnresolvedReferences
             os._exit(0)
         elif pressedKey == arcade.key.G:
-            from pytrek.gui.GalaxyView import GalaxyView
-            # TODO both of these views should be changed to use a callback;  The callback switches
-            # us back to the game view
-            #
-            galaxyView: GalaxyView = GalaxyView(gameView=self)
+            galaxyView: GalaxyView = GalaxyView(viewCompleteCallback=self._switchViewBack)
             self.window.show_view(galaxyView)
         elif pressedKey == arcade.key.L:
-            from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
-
-            longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(gameView=self)
+            longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(viewCompleteCallback=self._switchViewBack)
             self.window.show_view(longRangeSensorView)
         elif pressedKey == arcade.key.T:
             print(f'I am shooting')
@@ -293,6 +289,9 @@ class PyTrekView(View):
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='probe_launch_1.wav')
         self._soundImpulse = Sound(file_name=fqFileName)
+
+    def _switchViewBack(self):
+        self.window.show_view(self)
 
 
 def main():

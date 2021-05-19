@@ -1,4 +1,6 @@
 
+from typing import Callable
+
 from arcade import View
 from arcade import load_texture
 from arcade import start_render
@@ -6,11 +8,10 @@ from arcade import start_render
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
+
 from pytrek.GameState import GameState
 
 from pytrek.LocateResources import LocateResources
-
-from pytrek.PyTrekView import PyTrekView
 
 from pytrek.engine.GameEngine import GameEngine
 
@@ -26,11 +27,11 @@ class LongRangeSensorScanView(View):
     BACKGROUND_WIDTH: int  = 321
     BACKGROUND_HEIGHT: int = 322
 
-    def __init__(self, gameView: PyTrekView):
+    def __init__(self, viewCompleteCallback: Callable):
 
         super().__init__()
 
-        self._gameView: PyTrekView = gameView
+        self._viewCompleteCallback: Callable = viewCompleteCallback
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='LongRangeSensorBackground.png')
 
         self.texture = load_texture(fqFileName)
@@ -64,4 +65,4 @@ class LongRangeSensorScanView(View):
         """
         If the user presses the mouse button, go back to the game
         """
-        self.window.show_view(self._gameView)
+        self._viewCompleteCallback()

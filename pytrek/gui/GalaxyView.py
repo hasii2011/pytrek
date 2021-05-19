@@ -1,4 +1,6 @@
 
+from typing import Callable
+
 from arcade import start_render
 
 from pytrek.Constants import CONSOLE_HEIGHT
@@ -12,18 +14,16 @@ from pytrek.GameState import GameState
 
 from pytrek.LocateResources import LocateResources
 
-from pytrek.PyTrekView import PyTrekView
-
 from pytrek.mediators.GalaxyViewMediator import GalaxyViewMediator
 
 
 class GalaxyView(View):
 
-    def __init__(self, gameView: PyTrekView):
+    def __init__(self, viewCompleteCallback: Callable):
 
         super().__init__()
 
-        self._gameView: PyTrekView = gameView
+        self._viewCompleteCallback: Callable = viewCompleteCallback
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='GalaxyScanBackground.png')
 
         self.texture = load_texture(fqFileName)
@@ -50,4 +50,4 @@ class GalaxyView(View):
         """
         If the user presses the mouse button, go back to the game
         """
-        self.window.show_view(self._gameView)
+        self._viewCompleteCallback()
