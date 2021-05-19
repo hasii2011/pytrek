@@ -4,7 +4,6 @@ from typing import cast
 
 from logging import Logger
 from logging import getLogger
-from logging import DEBUG
 
 from unittest import TestSuite
 from unittest import main as unitTestMain
@@ -14,6 +13,7 @@ from pytrek.model.Galaxy import Galaxy
 
 from pytrek.GameState import GameState
 from pytrek.model.Quadrant import Quadrant
+from pytrek.settings.GameSettings import GameSettings
 
 from pytrek.settings.SettingsCommon import SettingsCommon
 
@@ -33,16 +33,19 @@ class TestGalaxy(TestBase):
     def setUp(self):
         self.logger: Logger = TestGalaxy.clsLogger
 
-        self._galaxy: Galaxy = Galaxy()
+        # Set the flag prior to instantiating the Galaxy singleton
+        self._gameSettings: GameSettings = GameSettings()
+        self._gameSettings.debugCollectKlingonQuadrantCoordinates = True
+
+        self._galaxy:       Galaxy = Galaxy()
 
     def tearDown(self):
-        pass
+        self._gameSettings.debugCollectKlingonQuadrantCoordinates = False
 
     def testPlaceKlingonsInGalaxyCount(self):
         """
         Use the debug list created during initialization
-        Assumes the the unit test logging configuration has
-        pytrek.model.Galaxy   set to DEBUG;  Other the debug list is not created
+        Assumes that the runtime debug flag 'debug_collect_klingon_quadrant_coordinates' is set to True
         """
         gameState: GameState = GameState()
         expectedKlingonCount: int = gameState.remainingKlingons
@@ -50,20 +53,19 @@ class TestGalaxy(TestBase):
         # The number of entries in the debug list is the number if klingons we placed
         placedKlingonCount: int = len(self._galaxy._debugKlingonQuadrants)
 
-        self.assertEqual(expectedKlingonCount, placedKlingonCount, 'Either we placed to little or too many klingons')
+        self.assertEqual(expectedKlingonCount, placedKlingonCount, 'Either we placed too little or too many klingons')
 
     def testPlaceKlingonsInGalaxyPositions(self):
         """
         Use the debug list created during initialization
-        Assumes the the unit test logging configuration has
-        pytrek.model.Galaxy   set to DEBUG;  Other the debug list is not created
+        Assumes that the runtime debug flag 'debug_collect_klingon_quadrant_coordinates' is set to True
         """
         galaxy: Galaxy = self._galaxy
         debugKlingonQuadrants: List[Coordinates] = galaxy._debugKlingonQuadrants
         for kCoordinates in debugKlingonQuadrants:
             kCoordinates: Coordinates = cast(Coordinates, kCoordinates)
             quadrant: Quadrant = galaxy.getQuadrant(kCoordinates)
-            self.assertNotEqual(0, quadrant.klingonCount)
+            self.assertNotEqual(0, quadrant.klingonCount, 'We should have some Klingons in this quadrant')
             self.logger.debug(f'{kCoordinates=} {quadrant.klingonCount=}')
 
 

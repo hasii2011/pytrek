@@ -10,7 +10,8 @@ from shutil import copyfile
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek import Constants
+from pytrek.Constants import BACKUP_SUFFIX
+
 from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.GameSettings import GameSettings
 
@@ -110,12 +111,23 @@ class TestGameSettings(TestBase):
 
         self._restoreBackup()
 
+    def testDebugPrintKlingonPlacement(self):
+        self._backupSettings()
+        self._emptySettings()
+        self._settings.init()       # create defaults
+
+        self._settings.debugPrintKlingonPlacement = True
+
+        self.assertTrue(self._settings.debugPrintKlingonPlacement, 'Should have changed to non-default')
+
+        self._restoreBackup()
+
     def _backupSettings(self):
 
         settingsFileName: str = SettingsCommon.getSettingsLocation()
 
         source: str = settingsFileName
-        target: str = f"{settingsFileName}{Constants.BACKUP_SUFFIX}"
+        target: str = f"{settingsFileName}{BACKUP_SUFFIX}"
         if osPath.exists(source):
             try:
                 copyfile(source, target)
@@ -126,7 +138,7 @@ class TestGameSettings(TestBase):
 
         settingsFileName: str = SettingsCommon.getSettingsLocation()
 
-        source: str = f"{settingsFileName}{Constants.BACKUP_SUFFIX}"
+        source: str = f"{settingsFileName}{BACKUP_SUFFIX}"
         target: str = settingsFileName
         if osPath.exists(source):
             try:

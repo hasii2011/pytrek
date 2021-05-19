@@ -121,6 +121,30 @@ class GameSettings(Singleton):
     def debugAddKlingons(self, newValue: bool):
         self._debug.debugAddKlingons = newValue
 
+    @property
+    def debugPrintKlingonPlacement(self) -> bool:
+        return self._debug.debugPrintKlingonPlacement
+
+    @debugPrintKlingonPlacement.setter
+    def debugPrintKlingonPlacement(self, newValue: bool):
+        self._debug.debugPrintKlingonPlacement = newValue
+
+    @property
+    def debugCollectKlingonQuadrantCoordinates(self) -> bool:
+        return self._debug.debugCollectKlingonQuadrantCoordinates
+
+    @debugCollectKlingonQuadrantCoordinates.setter
+    def debugCollectKlingonQuadrantCoordinates(self, newValue: bool):
+        self._debug.debugCollectKlingonQuadrantCoordinates = newValue
+
+    @property
+    def debugAnnounceQuadrantCreation(self) -> bool:
+        return self._debug.debugAnnounceQuadrantCreation
+
+    @debugAnnounceQuadrantCreation.setter
+    def debugAnnounceQuadrantCreation(self, newValue: bool):
+        self._debug.debugAnnounceQuadrantCreation.debugAnnounceQuadrantCreation = newValue
+
     def _createEmptySettings(self):
 
         self._config: ConfigParser = ConfigParser()
