@@ -10,7 +10,7 @@ from math import pi
 from math import radians
 from math import degrees
 
-from pytrek.engine.ArcadePosition import ArcadePosition
+from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 
@@ -29,7 +29,7 @@ class SmoothMotion:
         """
         True if we are moving, else False
         """
-        self._destinationPoint: ArcadePosition = cast(ArcadePosition, None)
+        self._destinationPoint: ArcadePoint = cast(ArcadePoint, None)
         """
         The arcade game library final destination screen position if the game piece is in motion
         """
@@ -44,15 +44,15 @@ class SmoothMotion:
         self._inMotion = newValue
 
     @property
-    def destinationPoint(self) -> ArcadePosition:
+    def destinationPoint(self) -> ArcadePoint:
         """
-        Use for game piece motion.  This this the the ArcadePosition.
+        Use for game piece motion.  This this the the ArcadePoint.
         Returns:
         """
         return self._destinationPoint
 
     @destinationPoint.setter
-    def destinationPoint(self, destinationPoint: ArcadePosition):
+    def destinationPoint(self, destinationPoint: ArcadePoint):
         self._destinationPoint = destinationPoint
 
     @property
@@ -63,7 +63,7 @@ class SmoothMotion:
     def imageRotation(self, newValue: int):
         self._imageRotation = newValue
 
-    def doMotion(self, gamePiece: GamePiece, destinationPoint: ArcadePosition, angleDiffRadians: float, actualAngleRadians: float):
+    def doMotion(self, gamePiece: GamePiece, destinationPoint: ArcadePoint, angleDiffRadians: float, actualAngleRadians: float):
 
         dest_x: float = destinationPoint.x
         dest_y: float = destinationPoint.y
@@ -96,7 +96,7 @@ class SmoothMotion:
             self._inMotion        = False
             gamePiece.angle       = 0
 
-    def computeArcadeMotion(self, currentPoint: ArcadePosition, destinationPoint: ArcadePosition, spriteRotationAngle: float, rotationalSpeed: float):
+    def computeArcadeMotion(self, currentPoint: ArcadePoint, destinationPoint: ArcadePoint, spriteRotationAngle: float, rotationalSpeed: float):
         """
         Do math to calculate how to get the sprite to the destinationPoint.
         Calculate the angle in radians between the start points

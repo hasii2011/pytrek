@@ -11,7 +11,7 @@ from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 
 from pytrek.engine.Computer import Computer
-from pytrek.engine.ArcadePosition import ArcadePosition
+from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
@@ -96,6 +96,12 @@ class QuadrantMediator(Singleton):
         self._torpedoFollowers = newList
         self._kth.torpedoFollowers = newList
 
+    def draw(self):
+        self.playerList.draw()
+        self.klingonList.draw()
+        self.klingonTorpedoes.draw()
+        self.torpedoFollowers.draw()
+
     def update(self, quadrant: Quadrant):
 
         if self.logger.getEffectiveLevel() == DEBUG:
@@ -142,7 +148,7 @@ class QuadrantMediator(Singleton):
         if enterprise.inMotion is True:
 
             self.logger.debug(f'Enterprise arcade position: ({arcadeX},{arcadeY})')
-            enterprise.destinationPoint = ArcadePosition(x=arcadeX, y=arcadeY)
+            enterprise.destinationPoint = ArcadePoint(x=arcadeX, y=arcadeY)
             enterprise.update()
         else:
             enterprise.center_x = arcadeX

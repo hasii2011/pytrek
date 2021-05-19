@@ -9,8 +9,10 @@ from unittest import TestSuite
 from unittest import main as unitTestMain
 from unittest.mock import MagicMock
 
-from pytrek.engine.ArcadePosition import ArcadePosition
+from pytrek.engine.ArcadePoint import ArcadePoint
+
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+
 from tests.TestBase import TestBase
 
 
@@ -38,10 +40,10 @@ class TestSmoothMotion(TestBase):
 
     def testDoMotion(self):
 
-        currentPosition:     ArcadePosition = ArcadePosition(x=0, y=0)
-        destinationPosition: ArcadePosition = ArcadePosition(x=0, y=500)
+        currentPoint:     ArcadePoint = ArcadePoint(x=0, y=0)
+        destinationPoint: ArcadePoint = ArcadePoint(x=0, y=500)
 
-        self.smoothMotion.computeArcadeMotion(currentPoint=currentPosition, destinationPoint=destinationPosition,
+        self.smoothMotion.computeArcadeMotion(currentPoint=currentPoint, destinationPoint=destinationPoint,
                                               spriteRotationAngle=0,
                                               rotationalSpeed=TestSmoothMotion.TEST_ROTATIONAL_SPEED)
 

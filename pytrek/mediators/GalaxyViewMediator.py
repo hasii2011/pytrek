@@ -10,7 +10,7 @@ from pytrek.Constants import GALAXY_ROWS
 
 from pytrek.Singleton import Singleton
 
-from pytrek.engine.ArcadePosition import ArcadePosition
+from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 
 from pytrek.model.Coordinates import Coordinates
@@ -37,16 +37,16 @@ class GalaxyViewMediator(Singleton):
                 if quadrant.scanned is True:
                     if centerCoordinates == coordinates:
                         contents: str = 'E'
-                        arcadePosition: ArcadePosition = Computer.gamePositionToScreenPosition(coordinates)
-                        arcadeX: float = arcadePosition.x + 2
-                        arcadeY: float = arcadePosition.y + 2
+                        arcadePoint: ArcadePoint = Computer.gamePositionToScreenPoint(coordinates)
+                        arcadeX: float = arcadePoint.x + 2
+                        arcadeY: float = arcadePoint.y + 2
                     else:
                         contents = self._computer.createValueString(klingonCount=quadrant.klingonCount,
                                                                     commanderCount=quadrant.commanderCount,
                                                                     hasStarBase=quadrant.hasStarBase)
 
-                        arcadePosition = Computer.gamePositionToScreenPosition(coordinates)
-                        arcadeX = arcadePosition.x
-                        arcadeY = arcadePosition.y
+                        arcadePoint = Computer.gamePositionToScreenPoint(coordinates)
+                        arcadeX = arcadePoint.x
+                        arcadeY = arcadePoint.y
 
                     draw_text(contents, arcadeX, arcadeY, color.WHITE, 14)

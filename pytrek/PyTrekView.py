@@ -181,17 +181,12 @@ class PyTrekView(View):
         # the screen to the background color, and erase what we drew last frame.
         start_render()
 
-        # Call draw() on all your sprite lists below
-        # self._backgroundSprite.gridSpriteList.draw()
         # Draw the background texture
         draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_HEIGHT,
                                      width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
 
-        self._quadrantMediator.playerList.draw()
-        self._quadrantMediator.klingonList.draw()
-        self._quadrantMediator.klingonTorpedoes.draw()      # TODO put this in mediator
-        self._quadrantMediator.torpedoFollowers.draw()      # TODO put this in mediator
-
+        # Call draw() on all our sprite lists
+        self._quadrantMediator.draw()
         self._statusConsole.draw()
         self._messageConsole.draw()
 

@@ -10,7 +10,7 @@ from arcade import Sprite
 from arcade import SpriteList
 from arcade import check_for_collision_with_list
 
-from pytrek.engine.ArcadePosition import ArcadePosition
+from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
@@ -194,8 +194,8 @@ class KlingonTorpedoHandler:
         # Use the enterprise arcade position rather than compute the sector center;  That way we
         # can use Arcade collision detection
         #
-        klingonPoint:    ArcadePosition = ArcadePosition(x=klingon.center_x, y=klingon.center_y)
-        enterprisePoint: ArcadePosition = ArcadePosition(x=enterprise.center_x, y=enterprise.center_y)
+        klingonPoint:    ArcadePoint = ArcadePoint(x=klingon.center_x, y=klingon.center_y)
+        enterprisePoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
 
         klingonTorpedo: KlingonTorpedo = KlingonTorpedo()
         klingonTorpedo.center_x = klingonPoint.x
@@ -244,8 +244,8 @@ class KlingonTorpedoHandler:
 
     def _pointAtEnterprise(self, klingon: Klingon, enterprise: Enterprise):
 
-        currentPoint:     ArcadePosition = ArcadePosition(x=klingon.center_x, y=klingon.center_y)
-        destinationPoint: ArcadePosition = ArcadePosition(x=enterprise.center_x, y=enterprise.center_y)
+        currentPoint:     ArcadePoint = ArcadePoint(x=klingon.center_x, y=klingon.center_y)
+        destinationPoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
 
         normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
         klingon.angle = normalAngle + 125

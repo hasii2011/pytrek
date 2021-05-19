@@ -8,6 +8,7 @@ from math import degrees
 from math import floor
 from math import sqrt
 
+
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
@@ -15,7 +16,8 @@ from pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_ROWS
-from pytrek.engine.ArcadePosition import ArcadePosition
+
+from pytrek.engine.ArcadePoint import ArcadePoint
 
 from pytrek.model.Coordinates import Coordinates
 
@@ -30,12 +32,10 @@ class Computer(Singleton):
     GALACTIC_TRAVEL_FACTOR: float = 1.0
 
     def init(self):
-
-        #  self.settings = Settings()
         self.logger: Logger = getLogger(__name__)
 
     @classmethod
-    def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates) -> ArcadePosition:
+    def gamePositionToScreenPoint(cls, gameCoordinates: Coordinates) -> ArcadePoint:
         """
         Computes x,y arcade position within the galaxy
         Args:
@@ -59,7 +59,7 @@ class Computer(Singleton):
         x = (adjustSectorX * QUADRANT_PIXEL_WIDTH) + HALF_QUADRANT_PIXEL_WIDTH + xMargins
         y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + yMargins + CONSOLE_HEIGHT
 
-        return ArcadePosition(x=x, y=y)
+        return ArcadePoint(x=x, y=y)
 
     def computeSectorCoordinates(self, x: float, y: float) -> Coordinates:
         """
@@ -138,7 +138,7 @@ class Computer(Singleton):
         hit:       float = klingonPower * hitFactor
         return hit
 
-    def computeAngleToTarget(self, shooter: ArcadePosition, deadMeat: ArcadePosition) -> float:
+    def computeAngleToTarget(self, shooter: ArcadePoint, deadMeat: ArcadePoint) -> float:
         """
         x goes right (as expected)
         y goes up

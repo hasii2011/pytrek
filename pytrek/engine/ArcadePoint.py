@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class ArcadePosition:
+class ArcadePoint:
     """
     Represent the position of arcade sprites.
     """
@@ -14,10 +14,10 @@ class ArcadePosition:
         return self.__str__()
 
     def __str__(self) -> str:
-        return f"ArcadePosition({self.x},{self.y})"
+        return f"ArcadePoint({self.x},{self.y})"
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, ArcadePosition):
+        if isinstance(other, ArcadePoint):
             if self.x == other.x and self.y == other.y:
                 return True
             else:

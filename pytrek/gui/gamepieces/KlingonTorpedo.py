@@ -10,7 +10,7 @@ from arcade import SpriteList
 
 from pytrek.LocateResources import LocateResources
 
-from pytrek.engine.ArcadePosition import ArcadePosition
+from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 
 from pytrek.gui.gamepieces.GamePiece import GamePiece
@@ -77,7 +77,7 @@ class KlingonTorpedo(GamePiece, SmoothMotion):
     def update(self):
 
         if self.inMotion is True:
-            actualAngleRadians, angleDiffRadians = self.computeArcadeMotion(currentPoint=ArcadePosition(x=self.center_x, y=self.center_y),
+            actualAngleRadians, angleDiffRadians = self.computeArcadeMotion(currentPoint=ArcadePoint(x=self.center_x, y=self.center_y),
                                                                             destinationPoint=self.destinationPoint,
                                                                             spriteRotationAngle=self.angle,
                                                                             rotationalSpeed=self.rotationSpeed)

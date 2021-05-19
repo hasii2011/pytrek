@@ -2,7 +2,7 @@
 from logging import Logger
 from logging import getLogger
 
-from pytrek.engine.ArcadePosition import ArcadePosition
+from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
@@ -24,7 +24,7 @@ class Enterprise(GamePiece, SmoothMotion):
     def update(self):
 
         if self.inMotion is True:
-            actualAngleRadians, angleDiffRadians = self.computeArcadeMotion(currentPoint=ArcadePosition(x=self.center_x, y=self.center_y),
+            actualAngleRadians, angleDiffRadians = self.computeArcadeMotion(currentPoint=ArcadePoint(x=self.center_x, y=self.center_y),
                                                                             destinationPoint=self.destinationPoint,
                                                                             spriteRotationAngle=self.angle,
                                                                             rotationalSpeed=self.rotationSpeed)
