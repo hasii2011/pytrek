@@ -18,7 +18,7 @@ from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
 
-from pytrek.mediators.KlingonTorpedoHandler import KlingonTorpedoHandler
+from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -40,7 +40,7 @@ class QuadrantMediator(Singleton):
         self._gameEngine: GameEngine = GameEngine()
         self._computer:   Computer   = Computer()
 
-        self._kth: KlingonTorpedoHandler = KlingonTorpedoHandler()
+        self._kth: KlingonTorpedoMediator = KlingonTorpedoMediator()
 
         self._playerList:    SpriteList = SpriteList()
         self._klingonList:   SpriteList = SpriteList()

@@ -37,7 +37,7 @@ from pytrek.GameState import GameState
 from pytrek.LocateResources import LocateResources
 
 
-class KlingonTorpedoHandler:
+class KlingonTorpedoMediator:
 
     def __init__(self):
 
