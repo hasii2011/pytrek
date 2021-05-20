@@ -6,7 +6,6 @@ from arcade import Sprite
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
-from pytrek.Constants import QUADRANT_MARGIN
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_ROWS
@@ -70,10 +69,7 @@ class GamePiece(Sprite):
         adjustSectorX: int = sectorX
         adjustSectorY: int = (QUADRANT_ROWS - sectorY) - 1
 
-        xMargins: int = (sectorX + 1) * QUADRANT_MARGIN
-        yMargins: int = (sectorY + 1) * QUADRANT_MARGIN
-
-        x = (adjustSectorX * QUADRANT_PIXEL_WIDTH) + HALF_QUADRANT_PIXEL_WIDTH + xMargins
-        y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + yMargins + CONSOLE_HEIGHT
+        x = (adjustSectorX * QUADRANT_PIXEL_WIDTH) + HALF_QUADRANT_PIXEL_WIDTH
+        y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + CONSOLE_HEIGHT
 
         return x, y

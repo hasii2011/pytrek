@@ -96,11 +96,13 @@ class QuadrantMediator(Singleton):
         self._torpedoFollowers = newList
         self._kth.torpedoFollowers = newList
 
-    def draw(self):
+    def draw(self, quadrant: Quadrant):
         self.playerList.draw()
         self.klingonList.draw()
         self.klingonTorpedoes.draw()
         self.torpedoFollowers.draw()
+        if quadrant.hasPlanet is True:
+            quadrant._planet.draw()
 
     def update(self, quadrant: Quadrant):
 
@@ -134,6 +136,9 @@ class QuadrantMediator(Singleton):
                         self._updateEnterprise(quadrant=quadrant, gamePiece=gamePiece)
                     elif sectorType == SectorType.KLINGON:
                         self._updateKlingon(gamePiece=gamePiece)
+                    elif sectorType == SectorType.PLANET:
+                        pass
+                        # Planets are immovable;  So arcade position set at creation
 
     def _updateEnterprise(self, quadrant: Quadrant, gamePiece: GamePiece):
         """

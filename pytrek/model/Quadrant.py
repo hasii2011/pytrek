@@ -12,6 +12,8 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
+from pytrek.gui.gamepieces.Planet import Planet
+from pytrek.gui.gamepieces.PlanetType import PlanetType
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Sector import Sector
@@ -43,10 +45,12 @@ class Quadrant:
         self._klingonCount:   int = 0
         self._commanderCount: int = 0
         self._hasStarBase:    bool = False
+        self._hasPlanet:      bool = False
         self._scanned:        bool = False
 
         self._klingons:   List[Klingon]   = []
         # self.commanders: List[Commander] = []
+        self._planet: Planet = cast(Planet, None)
 
         self._enterprise:            Enterprise  = cast(Enterprise, None)
         self._enterpriseCoordinates: Coordinates = cast(Coordinates, None)
@@ -150,6 +154,10 @@ class Quadrant:
     def hasStarBase(self, newValue: bool):
         self._hasStarBase = newValue
 
+    @property
+    def hasPlanet(self) -> bool:
+        return self._hasPlanet
+
     def getSector(self, sectorCoordinates: Coordinates) -> Sector:
         """
 
@@ -169,6 +177,16 @@ class Quadrant:
         self._klingonCount += 1
         klingon: Klingon = self.placeAKlingon()
         self._klingons.append(klingon)
+
+    def addPlanet(self):
+
+        self._hasPlanet = True
+
+        sector      = self.getRandomEmptySector()
+        sector.type = SectorType.PLANET
+
+        planetType: PlanetType = self._intelligence.computeRandomPlanetType()
+        self._planet = Planet(planetType=planetType, sectorCoordinates=sector.coordinates)
 
     def getRandomEmptySector(self) -> Sector:
         """

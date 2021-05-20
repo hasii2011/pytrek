@@ -7,6 +7,7 @@ class SectorType(Enum):
     ENTERPRISE           = 'Enterprise'
     EMPTY                = 'empty'
     STAR                 = 'star'
+    PLANET               = 'planet'
     STARBASE             = 'starbase'
     KLINGON              = 'klingon'
     COMMANDER            = 'commander'

@@ -8,6 +8,7 @@ from unittest import main as unitTestMain
 from pytrek.engine.GameType import GameType
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.PlayerType import PlayerType
+from pytrek.gui.gamepieces.PlanetType import PlanetType
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.DataTypes import LRScanCoordinatesList
@@ -266,6 +267,11 @@ class TestIntelligence(TestBase):
             self.assertGreaterEqual(ans, minFiringInterval, 'Cannot be below the min')
             self.assertLessEqual(ans, maxFiringInterval, 'Cannot be above the  max')
             self.logger.debug(f'Random klingon firing interval: {ans}')
+
+    def testComputeRandomPlanetType(self):
+        for x in range(0, 10):
+            planetType: PlanetType = self.smarty.computeRandomPlanetType()
+            self.logger.debug(f'Random Choice: {planetType}')
 
 
 def suite() -> TestSuite:

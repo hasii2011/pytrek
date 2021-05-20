@@ -120,10 +120,9 @@ class PyTrekView(View):
         self.background = load_texture(fqFileName)
         # Create the 'physics engine'
         # self.physicsEngine = PhysicsEnginePlatformer(self.enterprise, self.hardSpriteList, gravity_constant=GRAVITY)
+        # self.physicsEngine = PhysicsEngineSimple(self._enterprise, self._hardSpriteList)
 
         self._enterprise: Enterprise = Enterprise()
-
-        # self.physicsEngine = PhysicsEngineSimple(self._enterprise, self._hardSpriteList)
 
         self._intelligence = Intelligence()
         self._computer     = Computer()
@@ -169,6 +168,8 @@ class PyTrekView(View):
         else:
             self._quadrantMediator.klingonList = SpriteList()
 
+        if self._gameSettings.debugAddPlanet is True:
+            self._quadrant.addPlanet()
         self._loadSounds()
 
         self.logger.info(f'Setup Complete')
@@ -186,7 +187,7 @@ class PyTrekView(View):
                                      width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
 
         # Call draw() on all our sprite lists
-        self._quadrantMediator.draw()
+        self._quadrantMediator.draw(quadrant=self._quadrant)
         self._statusConsole.draw()
         self._messageConsole.draw()
 

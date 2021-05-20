@@ -1,4 +1,4 @@
-
+from random import choice
 from typing import List
 
 from logging import Logger
@@ -18,6 +18,7 @@ from pytrek.Constants import QUADRANT_ROWS
 from pytrek.Singleton import Singleton
 from pytrek.engine.Direction import Direction
 from pytrek.engine.LRScanCoordinates import LRScanCoordinates
+from pytrek.gui.gamepieces.PlanetType import PlanetType
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.DataTypes import LRScanCoordinatesList
@@ -159,6 +160,14 @@ class Intelligence(Singleton):
         if planetCount >= maxPlanets:
             planetCount = maxPlanets
         return planetCount
+
+    def computeRandomPlanetType(self) -> PlanetType:
+
+        planetTypeList = [name for name in dir(PlanetType) if not name.startswith('_')]
+
+        planetName: str = choice(planetTypeList)
+
+        return PlanetType(planetName)
 
     def rand(self) -> float:
         """

@@ -56,6 +56,7 @@ class Galaxy(Singleton):
         self.placeKlingonsInGalaxy()
         # self.placeCommandersInGalaxy()
         # self.placeStarBasesInGalaxy()
+        self._placePlanets()
         self.setInitialQuadrant()
 
     def updateGalaxy(self):
@@ -133,6 +134,35 @@ class Galaxy(Singleton):
                 if self._gameSettings.debugAnnounceQuadrantCreation is True:
                     self.logger.info(f"Created quadrant: ({x},{y})")
             self.quadrants.append(quadrantRow)
+
+    def _placePlanets(self):
+        """
+        ```java
+            for (int i = 0; i < myPlanetCount; i++) {
+
+                Coordinates pCoords = Intelligence.getRandomQuadrantCoordinates();
+                int         x       = pCoords.getXCoordinate();
+                int         y       = pCoords.getYCoordinate();
+                Quadrant    pQuad   = myQuadrants[x][y];
+                pQuad.addPlanet();
+            }
+        ```
+        """
+        planetCount: int = self._intelligence.computePlanetsInGalaxy()
+        for x in range(planetCount):
+
+            quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
+            quadrant:            Quadrant    = self.getQuadrant(quadrantCoordinates)
+            #
+            # Quadrants are allowed only a single planet and cannot have a starbase
+            #
+            while quadrant.hasPlanet is True or quadrant.hasStarBase is True:
+                quadrantCoordinates = self._intelligence.generateQuadrantCoordinates()
+                quadrant            = self.getQuadrant(quadrantCoordinates)
+                self.logger.warning(f'Generated new quadrant for planet')
+
+            quadrant.addPlanet()
+            self.logger.info(f'Quadrant: {quadrantCoordinates} has a planet')
 
     def _debugPrintKlingonPlacement(self):
         """

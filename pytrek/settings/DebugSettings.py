@@ -13,6 +13,7 @@ class DebugSettings(BaseSubSetting):
     DEBUG_ADD_KLINGONS:             str = 'debug_add_klingons'
     DEBUG_KLINGON_COUNT:            str = 'debug_klingon_count'
     DEBUG_PRINT_KLINGON_PLACEMENT:  str = 'debug_print_klingon_placement'
+    DEBUG_ADD_PLANET:               str = 'debug_add_planet'
 
     DEBUG_COLLECT_KLINGON_QUADRANT_COORDINATES: str = 'debug_collect_klingon_quadrant_coordinates'
     DEBUG_ANNOUNCE_QUADRANT_CREATION:           str = 'debug_announce_quadrant_creation'
@@ -23,6 +24,7 @@ class DebugSettings(BaseSubSetting):
         DEBUG_PRINT_KLINGON_PLACEMENT:  'False',
         DEBUG_COLLECT_KLINGON_QUADRANT_COORDINATES: 'False',
         DEBUG_ANNOUNCE_QUADRANT_CREATION:           'False',
+        DEBUG_ADD_PLANET:                           'False',
     }
 
     def init(self, *args, **kwds):
@@ -81,4 +83,13 @@ class DebugSettings(BaseSubSetting):
     @debugAnnounceQuadrantCreation.setter
     def debugAnnounceQuadrantCreation(self, newValue: bool):
         self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ANNOUNCE_QUADRANT_CREATION, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def debugAddPlanet(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_PLANET)
+
+    @debugAddPlanet.setter
+    def debugAddPlanet(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_PLANET, str(newValue))
         self._settingsCommon.saveSettings()

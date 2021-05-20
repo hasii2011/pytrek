@@ -145,6 +145,14 @@ class GameSettings(Singleton):
     def debugAnnounceQuadrantCreation(self, newValue: bool):
         self._debug.debugAnnounceQuadrantCreation.debugAnnounceQuadrantCreation = newValue
 
+    @property
+    def debugAddPlanet(self) -> bool:
+        return self._debug.debugAddPlanet
+
+    @debugAddPlanet.setter
+    def debugAddPlanet(self, newValue: bool):
+        self._debug.debugAddPlanet = newValue
+
     def _createEmptySettings(self):
 
         self._config: ConfigParser = ConfigParser()
