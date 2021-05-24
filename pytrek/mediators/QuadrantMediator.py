@@ -49,10 +49,11 @@ class QuadrantMediator(Singleton):
         self._commanderList: SpriteList = SpriteList()
 
         self._klingonTorpedoes: SpriteList = SpriteList()
-        self._torpedoFollowers: SpriteList = cast(SpriteList, None)
+        self._torpedoFollowers: SpriteList = SpriteList(is_static=True)
         self._photonTorpedoes:  SpriteList = SpriteList()
 
         self._ktm.klingonTorpedoes = self._klingonTorpedoes
+        self._ktm.torpedoFollowers = self._torpedoFollowers
         self._ptm.torpedoes        = self._photonTorpedoes
 
     @property
@@ -80,15 +81,6 @@ class QuadrantMediator(Singleton):
     def commanderList(self, newValues: SpriteList):
         self._commanderList = newValues
 
-    @property
-    def torpedoFollowers(self) -> SpriteList:
-        return self._torpedoFollowers
-
-    @torpedoFollowers.setter
-    def torpedoFollowers(self, newList: SpriteList):
-        self._torpedoFollowers = newList
-        self._ktm.torpedoFollowers = newList
-
     def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
         self._ptm.fireEnterpriseTorpedoesAtKlingons(enterprise=quadrant.enterprise, klingons=quadrant.klingons)
 
@@ -96,7 +88,7 @@ class QuadrantMediator(Singleton):
         self.playerList.draw()
         self.klingonList.draw()
         self._klingonTorpedoes.draw()
-        self.torpedoFollowers.draw()
+        self._torpedoFollowers.draw()
         if quadrant.hasPlanet is True:
             quadrant._planet.draw()
 
@@ -114,7 +106,7 @@ class QuadrantMediator(Singleton):
         self._ktm.fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant)
         self.playerList.update()
         self._klingonTorpedoes.update()
-        self.torpedoFollowers.update()
+        self._torpedoFollowers.update()
 
         self._ktm.handleKlingonTorpedoHits(quadrant)
         self._ktm.handleKlingonTorpedoMisses()

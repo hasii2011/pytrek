@@ -85,7 +85,6 @@ class PyTrekView(View):
         self.background:  Texture    = cast(Texture, None)
         self._enterprise: Enterprise = cast(Enterprise, None)
         # If you have sprite lists, you should create them here and set them to None
-        self.torpedoFollowers: SpriteList = cast(SpriteList, None)
         # self.physicsEngine: PhysicsEnginePlatformer = cast(PhysicsEnginePlatformer, None)
         # self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
 
@@ -141,8 +140,6 @@ class PyTrekView(View):
         playerList: SpriteList = SpriteList()
         playerList.append(self._enterprise)
 
-        self.torpedoFollowers = SpriteList(is_static=True)
-
         self._gameState.currentSectorCoordinates = currentSectorCoordinates
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
@@ -151,7 +148,6 @@ class PyTrekView(View):
         self._messageConsole   = MessageConsole()
 
         self._quadrantMediator.playerList       = playerList
-        self._quadrantMediator.torpedoFollowers = self.torpedoFollowers
 
         if self._gameSettings.debugAddKlingons is True:
             for x in range(self._gameSettings.debugAddKlingons + 1):
