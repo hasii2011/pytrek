@@ -43,6 +43,7 @@ from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.mediators.PhotonTorpedoMediator import PhotonTorpedoMediator
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -87,6 +88,7 @@ class PyTrekView(View):
 
         self.klingonTorpedoes: SpriteList = cast(SpriteList, None)
         self.torpedoFollowers: SpriteList = cast(SpriteList, None)
+        self._torpedoes:       SpriteList = cast(SpriteList, None)  # Photon torpedoes fire by the Enterprise
         # self.physicsEngine: PhysicsEnginePlatformer = cast(PhysicsEnginePlatformer, None)
         # self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
 
@@ -99,7 +101,8 @@ class PyTrekView(View):
         self._galaxy:       Galaxy       = cast(Galaxy, None)
         self._quadrant:     Quadrant     = cast(Quadrant, None)
 
-        self._quadrantMediator: QuadrantMediator = cast(QuadrantMediator, None)
+        self._quadrantMediator:      QuadrantMediator      = cast(QuadrantMediator, None)
+        self._photonTorpedoMediator: PhotonTorpedoMediator = cast(PhotonTorpedoMediator, None)
         self._statusConsole:    StatusConsole    = cast(StatusConsole, None)
         self._messageConsole:   MessageConsole   = cast(MessageConsole, None)
 
@@ -142,17 +145,21 @@ class PyTrekView(View):
 
         self.klingonTorpedoes = SpriteList()
         self.torpedoFollowers = SpriteList(is_static=True)
+        self._torpedoes       = SpriteList()
 
         self._gameState.currentSectorCoordinates = currentSectorCoordinates
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
-        self._quadrantMediator = QuadrantMediator()
+        self._quadrantMediator      = QuadrantMediator()
+        self._photonTorpedoMediator = PhotonTorpedoMediator()
         self._statusConsole    = StatusConsole(gameView=self)
         self._messageConsole   = MessageConsole()
 
         self._quadrantMediator.playerList       = playerList
         self._quadrantMediator.klingonTorpedoes = self.klingonTorpedoes
         self._quadrantMediator.torpedoFollowers = self.torpedoFollowers
+
+        self._photonTorpedoMediator.torpedoes = self._torpedoes
 
         if self._gameSettings.debugAddKlingons is True:
             for x in range(self._gameSettings.debugAddKlingons + 1):
@@ -188,6 +195,7 @@ class PyTrekView(View):
 
         # Call draw() on all our sprite lists
         self._quadrantMediator.draw(quadrant=self._quadrant)
+        self._photonTorpedoMediator.draw(quadrant=self._quadrant)
         self._statusConsole.draw()
         self._messageConsole.draw()
 
@@ -202,6 +210,7 @@ class PyTrekView(View):
         """
         # self.physicsEngine.update()
         self._quadrantMediator.update(quadrant=self._quadrant)
+        self._photonTorpedoMediator.update(quadrant=self._quadrant)
 
         self._gameEngine.updateRealTimeClock(deltaTime=delta_time)
 
@@ -230,7 +239,7 @@ class PyTrekView(View):
             longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(viewCompleteCallback=self._switchViewBack)
             self.window.show_view(longRangeSensorView)
         elif pressedKey == arcade.key.T:
-            print(f'I am shooting')
+            self._photonTorpedoMediator.fireEnterpriseTorpedoesAtKlingons(enterprise=self._quadrant.enterprise, klingons=self._quadrant.klingons)
 
     def on_key_release(self, releasedKey, key_modifiers):
         """

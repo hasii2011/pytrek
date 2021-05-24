@@ -11,6 +11,7 @@ from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePieceTypes import Klingons
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.Planet import Planet
 from pytrek.gui.gamepieces.PlanetType import PlanetType
@@ -48,7 +49,7 @@ class Quadrant:
         self._hasPlanet:      bool = False
         self._scanned:        bool = False
 
-        self._klingons:   List[Klingon]   = []
+        self._klingons:   Klingons   = Klingons([])
         # self.commanders: List[Commander] = []
         self._planet: Planet = cast(Planet, None)
 
@@ -122,7 +123,7 @@ class Quadrant:
         return self._klingonCount
 
     @property
-    def klingons(self) -> List[Klingon]:
+    def klingons(self) -> Klingons:
         return self._klingons
 
     @property
