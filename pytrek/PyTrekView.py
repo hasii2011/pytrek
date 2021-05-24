@@ -1,4 +1,4 @@
-
+from typing import List
 from typing import cast
 
 from logging import Logger
@@ -43,7 +43,7 @@ from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.mediators.PhotonTorpedoMediator import PhotonTorpedoMediator
+from pytrek.gui.gamepieces.ExplosionColor import ExplosionColor
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -85,10 +85,7 @@ class PyTrekView(View):
         self.background:  Texture    = cast(Texture, None)
         self._enterprise: Enterprise = cast(Enterprise, None)
         # If you have sprite lists, you should create them here and set them to None
-
-        self.klingonTorpedoes: SpriteList = cast(SpriteList, None)
         self.torpedoFollowers: SpriteList = cast(SpriteList, None)
-        self._torpedoes:       SpriteList = cast(SpriteList, None)  # Photon torpedoes fire by the Enterprise
         # self.physicsEngine: PhysicsEnginePlatformer = cast(PhysicsEnginePlatformer, None)
         # self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
 
@@ -102,11 +99,12 @@ class PyTrekView(View):
         self._quadrant:     Quadrant     = cast(Quadrant, None)
 
         self._quadrantMediator:      QuadrantMediator      = cast(QuadrantMediator, None)
-        self._photonTorpedoMediator: PhotonTorpedoMediator = cast(PhotonTorpedoMediator, None)
         self._statusConsole:    StatusConsole    = cast(StatusConsole, None)
         self._messageConsole:   MessageConsole   = cast(MessageConsole, None)
 
         self._soundImpulse:        Sound = cast(Sound, None)
+
+        self._photonTorpedoExplosions: List[Texture] = cast(List[Texture], None)
         #
         # I am cheating here because I know arcade use PIL under the covers
         #
@@ -143,23 +141,17 @@ class PyTrekView(View):
         playerList: SpriteList = SpriteList()
         playerList.append(self._enterprise)
 
-        self.klingonTorpedoes = SpriteList()
         self.torpedoFollowers = SpriteList(is_static=True)
-        self._torpedoes       = SpriteList()
 
         self._gameState.currentSectorCoordinates = currentSectorCoordinates
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
-        self._quadrantMediator      = QuadrantMediator()
-        self._photonTorpedoMediator = PhotonTorpedoMediator()
+        self._quadrantMediator = QuadrantMediator()
         self._statusConsole    = StatusConsole(gameView=self)
         self._messageConsole   = MessageConsole()
 
         self._quadrantMediator.playerList       = playerList
-        self._quadrantMediator.klingonTorpedoes = self.klingonTorpedoes
         self._quadrantMediator.torpedoFollowers = self.torpedoFollowers
-
-        self._photonTorpedoMediator.torpedoes = self._torpedoes
 
         if self._gameSettings.debugAddKlingons is True:
             for x in range(self._gameSettings.debugAddKlingons + 1):
@@ -178,6 +170,7 @@ class PyTrekView(View):
         if self._gameSettings.debugAddPlanet is True:
             self._quadrant.addPlanet()
         self._loadSounds()
+        self._photonTorpedoExplosions = self._loadPhotonTorpedoExplosions()
 
         self.logger.info(f'Setup Complete')
 
@@ -195,7 +188,6 @@ class PyTrekView(View):
 
         # Call draw() on all our sprite lists
         self._quadrantMediator.draw(quadrant=self._quadrant)
-        self._photonTorpedoMediator.draw(quadrant=self._quadrant)
         self._statusConsole.draw()
         self._messageConsole.draw()
 
@@ -210,8 +202,6 @@ class PyTrekView(View):
         """
         # self.physicsEngine.update()
         self._quadrantMediator.update(quadrant=self._quadrant)
-        self._photonTorpedoMediator.update(quadrant=self._quadrant)
-
         self._gameEngine.updateRealTimeClock(deltaTime=delta_time)
 
     def on_key_press(self, pressedKey, key_modifiers):
@@ -239,7 +229,7 @@ class PyTrekView(View):
             longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(viewCompleteCallback=self._switchViewBack)
             self.window.show_view(longRangeSensorView)
         elif pressedKey == arcade.key.T:
-            self._photonTorpedoMediator.fireEnterpriseTorpedoesAtKlingons(enterprise=self._quadrant.enterprise, klingons=self._quadrant.klingons)
+            self._quadrantMediator.fireEnterpriseTorpedoesAtKlingons(self._quadrant)
 
     def on_key_release(self, releasedKey, key_modifiers):
         """
@@ -294,6 +284,19 @@ class PyTrekView(View):
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='probe_launch_1.wav')
         self._soundImpulse = Sound(file_name=fqFileName)
+
+    def _loadPhotonTorpedoExplosions(self) -> List[Texture]:
+
+        explosions: List[Texture] = []
+
+        for eColor in ExplosionColor:
+            bareFileName: str = f'explosion_rays_{eColor.value}.png'
+            fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
+
+            explosion = load_texture(fqFileName)
+            explosions.append(explosion)
+
+        return explosions
 
     def _switchViewBack(self):
         self.window.show_view(self)

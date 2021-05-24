@@ -19,6 +19,7 @@ from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
 
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
+from pytrek.mediators.PhotonTorpedoMediator import PhotonTorpedoMediator
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -41,13 +42,18 @@ class QuadrantMediator(Singleton):
         self._computer:   Computer   = Computer()
 
         self._ktm: KlingonTorpedoMediator = KlingonTorpedoMediator()
+        self._ptm: PhotonTorpedoMediator  = PhotonTorpedoMediator()
 
         self._playerList:    SpriteList = SpriteList()
         self._klingonList:   SpriteList = SpriteList()
         self._commanderList: SpriteList = SpriteList()
 
-        self._klingonTorpedoes: SpriteList = cast(SpriteList, None)
+        self._klingonTorpedoes: SpriteList = SpriteList()
         self._torpedoFollowers: SpriteList = cast(SpriteList, None)
+        self._photonTorpedoes:  SpriteList = SpriteList()
+
+        self._ktm.klingonTorpedoes = self._klingonTorpedoes
+        self._ptm.torpedoes        = self._photonTorpedoes
 
     @property
     def playerList(self) -> SpriteList:
@@ -75,19 +81,6 @@ class QuadrantMediator(Singleton):
         self._commanderList = newValues
 
     @property
-    def klingonTorpedoes(self) -> SpriteList:
-        return self._klingonTorpedoes
-
-    @klingonTorpedoes.setter
-    def klingonTorpedoes(self, newList: SpriteList):
-        """
-        Args:
-            newList:
-        """
-        self._klingonTorpedoes = newList
-        self._ktm.klingonTorpedoes = newList
-
-    @property
     def torpedoFollowers(self) -> SpriteList:
         return self._torpedoFollowers
 
@@ -96,13 +89,18 @@ class QuadrantMediator(Singleton):
         self._torpedoFollowers = newList
         self._ktm.torpedoFollowers = newList
 
+    def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
+        self._ptm.fireEnterpriseTorpedoesAtKlingons(enterprise=quadrant.enterprise, klingons=quadrant.klingons)
+
     def draw(self, quadrant: Quadrant):
         self.playerList.draw()
         self.klingonList.draw()
-        self.klingonTorpedoes.draw()
+        self._klingonTorpedoes.draw()
         self.torpedoFollowers.draw()
         if quadrant.hasPlanet is True:
             quadrant._planet.draw()
+
+        self._ptm.draw(quadrant=quadrant)
 
     def update(self, quadrant: Quadrant):
 
@@ -115,11 +113,13 @@ class QuadrantMediator(Singleton):
 
         self._ktm.fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant)
         self.playerList.update()
-        self.klingonTorpedoes.update()
+        self._klingonTorpedoes.update()
         self.torpedoFollowers.update()
 
         self._ktm.handleKlingonTorpedoHits(quadrant)
         self._ktm.handleKlingonTorpedoMisses()
+
+        self._ptm.update(quadrant=quadrant)
 
     def _updateQuadrant(self, quadrant):
         for y in range(QUADRANT_ROWS):
