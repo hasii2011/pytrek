@@ -1,4 +1,4 @@
-
+from typing import List
 from typing import cast
 
 from logging import Logger
@@ -6,15 +6,19 @@ from logging import getLogger
 from logging import DEBUG
 
 from arcade import SpriteList
+from arcade import Texture
+from arcade import load_texture
 
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
+from pytrek.LocateResources import LocateResources
 
 from pytrek.engine.Computer import Computer
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.ExplosionColor import ExplosionColor
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
 
@@ -55,6 +59,8 @@ class QuadrantMediator(Singleton):
         self._ktm.klingonTorpedoes = self._klingonTorpedoes
         self._ktm.torpedoFollowers = self._torpedoFollowers
         self._ptm.torpedoes        = self._photonTorpedoes
+
+        self._photonTorpedoExplosions: List[Texture] = self._loadPhotonTorpedoExplosions()
 
     @property
     def playerList(self) -> SpriteList:
@@ -159,3 +165,20 @@ class QuadrantMediator(Singleton):
 
         klingon.center_x = arcadeX
         klingon.center_y = arcadeY
+
+    def _loadPhotonTorpedoExplosions(self) -> List[Texture]:
+        """
+        Cache the torpedo explosion textures
+
+        Returns:  The list
+        """
+        explosions: List[Texture] = []
+
+        for eColor in ExplosionColor:
+            bareFileName: str = f'explosion_rays_{eColor.value}.png'
+            fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
+
+            explosion = load_texture(fqFileName)
+            explosions.append(explosion)
+
+        return explosions

@@ -1,4 +1,4 @@
-from typing import List
+
 from typing import cast
 
 from logging import Logger
@@ -6,13 +6,10 @@ from logging import getLogger
 
 import logging.config
 
-import os
-
 from json import load as jsonLoad
 
-from PIL import ImageFont
-
 import arcade
+from PIL import ImageFont
 
 # from arcade import PhysicsEngineSimple
 from arcade import Sound
@@ -43,7 +40,6 @@ from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.gui.gamepieces.ExplosionColor import ExplosionColor
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -103,7 +99,6 @@ class PyTrekView(View):
 
         self._soundImpulse:        Sound = cast(Sound, None)
 
-        self._photonTorpedoExplosions: List[Texture] = cast(List[Texture], None)
         #
         # I am cheating here because I know arcade use PIL under the covers
         #
@@ -166,7 +161,6 @@ class PyTrekView(View):
         if self._gameSettings.debugAddPlanet is True:
             self._quadrant.addPlanet()
         self._loadSounds()
-        self._photonTorpedoExplosions = self._loadPhotonTorpedoExplosions()
 
         self.logger.info(f'Setup Complete')
 
@@ -200,34 +194,35 @@ class PyTrekView(View):
         self._quadrantMediator.update(quadrant=self._quadrant)
         self._gameEngine.updateRealTimeClock(deltaTime=delta_time)
 
-    def on_key_press(self, pressedKey, key_modifiers):
+    def on_key_press(self, pressedKey: int, key_modifiers: int):
         """
         Called whenever a key on the keyboard is pressed.
 
         For a full list of keys, see:
         https://arcade.academy/arcade.key.html
         """
-        if pressedKey == arcade.key.UP:
+        if pressedKey == key.UP:
             self._enterprise.change_y = MOVEMENT_SPEED
-        elif pressedKey == arcade.key.DOWN:
+        elif pressedKey == key.DOWN:
             self._enterprise.change_y = -MOVEMENT_SPEED
         elif pressedKey == arcade.key.LEFT:
             self._enterprise.change_x = -MOVEMENT_SPEED
         elif pressedKey == arcade.key.RIGHT:
             self._enterprise.change_x = MOVEMENT_SPEED
         elif pressedKey == arcade.key.Q:
+            import os
             # noinspection PyUnresolvedReferences
             os._exit(0)
-        elif pressedKey == arcade.key.G:
+        elif pressedKey == key.G:
             galaxyView: GalaxyView = GalaxyView(viewCompleteCallback=self._switchViewBack)
             self.window.show_view(galaxyView)
-        elif pressedKey == arcade.key.L:
+        elif pressedKey == key.L:
             longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(viewCompleteCallback=self._switchViewBack)
             self.window.show_view(longRangeSensorView)
-        elif pressedKey == arcade.key.T:
+        elif pressedKey == key.T:
             self._quadrantMediator.fireEnterpriseTorpedoesAtKlingons(self._quadrant)
 
-    def on_key_release(self, releasedKey, key_modifiers):
+    def on_key_release(self, releasedKey: int, key_modifiers: int):
         """
         Called whenever the user lets off a previously pressed key.
         """
@@ -240,14 +235,14 @@ class PyTrekView(View):
         elif releasedKey == key.DOWN or releasedKey == key.X:
             self._enterprise.change_y = 0
 
-    def on_mouse_motion(self, x, y, delta_x, delta_y):
+    def on_mouse_motion(self, x: int, y: int, delta_x: float, delta_y: float):
         """
         Called whenever the mouse moves.
         """
         pass
         # print(f'Mouse ({x},{y})')
 
-    def on_mouse_press(self, x, y, button, key_modifiers):
+    def on_mouse_press(self, x: int, y: int, button: int, key_modifiers: int):
         """
         Called when the user presses a mouse button.
         """
@@ -280,19 +275,6 @@ class PyTrekView(View):
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='probe_launch_1.wav')
         self._soundImpulse = Sound(file_name=fqFileName)
-
-    def _loadPhotonTorpedoExplosions(self) -> List[Texture]:
-
-        explosions: List[Texture] = []
-
-        for eColor in ExplosionColor:
-            bareFileName: str = f'explosion_rays_{eColor.value}.png'
-            fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
-
-            explosion = load_texture(fqFileName)
-            explosions.append(explosion)
-
-        return explosions
 
     def _switchViewBack(self):
         self.window.show_view(self)
