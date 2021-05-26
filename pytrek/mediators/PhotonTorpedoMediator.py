@@ -1,13 +1,17 @@
 
+from typing import List
 from typing import cast
 
 from logging import Logger
 from logging import getLogger
 
 from arcade import Sound
+from arcade import Sprite
 from arcade import SpriteList
+from arcade import check_for_collision_with_list
 
 from pytrek.Constants import SOUND_VOLUME_HIGH
+from pytrek.GameState import GameState
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
@@ -28,6 +32,7 @@ class PhotonTorpedoMediator:
 
         self._computer:       Computer       = Computer()
         self._messageConsole: MessageConsole = MessageConsole()
+        self._gameState:      GameState      = GameState()
 
         self._torpedoes:      SpriteList     = cast(SpriteList, None)
 
@@ -58,9 +63,25 @@ class PhotonTorpedoMediator:
         if len(klingons) == 0:
             self._messageConsole.displayMessage("Don't waste torpedoes.  Nothing to fire at")
         else:
-            self._pointAtKlingon(enterprise=enterprise, klingon=klingons[0])
-            self._fireTorpedo(enterprise=enterprise, klingon=klingons[0])
-            self._photonTorpedoFired.play(volume=SOUND_VOLUME_HIGH)
+            for klingon in klingons:
+                klingon: Klingon = cast(Klingon, klingon)
+                self._pointAtKlingon(enterprise=enterprise, klingon=klingon)
+                self._fireTorpedo(enterprise=enterprise, klingon=klingon)
+                self._photonTorpedoFired.play(volume=SOUND_VOLUME_HIGH)
+                self._gameState.torpedoCount -= 1
+                enterprise.angle = 0
+
+    def handleTorpedoHits(self, quadrant: Quadrant):
+
+        klingons: Klingons = quadrant.klingons
+        for klingon in klingons:
+            klingon: Klingon = cast(Klingon, klingon)
+            expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=klingon, sprite_list=self.torpedoes)
+
+            for killerTorpedo in expendedTorpedoes:
+                killerTorpedo: PhotonTorpedo = cast(PhotonTorpedo, killerTorpedo)
+                self.logger.info(f'Torpedo-{killerTorpedo._id} hit')
+                killerTorpedo.remove_from_sprite_lists()
 
     def _pointAtKlingon(self, klingon: Klingon, enterprise: Enterprise):
 

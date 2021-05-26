@@ -118,6 +118,7 @@ class QuadrantMediator(Singleton):
         self._ktm.handleKlingonTorpedoMisses()
 
         self._ptm.update(quadrant=quadrant)
+        self._ptm.handleTorpedoHits(quadrant=quadrant)
 
     def _updateQuadrant(self, quadrant):
         for y in range(QUADRANT_ROWS):

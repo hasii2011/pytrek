@@ -101,7 +101,7 @@ class KlingonTorpedoMediator:
         for klingon in klingons:
             deltaClockTime: float = currentTime - klingon.lastTimeCheck
             if deltaClockTime > klingon.firingInterval:
-                self.logger.info(f'Time for {klingon} to fire torpedoes')
+                self.logger.debug(f'Time for {klingon} to fire torpedoes')
 
                 self._pointAtEnterprise(klingon=klingon, enterprise=quadrant.enterprise)
 
@@ -246,4 +246,4 @@ class KlingonTorpedoMediator:
         normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
         klingon.angle = normalAngle + 125
 
-        self.logger.info(f'{klingon.angle=}')
+        self.logger.debug(f'{klingon.angle=}')

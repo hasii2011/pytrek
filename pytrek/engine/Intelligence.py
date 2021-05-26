@@ -193,3 +193,16 @@ class Intelligence(Singleton):
 
         weeNumber: float = random()
         return weeNumber
+
+    def square(self, num: float):
+        """
+        Emulates sst square()
+
+            double square(double i) { return i*i; }
+
+        Args:
+            num:  The number to square
+
+        Returns:  The input number squared
+        """
+        return num * num

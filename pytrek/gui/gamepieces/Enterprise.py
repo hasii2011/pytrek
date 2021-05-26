@@ -9,7 +9,10 @@ from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 from pytrek.LocateResources import LocateResources
 
 
-class Enterprise(GamePiece, SmoothMotion):
+class Enterprise(
+    GamePiece,
+    SmoothMotion
+):
 
     def __init__(self):
 
