@@ -32,31 +32,31 @@
             "propagate": "False"
         },
         "tests.TestIntelligence": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "TestComputer": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "TestQuadrant": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "TestSmoothMotion": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "pytrek.engine.Intelligence": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "pytrek.model.Quadrant": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "pytrek.model.Galaxy": {
-            "level": "DEBUG",
+            "level": "WARNING",
             "propagate": "False"
         },
         "tests.pytrek.engine.TestDevices": {
@@ -64,7 +64,7 @@
             "propagate": "False"
         },
         "pytrek.gui.gamepieces.SmoothMotion": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         }
 

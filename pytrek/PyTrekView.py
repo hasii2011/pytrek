@@ -145,7 +145,8 @@ class PyTrekView(View):
         self._quadrantMediator.playerList       = playerList
 
         if self._gameSettings.debugAddKlingons is True:
-            for x in range(self._gameSettings.debugAddKlingons + 1):
+            numToAdd: int = self._gameSettings.debugKlingonCount
+            for x in range(numToAdd):
                 self._quadrant.addKlingon()
 
         if self._quadrant.klingonCount > 0:

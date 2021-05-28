@@ -28,6 +28,10 @@ class TestTemplate(TestBase):
         TestTemplate.clsLogger = getLogger(__name__)
         SettingsCommon.determineSettingsLocation()
 
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
     def setUp(self):
         self.logger: Logger = TestTemplate.clsLogger
 

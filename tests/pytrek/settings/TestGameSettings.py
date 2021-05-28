@@ -28,18 +28,18 @@ class TestGameSettings(TestBase):
         TestBase.setUpLogging()
         TestGameSettings.clsLogger = getLogger(__name__)
         SettingsCommon.determineSettingsLocation()
+        TestGameSettings.backupSettings()
+
+    @classmethod
+    def tearDownClass(cls):
+        TestGameSettings.restoreBackup()
 
     def setUp(self):
         self.logger:    Logger = TestGameSettings.clsLogger
+
         self._settings: GameSettings = GameSettings()
 
     def tearDown(self):
-        pass
-
-    def testSettingExistence(self):
-        """
-        Only tests the existence of settings not their default value
-        """
         pass
 
     def testMaxStarsExistence(self):
@@ -81,80 +81,75 @@ class TestGameSettings(TestBase):
     def testStarBaseMultiplierExistence(self):
         self.assertIsNotNone(self._settings.starBaseMultiplier)
 
-    def testMinKlingonFiringInterval(self):
+    def testMinKlingonFiringIntervalExistence(self):
         self.assertIsNotNone(self._settings.minKlingonFiringInterval)
 
-    def testMaxKlingonFiringInterval(self):
+    def testMaxKlingonFiringIntervalExistence(self):
         self.assertIsNotNone(self._settings.maxKlingonFiringInterval)
 
     def testDebugSettingsAddKlingons(self):
-
-        self._backupSettings()
-        self._emptySettings()
-        self._settings.init()       # create defaults
 
         self._settings.debugAddKlingons = True
 
         self.assertTrue(self._settings.debugAddKlingons, 'Supposed to change')
 
-        self._restoreBackup()
-
     def testDebugSettingsDebugKlingonCount(self):
 
-        self._backupSettings()
-        self._emptySettings()
-        self._settings.init()       # create defaults
+        self._settings.debugKlingonCount = 22
 
-        self._settings.debugKlingonCount = 6
-
-        self.assertEqual(6, self._settings.debugKlingonCount, 'Supposed to change')
-
-        self._restoreBackup()
+        self.assertEqual(22, self._settings.debugKlingonCount, 'Supposed to change')
 
     def testDebugPrintKlingonPlacement(self):
-        self._backupSettings()
-        self._emptySettings()
-        self._settings.init()       # create defaults
 
         self._settings.debugPrintKlingonPlacement = True
 
         self.assertTrue(self._settings.debugPrintKlingonPlacement, 'Should have changed to non-default')
 
-        self._restoreBackup()
-
-    def _backupSettings(self):
+    @classmethod
+    def backupSettings(cls):
 
         settingsFileName: str = SettingsCommon.getSettingsLocation()
 
         source: str = settingsFileName
         target: str = f"{settingsFileName}{BACKUP_SUFFIX}"
+        print(f'Backup to: {target}')
         if osPath.exists(source):
             try:
                 copyfile(source, target)
             except IOError as e:
-                self.logger.error(f"Unable to copy file. {e}")
+                TestGameSettings.clsLogger.error(f"Unable to copy file. {e}")
 
-    def _restoreBackup(self):
+    @classmethod
+    def restoreBackup(cls):
 
         settingsFileName: str = SettingsCommon.getSettingsLocation()
 
         source: str = f"{settingsFileName}{BACKUP_SUFFIX}"
         target: str = settingsFileName
+
+        # self.__printBackupFile(source)
+
+        print(f'Restoring: {source}')
         if osPath.exists(source):
             try:
                 copyfile(source, target)
             except IOError as e:
-                self.logger.error(f"Unable to copy file. {e}")
+                TestGameSettings.clsLogger.error(f"Unable to copy file. {e}")
 
-            osRemove(source)
+            # osRemove(source)
         else:
             osRemove(target)
 
-    def _emptySettings(self):
+    def __printBackupFile(self, filename: str):
 
-        self._settings: GameSettings = GameSettings()
-        self._settings._createEmptySettings()
-        self._settings._settingsCommon.saveSettings()
+        f = open(filename, "r")
+        contents: str = f.read()
+        print(f'***************************')
+        print(f'{filename=}')
+        print(contents)
+        print(f'***************************')
+
+        f.close()
 
 
 def suite() -> TestSuite:
