@@ -2,15 +2,8 @@
 from logging import Logger
 from logging import getLogger
 
-from os import remove as osRemove
-from os import path as osPath
-
-from shutil import copyfile
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
-
-from pytrek.Constants import BACKUP_SUFFIX
 
 from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.GameSettings import GameSettings
@@ -28,15 +21,13 @@ class TestGameSettings(TestBase):
         TestBase.setUpLogging()
         TestGameSettings.clsLogger = getLogger(__name__)
         SettingsCommon.determineSettingsLocation()
-        TestGameSettings.backupSettings()
 
     @classmethod
     def tearDownClass(cls):
-        TestGameSettings.restoreBackup()
+        pass
 
     def setUp(self):
-        self.logger:    Logger = TestGameSettings.clsLogger
-
+        self.logger:    Logger       = TestGameSettings.clsLogger
         self._settings: GameSettings = GameSettings()
 
     def tearDown(self):
@@ -89,67 +80,24 @@ class TestGameSettings(TestBase):
 
     def testDebugSettingsAddKlingons(self):
 
+        saveSetting: bool = self._settings.debugAddKlingons
         self._settings.debugAddKlingons = True
-
         self.assertTrue(self._settings.debugAddKlingons, 'Supposed to change')
+        self._settings.debugAddKlingons = saveSetting
 
     def testDebugSettingsDebugKlingonCount(self):
 
+        saveSetting: int = self._settings.debugKlingonCount
         self._settings.debugKlingonCount = 22
-
         self.assertEqual(22, self._settings.debugKlingonCount, 'Supposed to change')
+        self._settings.debugKlingonCount = saveSetting
 
     def testDebugPrintKlingonPlacement(self):
 
+        saveSetting: bool = self._settings.debugPrintKlingonPlacement
         self._settings.debugPrintKlingonPlacement = True
-
         self.assertTrue(self._settings.debugPrintKlingonPlacement, 'Should have changed to non-default')
-
-    @classmethod
-    def backupSettings(cls):
-
-        settingsFileName: str = SettingsCommon.getSettingsLocation()
-
-        source: str = settingsFileName
-        target: str = f"{settingsFileName}{BACKUP_SUFFIX}"
-        print(f'Backup to: {target}')
-        if osPath.exists(source):
-            try:
-                copyfile(source, target)
-            except IOError as e:
-                TestGameSettings.clsLogger.error(f"Unable to copy file. {e}")
-
-    @classmethod
-    def restoreBackup(cls):
-
-        settingsFileName: str = SettingsCommon.getSettingsLocation()
-
-        source: str = f"{settingsFileName}{BACKUP_SUFFIX}"
-        target: str = settingsFileName
-
-        # self.__printBackupFile(source)
-
-        print(f'Restoring: {source}')
-        if osPath.exists(source):
-            try:
-                copyfile(source, target)
-            except IOError as e:
-                TestGameSettings.clsLogger.error(f"Unable to copy file. {e}")
-
-            # osRemove(source)
-        else:
-            osRemove(target)
-
-    def __printBackupFile(self, filename: str):
-
-        f = open(filename, "r")
-        contents: str = f.read()
-        print(f'***************************')
-        print(f'{filename=}')
-        print(contents)
-        print(f'***************************')
-
-        f.close()
+        self._settings.debugPrintKlingonPlacement = saveSetting
 
 
 def suite() -> TestSuite:
