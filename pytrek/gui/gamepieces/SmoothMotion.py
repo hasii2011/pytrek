@@ -93,8 +93,8 @@ class SmoothMotion:
         # If we have arrived, then way we are not in motion
         if not traveling:
             # self.destinationPoint = None      # Leave this set for klingon torpedo hit computation
-            self._inMotion        = False
-            gamePiece.angle       = 0
+            self._inMotion  = False
+            gamePiece.angle = 0
 
     def computeArcadeMotion(self, currentPoint: ArcadePoint, destinationPoint: ArcadePoint, spriteRotationAngle: float, rotationalSpeed: float):
         """

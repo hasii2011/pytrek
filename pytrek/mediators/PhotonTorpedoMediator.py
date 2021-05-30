@@ -8,7 +8,9 @@ from logging import getLogger
 from arcade import Sound
 from arcade import Sprite
 from arcade import SpriteList
+from arcade import Texture
 from arcade import check_for_collision_with_list
+from arcade import load_spritesheet
 
 from pytrek.Constants import SOUND_VOLUME_HIGH
 from pytrek.GameState import GameState
@@ -17,6 +19,7 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.Explosion import Explosion
 
 from pytrek.gui.gamepieces.GamePieceTypes import Klingons
 from pytrek.gui.gamepieces.Klingon import Klingon
@@ -34,27 +37,27 @@ class PhotonTorpedoMediator:
         self._messageConsole: MessageConsole = MessageConsole()
         self._gameState:      GameState      = GameState()
 
-        self._torpedoes:      SpriteList     = cast(SpriteList, None)
+        self._torpedoes:  SpriteList = SpriteList()
+        self._explosions: SpriteList = SpriteList()
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='tos_photon_torpedo.wav')
 
         self._photonTorpedoFired: Sound = Sound(file_name=fqFileName)
 
-    @property
-    def torpedoes(self) -> SpriteList:
-        return self._torpedoes
+        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='SmallExplosion.wav')
+        self._explosionSound:     Sound = Sound(file_name=fqFileName)
 
-    @torpedoes.setter
-    def torpedoes(self, newValues: SpriteList):
-        self._torpedoes = newValues
+        self._torpedoTextures: List[Texture] = self._loadPhotonTorpedoExplosions()
 
     # noinspection PyUnusedLocal
     def draw(self, quadrant: Quadrant):
-        self.torpedoes.draw()
+        self._torpedoes.draw()
+        self._explosions.draw()
 
     # noinspection PyUnusedLocal
     def update(self, quadrant: Quadrant):
-        self.torpedoes.update()
+        self._torpedoes.update()
+        self._explosions.update()
 
     def fireEnterpriseTorpedoesAtKlingons(self, enterprise: Enterprise, klingons: Klingons):
 
@@ -69,19 +72,26 @@ class PhotonTorpedoMediator:
                 self._fireTorpedo(enterprise=enterprise, klingon=klingon)
                 self._photonTorpedoFired.play(volume=SOUND_VOLUME_HIGH)
                 self._gameState.torpedoCount -= 1
-                enterprise.angle = 0
+            enterprise.angle = 0
 
     def handleTorpedoHits(self, quadrant: Quadrant):
 
         klingons: Klingons = quadrant.klingons
         for klingon in klingons:
             klingon: Klingon = cast(Klingon, klingon)
-            expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=klingon, sprite_list=self.torpedoes)
+            expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=klingon, sprite_list=self._torpedoes)
 
             for killerTorpedo in expendedTorpedoes:
                 killerTorpedo: PhotonTorpedo = cast(PhotonTorpedo, killerTorpedo)
                 self.logger.info(f'Torpedo-{killerTorpedo._id} hit')
+
+                explosion: Explosion = Explosion(textureList=self._torpedoTextures, sound=self._explosionSound)
+
+                explosion.center_x = killerTorpedo.center_x
+                explosion.center_y = killerTorpedo.center_y
+                self._explosions.append(explosion)
                 killerTorpedo.remove_from_sprite_lists()
+                self._explosionSound.play(SOUND_VOLUME_HIGH)
 
     def _pointAtKlingon(self, klingon: Klingon, enterprise: Enterprise):
 
@@ -105,5 +115,22 @@ class PhotonTorpedoMediator:
         torpedo.inMotion = True
         torpedo.destinationPoint = klingonPoint
 
-        self.torpedoes.append(torpedo)
+        self._torpedoes.append(torpedo)
         self._messageConsole.displayMessage(f'Enterprise fire from: {enterprise.currentPosition} at Klingon {klingon.currentPosition}')
+
+    def _loadPhotonTorpedoExplosions(self) -> List[Texture]:
+        """
+        Cache the torpedo explosion textures
+
+        Returns:  The texture list
+        """
+        nColumns:  int = 8
+        tileCount: int = 21
+        spriteWidth:  int = 128
+        spriteHeight: int = 128
+        bareFileName: str = f'PhotonTorpedoExplosionSprites.png'
+        fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
+
+        explosions: List[Texture] = load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount)
+
+        return explosions
