@@ -8,7 +8,7 @@ from arcade import Texture
 
 class Explosion(Sprite):
 
-    DELAY_FRAMES: int =8
+    DELAY_FRAMES: int = 8
 
     def __init__(self, textureList: List[Texture], sound: Sound):
 
@@ -28,7 +28,6 @@ class Explosion(Sprite):
         self._delayCounter += 1
         if self._delayCounter > Explosion.DELAY_FRAMES:
             self.textureIdx += 1
-            print(f"Change texture")
             if self.textureIdx < len(self.textures):
                 self.texture = self.textures[self.textureIdx]
                 # self.sound.play()

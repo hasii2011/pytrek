@@ -1,10 +1,12 @@
 from logging import Logger
 from logging import getLogger
+from typing import cast
 
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
 
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePieceTypes import KlingonId
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
 
@@ -21,9 +23,18 @@ class PhotonTorpedo(GamePiece, SmoothMotion):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._id: int = PhotonTorpedo.nextId
+        self._id:      int       = PhotonTorpedo.nextId
+        self._firedAt: KlingonId = cast(KlingonId, None)
 
         PhotonTorpedo.nextId += 1
+
+    @property
+    def firedAt(self) -> KlingonId:
+        return self._firedAt
+
+    @firedAt.setter
+    def firedAt(self, klingonId: KlingonId):
+        self._firedAt = klingonId
 
     def update(self):
 

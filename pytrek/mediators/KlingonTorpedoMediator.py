@@ -177,9 +177,9 @@ class KlingonTorpedoMediator:
             firedBy: KlingonId = torpedoDud.firedBy
 
             shootingKlingon: Klingon = self._findFiringKlingon(klingonId=firedBy)
-
-            self._messageConsole.displayMessage(f'{shootingKlingon.id} missed !!!!')
-            shootingKlingon.angle = 0
+            if shootingKlingon is not None:
+                self._messageConsole.displayMessage(f'{shootingKlingon.id} missed !!!!')
+                shootingKlingon.angle = 0
             torpedoDud.remove_from_sprite_lists()
 
     def _fireKlingonTorpedo(self, klingon: Klingon, enterprise: Enterprise):
@@ -219,6 +219,14 @@ class KlingonTorpedoMediator:
             followerToRemove.remove_from_sprite_lists()
 
     def _findFiringKlingon(self, klingonId: KlingonId) -> Klingon:
+        """
+
+        Args:
+            klingonId:
+
+        Returns:  May return 'None' if the Enterprise killed him
+
+        """
 
         fndKlingon: Klingon = cast(Klingon, None)
         for klingon in self._klingonList:

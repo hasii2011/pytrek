@@ -76,22 +76,27 @@ class PhotonTorpedoMediator:
 
     def handleTorpedoHits(self, quadrant: Quadrant):
 
-        klingons: Klingons = quadrant.klingons
+        klingons:   Klingons  = quadrant.klingons
+        enterprise: Enterprise = quadrant.enterprise
         for klingon in klingons:
             klingon: Klingon = cast(Klingon, klingon)
-            expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=klingon, sprite_list=self._torpedoes)
+            if klingon.power > 0:
+                expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=klingon, sprite_list=self._torpedoes)
 
-            for killerTorpedo in expendedTorpedoes:
-                killerTorpedo: PhotonTorpedo = cast(PhotonTorpedo, killerTorpedo)
-                self.logger.info(f'Torpedo-{killerTorpedo._id} hit')
+                for killerTorpedo in expendedTorpedoes:
+                    killerTorpedo: PhotonTorpedo = cast(PhotonTorpedo, killerTorpedo)
+                    self.logger.info(f'Torpedo-{killerTorpedo._id} hit')
 
-                explosion: Explosion = Explosion(textureList=self._torpedoTextures, sound=self._explosionSound)
+                    self.__doExplosion(killerTorpedo)
 
-                explosion.center_x = killerTorpedo.center_x
-                explosion.center_y = killerTorpedo.center_y
-                self._explosions.append(explosion)
-                killerTorpedo.remove_from_sprite_lists()
-                self._explosionSound.play(SOUND_VOLUME_HIGH)
+                    killerTorpedo.remove_from_sprite_lists()
+
+                    self.__damageOrKillKlingon(enterprise, klingon)
+
+        #
+        # Remove Dead Klingons
+        #
+        quadrant.removeDeadKlingons()
 
     def _pointAtKlingon(self, klingon: Klingon, enterprise: Enterprise):
 
@@ -101,7 +106,7 @@ class PhotonTorpedoMediator:
         normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
         enterprise.angle = normalAngle + 125
 
-        self.logger.info(f'{enterprise.angle=}')
+        self._messageConsole.displayMessage(f'Enterprise firing on course {enterprise.angle:.2f}')
 
     def _fireTorpedo(self, enterprise: Enterprise, klingon: Klingon):
 
@@ -113,10 +118,11 @@ class PhotonTorpedoMediator:
         torpedo.center_x = enterprisePoint.x
         torpedo.center_y = enterprisePoint.y
         torpedo.inMotion = True
+        torpedo.firedAt  = klingon.id
         torpedo.destinationPoint = klingonPoint
 
         self._torpedoes.append(torpedo)
-        self._messageConsole.displayMessage(f'Enterprise fire from: {enterprise.currentPosition} at Klingon {klingon.currentPosition}')
+        self._messageConsole.displayMessage(f'Enterprise fire from: {enterprise.currentPosition} at Klingon {klingon.id}')
 
     def _loadPhotonTorpedoExplosions(self) -> List[Texture]:
         """
@@ -134,3 +140,25 @@ class PhotonTorpedoMediator:
         explosions: List[Texture] = load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount)
 
         return explosions
+
+    def __doExplosion(self, killerTorpedo: PhotonTorpedo):
+
+        explosion: Explosion = Explosion(textureList=self._torpedoTextures, sound=self._explosionSound)
+        explosion.center_x = killerTorpedo.center_x
+        explosion.center_y = killerTorpedo.center_y
+
+        self._explosions.append(explosion)
+
+        self._explosionSound.play(SOUND_VOLUME_HIGH)
+
+    def __damageOrKillKlingon(self, enterprise: Enterprise, klingon: Klingon):
+
+        kHit: float = self._computer.computeHitValueOnKlingon(enterprisePosition=enterprise.currentPosition,
+                                                              klingonPosition=klingon.currentPosition,
+                                                              klingonPower=klingon.power)
+        klingon.power -= kHit
+        self._messageConsole.displayMessage(f'{klingon.id} took hit: {kHit:.2f}  remaining: {klingon.power:.2f}')
+        if klingon.power <= 0:
+            self._messageConsole.displayMessage(f'{klingon.id} destroyed')
+            klingon.remove_from_sprite_lists()
+            klingon.power = 0

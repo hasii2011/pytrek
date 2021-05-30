@@ -223,6 +223,20 @@ class Quadrant:
         self.logger.debug(f"Placed klingon at quadrant: {self._coordinates} {klingon=}")
         return klingon
 
+    def removeDeadKlingons(self):
+
+        liveKlingons: Klingons = Klingons([])
+        for klingon in self._klingons:
+            klingon: Klingon = cast(Klingon, klingon)
+            if klingon.power == 0:
+                self.logger.info(f'Found dead Klingon: {klingon.id}')
+                self._klingonCount -= 1
+                sector: Sector = self.getSector(klingon.currentPosition)
+                sector.type = SectorType.EMPTY
+            else:
+                liveKlingons.append(klingon)
+
+        self._klingons = liveKlingons
     # def placeKlingonTorpedo(self):
     #     sector      = self.getRandomEmptySector()
 
