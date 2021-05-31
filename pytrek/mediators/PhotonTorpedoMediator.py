@@ -85,7 +85,7 @@ class PhotonTorpedoMediator:
 
                 for killerTorpedo in expendedTorpedoes:
                     killerTorpedo: PhotonTorpedo = cast(PhotonTorpedo, killerTorpedo)
-                    self.logger.info(f'Torpedo-{killerTorpedo._id} hit')
+                    self.logger.info(f'{killerTorpedo.id} hit')
 
                     self.__doExplosion(killerTorpedo)
 

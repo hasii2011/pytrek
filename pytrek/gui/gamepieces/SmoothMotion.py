@@ -12,6 +12,7 @@ from math import degrees
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePieceTypes import RadianInfo
 
 
 class SmoothMotion:
@@ -96,7 +97,7 @@ class SmoothMotion:
             self._inMotion  = False
             gamePiece.angle = 0
 
-    def computeArcadeMotion(self, currentPoint: ArcadePoint, destinationPoint: ArcadePoint, spriteRotationAngle: float, rotationalSpeed: float):
+    def computeArcadeMotion(self, currentPoint: ArcadePoint, destinationPoint: ArcadePoint, spriteRotationAngle: float, rotationalSpeed: float) -> RadianInfo:
         """
         Do math to calculate how to get the sprite to the destinationPoint.
         Calculate the angle in radians between the start points
@@ -135,7 +136,9 @@ class SmoothMotion:
         actualAngleRadians = self.correctRotation(actualAngleRadians=actualAngleRadians, rotationSpeedRadians=rotationSpeedRadians,
                                                   targetAngleRadians=targetAngleRadians, clockwise=clockwise)
 
-        return actualAngleRadians, angleDiffRadians
+        radianInfo: RadianInfo = RadianInfo(actualAngleRadians=actualAngleRadians, angleDiffRadians=angleDiffRadians)
+        # return actualAngleRadians, angleDiffRadians
+        return radianInfo
 
     def computeTargetAngle(self, xDiff: float, yDiff: float) -> float:
         """

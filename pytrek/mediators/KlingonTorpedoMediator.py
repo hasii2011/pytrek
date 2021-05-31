@@ -124,35 +124,37 @@ class KlingonTorpedoMediator:
         for expendedTorpedo in expendedTorpedoes:
 
             expendedTorpedo: KlingonTorpedo = cast(KlingonTorpedo, expendedTorpedo)
-            self.logger.info(f'{expendedTorpedo.uuid} arrived at destination')
+            self.logger.info(f'{expendedTorpedo.id} arrived at destination')
             self._removeTorpedoFollowers(klingonTorpedo=expendedTorpedo)
 
             firedBy: KlingonId = expendedTorpedo.firedBy
             shootingKlingon: Klingon = self._findFiringKlingon(klingonId=firedBy)
 
-            shootingKlingon.angle = 0
-            hitValue: float = self._computer.computeHitValueOnEnterprise(klingonPosition=shootingKlingon.currentPosition,
-                                                                         enterprisePosition=quadrant.enterpriseCoordinates,
-                                                                         klingonPower=shootingKlingon.power)
+            if shootingKlingon is not None:
+                shootingKlingon.angle = 0
+                hitValue: float = self._computer.computeHitValueOnEnterprise(klingonPosition=shootingKlingon.currentPosition,
+                                                                             enterprisePosition=quadrant.enterpriseCoordinates,
+                                                                             klingonPower=shootingKlingon.power)
+
+                self.logger.debug(f"Original Hit Value: {hitValue:.4f} {shootingKlingon=}")
+
+                if self._devices.getDeviceStatus(DeviceType.Shields) == DeviceStatus.Up:
+                    shieldHitData: ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=hitValue)
+                else:
+                    shieldHitData: ShieldHitData = ShieldHitData(degradedTorpedoHitValue=hitValue, shieldAbsorptionValue=0.0)
+                shieldAbsorptionValue   = shieldHitData.shieldAbsorptionValue
+                degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
+
+                self._soundShieldHit.play()
+                self._gameEngine.degradeShields(shieldAbsorptionValue)
+                shieldPercentage: int = round((self._gameState.shieldEnergy / DEFAULT_FULL_SHIELDS) * 100)
+
+                self._messageConsole.displayMessage(f"Shields at {shieldPercentage} percent.  Enterprise energy degraded by: {degradedTorpedoHitValue:.2f}")
+
+                self._gameEngine.degradeEnergyLevel(shieldHitData.degradedTorpedoHitValue)
+
             expendedTorpedo.remove_from_sprite_lists()
 
-            self.logger.debug(f"Original Hit Value: {hitValue:.4f} {shootingKlingon=}")
-
-            if self._devices.getDeviceStatus(DeviceType.Shields) == DeviceStatus.Up:
-                shieldHitData: ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=hitValue)
-            else:
-                shieldHitData: ShieldHitData = ShieldHitData(degradedTorpedoHitValue=hitValue, shieldAbsorptionValue=0.0)
-
-            shieldAbsorptionValue   = shieldHitData.shieldAbsorptionValue
-            degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
-
-            self._soundShieldHit.play()
-            self._gameEngine.degradeShields(shieldAbsorptionValue)
-            shieldPercentage: int = round((self._gameState.shieldEnergy / DEFAULT_FULL_SHIELDS) * 100)
-
-            self._messageConsole.displayMessage(f"Shields at {shieldPercentage} percent.  Enterprise energy degraded by: {degradedTorpedoHitValue:.2f}")
-
-            self._gameEngine.degradeEnergyLevel(shieldHitData.degradedTorpedoHitValue)
             if self._gameState.energy <= 0:
                 # alert(theMessage='Game Over!  The Enterprise is out of energy')
                 # sys.exit()
@@ -211,7 +213,7 @@ class KlingonTorpedoMediator:
         followersToRemove: List[Sprite] = []
         for follower in self.torpedoFollowers:
             follower: KlingonTorpedoFollower = cast(KlingonTorpedoFollower, follower)
-            if follower.following == klingonTorpedo.uuid:
+            if follower.following == klingonTorpedo.id:
                 self.logger.debug(f'Removing follower: {follower.uuid}')
                 followersToRemove.append(follower)
 
@@ -225,7 +227,6 @@ class KlingonTorpedoMediator:
             klingonId:
 
         Returns:  May return 'None' if the Enterprise killed him
-
         """
 
         fndKlingon: Klingon = cast(Klingon, None)

@@ -4,6 +4,7 @@ from logging import getLogger
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePieceTypes import RadianInfo
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
 from pytrek.LocateResources import LocateResources
@@ -27,8 +28,11 @@ class Enterprise(
     def update(self):
 
         if self.inMotion is True:
-            actualAngleRadians, angleDiffRadians = self.computeArcadeMotion(currentPoint=ArcadePoint(x=self.center_x, y=self.center_y),
-                                                                            destinationPoint=self.destinationPoint,
-                                                                            spriteRotationAngle=self.angle,
-                                                                            rotationalSpeed=self.rotationSpeed)
-            self.doMotion(gamePiece=self, destinationPoint=self.destinationPoint, angleDiffRadians=angleDiffRadians, actualAngleRadians=actualAngleRadians)
+
+            radianInfo: RadianInfo = self.computeArcadeMotion(currentPoint=ArcadePoint(x=self.center_x, y=self.center_y),
+                                                              destinationPoint=self.destinationPoint,
+                                                              spriteRotationAngle=self.angle,
+                                                              rotationalSpeed=self.rotationSpeed)
+
+            self.doMotion(gamePiece=self, destinationPoint=self.destinationPoint,
+                          angleDiffRadians=radianInfo.angleDiffRadians, actualAngleRadians=radianInfo.actualAngleRadians)

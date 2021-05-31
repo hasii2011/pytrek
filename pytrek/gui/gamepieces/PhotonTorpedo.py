@@ -7,6 +7,8 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.GamePieceTypes import KlingonId
+from pytrek.gui.gamepieces.GamePieceTypes import PhotonTorpedoId
+from pytrek.gui.gamepieces.GamePieceTypes import RadianInfo
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
 
@@ -23,10 +25,14 @@ class PhotonTorpedo(GamePiece, SmoothMotion):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._id:      int       = PhotonTorpedo.nextId
-        self._firedAt: KlingonId = cast(KlingonId, None)
+        self._id:      PhotonTorpedoId = PhotonTorpedoId(f'Torpedo-{PhotonTorpedo.nextId}')
+        self._firedAt: KlingonId       = cast(KlingonId, None)
 
         PhotonTorpedo.nextId += 1
+
+    @property
+    def id(self) -> PhotonTorpedoId:
+        return self._id
 
     @property
     def firedAt(self) -> KlingonId:
@@ -40,8 +46,10 @@ class PhotonTorpedo(GamePiece, SmoothMotion):
 
         if self.inMotion is True:
 
-            actualAngleRadians, angleDiffRadians = self.computeArcadeMotion(currentPoint=ArcadePoint(x=self.center_x, y=self.center_y),
-                                                                            destinationPoint=self.destinationPoint,
-                                                                            spriteRotationAngle=self.angle,
-                                                                            rotationalSpeed=self.rotationSpeed)
-            self.doMotion(gamePiece=self, destinationPoint=self.destinationPoint, angleDiffRadians=angleDiffRadians, actualAngleRadians=actualAngleRadians)
+            radianInfo: RadianInfo = self.computeArcadeMotion(currentPoint=ArcadePoint(x=self.center_x, y=self.center_y),
+                                                              destinationPoint=self.destinationPoint,
+                                                              spriteRotationAngle=self.angle,
+                                                              rotationalSpeed=self.rotationSpeed)
+
+            self.doMotion(gamePiece=self, destinationPoint=self.destinationPoint,
+                          angleDiffRadians=radianInfo.angleDiffRadians, actualAngleRadians=radianInfo.actualAngleRadians)
