@@ -85,6 +85,7 @@ class QuadrantMediator(Singleton):
     def draw(self, quadrant: Quadrant):
         self.playerList.draw()
         self.klingonList.draw()
+        self.commanderList.draw()
         self._klingonTorpedoes.draw()
         self._torpedoFollowers.draw()
         if quadrant.hasPlanet is True:

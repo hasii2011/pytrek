@@ -1,16 +1,19 @@
+
+from typing import NewType
 from typing import cast
 
 from pytrek.LocateResources import LocateResources
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.GamePieceTypes import KlingonId
 
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
 
+KlingonId       = NewType('KlingonId', str)
+
+
 class Klingon(GamePiece, SmoothMotion):
-    """"""
 
     def __init__(self, coordinates: Coordinates):
         """

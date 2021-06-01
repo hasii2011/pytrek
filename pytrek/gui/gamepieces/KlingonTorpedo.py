@@ -12,10 +12,11 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.GamePieceTypes import KlingonId
-from pytrek.gui.gamepieces.GamePieceTypes import RadianInfo
+from pytrek.gui.gamepieces.Klingon import KlingonId
+
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
+from pytrek.gui.gamepieces.SmoothMotion import RadianInfo
 
 from pytrek.model.Coordinates import Coordinates
 

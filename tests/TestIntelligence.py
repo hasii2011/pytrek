@@ -48,6 +48,7 @@ class TestIntelligence(TestBase):
     SOUTH_WEST_EDGE_COORDINATES_COUNT: int = SOUTH_EAST_EDGE_COORDINATES_COUNT
 
     GENERATE_KLINGON_COUNT_LOOP_COUNT: int = 250
+    COMMAND_POWER_LOOP_COUNT:          int = 250
 
     clsLogger: Logger = None
 
@@ -118,29 +119,6 @@ class TestIntelligence(TestBase):
         ans: bool = (medianCount > 150.0) and (medianCount < 250.0)
 
         self.assertTrue(ans, f'We are not in range: {medianCount=}')
-
-    def _runKlingonCountTest(self) -> float:
-
-        gameState:    GameState    = self._gameState
-        intelligence: Intelligence = self.smarty
-
-        generatedCount: List[int] = []
-        for x in range(TestIntelligence.GENERATE_KLINGON_COUNT_LOOP_COUNT):
-
-            klingonCount = intelligence.generateInitialKlingonCount()
-            generatedCount.append(klingonCount)
-
-        medianCount: float = median(generatedCount)
-        meanCount:   float = mean(generatedCount)
-        modeCount:   float = mode(generatedCount)
-
-        statsStr: str = (
-            f' {gameState.playerType} {gameState.gameType} '
-            f'median={medianCount} average={meanCount} mode={modeCount}'
-        )
-        self.logger.info(statsStr)
-
-        return medianCount
 
     def testGetGameInitialTimeShort(self):
         """"""
@@ -319,6 +297,82 @@ class TestIntelligence(TestBase):
         for x in range(0, 10):
             planetType: PlanetType = self.smarty.computeRandomPlanetType()
             self.logger.debug(f'Random Choice: {planetType}')
+
+    def testComputeCommanderPowerNovicePlayer(self):
+
+        self._gameState.playerType  = PlayerType.Novice
+
+        medianStatistic: float = self._runCommanderPowerTest()
+
+        ans: bool = (medianStatistic > 1150.0) and (medianStatistic < 1225.0)
+
+        self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
+
+    def testComputeCommanderPowerEmeritusPlayer(self):
+
+        self._gameState.playerType  = PlayerType.Emeritus
+
+        medianStatistic: float = self._runCommanderPowerTest()
+
+        ans: bool = (medianStatistic > 1380.0) and (medianStatistic < 1425.0)
+
+        self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
+
+    def testComputeCommanderPowerGoodPlayer(self):
+
+        self._gameState.playerType  = PlayerType.Good
+
+        medianStatistic: float = self._runCommanderPowerTest()
+
+        ans: bool = (medianStatistic > 1270.0) and (medianStatistic < 1325.0)
+
+        self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
+
+    def _runKlingonCountTest(self) -> float:
+
+        gameState:    GameState    = self._gameState
+        intelligence: Intelligence = self.smarty
+
+        generatedCount: List[int] = []
+        for x in range(TestIntelligence.GENERATE_KLINGON_COUNT_LOOP_COUNT):
+
+            klingonCount = intelligence.generateInitialKlingonCount()
+            generatedCount.append(klingonCount)
+
+        medianCount: float = median(generatedCount)
+        meanCount:   float = mean(generatedCount)
+        modeCount:   float = mode(generatedCount)
+
+        statsStr: str = (
+            f' {gameState.playerType} {gameState.gameType} '
+            f'median={medianCount} average={meanCount} mode={modeCount}'
+        )
+        self.logger.info(statsStr)
+
+        return medianCount
+
+    def _runCommanderPowerTest(self):
+
+        intelligence: Intelligence = self.smarty
+
+        generatedPower: List[float] = []
+
+        for x in range(TestIntelligence.COMMAND_POWER_LOOP_COUNT):
+
+            commanderPower: float = intelligence.computeCommanderPower()
+            generatedPower.append(commanderPower)
+
+        medianStatistic: float = median(generatedPower)
+        meanStatistic:   float = mean(generatedPower)
+        modeStatistic:   float = mode(generatedPower)
+
+        statsStr: str = (
+            f' {self._gameState.playerType} '
+            f'median={medianStatistic:.2f} average={meanStatistic:.2f} mode={modeStatistic:.2f}'
+        )
+        self.logger.info(statsStr)
+
+        return medianStatistic
 
 
 def suite() -> TestSuite:

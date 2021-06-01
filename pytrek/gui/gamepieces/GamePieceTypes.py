@@ -1,12 +1,11 @@
 
-from collections import namedtuple
-
 from typing import List
 from typing import NewType
 
-Klingons  = NewType('Klingons', List[str])
+from pytrek.gui.gamepieces.Commander import Commander
+from pytrek.gui.gamepieces.Klingon import Klingon
 
-KlingonId       = NewType('KlingonId', str)
+Klingons   = NewType('Klingons', List[Klingon])
+Commanders = NewType('Commanders', List[Commander])
+
 PhotonTorpedoId = NewType('PhotonTorpedoId', str)
-
-RadianInfo = namedtuple('RadianInfo', 'actualAngleRadians, angleDiffRadians')

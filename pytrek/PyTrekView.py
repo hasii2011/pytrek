@@ -148,6 +148,10 @@ class PyTrekView(View):
             numToAdd: int = self._gameSettings.debugKlingonCount
             for x in range(numToAdd):
                 self._quadrant.addKlingon()
+                self._gameState.remainingKlingons += numToAdd
+
+        # TODO:  Add debug flag to control this
+        self._quadrant.addCommander()
 
         if self._quadrant.klingonCount > 0:
             self._gameState.shipCondition = ShipCondition.Red
@@ -159,8 +163,19 @@ class PyTrekView(View):
         else:
             self._quadrantMediator.klingonList = SpriteList()
 
+        if self._quadrant.commanderCount > 0:
+            self._gameState.shipCondition = ShipCondition.Red
+            commanderSprites: SpriteList = SpriteList()
+            for commander in self._quadrant._commanders:
+                commanderSprites.append(commander)
+
+            self._quadrantMediator.klingonList = commanderSprites
+        else:
+            self._quadrantMediator.commanderList = SpriteList()
+
         if self._gameSettings.debugAddPlanet is True:
             self._quadrant.addPlanet()
+
         self._loadSounds()
 
         self.logger.info(f'Setup Complete')

@@ -54,7 +54,7 @@ class Galaxy(Singleton):
         self._createGalaxy()
 
         self.placeKlingonsInGalaxy()
-        # self.placeCommandersInGalaxy()
+        self.placeCommandersInGalaxy()
         # self.placeStarBasesInGalaxy()
         self._placePlanets()
         self.setInitialQuadrant()
@@ -93,12 +93,12 @@ class Galaxy(Singleton):
             self._debugPrintKlingonPlacement()
 
     def placeCommandersInGalaxy(self):
-        """"""
-        # for x in range(self.stats.remainingCommanders):
-        #     coordinates = self._intelligence.getRandomQuadrantCoordinates()
-        #     quadrant    = self.getQuadrant(coordinates)
-        #     quadrant.addCommander()
-        pass
+        """
+        """
+        for x in range(self._gameState.remainingCommanders):
+            coordinates = self._intelligence.generateQuadrantCoordinates()
+            quadrant    = self.getQuadrant(coordinates)
+            quadrant.addCommander()
 
     def placeStarBasesInGalaxy(self):
         """"""

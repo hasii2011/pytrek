@@ -108,19 +108,35 @@ class Intelligence(Singleton):
         skill:   int   = self._gameState.playerType.value
         remTime: float = 7.0 * self._gameState.gameType.value
 
-        self.remainingKlingons: float = 2.0 * remTime * (skill + 1 - rFactor * self.rand()) * skill * 0.1 + mOffset
+        remainingKlingons: float = 2.0 * remTime * (skill + 1 - rFactor * self.rand()) * skill * 0.1 + mOffset
 
-        self.remainingKlingons = round(self.remainingKlingons)
+        remainingKlingons = round(remainingKlingons)
 
         if self.logger.level == INFO:
             message = (
                 f"PlayerType: '{self._gameState.playerType} "
                 f"GameType '{self._gameState.gameType}' "
-                f"klingonCount: '{str(self.remainingKlingons)}'"
+                f"klingonCount: '{str(remainingKlingons)}'"
             )
             self.logger.info(message)
 
-        return self.remainingKlingons
+        return int(remainingKlingons)
+
+    def generateInitialCommanderCount(self, generatedKlingons: int) -> int:
+        """
+        incom = skill + 0.0625*inkling*Rand();
+
+        Returns:  Klingon Commander Count
+        """
+
+        commanderCount = self._gameState.playerType.value * 0.0625 * generatedKlingons * self.rand()
+        commanderCount = round(commanderCount)
+
+        #
+        # Adjust total Klingon count by # of commanders -- Game Engine should do this
+        #
+        # self.remainingKlingons = self.remainingKlingons - self.commanderCount
+        return commanderCount
 
     def generateInitialStarDate(self) -> int:
 
@@ -154,6 +170,21 @@ class Intelligence(Singleton):
         """
         kPower: float = (self.rand() * 150.0) + 300.0 + (25.0 * self._gameSettings.playerType.value)
         return kPower
+
+    def computeCommanderPower(self) -> float:
+        """
+
+        Commander
+            kpower[klhere] = 950.0+400.0*Rand()+50.0*skill;
+
+        Super Commander
+            kpower[1] = 1175.0 + 400.0*Rand() + 125.0*skill;
+
+        Returns:
+
+        """
+        cPower = 950.0 + (400.0 * self.rand()) + (50.0 * self._gameState.playerType.value)
+        return cPower
 
     def computeKlingonFiringInterval(self) -> int:
         """

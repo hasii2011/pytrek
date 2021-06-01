@@ -22,8 +22,8 @@ from pytrek.engine.ShieldHitData import ShieldHitData
 from pytrek.gui.MessageConsole import MessageConsole
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.gui.gamepieces.GamePieceTypes import KlingonId
 from pytrek.gui.gamepieces.Klingon import Klingon
+from pytrek.gui.gamepieces.Klingon import KlingonId
 from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
 

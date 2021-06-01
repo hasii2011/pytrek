@@ -48,10 +48,14 @@ class GameEngine(Singleton):
         self._gameState.inTime          = self._intelligence.generateInitialGameTime()
         self._gameState.shipCondition   = ShipCondition.Green
         self._gameState.opTime          = 0.0
-        self._gameState.starDate        = self._intelligence.generateInitialStarDate()
+
+        self._gameState.starDate          = self._intelligence.generateInitialStarDate()
         self._gameState.remainingGameTime = self._intelligence.generateInitialGameTime()
-        self._gameState.remainingKlingons = self._intelligence.generateInitialKlingonCount()
-        # self.stats.remainingCommanders = self._intelligence.getInitialCommanderCount()
+        self._gameState.remainingKlingons   = self._intelligence.generateInitialKlingonCount()
+        self._gameState.remainingCommanders = self._intelligence.generateInitialCommanderCount(self._gameState.remainingKlingons)
+
+        # Adjust total Klingon count by # of commanders
+        self._gameState.remainingKlingons = self._gameState.remainingKlingons - self._gameState.remainingCommanders
 
         self._accumulatedDelta: float = 0.0
         self._gameClock:        float = 0.0

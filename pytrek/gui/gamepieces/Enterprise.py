@@ -4,8 +4,8 @@ from logging import getLogger
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.GamePieceTypes import RadianInfo
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
+from pytrek.gui.gamepieces.SmoothMotion import RadianInfo
 
 from pytrek.LocateResources import LocateResources
 

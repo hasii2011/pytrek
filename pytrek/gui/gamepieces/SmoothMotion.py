@@ -1,6 +1,7 @@
-from math import cos
-from math import sin
+
 from typing import cast
+
+from collections import namedtuple
 
 from logging import Logger
 from logging import getLogger
@@ -9,10 +10,13 @@ from math import atan2
 from math import pi
 from math import radians
 from math import degrees
+from math import cos
+from math import sin
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.GamePieceTypes import RadianInfo
+
+RadianInfo = namedtuple('RadianInfo', 'actualAngleRadians, angleDiffRadians')
 
 
 class SmoothMotion:

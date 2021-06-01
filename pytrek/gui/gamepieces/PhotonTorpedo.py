@@ -5,11 +5,13 @@ from typing import cast
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
 
+from pytrek.gui.gamepieces.Klingon import KlingonId
+
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.GamePieceTypes import KlingonId
 from pytrek.gui.gamepieces.GamePieceTypes import PhotonTorpedoId
-from pytrek.gui.gamepieces.GamePieceTypes import RadianInfo
+
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
+from pytrek.gui.gamepieces.SmoothMotion import RadianInfo
 
 
 class PhotonTorpedo(GamePiece, SmoothMotion):
