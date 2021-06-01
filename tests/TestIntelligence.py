@@ -314,7 +314,7 @@ class TestIntelligence(TestBase):
 
         medianStatistic: float = self._runCommanderPowerTest()
 
-        ans: bool = (medianStatistic > 1380.0) and (medianStatistic < 1425.0)
+        ans: bool = (medianStatistic > 1360.0) and (medianStatistic < 1425.0)
 
         self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
