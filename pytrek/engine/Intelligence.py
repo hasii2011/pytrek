@@ -14,6 +14,7 @@ from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
+from pytrek.GameState import GameState
 
 from pytrek.Singleton import Singleton
 from pytrek.engine.Direction import Direction
@@ -43,6 +44,7 @@ class Intelligence(Singleton):
         self.logger:  Logger = getLogger(__name__)
 
         self._gameSettings: GameSettings = GameSettings()
+        self._gameState:    GameState    = GameState()
 
     def generateSectorCoordinates(self) -> Coordinates:
         """
@@ -74,7 +76,7 @@ class Intelligence(Singleton):
         remainingGameTime = self._gameSettings.gameLengthFactor * self._gameSettings.gameType.value
         return remainingGameTime
 
-    def generateInitialKlingonCount(self, remainingGameTime: float) -> int:
+    def generateInitialKlingonCount(self) -> int:
         """
         ```
         private double dremkl = 2.0*intime*((skill+1 - 2*Intelligence.Rand())*skill*0.1+0.15);
@@ -82,17 +84,38 @@ class Intelligence(Singleton):
         public int myRemainingKlingons = (int) Math.round(dremkl);
         self.remainingKlingons = ((2.0 * self.remainingGameTime) * (self.skill.value + 1)) - (2 * nextNum) * (self.skill.value * 0.1) + 0.15
         ```
-        """
-        nextNum = random() / 4.0
-        self.logger.info(f"Random value: {nextNum:.4f}")
+        // Determine the initial values of klingons.
+        // Values are different for Wglxy variation because the small variation option
+        // is usually set. That narrows the range low-high of k counts.
 
-        self.remainingKlingons = (remainingGameTime * nextNum) + self._gameSettings.playerType.value + self._gameSettings.gameType.value
+        game.state.remtime = 7.0 * game.length;
+        game.intime = game.state.remtime;
+
+        int rFactor = 2;
+        double mOffset = 0.15d;
+        if ((game.options & OPTION_SMALL_VARIANCE_IN_K) != 0) {
+           rFactor = 1;
+           mOffset = 0.20d;
+        }
+        game.state.nscrem = game.inscom = (game.skill > SKILL_FAIR ? 1 : 0);
+        game.state.remkl = game.inkling = (int) Math.round (2.0*game.intime
+                                                   * (game.skill+1 - rFactor*tk.rand ())
+                                                   * game.skill*0.1 + mOffset);
+        """
+
+        rFactor: int   = 2
+        mOffset: float = 0.20
+        skill:   int   = self._gameState.playerType.value
+        remTime: float = 7.0 * self._gameState.gameType.value
+
+        self.remainingKlingons: float = 2.0 * remTime * (skill + 1 - rFactor * self.rand()) * skill * 0.1 + mOffset
+
         self.remainingKlingons = round(self.remainingKlingons)
 
         if self.logger.level == INFO:
             message = (
-                f"PlayerType: '{self._gameSettings.playerType} "
-                f"GameType '{self._gameSettings.gameType}' "
+                f"PlayerType: '{self._gameState.playerType} "
+                f"GameType '{self._gameState.gameType}' "
                 f"klingonCount: '{str(self.remainingKlingons)}'"
             )
             self.logger.info(message)

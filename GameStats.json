@@ -1,14 +1,14 @@
 {
     "py/object": "pytrek.GameState.GameState",
-    "_energy": 0.0,
-    "_shieldEnergy": 0.0,
+    "_energy": 5000,
+    "_shieldEnergy": 2500,
     "_starDate": 40501.0,
-    "_inTime": 0.0,
+    "_inTime": 112.0,
     "_opTime": 0.0,
     "_remainingGameTime": 42.42424242,
-    "_remainingKlingons": 0,
+    "_remainingKlingons": 167,
     "_remainingCommanders": 0,
-    "_torpedoCount": 0,
+    "_torpedoCount": 10,
     "_shipCondition": {
         "py/reduce": [
             {
@@ -21,7 +21,18 @@
             }
         ]
     },
-    "_playerType": null,
+    "_playerType": {
+        "py/reduce": [
+            {
+                "py/type": "pytrek.engine.PlayerType.PlayerType"
+            },
+            {
+                "py/tuple": [
+                    1
+                ]
+            }
+        ]
+    },
     "_gameType": {
         "py/reduce": [
             {

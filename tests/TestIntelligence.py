@@ -1,10 +1,18 @@
+from statistics import mode
+from typing import List
 
 from logging import Logger
 from logging import getLogger
 
+from statistics import median
+from statistics import mean
+
+
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from pytrek.GameState import GameState
+from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.GameType import GameType
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.PlayerType import PlayerType
@@ -26,7 +34,7 @@ class TestIntelligence(TestBase):
     EXPECTED_LONG_GAME_LENGTH:   int = 224
     EXPECTED_MEDIUM_GAME_LENGTH: int = 112
 
-    MAX_STAR_DATE_CALLS: int = 7
+    MAX_STAR_DATE_CALLS:          int = 7
     MAX_COORDINATES_COUNT:        int = 8
     NORTH_EDGE_COORDINATES_COUNT: int = 5
 
@@ -39,6 +47,8 @@ class TestIntelligence(TestBase):
     SOUTH_EAST_EDGE_COORDINATES_COUNT: int = NORTH_EAST_EDGE_COORDINATES_COUNT
     SOUTH_WEST_EDGE_COORDINATES_COUNT: int = SOUTH_EAST_EDGE_COORDINATES_COUNT
 
+    GENERATE_KLINGON_COUNT_LOOP_COUNT: int = 250
+
     clsLogger: Logger = None
 
     @classmethod
@@ -50,8 +60,10 @@ class TestIntelligence(TestBase):
     def setUp(self):
         self.logger: Logger = TestIntelligence.clsLogger
 
-        self.smarty:    Intelligence = Intelligence()
-        self._settings: GameSettings = GameSettings()
+        self._gameEngine: GameEngine   = GameEngine()     # TODO: when https://github.com/hasii2011/PyArcadeStarTrek/issues/9 is fixed don't needs this
+        self.smarty:      Intelligence = Intelligence()
+        self._settings:   GameSettings = GameSettings()
+        self._gameState:  GameState    = GameState()
 
         self._savePlayerType: PlayerType = self._settings.playerType
         self._saveGameType:   GameType   = self._settings.gameType
@@ -72,28 +84,63 @@ class TestIntelligence(TestBase):
         self.assertNotEqual(coordinates, bogusCoordinate, "Not truly initializing random coordinates")
 
     def testInitialKlingonCountPlayerTypeNoviceGameTypeShort(self):
-        """"""
 
-        settings: GameSettings = self._settings
-        settings.skill         = PlayerType.Novice
-        settings.gameType      = GameType.Short
+        gameState: GameState  = self._gameState
+        gameState.playerType  = PlayerType.Novice
+        gameState.gameType    = GameType.Short
 
-        intelligence = self.smarty
+        medianCount: float = self._runKlingonCountTest()
 
-        klingonCount = intelligence.generateInitialKlingonCount(remainingGameTime=TestIntelligence.DEFAULT_GAME_LENGTH)
+        ans: bool = (medianCount >= 10.0) and (medianCount < 20.0)
 
-        self.assertIsNotNone(klingonCount, "I need some value back")
+        self.assertTrue(ans, f'We are not in range: {medianCount=}')
 
     def testInitialKlingonCountPlayerTypeEmeritusGameTypeLong(self):
-        """"""
 
-        settings          = self._settings
-        settings.skill    = PlayerType.Emeritus
-        settings.gameType = GameType.Long
+        gameState: GameState  = self._gameState
+        gameState.playerType  = PlayerType.Emeritus
+        gameState.gameType = GameType.Long
 
-        intelligence = Intelligence()
-        klingonCount = intelligence.generateInitialKlingonCount(remainingGameTime=TestIntelligence.DEFAULT_GAME_LENGTH)
-        self.assertIsNotNone(klingonCount, "I need some klingon value back")
+        medianCount: float = self._runKlingonCountTest()
+
+        ans: bool = (medianCount > 1050.0) and (medianCount < 1300.0)
+
+        self.assertTrue(ans, f'We are not in range: {medianCount=}')
+
+    def testInitialKlingonCountPlayerTypeGoodGameTypeMedium(self):
+
+        gameState: GameState  = self._gameState
+        gameState.playerType  = PlayerType.Good
+        gameState.gameType = GameType.Medium
+
+        medianCount: float = self._runKlingonCountTest()
+
+        ans: bool = (medianCount > 150.0) and (medianCount < 250.0)
+
+        self.assertTrue(ans, f'We are not in range: {medianCount=}')
+
+    def _runKlingonCountTest(self) -> float:
+
+        gameState:    GameState    = self._gameState
+        intelligence: Intelligence = self.smarty
+
+        generatedCount: List[int] = []
+        for x in range(TestIntelligence.GENERATE_KLINGON_COUNT_LOOP_COUNT):
+
+            klingonCount = intelligence.generateInitialKlingonCount()
+            generatedCount.append(klingonCount)
+
+        medianCount: float = median(generatedCount)
+        meanCount:   float = mean(generatedCount)
+        modeCount:   float = mode(generatedCount)
+
+        statsStr: str = (
+            f' {gameState.playerType} {gameState.gameType} '
+            f'median={medianCount} average={meanCount} mode={modeCount}'
+        )
+        self.logger.info(statsStr)
+
+        return medianCount
 
     def testGetGameInitialTimeShort(self):
         """"""

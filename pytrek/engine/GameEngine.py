@@ -50,7 +50,7 @@ class GameEngine(Singleton):
         self._gameState.opTime          = 0.0
         self._gameState.starDate        = self._intelligence.generateInitialStarDate()
         self._gameState.remainingGameTime = self._intelligence.generateInitialGameTime()
-        self._gameState.remainingKlingons = self._intelligence.generateInitialKlingonCount(remainingGameTime=self._gameState.remainingGameTime)
+        self._gameState.remainingKlingons = self._intelligence.generateInitialKlingonCount()
         # self.stats.remainingCommanders = self._intelligence.getInitialCommanderCount()
 
         self._accumulatedDelta: float = 0.0

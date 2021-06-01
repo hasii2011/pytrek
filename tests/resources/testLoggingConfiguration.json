@@ -31,8 +31,8 @@
             "level": "WARNING",
             "propagate": "False"
         },
-        "tests.TestIntelligence": {
-            "level": "WARNING",
+        "TestIntelligence": {
+            "level": "INFO",
             "propagate": "False"
         },
         "TestComputer": {
