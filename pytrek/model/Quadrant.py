@@ -21,7 +21,7 @@ from pytrek.gui.gamepieces.PlanetType import PlanetType
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
-
+from pytrek.settings.GameSettings import GameSettings
 
 SectorRow    = NewType('SectorRow', List[Sector])
 QuadrantGrid = NewType('GalaxyGrid', List[SectorRow])
@@ -44,6 +44,7 @@ class Quadrant:
 
         self._intelligence: Intelligence = Intelligence()
         self._gameEngine:   GameEngine   = GameEngine()
+        self._gameSettings: GameSettings = GameSettings()
 
         self._klingonCount:   int = 0
         self._commanderCount: int = 0
@@ -238,15 +239,19 @@ class Quadrant:
 
         Returns:  The 'placed" commander
         """
-        sector            = self.getRandomEmptySector()
-        sector.sectorType = SectorType.COMMANDER
-        commander         = Commander(coordinates=sector.coordinates, moveInterval=0)
+        sector      = self.getRandomEmptySector()
+        sector.type = SectorType.COMMANDER
+
+        moveInterval: int = self._gameSettings.commanderUpdateIntervalSeconds
+        commander         = Commander(coordinates=sector.coordinates, moveInterval=moveInterval)
         cPower            = self._intelligence.computeCommanderPower()
 
         commander.power = cPower
+        commander.timeSinceMovement = self._gameEngine.gameClock
+
         sector.sprite = commander
 
-        self.logger.debug(f"Placed commander at: quadrant: {self.coordinates}  sector: {sector}  power {cPower}")
+        self.logger.warning(f'Placed commander at quadrant: {self.coordinates} {commander=}')
         return commander
 
     def removeDeadKlingons(self):

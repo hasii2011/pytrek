@@ -169,7 +169,7 @@ class PyTrekView(View):
             for commander in self._quadrant._commanders:
                 commanderSprites.append(commander)
 
-            self._quadrantMediator.klingonList = commanderSprites
+            self._quadrantMediator.commanderList = commanderSprites
         else:
             self._quadrantMediator.commanderList = SpriteList()
 

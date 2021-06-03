@@ -95,7 +95,7 @@ class KlingonTorpedoMediator:
 
     def fireTorpedoesAtEnterpriseIfNecessary(self, quadrant: Quadrant):
 
-        currentTime:    float = self._gameEngine.gameClock
+        currentTime: float = self._gameEngine.gameClock
 
         klingons: List[Klingon] = quadrant.klingons
         for klingon in klingons:

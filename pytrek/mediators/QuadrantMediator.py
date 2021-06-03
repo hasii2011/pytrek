@@ -13,6 +13,7 @@ from pytrek.Constants import QUADRANT_ROWS
 from pytrek.engine.Computer import Computer
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
+from pytrek.gui.gamepieces.Commander import Commander
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
@@ -131,6 +132,10 @@ class QuadrantMediator(Singleton):
                     elif sectorType == SectorType.PLANET:
                         pass
                         # Planets are immovable;  So arcade position set at creation
+                    elif sectorType == SectorType.COMMANDER:
+                        self._updateCommander(quadrant=quadrant, commander=cast(Commander, gamePiece))
+                    else:
+                        assert False, 'Bad Game Piece'
 
     def _updateEnterprise(self, quadrant: Quadrant, gamePiece: GamePiece):
         """
@@ -159,3 +164,36 @@ class QuadrantMediator(Singleton):
 
         klingon.center_x = arcadeX
         klingon.center_y = arcadeY
+
+    def _updateCommander(self, quadrant: Quadrant, commander: Commander):
+
+        currentTime:    float = self._gameEngine.gameClock
+        deltaClockTime: float = currentTime - commander.timeSinceMovement
+        if deltaClockTime > commander.moveInterval:
+
+            oldPosition: Coordinates = commander.currentPosition
+            newPosition: Coordinates = commander.evade(currentLocation=oldPosition)
+            print(f'Commander moves from {oldPosition} to {newPosition}')
+
+            self._commanderMovedUpdateQuadrant(commander, newPosition, oldPosition, quadrant)
+
+            commander.currentPosition = newPosition
+
+            arcadeX, arcadeY = GamePiece.gamePositionToScreenPosition(newPosition)
+
+            commander.center_x = arcadeX
+            commander.center_y = arcadeY
+
+            commander.timeSinceMovement = currentTime
+
+    def _commanderMovedUpdateQuadrant(self, commander: Commander, newPosition: Coordinates, oldPosition: Coordinates, quadrant: Quadrant):
+
+        oldSector: Sector = quadrant.getSector(sectorCoordinates=oldPosition)
+
+        oldSector.type   = SectorType.EMPTY
+        oldSector.sprite = None
+
+        newSector: Sector = quadrant.getSector(sectorCoordinates=newPosition)
+
+        newSector.type   = SectorType.COMMANDER
+        newSector.sprite = commander
