@@ -39,12 +39,7 @@ class PhotonTorpedoMediator(BaseMediator):
         self._torpedoes:  SpriteList = SpriteList()
         self._explosions: SpriteList = SpriteList()
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='tos_photon_torpedo.wav')
-
-        self._photonTorpedoFired: Sound = Sound(file_name=fqFileName)
-
-        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='SmallExplosion.wav')
-        self._explosionSound:     Sound = Sound(file_name=fqFileName)
+        self._loadSounds()
 
         self._torpedoTextures: List[Texture] = self._loadPhotonTorpedoExplosions()
 
@@ -67,6 +62,7 @@ class PhotonTorpedoMediator(BaseMediator):
 
         if len(klingons) == 0:
             self._messageConsole.displayMessage("Don't waste torpedoes.  Nothing to fire at")
+            self._noKlingonsSound.play(volume=SOUND_VOLUME_HIGH)
         else:
             startingPoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
             for klingon in klingons:
@@ -111,6 +107,20 @@ class PhotonTorpedoMediator(BaseMediator):
         # Remove Dead Klingons
         #
         quadrant.removeDeadKlingons()
+
+    def _loadSounds(self):
+
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
+                                                           bareFileName='tos_photon_torpedo.wav')
+        self._photonTorpedoFired: Sound = Sound(file_name=fqFileName)
+
+        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
+                                                      bareFileName='SmallExplosion.wav')
+        self._explosionSound: Sound = Sound(file_name=fqFileName)
+
+        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
+                                                      bareFileName='tos_inaccurateerror_ep.wav')
+        self._noKlingonsSound: Sound = Sound(file_name=fqFileName)
 
     def _pointAtKlingon(self, klingon: Klingon, enterprise: Enterprise):
 
