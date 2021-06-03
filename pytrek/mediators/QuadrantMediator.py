@@ -81,7 +81,7 @@ class QuadrantMediator(Singleton):
         self._commanderList = newValues
 
     def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
-        self._ptm.fireEnterpriseTorpedoesAtKlingons(enterprise=quadrant.enterprise, klingons=quadrant.klingons)
+        self._ptm.fireEnterpriseTorpedoesAtKlingons(quadrant=quadrant)
 
     def draw(self, quadrant: Quadrant):
         self.playerList.draw()

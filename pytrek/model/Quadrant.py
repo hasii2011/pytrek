@@ -251,7 +251,7 @@ class Quadrant:
 
         sector.sprite = commander
 
-        self.logger.warning(f'Placed commander at quadrant: {self.coordinates} {commander=}')
+        self.logger.debug(f'Placed commander at quadrant: {self.coordinates} {commander=}')
         return commander
 
     def removeDeadKlingons(self):

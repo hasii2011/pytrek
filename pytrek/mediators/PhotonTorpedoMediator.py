@@ -10,32 +10,31 @@ from arcade import Sprite
 from arcade import SpriteList
 from arcade import Texture
 from arcade import check_for_collision_with_list
+# from arcade import has_line_of_sight
 from arcade import load_spritesheet
 
 from pytrek.Constants import SOUND_VOLUME_HIGH
-from pytrek.GameState import GameState
+
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
-from pytrek.engine.Computer import Computer
-from pytrek.gui.MessageConsole import MessageConsole
+
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.Explosion import Explosion
 
 from pytrek.gui.gamepieces.GamePieceTypes import Klingons
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.PhotonTorpedo import PhotonTorpedo
+from pytrek.mediators.BaseMediator import BaseMediator
+from pytrek.mediators.BaseMediator import LineOfSightResponse
 from pytrek.model.Quadrant import Quadrant
 
 
-class PhotonTorpedoMediator:
+class PhotonTorpedoMediator(BaseMediator):
 
     def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
-
-        self._computer:       Computer       = Computer()
-        self._messageConsole: MessageConsole = MessageConsole()
-        self._gameState:      GameState      = GameState()
+        super().__init__()
 
         self._torpedoes:  SpriteList = SpriteList()
         self._explosions: SpriteList = SpriteList()
@@ -59,19 +58,34 @@ class PhotonTorpedoMediator:
         self._torpedoes.update()
         self._explosions.update()
 
-    def fireEnterpriseTorpedoesAtKlingons(self, enterprise: Enterprise, klingons: Klingons):
+    def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
 
         self._messageConsole.displayMessage("Firing Torpedoes!!")
+
+        enterprise: Enterprise = quadrant.enterprise
+        klingons:   Klingons   = quadrant.klingons
 
         if len(klingons) == 0:
             self._messageConsole.displayMessage("Don't waste torpedoes.  Nothing to fire at")
         else:
+            startingPoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
             for klingon in klingons:
-                klingon: Klingon = cast(Klingon, klingon)
-                self._pointAtKlingon(enterprise=enterprise, klingon=klingon)
-                self._fireTorpedo(enterprise=enterprise, klingon=klingon)
-                self._photonTorpedoFired.play(volume=SOUND_VOLUME_HIGH)
-                self._gameState.torpedoCount -= 1
+                endPoint: ArcadePoint = ArcadePoint(x=klingon.center_x, y=klingon.center_y)
+
+                clearLineOfSight: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant, startingPoint, endPoint)
+                if clearLineOfSight.answer is True:
+                    klingon: Klingon = cast(Klingon, klingon)
+                    self._pointAtKlingon(enterprise=enterprise, klingon=klingon)
+                    self._fireTorpedo(enterprise=enterprise, klingon=klingon)
+                    self._photonTorpedoFired.play(volume=SOUND_VOLUME_HIGH)
+                    self._gameState.torpedoCount -= 1
+                else:
+                    msg: str = (
+                        f'Cannot fire at {klingon.id} '
+                        f'because a {clearLineOfSight.obstacle.id} is in the way'
+                    )
+                    self._messageConsole.displayMessage(message=msg)
+                    self.logger.info(msg)
             enterprise.angle = 0
 
     def handleTorpedoHits(self, quadrant: Quadrant):
@@ -140,6 +154,30 @@ class PhotonTorpedoMediator:
         explosions: List[Texture] = load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount)
 
         return explosions
+
+    def _doWeHaveLineOfSight(self, quadrant: Quadrant, startingPoint: ArcadePoint, endPoint: ArcadePoint) -> LineOfSightResponse:
+        """
+        Check to see if planets, stars, other Klingons, Commanders, or StarBases prevent
+        this klingon from shooting at the Enterprises
+
+        Args:
+            startingPoint:
+
+        Returns:  `True` if no obstructions, else `False`
+
+        """
+        obstacles: SpriteList = SpriteList()
+        if quadrant.hasPlanet is True:
+            obstacles.append(quadrant._planet)
+
+        # startTuple = (startingPoint.x, startingPoint.y)
+        # endTuple   = (endPoint.x,      endPoint.y)
+        # results = has_line_of_sight(point_1=startTuple, point_2=endTuple, walls=obstacles)
+
+        results: LineOfSightResponse = self.hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
+
+        self.logger.info(f'{results=}')
+        return results
 
     def __doExplosion(self, killerTorpedo: PhotonTorpedo):
 

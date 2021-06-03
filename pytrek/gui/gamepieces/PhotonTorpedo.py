@@ -30,6 +30,8 @@ class PhotonTorpedo(GamePiece, SmoothMotion):
         self._id:      PhotonTorpedoId = PhotonTorpedoId(f'Torpedo-{PhotonTorpedo.nextId}')
         self._firedAt: KlingonId       = cast(KlingonId, None)
 
+        self.speed = 3  # TODO make this a game setting so we can tweak it for playability
+
         PhotonTorpedo.nextId += 1
 
     @property

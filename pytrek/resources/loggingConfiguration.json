@@ -35,6 +35,10 @@
             "level":     "INFO",
             "propagate": "False"
         },
+        "pytrek.mediators.PhotonTorpedoMediator": {
+            "level":     "INFO",
+            "propagate": "False"
+        },
         "pytrek.gui.gamepieces.KlingonTorpedoFollower": {
             "level":     "INFO",
             "propagate": "False"

@@ -26,3 +26,10 @@ class Planet(Sprite):
 
         self.center_x = arcadeX
         self.center_y = arcadeY
+
+        self._type: PlanetType = planetType
+        self._id:   str        = f'{self._type.value} type planet'
+
+    @property
+    def id(self) -> str:
+        return self._id

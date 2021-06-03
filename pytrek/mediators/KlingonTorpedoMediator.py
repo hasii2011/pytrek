@@ -11,44 +11,36 @@ from arcade import SpriteList
 from arcade import check_for_collision_with_list
 
 from pytrek.engine.ArcadePoint import ArcadePoint
-from pytrek.engine.Computer import Computer
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
-from pytrek.engine.GameEngine import GameEngine
-from pytrek.engine.Intelligence import Intelligence
-from pytrek.engine.ShieldHitData import ShieldHitData
 
-from pytrek.gui.MessageConsole import MessageConsole
+from pytrek.engine.ShieldHitData import ShieldHitData
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.Klingon import KlingonId
 from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
+from pytrek.mediators.BaseMediator import BaseMediator
 
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.Constants import DEFAULT_FULL_SHIELDS
 from pytrek.Constants import SOUND_VOLUME_HIGH
 
-from pytrek.GameState import GameState
-
 from pytrek.LocateResources import LocateResources
 
 
-class KlingonTorpedoMediator:
+class KlingonTorpedoMediator(BaseMediator):
 
     def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._gameEngine:     GameEngine     = GameEngine()
-        self._gameState:      GameState      = GameState()
-        self._computer:       Computer       = Computer()
-        self._intelligence:   Intelligence   = Intelligence()
+        super().__init__()
+
         self._devices:        Devices        = Devices()
-        self._messageConsole: MessageConsole = MessageConsole()
 
         self._klingonTorpedoes: SpriteList = cast(SpriteList, None)
         self._torpedoFollowers: SpriteList = cast(SpriteList, None)
