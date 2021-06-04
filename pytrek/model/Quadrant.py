@@ -130,6 +130,10 @@ class Quadrant:
         return self._klingons
 
     @property
+    def commanders(self) -> Commanders:
+        return self._commanders
+
+    @property
     def commanderCount(self) -> int:
         return self._commanderCount
 

@@ -167,8 +167,8 @@ class PhotonTorpedoMediator(BaseMediator):
 
     def _doWeHaveLineOfSight(self, quadrant: Quadrant, startingPoint: ArcadePoint, endPoint: ArcadePoint) -> LineOfSightResponse:
         """
-        Check to see if planets, stars, other Klingons, Commanders, or StarBases prevent
-        this klingon from shooting at the Enterprises
+        Check to see if planets or StarBases prevent
+        the Enterprise from shooting at the enemy
 
         Args:
             startingPoint:
