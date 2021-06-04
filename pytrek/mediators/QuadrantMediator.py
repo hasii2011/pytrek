@@ -5,6 +5,7 @@ from logging import Logger
 from logging import getLogger
 from logging import DEBUG
 
+from arcade import MOUSE_BUTTON_RIGHT
 from arcade import SpriteList
 
 from pytrek.Constants import QUADRANT_COLUMNS
@@ -13,12 +14,13 @@ from pytrek.Constants import QUADRANT_ROWS
 from pytrek.engine.Computer import Computer
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
-from pytrek.gui.gamepieces.Commander import Commander
 
+from pytrek.gui.gamepieces.Commander import Commander
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
 
+from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 from pytrek.mediators.PhotonTorpedoMediator import PhotonTorpedoMediator
 
@@ -44,6 +46,7 @@ class QuadrantMediator(Singleton):
 
         self._ktm: KlingonTorpedoMediator = KlingonTorpedoMediator()
         self._ptm: PhotonTorpedoMediator  = PhotonTorpedoMediator()
+        self._em:  EnterpriseMediator     = EnterpriseMediator()
 
         self._playerList:    SpriteList = SpriteList()
         self._klingonList:   SpriteList = SpriteList()
@@ -82,6 +85,12 @@ class QuadrantMediator(Singleton):
 
     def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
         self._ptm.fireEnterpriseTorpedoesAtKlingons(quadrant=quadrant)
+
+    # noinspection PyUnusedLocal
+    def handleMousePress(self, quadrant: Quadrant, arcadePoint: ArcadePoint, button: int, keyModifiers: int):
+
+        if button == MOUSE_BUTTON_RIGHT:
+            self._em.impulse(quadrant=quadrant, arcadePoint=arcadePoint)
 
     def draw(self, quadrant: Quadrant):
         self.playerList.draw()
@@ -126,7 +135,8 @@ class QuadrantMediator(Singleton):
 
                 if sectorType != SectorType.EMPTY:
                     if sectorType == SectorType.ENTERPRISE:
-                        self._updateEnterprise(quadrant=quadrant, gamePiece=gamePiece)
+                        # self._updateEnterprise(quadrant=quadrant, gamePiece=gamePiece)
+                        self._em.update(quadrant=quadrant)
                     elif sectorType == SectorType.KLINGON:
                         self._updateKlingon(gamePiece=gamePiece)
                     elif sectorType == SectorType.PLANET:
@@ -136,25 +146,6 @@ class QuadrantMediator(Singleton):
                         self._updateCommander(quadrant=quadrant, commander=cast(Commander, gamePiece))
                     else:
                         assert False, 'Bad Game Piece'
-
-    def _updateEnterprise(self, quadrant: Quadrant, gamePiece: GamePiece):
-        """
-        Updates the Enterprise.  Account for in motion or stationary
-
-        Args:
-            quadrant:  The inspected quadrant
-            gamePiece: The game piece found in the quadrant
-        """
-        enterprise: Enterprise = cast(Enterprise, gamePiece)
-        arcadeX, arcadeY = GamePiece.gamePositionToScreenPosition(quadrant.enterpriseCoordinates)
-        if enterprise.inMotion is True:
-
-            self.logger.debug(f'Enterprise arcade position: ({arcadeX},{arcadeY})')
-            enterprise.destinationPoint = ArcadePoint(x=arcadeX, y=arcadeY)
-            enterprise.update()
-        else:
-            enterprise.center_x = arcadeX
-            enterprise.center_y = arcadeY
 
     def _updateKlingon(self, gamePiece: GamePiece):
 

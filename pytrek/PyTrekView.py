@@ -28,8 +28,8 @@ from pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
-from pytrek.Constants import SOUND_VOLUME_HIGH
 
+from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.ShipCondition import ShipCondition
@@ -176,8 +176,6 @@ class PyTrekView(View):
         if self._gameSettings.debugAddPlanet is True:
             self._quadrant.addPlanet()
 
-        self._loadSounds()
-
         self.logger.info(f'Setup Complete')
 
     def on_draw(self):
@@ -217,6 +215,7 @@ class PyTrekView(View):
         For a full list of keys, see:
         https://arcade.academy/arcade.key.html
         """
+        # TODO this code needs to go away
         if pressedKey == key.UP:
             self._enterprise.change_y = MOVEMENT_SPEED
         elif pressedKey == key.DOWN:
@@ -262,13 +261,15 @@ class PyTrekView(View):
         """
         Called when the user presses a mouse button.
         """
-        if button == arcade.MOUSE_BUTTON_RIGHT:
-            coordinates: Coordinates = self._computer.computeSectorCoordinates(x=round(x), y=round(y))
-
-            self._quadrant.enterprise.inMotion = True
-            self._quadrant.enterpriseCoordinates = coordinates
-            self._gameEngine.impulse(newCoordinates=coordinates, quadrant=self._quadrant, enterprise=self._enterprise)
-            self._soundImpulse.play(volume=SOUND_VOLUME_HIGH)
+        arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
+        self._quadrantMediator.handleMousePress(quadrant=self._quadrant, arcadePoint=arcadePoint, button=button, keyModifiers=key_modifiers)
+        # if button == arcade.MOUSE_BUTTON_RIGHT:
+        #     coordinates: Coordinates = self._computer.computeSectorCoordinates(x=round(x), y=round(y))
+        #
+        #     self._quadrant.enterprise.inMotion = True
+        #     self._quadrant.enterpriseCoordinates = coordinates
+        #     self._gameEngine.impulse(newCoordinates=coordinates, quadrant=self._quadrant, enterprise=self._enterprise)
+        #     self._soundImpulse.play(volume=SOUND_VOLUME_HIGH)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
@@ -286,11 +287,6 @@ class PyTrekView(View):
         logging.config.dictConfig(configurationDictionary)
         logging.logProcesses = False
         logging.logThreads   = False
-
-    def _loadSounds(self):
-
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='probe_launch_1.wav')
-        self._soundImpulse = Sound(file_name=fqFileName)
 
     def _switchViewBack(self):
         self.window.show_view(self)

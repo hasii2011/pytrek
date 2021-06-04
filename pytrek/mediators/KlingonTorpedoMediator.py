@@ -46,7 +46,7 @@ class KlingonTorpedoMediator(BaseMediator):
         self._torpedoFollowers: SpriteList = cast(SpriteList, None)
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='klingon_torpedo.wav')
+                                                           bareFileName='klingonTorpedo.wav')
         self._soundKlingonTorpedo: Sound = Sound(file_name=fqFileName)
 
         fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,

@@ -111,7 +111,7 @@ class PhotonTorpedoMediator(BaseMediator):
     def _loadSounds(self):
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='tos_photon_torpedo.wav')
+                                                           bareFileName='photonTorpedo.wav')
         self._photonTorpedoFired: Sound = Sound(file_name=fqFileName)
 
         fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
@@ -119,7 +119,7 @@ class PhotonTorpedoMediator(BaseMediator):
         self._explosionSound: Sound = Sound(file_name=fqFileName)
 
         fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
-                                                      bareFileName='tos_inaccurateerror_ep.wav')
+                                                      bareFileName='inaccurateError.wav')
         self._noKlingonsSound: Sound = Sound(file_name=fqFileName)
 
     def _pointAtKlingon(self, klingon: Klingon, enterprise: Enterprise):
@@ -174,7 +174,6 @@ class PhotonTorpedoMediator(BaseMediator):
             startingPoint:
 
         Returns:  `True` if no obstructions, else `False`
-
         """
         obstacles: SpriteList = SpriteList()
         if quadrant.hasPlanet is True:
