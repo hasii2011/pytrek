@@ -164,7 +164,7 @@ class QuadrantMediator(Singleton):
 
             oldPosition: Coordinates = commander.currentPosition
             newPosition: Coordinates = commander.evade(currentLocation=oldPosition)
-            print(f'Commander moves from {oldPosition} to {newPosition}')
+            self.logger.info(f'Commander moves from {oldPosition} to {newPosition}')
 
             self._commanderMovedUpdateQuadrant(commander, newPosition, oldPosition, quadrant)
 

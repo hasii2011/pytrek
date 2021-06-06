@@ -18,11 +18,13 @@ from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.ShieldHitData import ShieldHitData
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePieceTypes import Klingons
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.Klingon import KlingonId
 from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
 from pytrek.mediators.BaseMediator import BaseMediator
+from pytrek.mediators.BaseMediator import LineOfSightResponse
 
 from pytrek.model.Quadrant import Quadrant
 
@@ -95,9 +97,12 @@ class KlingonTorpedoMediator(BaseMediator):
             if deltaClockTime > klingon.firingInterval:
                 self.logger.debug(f'Time for {klingon} to fire torpedoes')
 
-                self._pointAtEnterprise(klingon=klingon, enterprise=quadrant.enterprise)
+                endPoint:      ArcadePoint = ArcadePoint(x=quadrant.enterprise.center_x, y=quadrant.enterprise.center_y)
+                lineOfSightResponse: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant, shooter=klingon, endPoint=endPoint)
+                if lineOfSightResponse.answer is True:
+                    self._pointAtEnterprise(klingon=klingon, enterprise=quadrant.enterprise)
 
-                self._fireKlingonTorpedo(klingon=klingon, enterprise=quadrant.enterprise)
+                    self._fireKlingonTorpedo(klingon=klingon, enterprise=quadrant.enterprise)
                 klingon.lastTimeCheck = currentTime
 
     def handleKlingonTorpedoHits(self, quadrant: Quadrant):
@@ -248,3 +253,34 @@ class KlingonTorpedoMediator(BaseMediator):
         klingon.angle = normalAngle + 125
 
         self.logger.debug(f'{klingon.angle=}')
+
+    def _doWeHaveLineOfSight(self, quadrant: Quadrant, shooter: Klingon, endPoint: ArcadePoint) -> LineOfSightResponse:
+
+        startingPoint: ArcadePoint = ArcadePoint(x=shooter.center_x, y=shooter.center_y)
+
+        obstacles: SpriteList = SpriteList()
+
+        if quadrant.hasPlanet is True:
+            obstacles.append(quadrant._planet)
+        otherKlingons: Klingons = self.__buildEligibleKlingonObstacles(shooter=shooter, klingons=quadrant.klingons)
+
+        obstacles.extend(otherKlingons)
+
+        results: LineOfSightResponse = self.hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
+
+        self.logger.info(f'{results=}')
+        if results.answer is False:
+            self._messageConsole.displayMessage(f'{shooter.id} cannot shoot, blocked by {results.obstacle.id}')
+
+        return results
+
+    def __buildEligibleKlingonObstacles(self, shooter: Klingon, klingons: Klingons) -> Klingons:
+        """
+
+        Returns:  A list of klingons excluding the shooter
+        """
+        obstacles: Klingons = Klingons([])
+        for klingon in klingons:
+            if klingon.id != shooter.id:
+                obstacles.append(klingon)
+        return obstacles
