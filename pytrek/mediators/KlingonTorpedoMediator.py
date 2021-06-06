@@ -47,14 +47,7 @@ class KlingonTorpedoMediator(BaseMediator):
         self._klingonTorpedoes: SpriteList = cast(SpriteList, None)
         self._torpedoFollowers: SpriteList = cast(SpriteList, None)
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='klingonTorpedo.wav')
-        self._soundKlingonTorpedo: Sound = Sound(file_name=fqFileName)
-
-        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
-                                                      bareFileName='ShieldHit.wav')
-
-        self._soundShieldHit: Sound = Sound(file_name=fqFileName)
+        self._loadSounds()
 
         self._lastTimeCheck: float = self._gameEngine.gameClock / 1000
         self.logger.info(f'{self._lastTimeCheck=}')
@@ -97,12 +90,15 @@ class KlingonTorpedoMediator(BaseMediator):
             if deltaClockTime > klingon.firingInterval:
                 self.logger.debug(f'Time for {klingon} to fire torpedoes')
 
-                endPoint:      ArcadePoint = ArcadePoint(x=quadrant.enterprise.center_x, y=quadrant.enterprise.center_y)
+                endPoint:            ArcadePoint = ArcadePoint(x=quadrant.enterprise.center_x, y=quadrant.enterprise.center_y)
                 lineOfSightResponse: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant, shooter=klingon, endPoint=endPoint)
                 if lineOfSightResponse.answer is True:
                     self._pointAtEnterprise(klingon=klingon, enterprise=quadrant.enterprise)
-
                     self._fireKlingonTorpedo(klingon=klingon, enterprise=quadrant.enterprise)
+                else:
+                    self._soundKlingonCannotFire.play(volume=SOUND_VOLUME_HIGH)
+                    self._messageConsole.displayMessage(f'{klingon.id} cannot shoot, blocked by {lineOfSightResponse.obstacle.id}')
+
                 klingon.lastTimeCheck = currentTime
 
     def handleKlingonTorpedoHits(self, quadrant: Quadrant):
@@ -269,10 +265,22 @@ class KlingonTorpedoMediator(BaseMediator):
         results: LineOfSightResponse = self.hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
 
         self.logger.info(f'{results=}')
-        if results.answer is False:
-            self._messageConsole.displayMessage(f'{shooter.id} cannot shoot, blocked by {results.obstacle.id}')
 
         return results
+
+    def _loadSounds(self):
+
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
+                                                           bareFileName='klingonTorpedo.wav')
+        self._soundKlingonTorpedo: Sound = Sound(file_name=fqFileName)
+        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
+                                                      bareFileName='ShieldHit.wav')
+        self._soundShieldHit: Sound = Sound(file_name=fqFileName)
+
+        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
+                                                      bareFileName='KlingonCannotFire.wav')
+
+        self._soundKlingonCannotFire: Sound = Sound(file_name=fqFileName)
 
     def __buildEligibleKlingonObstacles(self, shooter: Klingon, klingons: Klingons) -> Klingons:
         """

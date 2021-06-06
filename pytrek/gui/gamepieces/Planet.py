@@ -36,3 +36,9 @@ class Planet(Sprite):
     @property
     def id(self) -> str:
         return self._id
+
+    def __str__(self) -> str:
+        return self.id
+
+    def __str__(self) -> str:
+        return self.__str__()
