@@ -6,7 +6,10 @@ from arcade import Sprite
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.PlanetType import PlanetType
 
+from pytrek.engine.ArcadePoint import ArcadePoint
+
 from pytrek.LocateResources import LocateResources
+
 from pytrek.model.Coordinates import Coordinates
 
 
@@ -22,10 +25,10 @@ class Planet(Sprite):
         super().__init__(filename=fqFileName, scale=0.35)
 
         # Compute these once since planets don't move
-        arcadeX, arcadeY = GamePiece.gamePositionToScreenPosition(sectorCoordinates)
+        arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(sectorCoordinates)
 
-        self.center_x = arcadeX
-        self.center_y = arcadeY
+        self.center_x = arcadePoint.x
+        self.center_y = arcadePoint.y
 
         self._type: PlanetType = planetType
         self._id:   str        = f'{self._type.value} type planet'

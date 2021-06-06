@@ -41,6 +41,7 @@ class Computer(Singleton):
     @classmethod
     def gamePositionToScreenPoint(cls, gameCoordinates: Coordinates) -> ArcadePoint:
         """
+        This is strictly for the GameView;  GamePieces need to use GamePiece.gamePositionToScreenPosition
         Computes x,y arcade position within the galaxy
         Args:
             gameCoordinates:   The game coordinates

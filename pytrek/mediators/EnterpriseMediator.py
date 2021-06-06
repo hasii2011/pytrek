@@ -35,7 +35,9 @@ class EnterpriseMediator(BaseMediator):
 
         enterprise: Enterprise = quadrant.enterprise
 
-        arcadeX, arcadeY = GamePiece.gamePositionToScreenPosition(quadrant.enterpriseCoordinates)
+        arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(quadrant.enterpriseCoordinates)
+        arcadeX:     float       = arcadePoint.x
+        arcadeY:     float       = arcadePoint.y
         if enterprise.inMotion is True:
 
             self.logger.debug(f'Enterprise arcade position: ({arcadeX},{arcadeY})')
@@ -53,9 +55,9 @@ class EnterpriseMediator(BaseMediator):
             self._messageConsole.displayMessage("WTF.  You are already here!")
             self._soundUnableToComply.play(volume=SOUND_VOLUME_HIGH)
         else:
-            x, y = GamePiece.gamePositionToScreenPosition(enterpriseCoordinates)
-            startingPoint: ArcadePoint = ArcadePoint(x=x, y=y)
+            startingPoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(enterpriseCoordinates)
             endPoint:      ArcadePoint = arcadePoint
+
             results: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant=quadrant, startingPoint=startingPoint, endPoint=endPoint)
             if results.answer is True:
                 quadrant.enterprise.inMotion    = True

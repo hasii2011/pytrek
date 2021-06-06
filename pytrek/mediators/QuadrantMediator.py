@@ -16,7 +16,7 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
 
 from pytrek.gui.gamepieces.Commander import Commander
-from pytrek.gui.gamepieces.Enterprise import Enterprise
+
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
 
@@ -151,10 +151,10 @@ class QuadrantMediator(Singleton):
 
         klingon: Klingon = cast(Klingon, gamePiece)
 
-        arcadeX, arcadeY = GamePiece.gamePositionToScreenPosition(klingon.currentPosition)
+        arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(klingon.currentPosition)
 
-        klingon.center_x = arcadeX
-        klingon.center_y = arcadeY
+        klingon.center_x = arcadePoint.x
+        klingon.center_y = arcadePoint.y
 
     def _updateCommander(self, quadrant: Quadrant, commander: Commander):
 
@@ -170,10 +170,10 @@ class QuadrantMediator(Singleton):
 
             commander.currentPosition = newPosition
 
-            arcadeX, arcadeY = GamePiece.gamePositionToScreenPosition(newPosition)
+            arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(newPosition)
 
-            commander.center_x = arcadeX
-            commander.center_y = arcadeY
+            commander.center_x = arcadePoint.x
+            commander.center_y = arcadePoint.y
 
             commander.timeSinceMovement = currentTime
 

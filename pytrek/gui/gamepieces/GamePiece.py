@@ -9,6 +9,7 @@ from pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_ROWS
+from pytrek.engine.ArcadePoint import ArcadePoint
 
 from pytrek.model.Coordinates import Coordinates
 
@@ -59,7 +60,7 @@ class GamePiece(Sprite):
         self._rotationSpeed = newValue
 
     @classmethod
-    def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates):
+    def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates) -> ArcadePoint :
 
         sectorX: int = gameCoordinates.x
         sectorY: int = gameCoordinates.y
@@ -72,4 +73,5 @@ class GamePiece(Sprite):
         x = (adjustSectorX * QUADRANT_PIXEL_WIDTH) + HALF_QUADRANT_PIXEL_WIDTH
         y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + CONSOLE_HEIGHT
 
-        return x, y
+        arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
+        return arcadePoint
