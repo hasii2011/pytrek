@@ -19,6 +19,8 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.Constants import SOUND_VOLUME_HIGH
 
 from pytrek.LocateResources import LocateResources
+from pytrek.model.Sector import Sector
+from pytrek.model.SectorType import SectorType
 
 
 class EnterpriseMediator(BaseMediator):
@@ -60,6 +62,7 @@ class EnterpriseMediator(BaseMediator):
 
             results: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant=quadrant, startingPoint=startingPoint, endPoint=endPoint)
             if results.answer is True:
+                self.__updateQuadrant(quadrant=quadrant, currentCoordinates=enterpriseCoordinates, targetCoordinates=targetCoordinates)
                 quadrant.enterprise.inMotion    = True
                 quadrant.enterpriseCoordinates = targetCoordinates
                 self._gameEngine.impulse(newCoordinates=targetCoordinates, quadrant=quadrant, enterprise=quadrant.enterprise)
@@ -105,3 +108,22 @@ class EnterpriseMediator(BaseMediator):
 
         self.logger.info(f'{results=}')
         return results
+
+    def __updateQuadrant(self, quadrant: Quadrant, currentCoordinates: Coordinates, targetCoordinates: Coordinates) -> Quadrant:
+        """
+
+        Args:
+            quadrant:           What we are updating
+            currentCoordinates: Where we are
+            targetCoordinates:  Where we are going
+
+        Returns: The updated input quadrant
+        """
+
+        currentSector: Sector = quadrant.getSector(currentCoordinates)
+        targetSector:  Sector = quadrant.getSector(targetCoordinates)
+
+        currentSector.type = SectorType.EMPTY
+        targetSector.type  = SectorType.ENTERPRISE
+
+        return quadrant
