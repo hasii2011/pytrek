@@ -164,6 +164,12 @@ class QuadrantMediator(Singleton):
 
             oldPosition: Coordinates = commander.currentPosition
             newPosition: Coordinates = commander.evade(currentLocation=oldPosition)
+            while True:
+                if self._checkCommanderMoveIsValid(quadrant=quadrant, targetCoordinates=newPosition):
+                    break
+                else:
+                    newPosition: Coordinates = commander.evade(currentLocation=oldPosition)
+                    
             self.logger.info(f'Commander moves from {oldPosition} to {newPosition}')
 
             self._commanderMovedUpdateQuadrant(commander, newPosition, oldPosition, quadrant)
@@ -188,3 +194,12 @@ class QuadrantMediator(Singleton):
 
         newSector.type   = SectorType.COMMANDER
         newSector.sprite = commander
+
+    def _checkCommanderMoveIsValid(self, quadrant: Quadrant, targetCoordinates: Coordinates) -> bool:
+
+        targetSector: Sector = quadrant.getSector(targetCoordinates)
+        if targetSector.type == SectorType.EMPTY:
+            return True
+        else:
+            self.logger.info(f'Commander cannot move to sector: {targetCoordinates} occupied by {targetSector.type}')
+            return False

@@ -78,7 +78,10 @@ class Commander(GamePiece, SmoothMotion):
         """
         Move commander around to avoid torpedoes
 
-        :return: new random coordinates
+        Args:
+            currentLocation:
+
+        Returns:  New random coordinates
         """
         while True:
             pDirection:     Direction   = self._randomDirection_()
@@ -90,7 +93,10 @@ class Commander(GamePiece, SmoothMotion):
         return newCoordinates
 
     def _randomDirection_(self) -> Direction:
-        """"""
+        """
+
+        Returns:  A random direction
+        """
         return randomChoice(list(Direction))
 
     def __str__(self):

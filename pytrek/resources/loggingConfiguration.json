@@ -28,7 +28,7 @@
             "propagate": "False"
         },
         "pytrek": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         },
         "pytrek.mediators.QuadrantMediator": {
@@ -36,10 +36,14 @@
             "propagate": "False"
         },
         "pytrek.mediators.PhotonTorpedoMediator": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         },
         "pytrek.gui.gamepieces.KlingonTorpedoFollower": {
+            "level":     "WARNING",
+            "propagate": "False"
+        },
+        "pytrek.gui.gamepieces.Commander": {
             "level":     "INFO",
             "propagate": "False"
         }
