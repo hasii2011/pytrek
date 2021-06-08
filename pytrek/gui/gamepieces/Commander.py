@@ -74,31 +74,6 @@ class Commander(GamePiece, SmoothMotion):
     def moveInterval(self, newValue: int):
         self._moveInterval = newValue
 
-    def evade(self, currentLocation: Coordinates) -> Coordinates:
-        """
-        Move commander around to avoid torpedoes
-
-        Args:
-            currentLocation:
-
-        Returns:  New random coordinates
-        """
-        while True:
-            pDirection:     Direction   = self._randomDirection_()
-            newCoordinates: Coordinates = currentLocation.newCoordinates(pDirection)
-
-            self.logger.debug(f"Random direction {pDirection.name}: currentLocation: {currentLocation} newCoordinates {newCoordinates}")
-            if newCoordinates.valid():
-                break
-        return newCoordinates
-
-    def _randomDirection_(self) -> Direction:
-        """
-
-        Returns:  A random direction
-        """
-        return randomChoice(list(Direction))
-
     def __str__(self):
 
         lookAtMe: str = (

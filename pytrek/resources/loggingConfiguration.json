@@ -39,6 +39,10 @@
             "level":     "WARNING",
             "propagate": "False"
         },
+        "pytrek.mediators.CommanderMediator": {
+            "level":     "INFO",
+            "propagate": "False"
+        },
         "pytrek.gui.gamepieces.KlingonTorpedoFollower": {
             "level":     "WARNING",
             "propagate": "False"

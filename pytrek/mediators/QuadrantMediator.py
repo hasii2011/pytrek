@@ -19,6 +19,7 @@ from pytrek.gui.gamepieces.Commander import Commander
 
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
+from pytrek.mediators.CommanderMediator import CommanderMediator
 
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
@@ -47,6 +48,7 @@ class QuadrantMediator(Singleton):
         self._ktm: KlingonTorpedoMediator = KlingonTorpedoMediator()
         self._ptm: PhotonTorpedoMediator  = PhotonTorpedoMediator()
         self._em:  EnterpriseMediator     = EnterpriseMediator()
+        self._cm:  CommanderMediator      = CommanderMediator()
 
         self._playerList:    SpriteList = SpriteList()
         self._klingonList:   SpriteList = SpriteList()
@@ -143,7 +145,8 @@ class QuadrantMediator(Singleton):
                         pass
                         # Planets are immovable;  So arcade position set at creation
                     elif sectorType == SectorType.COMMANDER:
-                        self._updateCommander(quadrant=quadrant, commander=cast(Commander, gamePiece))
+                        # self._updateCommander(quadrant=quadrant, commander=cast(Commander, gamePiece))
+                        self._cm.update(quadrant=quadrant, commander=cast(Commander, gamePiece))
                     else:
                         assert False, 'Bad Game Piece'
 
@@ -155,51 +158,3 @@ class QuadrantMediator(Singleton):
 
         klingon.center_x = arcadePoint.x
         klingon.center_y = arcadePoint.y
-
-    def _updateCommander(self, quadrant: Quadrant, commander: Commander):
-
-        currentTime:    float = self._gameEngine.gameClock
-        deltaClockTime: float = currentTime - commander.timeSinceMovement
-        if deltaClockTime > commander.moveInterval:
-
-            oldPosition: Coordinates = commander.currentPosition
-            newPosition: Coordinates = commander.evade(currentLocation=oldPosition)
-            while True:
-                if self._checkCommanderMoveIsValid(quadrant=quadrant, targetCoordinates=newPosition):
-                    break
-                else:
-                    newPosition: Coordinates = commander.evade(currentLocation=oldPosition)
-                    
-            self.logger.info(f'Commander moves from {oldPosition} to {newPosition}')
-
-            self._commanderMovedUpdateQuadrant(commander, newPosition, oldPosition, quadrant)
-
-            commander.currentPosition = newPosition
-
-            arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(newPosition)
-
-            commander.center_x = arcadePoint.x
-            commander.center_y = arcadePoint.y
-
-            commander.timeSinceMovement = currentTime
-
-    def _commanderMovedUpdateQuadrant(self, commander: Commander, newPosition: Coordinates, oldPosition: Coordinates, quadrant: Quadrant):
-
-        oldSector: Sector = quadrant.getSector(sectorCoordinates=oldPosition)
-
-        oldSector.type   = SectorType.EMPTY
-        oldSector.sprite = None
-
-        newSector: Sector = quadrant.getSector(sectorCoordinates=newPosition)
-
-        newSector.type   = SectorType.COMMANDER
-        newSector.sprite = commander
-
-    def _checkCommanderMoveIsValid(self, quadrant: Quadrant, targetCoordinates: Coordinates) -> bool:
-
-        targetSector: Sector = quadrant.getSector(targetCoordinates)
-        if targetSector.type == SectorType.EMPTY:
-            return True
-        else:
-            self.logger.info(f'Commander cannot move to sector: {targetCoordinates} occupied by {targetSector.type}')
-            return False
