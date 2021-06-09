@@ -3,6 +3,8 @@ from typing import cast
 
 from arcade import Sprite
 
+from pytrek.LocateResources import LocateResources
+
 from pytrek.model.Coordinates import Coordinates
 
 
@@ -10,7 +12,9 @@ class BaseGamePiece(Sprite):
 
     def __init__(self, filename: str = None, scale: float = 1.0):
 
-        super().__init__(filename=filename, scale=scale)
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=filename)
+
+        super().__init__(filename=fqFileName, scale=scale)
 
         self._gameCoordinates: Coordinates = cast(Coordinates, None)
 

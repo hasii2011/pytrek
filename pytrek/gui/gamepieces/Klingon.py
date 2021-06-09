@@ -2,7 +2,6 @@
 from typing import NewType
 from typing import cast
 
-from pytrek.LocateResources import LocateResources
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.model.Coordinates import Coordinates
@@ -15,15 +14,15 @@ KlingonId       = NewType('KlingonId', str)
 
 class Klingon(GamePiece, SmoothMotion):
 
+    FILENAME: str = 'KlingonD7.png'
+
     def __init__(self, coordinates: Coordinates):
         """
 
         Args:
             coordinates:   Current Game Position
         """
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='KlingonD7.png')
-
-        GamePiece.__init__(self, filename=fqFileName)
+        GamePiece.__init__(self, filename=Klingon.FILENAME)
         SmoothMotion.__init__(self)
 
         self.currentPosition = coordinates

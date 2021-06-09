@@ -3,18 +3,16 @@ from typing import cast
 
 from uuid import uuid4
 
-from pytrek.LocateResources import LocateResources
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 
 class KlingonTorpedoFollower(GamePiece):
 
+    FILENAME: str = 'KlingonTorpedoFollower-16.png'
+
     def __init__(self):
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='KlingonTorpedoFollower-16.png')
-
-        GamePiece.__init__(self, filename=fqFileName)
+        super().__init__(filename=KlingonTorpedoFollower.FILENAME)
 
         self._uuid:      uuid4 = uuid4()            # My ID
         self._following: uuid4 = cast(uuid4, None)

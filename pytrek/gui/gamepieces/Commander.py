@@ -10,8 +10,6 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
-from pytrek.LocateResources import LocateResources
-
 from pytrek.model.Coordinates import Coordinates
 
 CommanderId = NewType('CommanderId', str)
@@ -19,11 +17,11 @@ CommanderId = NewType('CommanderId', str)
 
 class Commander(GamePiece, SmoothMotion):
 
+    FILENAME: str = 'Commander.png'
+
     def __init__(self, coordinates: Coordinates, moveInterval: int):
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='Commander.png')
-
-        GamePiece.__init__(self, filename=fqFileName)
+        GamePiece.__init__(self, filename=Commander.FILENAME)
         SmoothMotion.__init__(self)
 
         self.logger: Logger = getLogger(__name__)

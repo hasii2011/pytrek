@@ -6,8 +6,6 @@ from logging import getLogger
 
 from arcade import SpriteList
 
-from pytrek.LocateResources import LocateResources
-
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 
@@ -23,13 +21,13 @@ from pytrek.model.Coordinates import Coordinates
 
 class KlingonTorpedo(GamePiece, SmoothMotion):
 
+    FILENAME: str = 'KlingonTorpedo.png'
+
     nextId: int = 0
 
     def __init__(self):
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='KlingonTorpedo.png')
-
-        GamePiece.__init__(self, filename=fqFileName)
+        GamePiece.__init__(self, filename=KlingonTorpedo.FILENAME)
         SmoothMotion.__init__(self)
 
         self.logger: Logger = getLogger(__name__)

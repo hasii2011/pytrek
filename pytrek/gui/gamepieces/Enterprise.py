@@ -7,22 +7,20 @@ from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 from pytrek.gui.gamepieces.SmoothMotion import RadianInfo
 
-from pytrek.LocateResources import LocateResources
-
 
 class Enterprise(
     GamePiece,
     SmoothMotion
 ):
 
+    FILENAME: str = 'EnterpriseD.png'
+
     def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='EnterpriseD.png')
         self.imageRotation = 0
-        GamePiece.__init__(self, filename=fqFileName)
+        GamePiece.__init__(self, filename=Enterprise.FILENAME)
         SmoothMotion.__init__(self, imageRotation=125)
 
     def update(self):

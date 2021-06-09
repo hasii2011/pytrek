@@ -1,28 +1,25 @@
 from logging import Logger
 from logging import getLogger
 
-from arcade import Sprite
 
+from pytrek.gui.gamepieces.BaseGamePiece import BaseGamePiece
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.PlanetType import PlanetType
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 
-from pytrek.LocateResources import LocateResources
-
 from pytrek.model.Coordinates import Coordinates
 
 
-class Planet(Sprite):
+class Planet(BaseGamePiece):
 
     def __init__(self, planetType: PlanetType, sectorCoordinates: Coordinates):
 
         self.logger: Logger = getLogger(__name__)
 
         bareFileName: str = f'{planetType.value}.png'
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=f'{bareFileName}')
 
-        super().__init__(filename=fqFileName, scale=0.35)
+        super().__init__(filename=bareFileName, scale=0.35)
 
         # Compute these once since planets don't move
         arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(sectorCoordinates)
@@ -40,5 +37,5 @@ class Planet(Sprite):
     def __str__(self) -> str:
         return self.id
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         return self.__str__()
