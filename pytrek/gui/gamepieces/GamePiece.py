@@ -1,7 +1,4 @@
 
-from typing import cast
-
-from arcade import Sprite
 
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
@@ -9,18 +6,19 @@ from pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_ROWS
+
 from pytrek.engine.ArcadePoint import ArcadePoint
+
+from pytrek.gui.gamepieces.BaseGamePiece import BaseGamePiece
 
 from pytrek.model.Coordinates import Coordinates
 
 
-class GamePiece(Sprite):
+class GamePiece(BaseGamePiece):
 
     def __init__(self, filename: str = None, scale: float = 1.0):
 
         super().__init__(filename=filename, scale=scale)
-
-        self._gameCoordinates: Coordinates = cast(Coordinates, None)
 
         self._speed: float = 2
         """
@@ -30,18 +28,6 @@ class GamePiece(Sprite):
         """
         Max speed we can rotate
         """
-
-    @property
-    def gameCoordinates(self) -> Coordinates:
-        """
-
-        Returns:  The current quadrant position
-        """
-        return self._gameCoordinates
-
-    @gameCoordinates.setter
-    def gameCoordinates(self, newValue: Coordinates):
-        self._gameCoordinates = newValue
 
     @property
     def speed(self) -> float:
