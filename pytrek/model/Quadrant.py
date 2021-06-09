@@ -90,7 +90,7 @@ class Quadrant:
         self.logger.info(f"Enterprise @sector: {coordinates}")
 
         self._enterprise = enterprise
-        enterprise.currentPosition  = coordinates
+        enterprise.gameCoordinates  = coordinates
         self._enterpriseCoordinates = coordinates
         self.scanned = True     # Naturally, we are here
 

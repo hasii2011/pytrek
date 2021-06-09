@@ -146,7 +146,7 @@ class PhotonTorpedoMediator(BaseMediator):
         torpedo.destinationPoint = klingonPoint
 
         self._torpedoes.append(torpedo)
-        self._messageConsole.displayMessage(f'Enterprise fire from: {enterprise.currentPosition} at Klingon {klingon.id}')
+        self._messageConsole.displayMessage(f'Enterprise fire from: {enterprise.gameCoordinates} at Klingon {klingon.id}')
 
     def _loadPhotonTorpedoExplosions(self) -> List[Texture]:
         """
@@ -200,7 +200,7 @@ class PhotonTorpedoMediator(BaseMediator):
 
     def __damageOrKillKlingon(self, enterprise: Enterprise, klingon: Klingon):
 
-        kHit: float = self._computer.computeHitValueOnKlingon(enterprisePosition=enterprise.currentPosition,
+        kHit: float = self._computer.computeHitValueOnKlingon(enterprisePosition=enterprise.gameCoordinates,
                                                               klingonPosition=klingon.currentPosition,
                                                               klingonPower=klingon.power)
         klingon.power -= kHit

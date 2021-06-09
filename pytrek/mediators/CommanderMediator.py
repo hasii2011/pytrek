@@ -34,7 +34,7 @@ class CommanderMediator(BaseMediator):
         deltaClockTime: float = currentTime - commander.timeSinceMovement
         if deltaClockTime > commander.moveInterval:
 
-            oldPosition: Coordinates = commander.currentPosition
+            oldPosition: Coordinates = commander.gameCoordinates
             newPosition: Coordinates = self.evade(currentLocation=oldPosition)
             while True:
                 if self._checkCommanderMoveIsValid(quadrant=quadrant, targetCoordinates=newPosition):
@@ -46,7 +46,7 @@ class CommanderMediator(BaseMediator):
 
             self._commanderMovedUpdateQuadrant(commander, newPosition, oldPosition, quadrant)
 
-            commander.currentPosition = newPosition
+            commander.gameCoordinates = newPosition
 
             arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(newPosition)
 

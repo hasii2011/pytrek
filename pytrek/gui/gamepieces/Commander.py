@@ -5,10 +5,7 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from random import choice as randomChoice
-
 from pytrek.engine.ArcadePoint import ArcadePoint
-from pytrek.engine.Direction import Direction
 
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
@@ -31,14 +28,14 @@ class Commander(GamePiece, SmoothMotion):
 
         self.logger: Logger = getLogger(__name__)
 
-        self.currentPosition = coordinates
+        self.gameCoordinates = coordinates
 
         self._moveInterval: int   = moveInterval
 
         self._timeSinceMovement: float = cast(float, None)
         self._power:             float = cast(float, None)
 
-        self._id: CommanderId     = CommanderId(f'Commander-{self.currentPosition}')
+        self._id: CommanderId     = CommanderId(f'Commander-{self.gameCoordinates}')
 
         # Compute at creation;  Mediator will move the commander
         arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(coordinates)
@@ -82,7 +79,7 @@ class Commander(GamePiece, SmoothMotion):
             f'power={self.power:.3f} '
             f'moveInterval={self.moveInterval} '
             f'timeSinceMovement={self.timeSinceMovement} '
-            f'currentPosition={self.currentPosition}'
+            f'currentPosition={self.gameCoordinates}'
             ']'
         )
         return lookAtMe

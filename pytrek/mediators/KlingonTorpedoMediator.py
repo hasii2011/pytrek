@@ -179,8 +179,8 @@ class KlingonTorpedoMediator(BaseMediator):
 
     def _fireKlingonTorpedo(self, klingon: Klingon, enterprise: Enterprise):
 
-        self.logger.debug(f'Klingon @ {klingon.currentPosition} firing; Enterprise @ {enterprise.currentPosition}')
-        self._messageConsole.displayMessage(f'Klingon @ {klingon.currentPosition} firing; Enterprise @ {enterprise.currentPosition}')
+        self.logger.debug(f'Klingon @ {klingon.currentPosition} firing; Enterprise @ {enterprise.gameCoordinates}')
+        self._messageConsole.displayMessage(f'Klingon @ {klingon.currentPosition} firing; Enterprise @ {enterprise.gameCoordinates}')
         #
         # Use the enterprise arcade position rather than compute the sector center;  That way we
         # can use Arcade collision detection

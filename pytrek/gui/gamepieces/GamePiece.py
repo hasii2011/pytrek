@@ -20,7 +20,7 @@ class GamePiece(Sprite):
 
         super().__init__(filename=filename, scale=scale)
 
-        self._currentPosition: Coordinates = cast(Coordinates, None)
+        self._gameCoordinates: Coordinates = cast(Coordinates, None)
 
         self._speed: float = 2
         """
@@ -32,16 +32,16 @@ class GamePiece(Sprite):
         """
 
     @property
-    def currentPosition(self) -> Coordinates:
+    def gameCoordinates(self) -> Coordinates:
         """
 
         Returns:  The current quadrant position
         """
-        return self._currentPosition
+        return self._gameCoordinates
 
-    @currentPosition.setter
-    def currentPosition(self, newValue: Coordinates):
-        self._currentPosition = newValue
+    @gameCoordinates.setter
+    def gameCoordinates(self, newValue: Coordinates):
+        self._gameCoordinates = newValue
 
     @property
     def speed(self) -> float:
@@ -60,7 +60,7 @@ class GamePiece(Sprite):
         self._rotationSpeed = newValue
 
     @classmethod
-    def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates) -> ArcadePoint :
+    def gamePositionToScreenPosition(cls, gameCoordinates: Coordinates) -> ArcadePoint:
 
         sectorX: int = gameCoordinates.x
         sectorY: int = gameCoordinates.y

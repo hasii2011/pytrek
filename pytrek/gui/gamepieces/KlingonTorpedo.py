@@ -36,7 +36,7 @@ class KlingonTorpedo(GamePiece, SmoothMotion):
 
         self._computer: Computer = Computer()
 
-        self._id:                int       = KlingonTorpedo.nextId
+        self._id:                int         = KlingonTorpedo.nextId
         self._firedBy:           KlingonId   = cast(KlingonId, None)
         self._firedFromPosition: Coordinates = cast(Coordinates, None)
         self._followers:         SpriteList  = cast(SpriteList, None)
