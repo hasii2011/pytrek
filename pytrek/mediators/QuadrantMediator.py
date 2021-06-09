@@ -141,7 +141,7 @@ class QuadrantMediator(Singleton):
 
         klingon: Klingon = cast(Klingon, gamePiece)
 
-        arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(klingon.currentPosition)
+        arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(klingon.gameCoordinates)
 
         klingon.center_x = arcadePoint.x
         klingon.center_y = arcadePoint.y

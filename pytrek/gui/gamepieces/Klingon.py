@@ -25,12 +25,12 @@ class Klingon(GamePiece, SmoothMotion):
         GamePiece.__init__(self, filename=Klingon.FILENAME)
         SmoothMotion.__init__(self)
 
-        self.currentPosition = coordinates
+        self.gameCoordinates = coordinates
 
         self._power:          float     = cast(float, None)
         self._firingInterval: int       = cast(int, None)
         self._lastTimeCheck:  int       = cast(int, None)
-        self._id:             KlingonId = KlingonId(f'Klingon-{self.currentPosition}')
+        self._id:             KlingonId = KlingonId(f'Klingon-{self.gameCoordinates}')
 
     @property
     def power(self) -> float:
@@ -71,7 +71,7 @@ class Klingon(GamePiece, SmoothMotion):
             f'{self.id=} '
             f'power={self.power:.3f} '
             f'firingInterval={self.firingInterval} '
-            f'{self.currentPosition=}'
+            f'{self.gameCoordinates=}'
             ']'
         )
         return lookAtMe

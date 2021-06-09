@@ -266,7 +266,7 @@ class Quadrant:
             if klingon.power == 0:
                 self.logger.info(f'Found dead Klingon: {klingon.id}')
                 self._klingonCount -= 1
-                sector: Sector = self.getSector(klingon.currentPosition)
+                sector: Sector = self.getSector(klingon.gameCoordinates)
                 sector.type = SectorType.EMPTY
             else:
                 liveKlingons.append(klingon)

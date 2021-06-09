@@ -154,7 +154,7 @@ class KlingonTorpedoMediator(BaseMediator):
 
             if shootingKlingon is not None:
                 shootingKlingon.angle = 0
-                hitValue: float = self._computer.computeHitValueOnEnterprise(klingonPosition=shootingKlingon.currentPosition,
+                hitValue: float = self._computer.computeHitValueOnEnterprise(klingonPosition=shootingKlingon.gameCoordinates,
                                                                              enterprisePosition=quadrant.enterpriseCoordinates,
                                                                              klingonPower=shootingKlingon.power)
 
@@ -280,8 +280,8 @@ class KlingonTorpedoMediator(BaseMediator):
 
     def __fireKlingonTorpedo(self, klingon: Klingon, enterprise: Enterprise):
 
-        self.logger.debug(f'Klingon @ {klingon.currentPosition} firing; Enterprise @ {enterprise.gameCoordinates}')
-        self._messageConsole.displayMessage(f'Klingon @ {klingon.currentPosition} firing; Enterprise @ {enterprise.gameCoordinates}')
+        self.logger.debug(f'Klingon @ {klingon.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
+        self._messageConsole.displayMessage(f'Klingon @ {klingon.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
         #
         # Use the enterprise arcade position rather than compute the sector center;  That way we
         # can use Arcade collision detection
@@ -294,7 +294,7 @@ class KlingonTorpedoMediator(BaseMediator):
         klingonTorpedo.center_y = klingonPoint.y
         klingonTorpedo.inMotion = True
         klingonTorpedo.destinationPoint  = enterprisePoint
-        klingonTorpedo.firedFromPosition = klingon.currentPosition
+        klingonTorpedo.firedFromPosition = klingon.gameCoordinates
         klingonTorpedo.firedBy           = klingon.id
         klingonTorpedo.followers         = self.torpedoFollowers
 
