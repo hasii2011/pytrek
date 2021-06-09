@@ -48,10 +48,10 @@ class PhotonTorpedoMediator(BaseMediator):
         self._torpedoes.draw()
         self._explosions.draw()
 
-    # noinspection PyUnusedLocal
     def update(self, quadrant: Quadrant):
         self._torpedoes.update()
         self._explosions.update()
+        self._handleTorpedoHits(quadrant=quadrant)
 
     def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
 
@@ -84,7 +84,7 @@ class PhotonTorpedoMediator(BaseMediator):
                     self.logger.info(msg)
             enterprise.angle = 0
 
-    def handleTorpedoHits(self, quadrant: Quadrant):
+    def _handleTorpedoHits(self, quadrant: Quadrant):
 
         klingons:   Klingons  = quadrant.klingons
         enterprise: Enterprise = quadrant.enterprise

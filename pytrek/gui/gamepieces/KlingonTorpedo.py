@@ -34,7 +34,7 @@ class KlingonTorpedo(GamePiece, SmoothMotion):
 
         self._computer: Computer = Computer()
 
-        self._id:                int         = KlingonTorpedo.nextId
+        self._id:                str         = f'KlingonTorpedo-{KlingonTorpedo.nextId}'
         self._firedBy:           KlingonId   = cast(KlingonId, None)
         self._firedFromPosition: Coordinates = cast(Coordinates, None)
         self._followers:         SpriteList  = cast(SpriteList, None)
@@ -42,7 +42,7 @@ class KlingonTorpedo(GamePiece, SmoothMotion):
         KlingonTorpedo.nextId += 1
 
     @property
-    def id(self) -> int:
+    def id(self) -> str:
         return self._id
 
     @property

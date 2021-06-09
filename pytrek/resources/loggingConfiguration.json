@@ -40,6 +40,10 @@
             "propagate": "False"
         },
         "pytrek.mediators.CommanderMediator": {
+            "level":     "WARNING",
+            "propagate": "False"
+        },
+        "pytrek.mediators.KlingonTorpedoMediator": {
             "level":     "INFO",
             "propagate": "False"
         },
