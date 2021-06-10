@@ -1,18 +1,11 @@
 
-from typing import NewType
-from typing import cast
-
-from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
+from pytrek.gui.gamepieces.BaseEnemy import EnemyId
 
 from pytrek.model.Coordinates import Coordinates
 
-from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
-
-KlingonId       = NewType('KlingonId', str)
-
-
-class Klingon(GamePiece, SmoothMotion):
+class Klingon(BaseEnemy):
 
     FILENAME: str = 'KlingonD7.png'
 
@@ -22,51 +15,18 @@ class Klingon(GamePiece, SmoothMotion):
         Args:
             coordinates:   Current Game Position
         """
-        GamePiece.__init__(self, filename=Klingon.FILENAME)
-        SmoothMotion.__init__(self)
+        super().__init__(filename=Klingon.FILENAME, coordinates=coordinates)
 
-        self.gameCoordinates = coordinates
-
-        self._power:          float     = cast(float, None)
-        self._firingInterval: int       = cast(int, None)
-        self._lastTimeCheck:  int       = cast(int, None)
-        self._id:             KlingonId = KlingonId(f'Klingon-{self.gameCoordinates}')
-
-    @property
-    def power(self) -> float:
-        return self._power
-
-    @power.setter
-    def power(self, theNewValue: float):
-        self._power = theNewValue
-
-    @property
-    def firingInterval(self) -> int:
-        return self._firingInterval
-
-    @firingInterval.setter
-    def firingInterval(self, newValue: int):
-        self._firingInterval = newValue
-
-    @property
-    def lastTimeCheck(self) -> int:
-        return self._lastTimeCheck
-
-    @lastTimeCheck.setter
-    def lastTimeCheck(self, newValue: int):
-        self._lastTimeCheck = newValue
-
-    @property
-    def id(self) -> KlingonId:
-        return self._id
-
-    @id.setter
-    def id(self, newValue: KlingonId):
-        self._id = newValue
+        self.id = EnemyId(f'Klingon-{self.gameCoordinates}')
 
     def __str__(self):
 
-        lookAtMe: str = (
+        lookAtMe: str = f'{self.id=}'
+        return lookAtMe
+
+    def __repr__(self):
+
+        devMe: str = (
             f'Klingon['
             f'{self.id=} '
             f'power={self.power:.3f} '
@@ -74,7 +34,5 @@ class Klingon(GamePiece, SmoothMotion):
             f'{self.gameCoordinates=}'
             ']'
         )
-        return lookAtMe
 
-    def __repr__(self):
-        return self.__str__()
+        return devMe

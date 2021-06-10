@@ -1,19 +1,19 @@
-from logging import Logger
-from logging import getLogger
+
 from typing import List
 from typing import NewType
 from typing import cast
 
+from logging import Logger
+from logging import getLogger
+
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 
-from pytrek.engine.Intelligence import Intelligence
 from pytrek.gui.gamepieces.Commander import Commander
-
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.GamePieceTypes import Commanders
-from pytrek.gui.gamepieces.GamePieceTypes import Klingons
+from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.Planet import Planet
 from pytrek.gui.gamepieces.PlanetType import PlanetType
@@ -21,6 +21,9 @@ from pytrek.gui.gamepieces.PlanetType import PlanetType
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
+
+from pytrek.engine.Intelligence import Intelligence
+
 from pytrek.settings.GameSettings import GameSettings
 
 SectorRow    = NewType('SectorRow', List[Sector])
@@ -52,8 +55,8 @@ class Quadrant:
         self._hasPlanet:      bool = False
         self._scanned:        bool = False
 
-        self._klingons:   Klingons   = Klingons([])
-        self._commanders: Commanders = Commanders([])
+        self._klingons:   Enemies = Enemies([])
+        self._commanders: Enemies = Enemies([])
         self._planet: Planet = cast(Planet, None)
 
         self._enterprise:            Enterprise  = cast(Enterprise, None)
@@ -126,11 +129,11 @@ class Quadrant:
         return self._klingonCount
 
     @property
-    def klingons(self) -> Klingons:
+    def klingons(self) -> Enemies:
         return self._klingons
 
     @property
-    def commanders(self) -> Commanders:
+    def commanders(self) -> Enemies:
         return self._commanders
 
     @property
@@ -220,7 +223,7 @@ class Quadrant:
 
     def _placeAKlingon(self) -> Klingon:
         """
-        Creates a klingon and places it at a random empty sector
+        Creates a enemy and places it at a random empty sector
         """
 
         sector        = self.getRandomEmptySector()
@@ -234,7 +237,7 @@ class Quadrant:
 
         sector.sprite = klingon
 
-        self.logger.debug(f"Placed klingon at quadrant: {self._coordinates} {klingon=}")
+        self.logger.debug(f"Placed enemy at quadrant: {self._coordinates} {klingon=}")
         return klingon
 
     def _placeACommander(self) -> Commander:
@@ -258,20 +261,28 @@ class Quadrant:
         self.logger.debug(f'Placed commander at quadrant: {self.coordinates} {commander=}')
         return commander
 
-    def removeDeadKlingons(self):
+    def removeDeadEnemies(self):
 
-        liveKlingons: Klingons = Klingons([])
-        for klingon in self._klingons:
-            klingon: Klingon = cast(Klingon, klingon)
-            if klingon.power == 0:
-                self.logger.info(f'Found dead Klingon: {klingon.id}')
+        self._klingons   = self._removeZombies(self._klingons)
+        self._commanders = self._removeZombies(self._commanders)
+
+        # TODO:   Clean up Commanders and SuperCommanders
+
+    def _removeZombies(self, enemies: Enemies):
+
+        liveKlingons: Enemies = Enemies([])
+
+        for enemy in enemies:
+            enemy: Klingon = cast(Klingon, enemy)
+            if enemy.power == 0:
+                self.logger.info(f'Found dead Klingon: {enemy.id}')
                 self._klingonCount -= 1
-                sector: Sector = self.getSector(klingon.gameCoordinates)
+                sector: Sector = self.getSector(enemy.gameCoordinates)
                 sector.type = SectorType.EMPTY
             else:
-                liveKlingons.append(klingon)
+                liveKlingons.append(enemy)
 
-        self._klingons = liveKlingons
+        return liveKlingons
 
     def _createQuadrant(self):
         for y in range(QUADRANT_ROWS):

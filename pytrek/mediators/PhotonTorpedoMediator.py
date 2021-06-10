@@ -1,7 +1,5 @@
 
 from typing import List
-from typing import NewType
-from typing import Union
 from typing import cast
 
 from logging import Logger
@@ -19,19 +17,18 @@ from pytrek.Constants import SOUND_VOLUME_HIGH
 
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
-from pytrek.gui.gamepieces.Commander import Commander
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.Explosion import Explosion
-
+from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.PhotonTorpedo import PhotonTorpedo
+
 from pytrek.mediators.BaseMediator import BaseMediator
 from pytrek.mediators.BaseMediator import LineOfSightResponse
-from pytrek.model.Quadrant import Quadrant
 
-Enemy   = NewType('Enemy', Union[Klingon, Commander])
-Enemies = NewType('Enemies', List[Enemy])
+from pytrek.model.Quadrant import Quadrant
 
 
 class PhotonTorpedoMediator(BaseMediator):
@@ -66,9 +63,8 @@ class PhotonTorpedoMediator(BaseMediator):
         # klingons:   Klingons   = quadrant.klingons
 
         enemies: Enemies = Enemies([])
-
-        enemies.extend(quadrant.klingons)
-        enemies.extend(quadrant.commanders)
+        # noinspection PyTypeChecker
+        enemies = enemies + quadrant.klingons + quadrant.commanders
 
         if len(enemies) == 0:
             self._messageConsole.displayMessage("Don't waste torpedoes.  Nothing to fire at")
@@ -81,8 +77,8 @@ class PhotonTorpedoMediator(BaseMediator):
                 clearLineOfSight: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant, startingPoint, endPoint)
                 if clearLineOfSight.answer is True:
                     enemy: Klingon = cast(Klingon, enemy)
-                    self._pointAtKlingon(enterprise=enterprise, klingon=enemy)
-                    self._fireTorpedo(enterprise=enterprise, klingon=enemy)
+                    self._pointAtEnemy(enterprise=enterprise, enemy=enemy)
+                    self._fireTorpedo(enterprise=enterprise, enemy=enemy)
                     self._photonTorpedoFired.play(volume=SOUND_VOLUME_HIGH)
                     self._gameState.torpedoCount -= 1
                 else:
@@ -104,7 +100,7 @@ class PhotonTorpedoMediator(BaseMediator):
 
         enterprise: Enterprise = quadrant.enterprise
         for enemy in enemies:
-            enemy: Klingon = cast(Klingon, enemy)
+            enemy: Enemy = cast(Enemy, enemy)
             if enemy.power > 0:
                 expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=enemy, sprite_list=self._torpedoes)
 
@@ -116,9 +112,9 @@ class PhotonTorpedoMediator(BaseMediator):
 
                     killerTorpedo.remove_from_sprite_lists()
 
-                    self.__damageOrKillKlingon(enterprise, enemy)
+                    self.__damageOrKillEnemy(enterprise, enemy)
 
-        quadrant.removeDeadKlingons()
+        quadrant.removeDeadEnemies()
 
     def _loadSounds(self):
 
@@ -134,31 +130,31 @@ class PhotonTorpedoMediator(BaseMediator):
                                                       bareFileName='inaccurateError.wav')
         self._noKlingonsSound: Sound = Sound(file_name=fqFileName)
 
-    def _pointAtKlingon(self, klingon: Klingon, enterprise: Enterprise):
+    def _pointAtEnemy(self, enemy: Enemy, enterprise: Enterprise):
 
         currentPoint:     ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
-        destinationPoint: ArcadePoint = ArcadePoint(x=klingon.center_x, y=klingon.center_y)
+        destinationPoint: ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
 
         normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
         enterprise.angle = normalAngle + 125
 
         self._messageConsole.displayMessage(f'Enterprise firing on course {enterprise.angle:.2f}')
 
-    def _fireTorpedo(self, enterprise: Enterprise, klingon: Klingon):
+    def _fireTorpedo(self, enterprise: Enterprise, enemy: Enemy):
 
         enterprisePoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
-        klingonPoint:    ArcadePoint = ArcadePoint(x=klingon.center_x,    y=klingon.center_y)
+        klingonPoint:    ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
 
         torpedo: PhotonTorpedo = PhotonTorpedo()
 
         torpedo.center_x = enterprisePoint.x
         torpedo.center_y = enterprisePoint.y
         torpedo.inMotion = True
-        torpedo.firedAt  = klingon.id
+        torpedo.firedAt  = enemy.id
         torpedo.destinationPoint = klingonPoint
 
         self._torpedoes.append(torpedo)
-        self._messageConsole.displayMessage(f'Enterprise fire from: {enterprise.gameCoordinates} at Klingon {klingon.id}')
+        self._messageConsole.displayMessage(f'Enterprise fire from: {enterprise.gameCoordinates} at Klingon {enemy.id}')
 
     def _loadPhotonTorpedoExplosions(self) -> List[Texture]:
         """
@@ -210,14 +206,14 @@ class PhotonTorpedoMediator(BaseMediator):
 
         self._explosionSound.play(SOUND_VOLUME_HIGH)
 
-    def __damageOrKillKlingon(self, enterprise: Enterprise, klingon: Klingon):
+    def __damageOrKillEnemy(self, enterprise: Enterprise, enemy: Enemy):
 
         kHit: float = self._computer.computeHitValueOnKlingon(enterprisePosition=enterprise.gameCoordinates,
-                                                              klingonPosition=klingon.gameCoordinates,
-                                                              klingonPower=klingon.power)
-        klingon.power -= kHit
-        self._messageConsole.displayMessage(f'{klingon.id} took hit: {kHit:.2f}  remaining: {klingon.power:.2f}')
-        if klingon.power <= 0:
-            self._messageConsole.displayMessage(f'{klingon.id} destroyed')
-            klingon.remove_from_sprite_lists()
-            klingon.power = 0
+                                                              klingonPosition=enemy.gameCoordinates,
+                                                              klingonPower=enemy.power)
+        enemy.power -= kHit
+        self._messageConsole.displayMessage(f'{enemy.id} took hit: {kHit:.2f}  remaining: {enemy.power:.2f}')
+        if enemy.power <= 0:
+            self._messageConsole.displayMessage(f'{enemy.id} destroyed')
+            enemy.remove_from_sprite_lists()
+            enemy.power = 0

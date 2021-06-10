@@ -17,12 +17,12 @@ from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 
 from pytrek.engine.ShieldHitData import ShieldHitData
+from pytrek.gui.gamepieces.BaseEnemy import EnemyId
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.GamePieceTypes import Klingons
+from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.Klingon import Klingon
-from pytrek.gui.gamepieces.Klingon import KlingonId
 from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
 from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
@@ -149,7 +149,7 @@ class KlingonTorpedoMediator(BaseMediator):
             self.logger.info(f'{expendedTorpedo.id} arrived at destination')
             self._removeTorpedoFollowers(klingonTorpedo=expendedTorpedo)
 
-            firedBy: KlingonId = expendedTorpedo.firedBy
+            firedBy: EnemyId = expendedTorpedo.firedBy
             shootingKlingon: Klingon = self._findFiringKlingon(klingonId=firedBy)
 
             if shootingKlingon is not None:
@@ -198,7 +198,7 @@ class KlingonTorpedoMediator(BaseMediator):
         for torpedoDud in torpedoDuds:
             self._removeTorpedoFollowers(klingonTorpedo=torpedoDud)
 
-            firedBy: KlingonId = torpedoDud.firedBy
+            firedBy: EnemyId = torpedoDud.firedBy
 
             shootingKlingon: Klingon = self._findFiringKlingon(klingonId=firedBy)
             if shootingKlingon is not None:
@@ -219,7 +219,7 @@ class KlingonTorpedoMediator(BaseMediator):
         for followerToRemove in followersToRemove:
             followerToRemove.remove_from_sprite_lists()
 
-    def _findFiringKlingon(self, klingonId: KlingonId) -> Klingon:
+    def _findFiringKlingon(self, klingonId: EnemyId) -> Klingon:
         """
 
         Args:
@@ -254,7 +254,7 @@ class KlingonTorpedoMediator(BaseMediator):
 
         if quadrant.hasPlanet is True:
             obstacles.append(quadrant._planet)
-        otherKlingons: Klingons = self.__buildEligibleKlingonObstacles(shooter=shooter, klingons=quadrant.klingons)
+        otherKlingons: Enemies = self.__buildEligibleKlingonObstacles(shooter=shooter, klingons=quadrant.klingons)
 
         obstacles.extend(otherKlingons)
 
@@ -312,12 +312,12 @@ class KlingonTorpedoMediator(BaseMediator):
 
         self.logger.debug(f'{klingon.angle=}')
 
-    def __buildEligibleKlingonObstacles(self, shooter: Klingon, klingons: Klingons) -> Klingons:
+    def __buildEligibleKlingonObstacles(self, shooter: Klingon, klingons: Enemies) -> Enemies:
         """
 
         Returns:  A list of klingons excluding the shooter
         """
-        obstacles: Klingons = Klingons([])
+        obstacles: Enemies = Enemies([])
         for klingon in klingons:
             if klingon.id != shooter.id:
                 obstacles.append(klingon)

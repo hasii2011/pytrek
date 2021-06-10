@@ -3,12 +3,10 @@ from logging import getLogger
 from typing import cast
 
 from pytrek.engine.ArcadePoint import ArcadePoint
-
-from pytrek.gui.gamepieces.Klingon import KlingonId
+from pytrek.gui.gamepieces.BaseEnemy import EnemyId
 
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.GamePieceTypes import PhotonTorpedoId
-
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 from pytrek.gui.gamepieces.SmoothMotion import RadianInfo
 
@@ -26,7 +24,7 @@ class PhotonTorpedo(GamePiece, SmoothMotion):
         self.logger: Logger = getLogger(__name__)
 
         self._id:      PhotonTorpedoId = PhotonTorpedoId(f'Torpedo-{PhotonTorpedo.nextId}')
-        self._firedAt: KlingonId       = cast(KlingonId, None)
+        self._firedAt: EnemyId         = cast(EnemyId, None)
 
         self.speed = 3  # TODO make this a game setting so we can tweak it for playability
 
@@ -37,11 +35,11 @@ class PhotonTorpedo(GamePiece, SmoothMotion):
         return self._id
 
     @property
-    def firedAt(self) -> KlingonId:
+    def firedAt(self) -> EnemyId:
         return self._firedAt
 
     @firedAt.setter
-    def firedAt(self, klingonId: KlingonId):
+    def firedAt(self, klingonId: EnemyId):
         self._firedAt = klingonId
 
     def update(self):

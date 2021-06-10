@@ -9,9 +9,8 @@ from arcade import SpriteList
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 
+from pytrek.gui.gamepieces.BaseEnemy import EnemyId
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.Klingon import KlingonId
-
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 from pytrek.gui.gamepieces.SmoothMotion import RadianInfo
@@ -35,7 +34,7 @@ class KlingonTorpedo(GamePiece, SmoothMotion):
         self._computer: Computer = Computer()
 
         self._id:                str         = f'KlingonTorpedo-{KlingonTorpedo.nextId}'
-        self._firedBy:           KlingonId   = cast(KlingonId, None)
+        self._firedBy:           EnemyId     = cast(EnemyId, None)
         self._firedFromPosition: Coordinates = cast(Coordinates, None)
         self._followers:         SpriteList  = cast(SpriteList, None)
 
@@ -55,14 +54,14 @@ class KlingonTorpedo(GamePiece, SmoothMotion):
         self.currentPosition    = newValue
 
     @property
-    def firedBy(self) -> KlingonId:
+    def firedBy(self) -> EnemyId:
         """
         Returns: The ID of the Klingon who fire the torpedo
         """
         return self._firedBy
 
     @firedBy.setter
-    def firedBy(self, klingonId: KlingonId):
+    def firedBy(self, klingonId: EnemyId):
         self._firedBy = klingonId
 
     def followers(self, newValues: SpriteList):
