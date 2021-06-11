@@ -118,6 +118,10 @@ class GameSettings(Singleton):
         return self._factors.basicMissDisplayInterval
 
     @property
+    def photonTorpedoMisfireRate(self) -> float:
+        return self._factors.photonTorpedoMisfireRate
+
+    @property
     def debugKlingonCount(self) -> int:
         return self._debug.debugKlingonCount
 
