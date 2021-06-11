@@ -7,6 +7,6 @@ class KlingonTorpedoMiss(BasicMiss):
     DISPLAY_SECONDS: int = 5
     FILENAME:        str = "KlingonTorpedoMiss.png"
 
-    def __init__(self, playTime: float):
+    def __init__(self, placedTime: float):
 
-        super().__init__(fileName=KlingonTorpedoMiss.FILENAME, playTime=playTime)
+        super().__init__(fileName=KlingonTorpedoMiss.FILENAME, placedTime=placedTime)

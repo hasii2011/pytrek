@@ -11,14 +11,12 @@ from arcade import SpriteList
 from arcade import check_for_collision_with_list
 
 from pytrek.engine.ArcadePoint import ArcadePoint
-
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
-
 from pytrek.engine.ShieldHitData import ShieldHitData
-from pytrek.gui.gamepieces.BaseEnemy import EnemyId
 
+from pytrek.gui.gamepieces.BaseEnemy import EnemyId
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
@@ -29,8 +27,8 @@ from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
 
 from pytrek.mediators.BaseMediator import BaseMediator
 from pytrek.mediators.BaseMediator import LineOfSightResponse
-from pytrek.model.Coordinates import Coordinates
 
+from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.Constants import DEFAULT_FULL_SHIELDS
@@ -47,7 +45,7 @@ class KlingonTorpedoMediator(BaseMediator):
 
         super().__init__()
 
-        self._devices:        Devices        = Devices()
+        self._devices: Devices = Devices()
 
         self._klingonTorpedoes: SpriteList = SpriteList()
         self._torpedoFollowers: SpriteList = SpriteList(is_static=True)
@@ -72,6 +70,7 @@ class KlingonTorpedoMediator(BaseMediator):
 
         self._handleKlingonTorpedoHits(quadrant)
         self._handleKlingonTorpedoMisses()
+        self._handleDudRemoval()
 
     @property
     def klingonTorpedoes(self) -> SpriteList:
@@ -278,6 +277,18 @@ class KlingonTorpedoMediator(BaseMediator):
 
         self._soundKlingonCannotFire: Sound = Sound(file_name=fqFileName)
 
+    def _handleDudRemoval(self):
+
+        duds:            SpriteList = self._torpedoDuds
+        currentTime:     float = self._gameEngine.gameClock
+        displayInterval: int   = self._gameSettings.basicMissDisplayInterval
+
+        for dud in duds:
+            dud: KlingonTorpedoMiss = cast(KlingonTorpedoMiss, dud)
+            deltaTime: float = currentTime - dud.placedTime
+            if deltaTime >= displayInterval:
+                dud.remove_from_sprite_lists()
+
     def __fireKlingonTorpedo(self, klingon: Klingon, enterprise: Enterprise):
 
         self.logger.debug(f'Klingon @ {klingon.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
@@ -325,7 +336,7 @@ class KlingonTorpedoMediator(BaseMediator):
 
     def __placeTorpedoDud(self, torpedoDud: KlingonTorpedo):
 
-        dud: KlingonTorpedoMiss = KlingonTorpedoMiss(playTime=self._gameEngine.gameClock)
+        dud: KlingonTorpedoMiss = KlingonTorpedoMiss(placedTime=self._gameEngine.gameClock)
 
         # Convert to game coordinates
         # Then to game point in order to get dud to center in sector

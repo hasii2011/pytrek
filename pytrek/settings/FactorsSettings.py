@@ -17,7 +17,9 @@ class FactorsSettings(BaseSubSetting):
 
     MIN_KLINGON_FIRING_INTERVAL: str = 'min_klingon_firing_interval'
     MAX_KLINGON_FIRING_INTERVAL: str = 'max_klingon_firing_interval'
-    COMMANDER_MOVE_INTERVAL:     str = 'commander_move_interval'
+    MIN_COMMANDER_MOVE_INTERVAL: str = 'min_commander_move_interval'
+    MAX_COMMANDER_MOVE_INTERVAL: str = 'max_commander_move_interval'
+    BASIC_MISS_DISPLAY_INTERVAL: str = 'basic_miss_display_interval'
 
     FACTORS_SETTINGS: SettingsNameValues = {
         GAME_LENGTH_FACTOR:     '7.0',
@@ -25,7 +27,9 @@ class FactorsSettings(BaseSubSetting):
         STAR_BASE_MULTIPLIER:   '3.0',
         MIN_KLINGON_FIRING_INTERVAL: '7',
         MAX_KLINGON_FIRING_INTERVAL: '15',
-        COMMANDER_MOVE_INTERVAL: '7'
+        MIN_COMMANDER_MOVE_INTERVAL: '3',
+        MAX_COMMANDER_MOVE_INTERVAL: '10',
+        BASIC_MISS_DISPLAY_INTERVAL: '5',
     }
 
     def init(self, *args, **kwds):
@@ -62,5 +66,13 @@ class FactorsSettings(BaseSubSetting):
         return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_KLINGON_FIRING_INTERVAL)
 
     @property
-    def commanderUpdateInterval(self) -> int:
-        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.COMMANDER_MOVE_INTERVAL)
+    def minCommanderUpdateInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MIN_COMMANDER_MOVE_INTERVAL)
+
+    @property
+    def maxCommanderUpdateInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_COMMANDER_MOVE_INTERVAL)
+
+    @property
+    def basicMissDisplayInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.BASIC_MISS_DISPLAY_INTERVAL)

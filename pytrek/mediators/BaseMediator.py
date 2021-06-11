@@ -20,6 +20,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.gui.MessageConsole import MessageConsole
 
 from pytrek.GameState import GameState
+from pytrek.settings.GameSettings import GameSettings
 
 LineOfSightResponse = namedtuple('LineOfSightResponse', 'answer, obstacle')
 
@@ -30,10 +31,11 @@ class BaseMediator:
     """
     def __init__(self):
 
-        self._computer:       Computer       = Computer()
-        self._gameState:      GameState      = GameState()
-        self._gameEngine:     GameEngine     = GameEngine()
-        self._intelligence:   Intelligence   = Intelligence()
+        self._computer:       Computer     = Computer()
+        self._gameState:      GameState    = GameState()
+        self._gameEngine:     GameEngine   = GameEngine()
+        self._intelligence:   Intelligence = Intelligence()
+        self._gameSettings:   GameSettings = GameSettings()
 
         self._messageConsole: MessageConsole = MessageConsole()
 

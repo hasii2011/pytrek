@@ -249,7 +249,7 @@ class Quadrant:
         sector      = self.getRandomEmptySector()
         sector.type = SectorType.COMMANDER
 
-        moveInterval: int = self._gameSettings.commanderUpdateIntervalSeconds
+        moveInterval: int = self._intelligence.computeKlingonMoveInterval()
         commander         = Commander(coordinates=sector.coordinates, moveInterval=moveInterval)
         cPower            = self._intelligence.computeCommanderPower()
 

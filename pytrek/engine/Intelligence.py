@@ -198,6 +198,12 @@ class Intelligence(Singleton):
 
         return randint(minFiringInterval, maxFiringInterval)
 
+    def computeKlingonMoveInterval(self) -> int:
+        minMoveInterval: int = self._gameSettings.minCommanderUpdateInterval
+        maxMoveInterval: int = self._gameSettings.maxCommanderUpdateInterval
+
+        return randint(minMoveInterval, maxMoveInterval)
+
     def computePlanetsInGalaxy(self) -> int:
         """
         Will some times generate 1 more than maximumPlanets;  Hence my patch

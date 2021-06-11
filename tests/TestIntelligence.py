@@ -328,6 +328,30 @@ class TestIntelligence(TestBase):
 
         self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
+    def testComputeKlingonMoveInterval(self):
+
+        generatedMoveIntervals: List[int] = []
+        for x in range(250):
+            moveInterval: int = self.smarty.computeKlingonMoveInterval()
+            generatedMoveIntervals.append(moveInterval)
+
+        medianCount: int = median(generatedMoveIntervals)
+        meanCount:   int = mean(generatedMoveIntervals)
+        modeCount:   int = mode(generatedMoveIntervals)
+
+        minValue: int = min(generatedMoveIntervals)
+        maxValue: int = max(generatedMoveIntervals)
+        statsStr: str = (
+            f'median={medianCount} average={meanCount} mode={modeCount} {minValue=} {maxValue=}'
+        )
+        self.logger.info(statsStr)
+
+        expectedMinValue: int = self._settings.minCommanderUpdateInterval
+        expectedMaxValue: int = self._settings.maxCommanderUpdateInterval
+
+        self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
+        self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')
+
     def _runKlingonCountTest(self) -> float:
 
         gameState:    GameState    = self._gameState

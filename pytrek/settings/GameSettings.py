@@ -106,8 +106,16 @@ class GameSettings(Singleton):
         return self._factors.maxKlingonFiringInterval
 
     @property
-    def commanderUpdateIntervalSeconds(self) -> int:
-        return self._factors.commanderUpdateInterval
+    def minCommanderUpdateInterval(self) -> int:
+        return self._factors.minCommanderUpdateInterval
+
+    @property
+    def maxCommanderUpdateInterval(self) -> int:
+        return self._factors.maxCommanderUpdateInterval
+
+    @property
+    def basicMissDisplayInterval(self) -> int:
+        return self._factors.basicMissDisplayInterval
 
     @property
     def debugKlingonCount(self) -> int:
