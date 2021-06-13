@@ -1,4 +1,6 @@
-
+from logging import Logger
+from logging import getLogger
+from typing import List
 from typing import cast
 
 from collections import namedtuple
@@ -19,13 +21,27 @@ from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.gui.MessageConsole import MessageConsole
 
+from pytrek.gui.gamepieces.BasicMiss import BasicMiss
+from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
+from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
+
 from pytrek.GameState import GameState
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Quadrant import Quadrant
+from pytrek.model.Sector import Sector
+from pytrek.model.SectorType import SectorType
+
 from pytrek.settings.GameSettings import GameSettings
 
 LineOfSightResponse = namedtuple('LineOfSightResponse', 'answer, obstacle')
+Torpedoes            = List[SmoothMotion]
+Misses               = List[BasicMiss]
 
 
 class BaseMediator:
+
+    clsLogger: Logger = getLogger(__name__)
     """
     Has common stuff that many mediators will need
     """
@@ -39,7 +55,7 @@ class BaseMediator:
 
         self._messageConsole: MessageConsole = MessageConsole()
 
-    def hasLineOfSight(self, startingPoint: ArcadePoint, endPoint: ArcadePoint, obstacles: SpriteList) -> LineOfSightResponse:
+    def _hasLineOfSight(self, startingPoint: ArcadePoint, endPoint: ArcadePoint, obstacles: SpriteList) -> LineOfSightResponse:
         """
         This is my replacement for Arcade's has_line_of_sight();  The function is only returning a boolean and not the sprite
         or sprite's that are obstacles
@@ -64,3 +80,61 @@ class BaseMediator:
                 return LineOfSightResponse(answer=False, obstacle=obstacle)
 
         return LineOfSightResponse(answer=True, obstacle=None)
+
+    def _findTorpedoMisses(self, torpedoes: Torpedoes):
+
+        torpedoDuds: List[SmoothMotion] = []
+        for torpedo in torpedoes:
+            torpedo: SmoothMotion = cast(SmoothMotion, torpedo)
+            if torpedo.inMotion is False:
+                torpedoDuds.append(torpedo)
+        return torpedoDuds
+
+    def _handleMissRemoval(self, quadrant: Quadrant, misses: Misses):
+
+        currentTime:     float = self._gameEngine.gameClock
+        displayInterval: int   = self._gameSettings.basicMissDisplayInterval
+
+        for dud in misses:
+            dud: BasicMiss = cast(BasicMiss, dud)
+            deltaTime: float = currentTime - dud.placedTime
+            if deltaTime >= displayInterval:
+                gameCoordinates: Coordinates = dud.gameCoordinates
+                self.__removeMissInQuadrant(quadrant=quadrant, sectorCoordinates=gameCoordinates)
+                dud.remove_from_sprite_lists()
+
+    def _placeMiss(self, quadrant: Quadrant, torpedoDud: GamePiece, miss: BasicMiss):
+        """
+        Convert to game coordinates
+        Then to game point in order to get miss to center in sector
+
+        Args:
+            miss:  The appropriate "miss" sprite
+        """
+
+        gameCoordinates: Coordinates = self._computer.computeSectorCoordinates(x=torpedoDud.center_x, y=torpedoDud.center_y)
+        arcadePoint:     ArcadePoint = GamePiece.gamePositionToScreenPosition(gameCoordinates=gameCoordinates)
+
+        miss.center_x = arcadePoint.x
+        miss.center_y = arcadePoint.y
+
+        if isinstance(miss, KlingonTorpedoMiss):
+            sectorType: SectorType = SectorType.KLINGON_TORPEDO_MISS
+        else:
+            sectorType: SectorType = SectorType.ENTERPRISE_TORPEDO_MISS
+
+        miss.gameCoordinates = gameCoordinates
+        self.__placeMissInQuadrant(quadrant, gameCoordinates, sectorType)
+        self.clsLogger.info(f'Placed miss at: {gameCoordinates=}  {arcadePoint=}')
+
+    def __placeMissInQuadrant(self, quadrant: Quadrant, sectorCoordinates: Coordinates, sectorType: SectorType):
+
+        sector: Sector = quadrant.getSector(sectorCoordinates)
+
+        sector.type = sectorType
+
+    def __removeMissInQuadrant(self, quadrant: Quadrant, sectorCoordinates: Coordinates):
+
+        sector: Sector = quadrant.getSector(sectorCoordinates)
+
+        sector.type = SectorType.EMPTY

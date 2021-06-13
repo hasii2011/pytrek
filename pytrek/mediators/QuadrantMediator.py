@@ -128,9 +128,8 @@ class QuadrantMediator(Singleton):
                         self._em.update(quadrant=quadrant)
                     elif sectorType == SectorType.KLINGON:
                         self._updateKlingon(gamePiece=gamePiece)
-                    elif sectorType == SectorType.PLANET:
+                    elif self._noUpdateSector(sectorType=sectorType) is True:
                         pass
-                        # Planets are immovable;  So arcade position set at creation
                     elif sectorType == SectorType.COMMANDER:
                         # self._updateCommander(quadrant=quadrant, commander=cast(Commander, gamePiece))
                         self._cm.update(quadrant=quadrant, commander=cast(Commander, gamePiece))
@@ -145,3 +144,18 @@ class QuadrantMediator(Singleton):
 
         klingon.center_x = arcadePoint.x
         klingon.center_y = arcadePoint.y
+
+    def _noUpdateSector(self, sectorType: SectorType) -> bool:
+        """
+        Some sector have sprites that do not move or are transient and handled by the mediators;
+        Args:
+            sectorType:
+
+        Returns:   True for the mediator handled sectors or for static sprites
+        """
+        ans: bool = False
+
+        if sectorType == SectorType.PLANET or sectorType == SectorType.KLINGON_TORPEDO_MISS or sectorType == SectorType.ENTERPRISE_TORPEDO_MISS:
+            ans = True
+
+        return ans

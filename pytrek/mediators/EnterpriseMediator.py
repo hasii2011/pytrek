@@ -104,7 +104,7 @@ class EnterpriseMediator(BaseMediator):
             obstacles.append(quadrant._planet)
         obstacles.extend(quadrant.klingons)
         obstacles.extend(quadrant.commanders)
-        results: LineOfSightResponse = self.hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
+        results: LineOfSightResponse = self._hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
 
         self.logger.info(f'{results=}')
         return results

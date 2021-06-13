@@ -24,9 +24,12 @@ from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.PhotonTorpedo import PhotonTorpedo
+from pytrek.gui.gamepieces.PhotonTorpedoMiss import PhotonTorpedoMiss
 
 from pytrek.mediators.BaseMediator import BaseMediator
 from pytrek.mediators.BaseMediator import LineOfSightResponse
+from pytrek.mediators.BaseMediator import Misses
+from pytrek.mediators.BaseMediator import Torpedoes
 
 from pytrek.model.Quadrant import Quadrant
 
@@ -39,6 +42,7 @@ class PhotonTorpedoMediator(BaseMediator):
         super().__init__()
 
         self._torpedoes:  SpriteList = SpriteList()
+        self._misses:     SpriteList = SpriteList()
         self._explosions: SpriteList = SpriteList()
 
         self._loadSounds()
@@ -49,11 +53,14 @@ class PhotonTorpedoMediator(BaseMediator):
     def draw(self, quadrant: Quadrant):
         self._torpedoes.draw()
         self._explosions.draw()
+        self._misses.draw()
 
     def update(self, quadrant: Quadrant):
         self._torpedoes.update()
         self._explosions.update()
         self._handleTorpedoHits(quadrant=quadrant)
+        self._handleTorpedoMisses(quadrant=quadrant)
+        self._handleMissRemoval(quadrant, cast(Misses, self._misses))
 
     def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
 
@@ -120,6 +127,20 @@ class PhotonTorpedoMediator(BaseMediator):
 
         quadrant.removeDeadEnemies()
 
+    def _handleTorpedoMisses(self, quadrant: Quadrant):
+
+        torpedoDuds: List[PhotonTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self._torpedoes))
+
+        for torpedoDud in torpedoDuds:
+
+            self._messageConsole.displayMessage(f'{torpedoDud.id} missed {torpedoDud.firedAt} !!!!')
+
+            miss: PhotonTorpedoMiss = PhotonTorpedoMiss(placedTime=self._gameEngine.gameClock)
+            self._placeMiss(quadrant=quadrant, torpedoDud=torpedoDud, miss=miss)
+            self._misses.append(miss)
+
+            torpedoDud.remove_from_sprite_lists()
+
     def _loadSounds(self):
 
         self._photonTorpedoFired: Sound = self.__loadSound('photonTorpedo.wav')
@@ -184,11 +205,7 @@ class PhotonTorpedoMediator(BaseMediator):
         if quadrant.hasPlanet is True:
             obstacles.append(quadrant._planet)
 
-        # startTuple = (startingPoint.x, startingPoint.y)
-        # endTuple   = (endPoint.x,      endPoint.y)
-        # results = has_line_of_sight(point_1=startTuple, point_2=endTuple, walls=obstacles)
-
-        results: LineOfSightResponse = self.hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
+        results: LineOfSightResponse = self._hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
 
         self.logger.info(f'{results=}')
         return results

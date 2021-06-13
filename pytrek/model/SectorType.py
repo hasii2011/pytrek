@@ -14,6 +14,6 @@ class SectorType(Enum):
     BLACK_HOLE           = 'blackhole'
     PHOTON_TORPEDO       = 'photonTorpedo'
     EXPLOSION            = 'explosion'
-    BIG_RED_X            = 'bigRedX'
     KLINGON_TORPEDO      = 'klingonTorpedo'
     KLINGON_TORPEDO_MISS = 'klingonTorpedoMiss'
+    ENTERPRISE_TORPEDO_MISS = 'enterpriseTorpedoMiss'

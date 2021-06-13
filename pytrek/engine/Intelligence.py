@@ -177,14 +177,22 @@ class Intelligence(Singleton):
         Commander
             kpower[klhere] = 950.0+400.0*Rand()+50.0*skill;
 
+        Returns:
+
+        """
+        cPower: float = 950.0 + (400.0 * self.rand()) + (50.0 * self._gameState.playerType.value)
+        return cPower
+
+    def computeSuperCommanderPower(self) -> float:
+        """
+
         Super Commander
             kpower[1] = 1175.0 + 400.0*Rand() + 125.0*skill;
 
         Returns:
-
         """
-        cPower = 950.0 + (400.0 * self.rand()) + (50.0 * self._gameState.playerType.value)
-        return cPower
+        scPower: float = 1175.0 + (400.0 * self.rand()) + (50.0 * self._gameState.playerType.value)
+        return scPower
 
     def computeKlingonFiringInterval(self) -> int:
         """
