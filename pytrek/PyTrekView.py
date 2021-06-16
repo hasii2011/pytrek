@@ -263,13 +263,6 @@ class PyTrekView(View):
         """
         arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
         self._quadrantMediator.handleMousePress(quadrant=self._quadrant, arcadePoint=arcadePoint, button=button, keyModifiers=key_modifiers)
-        # if button == arcade.MOUSE_BUTTON_RIGHT:
-        #     coordinates: Coordinates = self._computer.computeSectorCoordinates(x=round(x), y=round(y))
-        #
-        #     self._quadrant.enterprise.inMotion = True
-        #     self._quadrant.enterpriseCoordinates = coordinates
-        #     self._gameEngine.impulse(newCoordinates=coordinates, quadrant=self._quadrant, enterprise=self._enterprise)
-        #     self._soundImpulse.play(volume=SOUND_VOLUME_HIGH)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """

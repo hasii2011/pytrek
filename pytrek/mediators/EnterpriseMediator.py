@@ -16,8 +16,6 @@ from pytrek.mediators.BaseMediator import LineOfSightResponse
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
 
-from pytrek.Constants import SOUND_VOLUME_HIGH
-
 from pytrek.LocateResources import LocateResources
 from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
@@ -53,9 +51,11 @@ class EnterpriseMediator(BaseMediator):
 
         targetCoordinates:     Coordinates = self._computer.computeSectorCoordinates(x=arcadePoint.x, y=arcadePoint.y)
         enterpriseCoordinates: Coordinates = self._gameState.currentSectorCoordinates
+        soundVolume:           float      = self._gameSettings.soundVolume.value
+
         if targetCoordinates == enterpriseCoordinates:
             self._messageConsole.displayMessage("WTF.  You are already here!")
-            self._soundUnableToComply.play(volume=SOUND_VOLUME_HIGH)
+            self._soundUnableToComply.play(volume=soundVolume)
         else:
             startingPoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(enterpriseCoordinates)
             endPoint:      ArcadePoint = arcadePoint
@@ -66,10 +66,10 @@ class EnterpriseMediator(BaseMediator):
                 quadrant.enterprise.inMotion    = True
                 quadrant.enterpriseCoordinates = targetCoordinates
                 self._gameEngine.impulse(newCoordinates=targetCoordinates, quadrant=quadrant, enterprise=quadrant.enterprise)
-                self._soundImpulse.play(volume=SOUND_VOLUME_HIGH)
+                self._soundImpulse.play(volume=soundVolume)
             else:
                 self._messageConsole.displayMessage(f'Destination is blocked by: {results.obstacle.id}')
-                self._soundRepeatRequest.play(volume=SOUND_VOLUME_HIGH)
+                self._soundRepeatRequest.play(volume=soundVolume)
                 # TODO This cost "some" energy
 
         # StarTrekScreen.quitIfTimeExpired()

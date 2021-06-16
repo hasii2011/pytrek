@@ -17,6 +17,7 @@ from pytrek.settings.GameLevelSettings import GameLevelSettings
 from pytrek.settings.LimitsSettings import LimitsSettings
 from pytrek.settings.PowerSettings import PowerSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
+from pytrek.settings.SoundVolume import SoundVolume
 
 
 class GameSettings(Singleton):
@@ -84,6 +85,14 @@ class GameSettings(Singleton):
     @gameType.setter
     def gameType(self, newValue: GameType):
         self._gameLevel.gameType = newValue
+
+    @property
+    def soundVolume(self) -> SoundVolume:
+        return self._gameLevel.soundVolume
+
+    @soundVolume.setter
+    def soundVolume(self, newValue: SoundVolume):
+        self._gameLevel.soundVolume = newValue
 
     @property
     def gameLengthFactor(self) -> float:

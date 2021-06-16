@@ -32,7 +32,6 @@ from pytrek.mediators.BaseMediator import Torpedoes
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.Constants import DEFAULT_FULL_SHIELDS
-from pytrek.Constants import SOUND_VOLUME_HIGH
 
 from pytrek.LocateResources import LocateResources
 
@@ -124,7 +123,7 @@ class KlingonTorpedoMediator(BaseMediator):
                     self.__pointAtEnterprise(klingon=klingon, enterprise=quadrant.enterprise)
                     self.__fireKlingonTorpedo(klingon=klingon, enterprise=quadrant.enterprise)
                 else:
-                    self._soundKlingonCannotFire.play(volume=SOUND_VOLUME_HIGH)
+                    self._soundKlingonCannotFire.play(volume=self._gameSettings.soundVolume.value)
                     self._messageConsole.displayMessage(f'{klingon.id} cannot shoot, blocked by {lineOfSightResponse.obstacle.id}')
 
                 klingon.lastTimeCheck = currentTime
@@ -296,7 +295,7 @@ class KlingonTorpedoMediator(BaseMediator):
         klingonTorpedo.followers         = self.torpedoFollowers
 
         self.klingonTorpedoes.append(klingonTorpedo)
-        self._soundKlingonTorpedo.play(volume=SOUND_VOLUME_HIGH)
+        self._soundKlingonTorpedo.play(volume=self._gameSettings.soundVolume.value)
         self.logger.info(f'{klingonTorpedo.firedFromPosition=}')
 
     def __pointAtEnterprise(self, klingon: Klingon, enterprise: Enterprise):

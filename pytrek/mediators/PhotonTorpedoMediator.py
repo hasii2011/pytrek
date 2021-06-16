@@ -13,8 +13,6 @@ from arcade import check_for_collision_with_list
 
 from arcade import load_spritesheet
 
-from pytrek.Constants import SOUND_VOLUME_HIGH
-
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
 
@@ -66,6 +64,8 @@ class PhotonTorpedoMediator(BaseMediator):
 
         self._messageConsole.displayMessage("Firing Torpedoes!!")
 
+        soundVolume: float      = self._gameSettings.soundVolume.value
+
         enterprise: Enterprise = quadrant.enterprise
         # klingons:   Klingons   = quadrant.klingons
 
@@ -75,7 +75,7 @@ class PhotonTorpedoMediator(BaseMediator):
 
         if len(enemies) == 0:
             self._messageConsole.displayMessage("Don't waste torpedoes.  Nothing to fire at")
-            self._noKlingonsSound.play(volume=SOUND_VOLUME_HIGH)
+            self._noKlingonsSound.play(volume=soundVolume)
         else:
             startingPoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
             for enemy in enemies:
@@ -87,10 +87,10 @@ class PhotonTorpedoMediator(BaseMediator):
                     self._pointAtEnemy(enterprise=enterprise, enemy=enemy)
                     if self._intelligence.rand() <= self._gameSettings.photonTorpedoMisfireRate:
                         self._messageConsole.displayMessage(f'Torpedo pointed at {enemy} misfired')
-                        self._torpedoMisfire.play(volume=SOUND_VOLUME_HIGH)
+                        self._torpedoMisfire.play(volume=soundVolume)
                     else:
                         self._fireTorpedo(enterprise=enterprise, enemy=enemy)
-                        self._photonTorpedoFired.play(volume=SOUND_VOLUME_HIGH)
+                        self._photonTorpedoFired.play(volume=soundVolume)
                         self._gameState.torpedoCount -= 1
                 else:
                     msg: str = (
@@ -218,7 +218,7 @@ class PhotonTorpedoMediator(BaseMediator):
 
         self._explosions.append(explosion)
 
-        self._explosionSound.play(SOUND_VOLUME_HIGH)
+        self._explosionSound.play(self._gameSettings.soundVolume.value)
 
     def __damageOrKillEnemy(self, enterprise: Enterprise, enemy: Enemy):
 
