@@ -1,8 +1,12 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
 
 from random import choice as randomChoice
+
+from arcade import Sound
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Direction import Direction
@@ -25,6 +29,8 @@ class CommanderMediator(BaseMediator):
         super().__init__()
 
         self.logger: Logger = getLogger(__name__)
+
+        self._commanderMove: Sound = cast(Sound, None)
 
         self._loadSounds()
 
@@ -92,6 +98,8 @@ class CommanderMediator(BaseMediator):
         newSector.type   = SectorType.COMMANDER
         newSector.sprite = commander
 
+        self._commanderMove.play(self._gameSettings.soundVolume.value)
+
     def _checkCommanderMoveIsValid(self, quadrant: Quadrant, targetCoordinates: Coordinates) -> bool:
 
         targetSector: Sector = quadrant.getSector(targetCoordinates)
@@ -102,4 +110,5 @@ class CommanderMediator(BaseMediator):
             return False
 
     def _loadSounds(self):
-        pass
+
+        self._commanderMove = self._loadSound(bareFileName='CommanderMove.wav')

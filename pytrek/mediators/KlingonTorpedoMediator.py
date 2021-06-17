@@ -50,6 +50,10 @@ class KlingonTorpedoMediator(BaseMediator):
         self._torpedoFollowers: SpriteList = SpriteList(is_static=True)
         self._misses:           SpriteList = SpriteList()
 
+        self._soundKlingonTorpedo:    Sound = cast(Sound, None)
+        self._soundShieldHit:         Sound = cast(Sound, None)
+        self._soundKlingonCannotFire: Sound = cast(Sound, None)
+
         self._loadSounds()
 
         self._lastTimeCheck: float = self._gameEngine.gameClock / 1000
@@ -262,17 +266,9 @@ class KlingonTorpedoMediator(BaseMediator):
 
     def _loadSounds(self):
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='klingonTorpedo.wav')
-        self._soundKlingonTorpedo: Sound = Sound(file_name=fqFileName)
-        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
-                                                      bareFileName='ShieldHit.wav')
-        self._soundShieldHit: Sound = Sound(file_name=fqFileName)
-
-        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME,
-                                                      bareFileName='KlingonCannotFire.wav')
-
-        self._soundKlingonCannotFire: Sound = Sound(file_name=fqFileName)
+        self._soundKlingonTorpedo    = self._loadSound(bareFileName='klingonTorpedo.wav')
+        self._soundShieldHit         = self._loadSound(bareFileName='ShieldHit.wav')
+        self._soundKlingonCannotFire = self._loadSound(bareFileName='KlingonCannotFire.wav')
 
     def __fireKlingonTorpedo(self, klingon: Klingon, enterprise: Enterprise):
 

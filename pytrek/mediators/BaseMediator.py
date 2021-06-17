@@ -6,6 +6,7 @@ from typing import cast
 from collections import namedtuple
 
 from arcade import PointList
+from arcade import Sound
 from arcade import Sprite
 from arcade import SpriteList
 
@@ -26,13 +27,16 @@ from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
-from pytrek.GameState import GameState
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
 from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
 
 from pytrek.settings.GameSettings import GameSettings
+
+from pytrek.LocateResources import LocateResources
+
+from pytrek.GameState import GameState
 
 LineOfSightResponse = namedtuple('LineOfSightResponse', 'answer, obstacle')
 Torpedoes            = List[SmoothMotion]
@@ -54,6 +58,13 @@ class BaseMediator:
         self._gameSettings:   GameSettings = GameSettings()
 
         self._messageConsole: MessageConsole = MessageConsole()
+
+    def _loadSound(self, bareFileName: str) -> Sound:
+
+        fqFileName: str   = LocateResources.getResourcesPath(LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName)
+        sound:      Sound = Sound(fqFileName)
+
+        return sound
 
     def _hasLineOfSight(self, startingPoint: ArcadePoint, endPoint: ArcadePoint, obstacles: SpriteList) -> LineOfSightResponse:
         """

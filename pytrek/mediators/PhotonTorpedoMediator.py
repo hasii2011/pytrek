@@ -43,6 +43,11 @@ class PhotonTorpedoMediator(BaseMediator):
         self._misses:     SpriteList = SpriteList()
         self._explosions: SpriteList = SpriteList()
 
+        self._photonTorpedoFired: Sound = cast(Sound, None)
+        self._explosionSound:     Sound = cast(Sound, None)
+        self._noKlingonsSound:    Sound = cast(Sound, None)
+        self._torpedoMisfire:     Sound = cast(Sound, None)
+
         self._loadSounds()
 
         self._torpedoTextures: List[Texture] = self._loadPhotonTorpedoExplosions()
@@ -143,10 +148,10 @@ class PhotonTorpedoMediator(BaseMediator):
 
     def _loadSounds(self):
 
-        self._photonTorpedoFired: Sound = self.__loadSound('photonTorpedo.wav')
-        self._explosionSound:     Sound = self.__loadSound('SmallExplosion.wav')
-        self._noKlingonsSound:    Sound = self.__loadSound('inaccurateError.wav')
-        self._torpedoMisfire:     Sound = self.__loadSound('PhotonTorpedoMisfire.wav')
+        self._photonTorpedoFired = self._loadSound('photonTorpedo.wav')
+        self._explosionSound     = self._loadSound('SmallExplosion.wav')
+        self._noKlingonsSound    = self._loadSound('inaccurateError.wav')
+        self._torpedoMisfire     = self._loadSound('PhotonTorpedoMisfire.wav')
 
     def _pointAtEnemy(self, enemy: Enemy, enterprise: Enterprise):
 
@@ -231,10 +236,3 @@ class PhotonTorpedoMediator(BaseMediator):
             self._messageConsole.displayMessage(f'{enemy.id} destroyed')
             enemy.remove_from_sprite_lists()
             enemy.power = 0
-
-    def __loadSound(self, bareFileName: str) -> Sound:
-
-        fqFileName: str   = LocateResources.getResourcesPath(LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName)
-        sound:      Sound = Sound(fqFileName)
-
-        return sound

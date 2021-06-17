@@ -1,4 +1,6 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
 
@@ -28,6 +30,10 @@ class EnterpriseMediator(BaseMediator):
         super().__init__()
 
         self.logger: Logger = getLogger(__name__)
+
+        self._soundImpulse:        Sound = cast(Sound, None)
+        self._soundUnableToComply: Sound = cast(Sound, None)
+        self._soundRepeatRequest:  Sound = cast(Sound, None)
 
         self._loadSounds()
 
@@ -80,14 +86,9 @@ class EnterpriseMediator(BaseMediator):
 
     def _loadSounds(self):
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='impulse.wav')
-        self._soundImpulse: Sound = Sound(file_name=fqFileName)
-
-        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='unableToComply.wav')
-        self._soundUnableToComply: Sound = Sound(file_name=fqFileName)
-
-        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName='pleaseRepeatRequest.wav')
-        self._soundRepeatRequest: Sound = Sound(file_name=fqFileName)
+        self._soundImpulse        = self._loadSound(bareFileName='impulse.wav')
+        self._soundUnableToComply = self._loadSound(bareFileName='unableToComply.wav')
+        self._soundRepeatRequest  = self._loadSound(bareFileName='pleaseRepeatRequest.wav')
 
     def _doWeHaveLineOfSight(self, quadrant: Quadrant, startingPoint: ArcadePoint, endPoint: ArcadePoint) -> LineOfSightResponse:
         """
