@@ -17,8 +17,6 @@ from pytrek.mediators.BaseMediator import LineOfSightResponse
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
-
-from pytrek.LocateResources import LocateResources
 from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
 
@@ -76,7 +74,11 @@ class EnterpriseMediator(BaseMediator):
             else:
                 self._messageConsole.displayMessage(f'Destination is blocked by: {results.obstacle.id}')
                 self._soundRepeatRequest.play(volume=soundVolume)
-                # TODO This cost "some" energy
+
+                stopEnergy: float = self._gameEngine.computeEnergyWhenBlocked(startSector=enterpriseCoordinates, endSector=targetCoordinates)
+                self._gameState.energy -= stopEnergy
+                #
+                # TODO move Enterprise "Close" to where it was 'blocked'
 
         # StarTrekScreen.quitIfTimeExpired()
         # self._dockIfAdjacentToStarbase()

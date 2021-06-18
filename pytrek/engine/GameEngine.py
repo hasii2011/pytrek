@@ -132,6 +132,31 @@ class GameEngine(Singleton):
 
         return quadrantEnergy
 
+    def computeEnergyWhenBlocked(self, startSector: Coordinates, endSector: Coordinates) -> float:
+        """
+        C code:
+        Time = dist/0.095;
+        stopegy = 50.0*dist/Time
+
+        Java:
+            power = 20.0 + 100.0*game.dist;
+            game.energy -= power;
+
+
+        Returns:   The Java calculated version
+
+        """
+        travelDistance: float = self._computer.computeQuadrantDistance(startSector=startSector, endSector=endSector)
+        elapsedTime:    float = travelDistance / 0.095
+
+        self.logger.info(f'{travelDistance=}  {elapsedTime=}')
+        self._gameState.opTime = elapsedTime
+
+        # stopEnergy: float = 50.0 * travelDistance / elapsedTime
+        stopEnergy: float = 20.0 + 100.0 * travelDistance
+
+        return stopEnergy
+
     def computeShieldHit(self, torpedoHit: float) -> ShieldHitData:
         """
 

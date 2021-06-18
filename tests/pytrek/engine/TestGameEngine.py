@@ -49,9 +49,47 @@ class TestGameEngine(TestBase):
             self.assertFalse(computedHit == 0.0, "Can't have non-hit")
             self.logger.info(f"computedHit for {pType.__repr__()}: {computedHit}")
 
-    def testName2(self):
-        """Another test"""
-        pass
+    def testComputeEnergyWhenBlockedNominal(self):
+
+        startSector: Coordinates = Coordinates(x=1, y=1)
+        endSector:   Coordinates = Coordinates(x=5, y=5)
+
+        expectedStopEnergy: float = 76.57
+        decimalPlace:       int   = 2
+
+        stopEnergy: float = self._gameEngine.computeEnergyWhenBlocked(startSector=startSector, endSector=endSector)
+
+        self.logger.info(f'{stopEnergy}')
+
+        self.assertAlmostEqual(expectedStopEnergy, stopEnergy, decimalPlace, 'Nominal test does not compute')
+
+    def testComputeEnergyWhenBlockedMaximum(self):
+
+        startSector: Coordinates = Coordinates(x=1, y=1)
+        endSector:   Coordinates = Coordinates(x=8, y=8)
+
+        expectedStopEnergy: float = 118.99
+        decimalPlace:       int   = 2
+
+        stopEnergy: float = self._gameEngine.computeEnergyWhenBlocked(startSector=startSector, endSector=endSector)
+
+        self.logger.info(f'{stopEnergy}')
+
+        self.assertAlmostEqual(expectedStopEnergy, stopEnergy, decimalPlace, 'Maximum case does not compute')
+
+    def testComputeEnergyWhenBlockedMinimum(self):
+
+        startSector: Coordinates = Coordinates(x=1, y=1)
+        endSector:   Coordinates = Coordinates(x=1, y=2)
+
+        expectedStopEnergy: float = 30.0
+        decimalPlace:       int   = 2
+
+        stopEnergy: float = self._gameEngine.computeEnergyWhenBlocked(startSector=startSector, endSector=endSector)
+
+        self.logger.info(f'{stopEnergy}')
+
+        self.assertAlmostEqual(expectedStopEnergy, stopEnergy, decimalPlace, 'Minimum test does not compute')
 
     def _commonComputeHit(self, playerType: PlayerType) -> float:
 

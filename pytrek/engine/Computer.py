@@ -229,20 +229,20 @@ class Computer(Singleton):
         Returns:    The game distance between the above
         """
 
-        x1 = startCoordinates.x
-        y1 = startCoordinates.y
-        x2 = endCoordinates.x
-        y2 = endCoordinates.y
+        x1: int = startCoordinates.x
+        y1: int = startCoordinates.y
+        x2: int = endCoordinates.x
+        y2: int = endCoordinates.y
 
         self.logger.debug(f"{x1=} {y1=} {x2=} {y2=}")
 
-        deltaX = x2 - x1
-        deltaY = y2 - y1
+        deltaX: int = x2 - x1
+        deltaY: int = y2 - y1
         self.logger.debug(f"{deltaX=} {deltaY=}")
 
-        distance = travelFactor * sqrt((deltaX * deltaX) + (deltaY * deltaY))
+        distance: float = travelFactor * sqrt((deltaX * deltaX) + (deltaY * deltaY))
 
-        self.logger.debug(f"Quadrant Distance: {distance}")
+        self.logger.debug(f"{distance=}")
 
         return distance
 

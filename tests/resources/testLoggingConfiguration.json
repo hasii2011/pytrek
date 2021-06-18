@@ -43,10 +43,19 @@
             "level": "WARNING",
             "propagate": "False"
         },
+        "tests.pytrek.engine.TestGameEngine": {
+            "level": "INFO",
+            "propagate": "False"
+        },
         "TestSmoothMotion": {
             "level": "WARNING",
             "propagate": "False"
         },
+        "pytrek.engine.GameEngine": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+
         "pytrek.engine.Intelligence": {
             "level": "WARNING",
             "propagate": "False"
