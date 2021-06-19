@@ -12,6 +12,8 @@ class DebugSettings(BaseSubSetting):
 
     DEBUG_ADD_KLINGONS:             str = 'debug_add_klingons'
     DEBUG_KLINGON_COUNT:            str = 'debug_klingon_count'
+    DEBUG_ADD_COMMANDERS:           str = 'debug_add_commanders'
+    DEBUG_COMMANDER_COUNT:          str = 'debug_commander_count'
     DEBUG_PRINT_KLINGON_PLACEMENT:  str = 'debug_print_klingon_placement'
     DEBUG_ADD_PLANET:               str = 'debug_add_planet'
 
@@ -21,6 +23,8 @@ class DebugSettings(BaseSubSetting):
     DEBUG_SETTINGS: SettingsNameValues = {
         DEBUG_ADD_KLINGONS:             'False',
         DEBUG_KLINGON_COUNT:            '2',
+        DEBUG_ADD_COMMANDERS:           'False',
+        DEBUG_COMMANDER_COUNT:          '2',
         DEBUG_PRINT_KLINGON_PLACEMENT:  'False',
         DEBUG_COLLECT_KLINGON_QUADRANT_COORDINATES: 'False',
         DEBUG_ANNOUNCE_QUADRANT_CREATION:           'False',
@@ -41,6 +45,15 @@ class DebugSettings(BaseSubSetting):
         self._settingsCommon.addMissingSettings(sectionName=DebugSettings.DEBUG_SECTION, nameValues=DebugSettings.DEBUG_SETTINGS)
 
     @property
+    def debugAddKlingons(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_KLINGONS)
+
+    @debugAddKlingons.setter
+    def debugAddKlingons(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_KLINGONS, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
     def debugKlingonCount(self) -> int:
         return self._config.getint(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_KLINGON_COUNT)
 
@@ -50,13 +63,12 @@ class DebugSettings(BaseSubSetting):
         self._settingsCommon.saveSettings()
 
     @property
-    def debugAddKlingons(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_KLINGONS)
+    def debugAddCommanders(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_COMMANDERS)
 
-    @debugAddKlingons.setter
-    def debugAddKlingons(self, newValue: bool):
-        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_KLINGONS, str(newValue))
-        self._settingsCommon.saveSettings()
+    @property
+    def debugCommanderCount(self) -> int:
+        return self._config.getint(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_COMMANDER_COUNT)
 
     @property
     def debugPrintKlingonPlacement(self) -> bool:

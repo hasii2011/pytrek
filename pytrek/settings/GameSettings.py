@@ -115,12 +115,20 @@ class GameSettings(Singleton):
         return self._factors.maxKlingonFiringInterval
 
     @property
-    def minCommanderUpdateInterval(self) -> int:
-        return self._factors.minCommanderUpdateInterval
+    def minCommanderMoveInterval(self) -> int:
+        return self._factors.minCommanderMoveInterval
 
     @property
-    def maxCommanderUpdateInterval(self) -> int:
-        return self._factors.maxCommanderUpdateInterval
+    def maxCommanderMoveInterval(self) -> int:
+        return self._factors.maxCommanderMoveInterval
+
+    @property
+    def minKlingonMoveInterval(self) -> int:
+        return self._factors.minKlingonMoveInterval
+
+    @property
+    def maxKlingonMoveInterval(self) -> int:
+        return self._factors.maxKlingonMoveInterval
 
     @property
     def basicMissDisplayInterval(self) -> int:
@@ -131,6 +139,14 @@ class GameSettings(Singleton):
         return self._factors.photonTorpedoMisfireRate
 
     @property
+    def debugAddKlingons(self) -> bool:
+        return self._debug.debugAddKlingons
+
+    @debugAddKlingons.setter
+    def debugAddKlingons(self, newValue: bool):
+        self._debug.debugAddKlingons = newValue
+
+    @property
     def debugKlingonCount(self) -> int:
         return self._debug.debugKlingonCount
 
@@ -139,12 +155,12 @@ class GameSettings(Singleton):
         self._debug.debugKlingonCount = newValue
 
     @property
-    def debugAddKlingons(self) -> bool:
-        return self._debug.debugAddKlingons
+    def debugAddCommanders(self) -> bool:
+        return self._debug.debugAddCommanders
 
-    @debugAddKlingons.setter
-    def debugAddKlingons(self, newValue: bool):
-        self._debug.debugAddKlingons = newValue
+    @property
+    def debugCommanderCount(self) -> int:
+        return self._debug.debugCommanderCount
 
     @property
     def debugPrintKlingonPlacement(self) -> bool:

@@ -142,39 +142,11 @@ class PyTrekView(View):
         self._statusConsole    = StatusConsole(gameView=self)
         self._messageConsole   = MessageConsole()
 
-        self._quadrantMediator.playerList       = playerList
+        self._quadrantMediator.playerList = playerList
 
-        if self._gameSettings.debugAddKlingons is True:
-            numToAdd: int = self._gameSettings.debugKlingonCount
-            for x in range(numToAdd):
-                self._quadrant.addKlingon()
-                self._gameState.remainingKlingons += numToAdd
+        self._doDebugActions()
 
-        # TODO:  Add debug flag to control this
-        self._quadrant.addCommander()
-
-        if self._quadrant.klingonCount > 0:
-            self._gameState.shipCondition = ShipCondition.Red
-            klingonSprites: SpriteList = SpriteList()
-            for klingon in self._quadrant._klingons:
-                klingonSprites.append(klingon)
-
-            self._quadrantMediator.klingonList = klingonSprites
-        else:
-            self._quadrantMediator.klingonList = SpriteList()
-
-        if self._quadrant.commanderCount > 0:
-            self._gameState.shipCondition = ShipCondition.Red
-            commanderSprites: SpriteList = SpriteList()
-            for commander in self._quadrant._commanders:
-                commanderSprites.append(commander)
-
-            self._quadrantMediator.commanderList = commanderSprites
-        else:
-            self._quadrantMediator.commanderList = SpriteList()
-
-        if self._gameSettings.debugAddPlanet is True:
-            self._quadrant.addPlanet()
+        self._makeEnemySpriteLists()
 
         self.logger.info(f'Setup Complete')
 
@@ -283,6 +255,58 @@ class PyTrekView(View):
 
     def _switchViewBack(self):
         self.window.show_view(self)
+
+    def _doDebugActions(self):
+
+        self.__doEnemyDebugActions()
+
+        if self._gameSettings.debugAddPlanet is True:
+            self._quadrant.addPlanet()
+
+    def _makeEnemySpriteLists(self):
+        """
+        Place enemies in the appropriate sprite lists
+        """
+        self.__makeKlingonSpriteList()
+        self.__makeCommanderSpriteList()
+
+    def __makeCommanderSpriteList(self):
+        if self._quadrant.commanderCount > 0:
+            self._gameState.shipCondition = ShipCondition.Red
+            commanderSprites: SpriteList = SpriteList()
+            for commander in self._quadrant._commanders:
+                commanderSprites.append(commander)
+
+            self._quadrantMediator.commanderList = commanderSprites
+        else:
+            self._quadrantMediator.commanderList = SpriteList()
+
+    def __makeKlingonSpriteList(self):
+        if self._quadrant.klingonCount > 0:
+            self._gameState.shipCondition = ShipCondition.Red
+            klingonSprites: SpriteList = SpriteList()
+            for klingon in self._quadrant._klingons:
+                klingonSprites.append(klingon)
+
+            self._quadrantMediator.klingonList = klingonSprites
+        else:
+            self._quadrantMediator.klingonList = SpriteList()
+
+    def __doEnemyDebugActions(self):
+
+        if self._gameSettings.debugAddKlingons is True:
+            numKlingons: int = self._gameSettings.debugKlingonCount
+            for x in range(numKlingons):
+                self._quadrant.addKlingon()
+
+            self._gameState.remainingKlingons += numKlingons
+
+        if self._gameSettings.debugAddCommanders is True:
+            nCommanders: int = self._gameSettings.debugCommanderCount
+            for x in range(nCommanders):
+                self._quadrant.addCommander()
+
+            self._gameState.remainingCommanders += nCommanders
 
 
 def main():
