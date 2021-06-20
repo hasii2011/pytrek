@@ -24,6 +24,7 @@ from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.mediators.CommanderMediator import CommanderMediator
 
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
+from pytrek.mediators.KlingonMediator import KlingonMediator
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 from pytrek.mediators.PhotonTorpedoMediator import PhotonTorpedoMediator
 
@@ -51,6 +52,7 @@ class QuadrantMediator(Singleton):
         self._ktm: KlingonTorpedoMediator = KlingonTorpedoMediator()
         self._ptm: PhotonTorpedoMediator  = PhotonTorpedoMediator()
         self._em:  EnterpriseMediator     = EnterpriseMediator()
+        self._km:  KlingonMediator        = KlingonMediator()
         self._cm:  CommanderMediator      = CommanderMediator()
 
         self._playerList:    SpriteList = SpriteList()
@@ -127,10 +129,10 @@ class QuadrantMediator(Singleton):
 
                 if sectorType != SectorType.EMPTY:
                     if sectorType == SectorType.ENTERPRISE:
-                        # self._updateEnterprise(quadrant=quadrant, gamePiece=gamePiece)
                         self._em.update(quadrant=quadrant)
                     elif sectorType == SectorType.KLINGON:
-                        self._updateKlingon(gamePiece=gamePiece)
+                        # self._updateKlingon(gamePiece=gamePiece)
+                        self._km.update(quadrant=quadrant, klingon=cast(Klingon, gamePiece))
                     elif self._noUpdateSector(sectorType=sectorType) is True:
                         pass
                     elif sectorType == SectorType.COMMANDER:

@@ -7,7 +7,6 @@ from logging import getLogger
 from arcade import Sound
 
 from pytrek.engine.ArcadePoint import ArcadePoint
-from pytrek.engine.PlayerType import PlayerType
 
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
@@ -30,16 +29,16 @@ class KlingonMediator(BaseEnemyMediator):
 
     def update(self, quadrant: Quadrant, klingon: Klingon):
 
-        playerType: PlayerType = self._gameState.playerType
-        if playerType == PlayerType.Emeritus or playerType == PlayerType.Expert:
-            pass    # TODO Klingons move
-            # self._enemyMovedUpdateQuadrant(enemy=klingon, newPosition=, oldPosition=, quadrant=quadrant)
-        else:
+        # playerType: PlayerType = self._gameState.playerType
+        # if playerType == PlayerType.Emeritus or playerType == PlayerType.Expert:
+        #     pass    # TODO Klingons move
+        # else:
+        arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(klingon.gameCoordinates)
 
-            arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(klingon.gameCoordinates)
-
-            klingon.center_x = arcadePoint.x
-            klingon.center_y = arcadePoint.y
+        self.logger.debug(f'{arcadePoint=}')
+        # assert arcadePoint.y == 0.0, 'This sprite is off quadrant'
+        klingon.center_x = arcadePoint.x
+        klingon.center_y = arcadePoint.y
 
     def _loadSounds(self):
         pass
