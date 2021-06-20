@@ -21,6 +21,7 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.gui.MessageConsole import MessageConsole
+from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
 
 from pytrek.gui.gamepieces.BasicMiss import BasicMiss
 from pytrek.gui.gamepieces.GamePiece import GamePiece

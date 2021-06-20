@@ -332,7 +332,7 @@ class TestIntelligence(TestBase):
 
         generatedMoveIntervals: List[int] = []
         for x in range(250):
-            moveInterval: int = self.smarty.computeKlingonMoveInterval()
+            moveInterval: int = self.smarty.computeCommanderMoveInterval()
             generatedMoveIntervals.append(moveInterval)
 
         medianCount: int = median(generatedMoveIntervals)
@@ -346,8 +346,8 @@ class TestIntelligence(TestBase):
         )
         self.logger.info(statsStr)
 
-        expectedMinValue: int = self._settings.minCommanderUpdateInterval
-        expectedMaxValue: int = self._settings.maxCommanderUpdateInterval
+        expectedMinValue: int = self._settings.minCommanderMoveInterval
+        expectedMaxValue: int = self._settings.maxCommanderMoveInterval
 
         self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
         self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')

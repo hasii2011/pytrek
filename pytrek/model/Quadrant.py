@@ -237,6 +237,9 @@ class Quadrant:
 
         sector.sprite = klingon
 
+        if sector.coordinates.x == 0 and sector.coordinates.y == 0:
+            print(f'{klingon.id=} is at sector: {sector.coordinates}')
+
         self.logger.debug(f"Placed enemy at quadrant: {self._coordinates} {klingon=}")
         return klingon
 
@@ -249,7 +252,7 @@ class Quadrant:
         sector      = self.getRandomEmptySector()
         sector.type = SectorType.COMMANDER
 
-        moveInterval: int = self._intelligence.computeKlingonMoveInterval()
+        moveInterval: int = self._intelligence.computeCommanderMoveInterval()
         commander         = Commander(coordinates=sector.coordinates, moveInterval=moveInterval)
         cPower            = self._intelligence.computeCommanderPower()
 

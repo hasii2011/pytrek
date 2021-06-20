@@ -19,6 +19,8 @@ class FactorsSettings(BaseSubSetting):
     MAX_KLINGON_FIRING_INTERVAL: str = 'max_klingon_firing_interval'
     MIN_COMMANDER_MOVE_INTERVAL: str = 'min_commander_move_interval'
     MAX_COMMANDER_MOVE_INTERVAL: str = 'max_commander_move_interval'
+    MIN_KLINGON_MOVE_INTERVAL:   str = 'min_klingon_move_interval'
+    MAX_KLINGON_MOVE_INTERVAL:   str = 'max_klingon_move_interval'
     BASIC_MISS_DISPLAY_INTERVAL: str = 'basic_miss_display_interval'
     PHOTON_TORPEDO_MISFIRE_RATE: str = 'photon_torpedo_misfire_rate'
 
@@ -28,8 +30,13 @@ class FactorsSettings(BaseSubSetting):
         STAR_BASE_MULTIPLIER:   '3.0',
         MIN_KLINGON_FIRING_INTERVAL: '7',
         MAX_KLINGON_FIRING_INTERVAL: '15',
+
         MIN_COMMANDER_MOVE_INTERVAL: '3',
         MAX_COMMANDER_MOVE_INTERVAL: '10',
+
+        MIN_KLINGON_MOVE_INTERVAL:    '5',
+        MAX_KLINGON_MOVE_INTERVAL:    '12',
+
         BASIC_MISS_DISPLAY_INTERVAL: '5',
         PHOTON_TORPEDO_MISFIRE_RATE: '0.2'
     }
@@ -68,12 +75,20 @@ class FactorsSettings(BaseSubSetting):
         return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_KLINGON_FIRING_INTERVAL)
 
     @property
-    def minCommanderUpdateInterval(self) -> int:
+    def minCommanderMoveInterval(self) -> int:
         return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MIN_COMMANDER_MOVE_INTERVAL)
 
     @property
-    def maxCommanderUpdateInterval(self) -> int:
+    def maxCommanderMoveInterval(self) -> int:
         return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_COMMANDER_MOVE_INTERVAL)
+
+    @property
+    def minKlingonMoveInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MIN_KLINGON_MOVE_INTERVAL)
+
+    @property
+    def maxKlingonMoveInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_KLINGON_MOVE_INTERVAL)
 
     @property
     def basicMissDisplayInterval(self) -> int:

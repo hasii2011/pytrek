@@ -19,10 +19,10 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
 
-from pytrek.mediators.BaseMediator import BaseMediator
+from pytrek.mediators.BaseEnemyMediator import BaseEnemyMediator
 
 
-class CommanderMediator(BaseMediator):
+class CommanderMediator(BaseEnemyMediator):
 
     def __init__(self):
 
@@ -49,8 +49,8 @@ class CommanderMediator(BaseMediator):
                     newPosition: Coordinates = self.evade(currentLocation=oldPosition)
 
             self.logger.info(f'Commander moves from {oldPosition} to {newPosition}')
-
-            self._commanderMovedUpdateQuadrant(commander, newPosition, oldPosition, quadrant)
+            self._enemyMovedUpdateQuadrant(quadrant=quadrant, enemy=commander, newPosition=newPosition, oldPosition=oldPosition)
+            self._commanderMove.play(self._gameSettings.soundVolume.value)
 
             commander.gameCoordinates = newPosition
 
@@ -85,20 +85,6 @@ class CommanderMediator(BaseMediator):
         Returns:  A random direction
         """
         return randomChoice(list(Direction))
-
-    def _commanderMovedUpdateQuadrant(self, commander: Commander, newPosition: Coordinates, oldPosition: Coordinates, quadrant: Quadrant):
-
-        oldSector: Sector = quadrant.getSector(sectorCoordinates=oldPosition)
-
-        oldSector.type   = SectorType.EMPTY
-        oldSector.sprite = None
-
-        newSector: Sector = quadrant.getSector(sectorCoordinates=newPosition)
-
-        newSector.type   = SectorType.COMMANDER
-        newSector.sprite = commander
-
-        self._commanderMove.play(self._gameSettings.soundVolume.value)
 
     def _checkCommanderMoveIsValid(self, quadrant: Quadrant, targetCoordinates: Coordinates) -> bool:
 

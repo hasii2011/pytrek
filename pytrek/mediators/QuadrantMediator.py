@@ -10,10 +10,12 @@ from arcade import SpriteList
 
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
+from pytrek.GameState import GameState
 
 from pytrek.engine.Computer import Computer
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
+# from pytrek.engine.PlayerType import PlayerType
 
 from pytrek.gui.gamepieces.Commander import Commander
 
@@ -43,6 +45,7 @@ class QuadrantMediator(Singleton):
         self.logger: Logger = getLogger(__name__)
 
         self._gameEngine: GameEngine = GameEngine()
+        self._gameState:  GameState  = GameState()
         self._computer:   Computer   = Computer()
 
         self._ktm: KlingonTorpedoMediator = KlingonTorpedoMediator()
@@ -137,11 +140,23 @@ class QuadrantMediator(Singleton):
                         assert False, 'Bad Game Piece'
 
     def _updateKlingon(self, gamePiece: GamePiece):
+        """
+        TODO: Eventually, move this to the KlingonTorpedoMediator
 
+        Args:
+            gamePiece:
+
+        """
+        # playerType: PlayerType = self._gameState.playerType
+        # if playerType == PlayerType.Emeritus or playerType == PlayerType.Expert:
+        #     pass    # TODO Klingons move
+        # else:
         klingon: Klingon = cast(Klingon, gamePiece)
 
         arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(klingon.gameCoordinates)
 
+        self.logger.warning(f'{arcadePoint=}')
+        # assert arcadePoint.y == 0.0, 'This sprite is off quadrant'
         klingon.center_x = arcadePoint.x
         klingon.center_y = arcadePoint.y
 

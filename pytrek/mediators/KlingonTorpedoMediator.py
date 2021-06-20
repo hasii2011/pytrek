@@ -33,8 +33,6 @@ from pytrek.model.Quadrant import Quadrant
 
 from pytrek.Constants import DEFAULT_FULL_SHIELDS
 
-from pytrek.LocateResources import LocateResources
-
 
 class KlingonTorpedoMediator(BaseMediator):
 
@@ -253,7 +251,7 @@ class KlingonTorpedoMediator(BaseMediator):
 
         results: LineOfSightResponse = self._hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
 
-        self.logger.info(f'{results=}')
+        self.logger.debug(f'{results=}')
 
         return results
 

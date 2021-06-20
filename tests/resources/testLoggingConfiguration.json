@@ -47,6 +47,10 @@
             "level": "INFO",
             "propagate": "False"
         },
+        "tests.pytrek.gui.TestGamePiece": {
+            "level": "INFO",
+            "propagate": "False"
+        },
         "TestSmoothMotion": {
             "level": "WARNING",
             "propagate": "False"
