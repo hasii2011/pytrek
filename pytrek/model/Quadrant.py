@@ -229,7 +229,8 @@ class Quadrant:
         sector        = self.getRandomEmptySector()
         sector.type   = SectorType.KLINGON
 
-        klingon     = Klingon(coordinates=sector.coordinates)
+        moveInterval: int      = self._intelligence.computeKlingonMoveInterval()
+        klingon     = Klingon(coordinates=sector.coordinates, moveInterval=moveInterval)
 
         klingon.power          = self._intelligence.computeKlingonPower()
         klingon.firingInterval = self._intelligence.computeKlingonFiringInterval()

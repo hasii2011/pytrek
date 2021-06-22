@@ -3,9 +3,9 @@ from logging import Logger
 from logging import getLogger
 
 from pytrek.engine.ArcadePoint import ArcadePoint
+
 from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.BaseEnemy import EnemyId
-
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.model.Coordinates import Coordinates

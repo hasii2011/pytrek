@@ -328,7 +328,7 @@ class TestIntelligence(TestBase):
 
         self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
-    def testComputeKlingonMoveInterval(self):
+    def testComputeCommanderMoveInterval(self):
 
         generatedMoveIntervals: List[int] = []
         for x in range(250):
@@ -348,6 +348,31 @@ class TestIntelligence(TestBase):
 
         expectedMinValue: int = self._settings.minCommanderMoveInterval
         expectedMaxValue: int = self._settings.maxCommanderMoveInterval
+
+        self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
+        self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')
+
+    def testComputeKlingonMoveInterval(self):
+
+        generatedMoveIntervals: List[int] = []
+
+        for x in range(250):
+            moveInterval: int = self.smarty.computeKlingonMoveInterval()
+            generatedMoveIntervals.append(moveInterval)
+
+        medianCount: int = median(generatedMoveIntervals)
+        meanCount:   int = mean(generatedMoveIntervals)
+        modeCount:   int = mode(generatedMoveIntervals)
+
+        minValue: int = min(generatedMoveIntervals)
+        maxValue: int = max(generatedMoveIntervals)
+        statsStr: str = (
+            f'median={medianCount} average={meanCount} mode={modeCount} {minValue=} {maxValue=}'
+        )
+        self.logger.info(statsStr)
+
+        expectedMinValue: int = self._settings.minKlingonMoveInterval
+        expectedMaxValue: int = self._settings.maxKlingonMoveInterval
 
         self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
         self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')

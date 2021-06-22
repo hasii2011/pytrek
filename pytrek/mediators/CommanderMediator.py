@@ -4,15 +4,9 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from random import choice as randomChoice
-
 from arcade import Sound
 
-from pytrek.engine.ArcadePoint import ArcadePoint
-from pytrek.engine.Direction import Direction
-
 from pytrek.gui.gamepieces.Commander import Commander
-from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -41,52 +35,29 @@ class CommanderMediator(BaseEnemyMediator):
         if deltaClockTime > commander.moveInterval:
 
             oldPosition: Coordinates = commander.gameCoordinates
-            newPosition: Coordinates = self.evade(currentLocation=oldPosition)
-            while True:
-                if self._checkCommanderMoveIsValid(quadrant=quadrant, targetCoordinates=newPosition):
-                    break
-                else:
-                    newPosition: Coordinates = self.evade(currentLocation=oldPosition)
+            newPosition: Coordinates = self._keepTryingToMoveUntilValid(quadrant, oldPosition)
 
             self.logger.info(f'Commander moves from {oldPosition} to {newPosition}')
-            self._enemyMovedUpdateQuadrant(quadrant=quadrant, enemy=commander, newPosition=newPosition, oldPosition=oldPosition)
-            self._commanderMove.play(self._gameSettings.soundVolume.value)
+            self._enemyMovedUpdateQuadrant(quadrant=quadrant, enemy=commander, newSectorCoordinates=newPosition, oldSectorCoordinates=oldPosition)
 
             commander.gameCoordinates = newPosition
-
-            arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(newPosition)
-
-            commander.center_x = arcadePoint.x
-            commander.center_y = arcadePoint.y
-
+            self._toArcadePoint(commander, newPosition)
             commander.timeSinceMovement = currentTime
 
-    def evade(self, currentLocation: Coordinates) -> Coordinates:
-        """
-        Move commander around to avoid torpedoes
+            self._commanderMove.play(self._gameSettings.soundVolume.value)
 
-        Args:
-            currentLocation:
+    def _keepTryingToMoveUntilValid(self, quadrant: Quadrant, oldPosition: Coordinates):
 
-        Returns:  New random coordinates
-        """
+        newPosition: Coordinates = self._evade(currentLocation=oldPosition)
+
         while True:
-            pDirection:     Direction   = self._randomDirection_()
-            newCoordinates: Coordinates = currentLocation.newCoordinates(pDirection)
-
-            self.logger.debug(f"Random direction {pDirection.name}: currentLocation: {currentLocation} newCoordinates {newCoordinates}")
-            if newCoordinates.valid():
+            if self._checkEnemyMoveIsValid(quadrant=quadrant, targetCoordinates=newPosition):
                 break
-        return newCoordinates
+            else:
+                newPosition: Coordinates = self._evade(currentLocation=oldPosition)
+        return newPosition
 
-    def _randomDirection_(self) -> Direction:
-        """
-
-        Returns:  A random direction
-        """
-        return randomChoice(list(Direction))
-
-    def _checkCommanderMoveIsValid(self, quadrant: Quadrant, targetCoordinates: Coordinates) -> bool:
+    def _checkEnemyMoveIsValid(self, quadrant: Quadrant, targetCoordinates: Coordinates) -> bool:
 
         targetSector: Sector = quadrant.getSector(targetCoordinates)
         if targetSector.type == SectorType.EMPTY:
