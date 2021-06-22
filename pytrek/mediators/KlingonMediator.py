@@ -46,7 +46,7 @@ class KlingonMediator(BaseEnemyMediator):
                 self._toArcadePoint(klingon, newPosition)
                 klingon.timeSinceMovement = currentTime
 
-                # self._klingonMove.play(self._gameSettings.soundVolume.value)
+                self._klingonMove.play(self._gameSettings.soundVolume.value)
 
         else:
             arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(klingon.gameCoordinates)
@@ -57,4 +57,5 @@ class KlingonMediator(BaseEnemyMediator):
             klingon.center_y = arcadePoint.y
 
     def _loadSounds(self):
-        pass
+
+        self._klingonMove = self._loadSound('KlingonMove.wav')
