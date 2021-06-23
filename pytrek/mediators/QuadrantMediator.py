@@ -15,7 +15,6 @@ from pytrek.GameState import GameState
 from pytrek.engine.Computer import Computer
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
-# from pytrek.engine.PlayerType import PlayerType
 
 from pytrek.gui.gamepieces.Commander import Commander
 
@@ -40,7 +39,6 @@ class QuadrantMediator(Singleton):
     """
     This class avoids putting UI logic (arcade) in the model class, Quadrant.
     """
-
     def init(self, *args, **kwds):
 
         self.logger: Logger = getLogger(__name__)
@@ -99,7 +97,7 @@ class QuadrantMediator(Singleton):
         self.commanderList.draw()
         self._ktm.draw()
         if quadrant.hasPlanet is True:
-            quadrant._planet.draw()
+            quadrant.planet.draw()
 
         self._ptm.draw(quadrant=quadrant)
 

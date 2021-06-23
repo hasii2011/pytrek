@@ -47,6 +47,7 @@ class KlingonTorpedoMediator(BaseMediator):
         self._klingonTorpedoes: SpriteList = SpriteList()
         self._torpedoFollowers: SpriteList = SpriteList(is_static=True)
         self._misses:           SpriteList = SpriteList()
+        self._klingonList:      SpriteList = cast (SpriteList, None)
 
         self._soundKlingonTorpedo:    Sound = cast(Sound, None)
         self._soundShieldHit:         Sound = cast(Sound, None)
@@ -171,7 +172,8 @@ class KlingonTorpedoMediator(BaseMediator):
                 self._gameEngine.degradeShields(shieldAbsorptionValue)
                 shieldPercentage: int = round((self._gameState.shieldEnergy / DEFAULT_FULL_SHIELDS) * 100)
 
-                self._messageConsole.displayMessage(f"Shields at {shieldPercentage} percent.  Enterprise energy degraded by: {degradedTorpedoHitValue:.2f}")
+                shieldMsg: str = f"Shields at {shieldPercentage} percent.  Enterprise energy degraded by: {degradedTorpedoHitValue:.2f}"
+                self._messageConsole.displayMessage(shieldMsg)
 
                 self._gameEngine.degradeEnergyLevel(shieldHitData.degradedTorpedoHitValue)
 
@@ -244,7 +246,8 @@ class KlingonTorpedoMediator(BaseMediator):
         obstacles: SpriteList = SpriteList()
 
         if quadrant.hasPlanet is True:
-            obstacles.append(quadrant._planet)
+            obstacles.append(quadrant.planet)
+
         otherKlingons: Enemies = self.__buildEligibleKlingonObstacles(shooter=shooter, klingons=quadrant.klingons)
 
         obstacles.extend(otherKlingons)

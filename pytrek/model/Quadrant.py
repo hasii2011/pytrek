@@ -169,6 +169,10 @@ class Quadrant:
     def hasPlanet(self) -> bool:
         return self._hasPlanet
 
+    @property
+    def planet(self) -> Planet:
+        return self._planet
+
     def getSector(self, sectorCoordinates: Coordinates) -> Sector:
         """
 
