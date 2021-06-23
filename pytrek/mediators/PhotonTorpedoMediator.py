@@ -47,6 +47,7 @@ class PhotonTorpedoMediator(BaseMediator):
         self._explosionSound:     Sound = cast(Sound, None)
         self._noKlingonsSound:    Sound = cast(Sound, None)
         self._torpedoMisfire:     Sound = cast(Sound, None)
+        self._torpedoMiss:        Sound = cast(Sound, None)
 
         self._loadSounds()
 
@@ -142,6 +143,7 @@ class PhotonTorpedoMediator(BaseMediator):
 
             miss: PhotonTorpedoMiss = PhotonTorpedoMiss(placedTime=self._gameEngine.gameClock)
             self._placeMiss(quadrant=quadrant, torpedoDud=torpedoDud, miss=miss)
+            self._torpedoMiss.play(self._gameSettings.soundVolume.value)
             self._misses.append(miss)
 
             torpedoDud.remove_from_sprite_lists()
@@ -152,6 +154,7 @@ class PhotonTorpedoMediator(BaseMediator):
         self._explosionSound     = self._loadSound('SmallExplosion.wav')
         self._noKlingonsSound    = self._loadSound('inaccurateError.wav')
         self._torpedoMisfire     = self._loadSound('PhotonTorpedoMisfire.wav')
+        self._torpedoMiss        = self._loadSound('PhotonTorpedoMiss.wav')
 
     def _pointAtEnemy(self, enemy: Enemy, enterprise: Enterprise):
 
