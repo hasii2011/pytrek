@@ -215,7 +215,7 @@ class KlingonTorpedoMediator(BaseMediator):
         for follower in self.torpedoFollowers:
             follower: KlingonTorpedoFollower = cast(KlingonTorpedoFollower, follower)
             if follower.following == klingonTorpedo.id:
-                self.logger.debug(f'Removing follower: {follower.uuid}')
+                self.logger.debug(f'Removing follower: {follower.id}')
                 followersToRemove.append(follower)
 
         for followerToRemove in followersToRemove:

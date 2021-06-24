@@ -11,4 +11,5 @@ Enemies = NewType('Enemies', List[Enemy])
 
 PhotonTorpedoId = NewType('PhotonTorpedoId', str)
 
-EnemyTorpedoId = NewType('EnemyTorpedoId', str)
+EnemyTorpedoId  = NewType('EnemyTorpedoId', str)
+EnemyFollowerId = NewType('EnemyFollowerId', str)

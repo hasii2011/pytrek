@@ -1,8 +1,6 @@
 
-
-from uuid import uuid4
-
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePieceTypes import EnemyFollowerId
 from pytrek.gui.gamepieces.GamePieceTypes import EnemyTorpedoId
 
 
@@ -10,16 +8,20 @@ class KlingonTorpedoFollower(GamePiece):
 
     FILENAME: str = 'KlingonTorpedoFollower.png'
 
+    nextId: int = 0
+
     def __init__(self):
 
         super().__init__(filename=KlingonTorpedoFollower.FILENAME, scale=0.1)
 
-        self._uuid:      uuid4 = uuid4()            # My ID
-        self._following: EnemyTorpedoId   = EnemyTorpedoId('')
+        KlingonTorpedoFollower.nextId += 1
+
+        self._id:       EnemyFollowerId = EnemyFollowerId(f'KlingonTorpedoFollower-{KlingonTorpedoFollower.nextId}')
+        self._following: EnemyTorpedoId = EnemyTorpedoId('')
 
     @property
-    def uuid(self) -> uuid4:
-        return self._uuid
+    def id(self) -> EnemyFollowerId:
+        return self._id
 
     @property
     def following(self) -> EnemyTorpedoId:
@@ -34,4 +36,3 @@ class KlingonTorpedoFollower(GamePiece):
             newValue:
         """
         self._following = newValue
-
