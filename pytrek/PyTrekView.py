@@ -9,6 +9,7 @@ import logging.config
 from json import load as jsonLoad
 
 import arcade
+# noinspection PyPackageRequirements
 from PIL import ImageFont
 
 # from arcade import PhysicsEngineSimple
@@ -81,7 +82,6 @@ class PyTrekView(View):
         self.background:  Texture    = cast(Texture, None)
         self._enterprise: Enterprise = cast(Enterprise, None)
         # If you have sprite lists, you should create them here and set them to None
-        # self.physicsEngine: PhysicsEnginePlatformer = cast(PhysicsEnginePlatformer, None)
         # self.physicsEngine: PhysicsEngineSimple = cast(PhysicsEngineSimple, None)
 
         self._intelligence: Intelligence = cast(Intelligence, None)
@@ -102,7 +102,8 @@ class PyTrekView(View):
         #
         # I am cheating here because I know arcade use PIL under the covers
         #
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.FONT_RESOURCES_PACKAGE_NAME, bareFileName=FIXED_WIDTH_FONT_FILENAME)
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.FONT_RESOURCES_PACKAGE_NAME,
+                                                           bareFileName=FIXED_WIDTH_FONT_FILENAME)
         ImageFont.truetype(fqFileName)
 
     def setup(self):
@@ -111,10 +112,10 @@ class PyTrekView(View):
 
         # self._backgroundSprite: QuadrantBackground = QuadrantBackground()
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='QuadrantBackground.png')
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
+                                                           bareFileName='QuadrantBackground.png')
         self.background = load_texture(fqFileName)
         # Create the 'physics engine'
-        # self.physicsEngine = PhysicsEnginePlatformer(self.enterprise, self.hardSpriteList, gravity_constant=GRAVITY)
         # self.physicsEngine = PhysicsEngineSimple(self._enterprise, self._hardSpriteList)
 
         self._enterprise: Enterprise = Enterprise()
@@ -199,6 +200,7 @@ class PyTrekView(View):
         elif pressedKey == arcade.key.Q:
             import os
             # noinspection PyUnresolvedReferences
+            # noinspection PyProtectedMember
             os._exit(0)
         elif pressedKey == key.G:
             galaxyView: GalaxyView = GalaxyView(viewCompleteCallback=self._switchViewBack)
@@ -274,7 +276,7 @@ class PyTrekView(View):
         if self._quadrant.commanderCount > 0:
             self._gameState.shipCondition = ShipCondition.Red
             commanderSprites: SpriteList = SpriteList()
-            for commander in self._quadrant._commanders:
+            for commander in self._quadrant.commanders:
                 commanderSprites.append(commander)
 
             self._quadrantMediator.commanderList = commanderSprites
@@ -285,7 +287,7 @@ class PyTrekView(View):
         if self._quadrant.klingonCount > 0:
             self._gameState.shipCondition = ShipCondition.Red
             klingonSprites: SpriteList = SpriteList()
-            for klingon in self._quadrant._klingons:
+            for klingon in self._quadrant.klingons:
                 klingonSprites.append(klingon)
 
             self._quadrantMediator.klingonList = klingonSprites

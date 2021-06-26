@@ -24,17 +24,17 @@ from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
 from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
 
-from pytrek.mediators.BaseMediator import BaseMediator
 from pytrek.mediators.BaseMediator import LineOfSightResponse
 from pytrek.mediators.BaseMediator import Misses
 from pytrek.mediators.BaseMediator import Torpedoes
+from pytrek.mediators.BaseTorpedoMediator import BaseTorpedoMediator
 
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.Constants import DEFAULT_FULL_SHIELDS
 
 
-class KlingonTorpedoMediator(BaseMediator):
+class KlingonTorpedoMediator(BaseTorpedoMediator):
 
     def __init__(self):
 
@@ -44,71 +44,27 @@ class KlingonTorpedoMediator(BaseMediator):
 
         self._devices: Devices = Devices()
 
-        self._klingonTorpedoes: SpriteList = SpriteList()
-        self._torpedoFollowers: SpriteList = SpriteList(is_static=True)
-        self._misses:           SpriteList = SpriteList()
-        self._klingonList:      SpriteList = cast (SpriteList, None)
-
         self._soundKlingonTorpedo:    Sound = cast(Sound, None)
         self._soundShieldHit:         Sound = cast(Sound, None)
         self._soundKlingonCannotFire: Sound = cast(Sound, None)
 
         self._loadSounds()
 
-        self._lastTimeCheck: float = self._gameEngine.gameClock / 1000
-        self.logger.info(f'{self._lastTimeCheck=}')
-
     def draw(self):
 
-        self.klingonTorpedoes.draw()
+        self.torpedoes.draw()
         self.torpedoFollowers.draw()
         self.torpedoDuds.draw()
 
     def update(self, quadrant: Quadrant):
 
         self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant)
-        self.klingonTorpedoes.update()
+        self.torpedoes.update()
         self.torpedoFollowers.update()
 
         self._handleKlingonTorpedoHits(quadrant)
         self._handleKlingonTorpedoMisses(quadrant)
         self._handleMissRemoval(quadrant, cast(Misses, self._misses))
-
-    @property
-    def klingonTorpedoes(self) -> SpriteList:
-        return self._klingonTorpedoes
-
-    @klingonTorpedoes.setter
-    def klingonTorpedoes(self, newList: SpriteList):
-        """
-        Args:
-            newList:
-        """
-        self._klingonTorpedoes = newList
-
-    @property
-    def torpedoFollowers(self) -> SpriteList:
-        return self._torpedoFollowers
-
-    @torpedoFollowers.setter
-    def torpedoFollowers(self, newValues: SpriteList):
-        self._torpedoFollowers = newValues
-
-    @property
-    def torpedoDuds(self) -> SpriteList:
-        return self._misses
-
-    @torpedoDuds.setter
-    def torpedoDuds(self, newValues: SpriteList):
-        self._misses = newValues
-
-    @property
-    def klingonList(self) -> SpriteList:
-        return self._klingonList
-
-    @klingonList.setter
-    def klingonList(self, newValues: SpriteList):
-        self._klingonList = newValues
 
     def _fireTorpedoesAtEnterpriseIfNecessary(self, quadrant: Quadrant):
 
@@ -143,7 +99,7 @@ class KlingonTorpedoMediator(BaseMediator):
             quadrant:  The current quadrant we are in
         """
 
-        expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=quadrant.enterprise, sprite_list=self.klingonTorpedoes)
+        expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=quadrant.enterprise, sprite_list=self.torpedoes)
         for expendedTorpedo in expendedTorpedoes:
 
             expendedTorpedo: KlingonTorpedo = cast(KlingonTorpedo, expendedTorpedo)
@@ -195,7 +151,7 @@ class KlingonTorpedoMediator(BaseMediator):
 
     def _handleKlingonTorpedoMisses(self, quadrant: Quadrant):
 
-        torpedoDuds: List[KlingonTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self.klingonTorpedoes))
+        torpedoDuds: List[KlingonTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self.torpedoes))
 
         for torpedoDud in torpedoDuds:
             self._removeTorpedoFollowers(klingonTorpedo=torpedoDud)
@@ -291,7 +247,7 @@ class KlingonTorpedoMediator(BaseMediator):
         klingonTorpedo.firedBy           = klingon.id
         klingonTorpedo.followers         = self.torpedoFollowers
 
-        self.klingonTorpedoes.append(klingonTorpedo)
+        self.torpedoes.append(klingonTorpedo)
         self._soundKlingonTorpedo.play(volume=self._gameSettings.soundVolume.value)
         self.logger.info(f'{klingonTorpedo.firedFromPosition=}')
 
