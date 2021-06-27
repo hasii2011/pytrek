@@ -39,7 +39,7 @@ class TestGameEngine(TestBase):
         for pType in PlayerType:
             torpedoHit:     float         = self._commonComputeHit(playerType=pType)
             shieldHitData:  ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=torpedoHit)
-            self.logger.info(f"torpedoHit: f{torpedoHit:.2f}  {pType:19.19}  {shieldHitData}")
+            self.logger.info(f"torpedoHit: {torpedoHit:.2f}  {pType:19.19}  {shieldHitData}")
 
     def testComputeHit(self):
 

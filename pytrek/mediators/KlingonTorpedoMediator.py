@@ -7,7 +7,6 @@ from logging import getLogger
 
 from arcade import Sound
 from arcade import Sprite
-from arcade import SpriteList
 from arcade import check_for_collision_with_list
 
 from pytrek.engine.ArcadePoint import ArcadePoint
@@ -18,13 +17,12 @@ from pytrek.engine.ShieldHitData import ShieldHitData
 
 from pytrek.gui.gamepieces.BaseEnemy import EnemyId
 from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
 from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
 
-from pytrek.mediators.BaseMediator import LineOfSightResponse
 from pytrek.mediators.BaseMediator import Misses
 from pytrek.mediators.BaseMediator import Torpedoes
 from pytrek.mediators.BaseTorpedoMediator import BaseTorpedoMediator
@@ -58,34 +56,13 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
     def update(self, quadrant: Quadrant):
 
-        self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant)
+        self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.klingons)
         self.torpedoes.update()
         self.torpedoFollowers.update()
 
         self._handleKlingonTorpedoHits(quadrant)
         self._handleKlingonTorpedoMisses(quadrant)
         self._handleMissRemoval(quadrant, cast(Misses, self._misses))
-
-    def _fireTorpedoesAtEnterpriseIfNecessary(self, quadrant: Quadrant):
-
-        currentTime: float = self._gameEngine.gameClock
-
-        klingons: List[Klingon] = quadrant.klingons
-        for klingon in klingons:
-            deltaClockTime: float = currentTime - klingon.lastTimeCheck
-            if deltaClockTime > klingon.firingInterval:
-                self.logger.debug(f'Time for {klingon} to fire torpedoes')
-
-                endPoint:            ArcadePoint = ArcadePoint(x=quadrant.enterprise.center_x, y=quadrant.enterprise.center_y)
-                lineOfSightResponse: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant, shooter=klingon, endPoint=endPoint)
-                if lineOfSightResponse.answer is True:
-                    self.__pointAtEnterprise(klingon=klingon, enterprise=quadrant.enterprise)
-                    self.__fireKlingonTorpedo(klingon=klingon, enterprise=quadrant.enterprise)
-                else:
-                    self._soundKlingonCannotFire.play(volume=self._gameSettings.soundVolume.value)
-                    self._messageConsole.displayMessage(f'{klingon.id} cannot shoot, blocked by {lineOfSightResponse.obstacle.id}')
-
-                klingon.lastTimeCheck = currentTime
 
     def _handleKlingonTorpedoHits(self, quadrant: Quadrant):
         """
@@ -107,7 +84,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
             self._removeTorpedoFollowers(klingonTorpedo=expendedTorpedo)
 
             firedBy: EnemyId = expendedTorpedo.firedBy
-            shootingKlingon: Klingon = self._findFiringKlingon(klingonId=firedBy)
+            shootingKlingon: Klingon = self._findFiringEnemy(enemyId=firedBy, enemies=self.klingonList)
 
             if shootingKlingon is not None:
                 shootingKlingon.angle = 0
@@ -158,7 +135,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
             firedBy: EnemyId = torpedoDud.firedBy
 
-            shootingKlingon: Klingon = self._findFiringKlingon(klingonId=firedBy)
+            shootingKlingon: Klingon = self._findFiringEnemy(enemyId=firedBy, enemies=self.klingonList)
             if shootingKlingon is not None:
                 self._messageConsole.displayMessage(f'{shootingKlingon.id} missed !!!!')
                 self._placeTorpedoMiss(quadrant=quadrant, torpedoDud=torpedoDud)
@@ -177,42 +154,23 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         for followerToRemove in followersToRemove:
             followerToRemove.remove_from_sprite_lists()
 
-    def _findFiringKlingon(self, klingonId: EnemyId) -> Klingon:
-        """
-
-        Args:
-            klingonId:
-
-        Returns:  May return 'None' if the Enterprise killed him
-        """
-
-        fndKlingon: Klingon = cast(Klingon, None)
-        for klingon in self._klingonList:
-            klingon: Klingon = cast(Klingon, klingon)
-            if klingon.id == klingonId:
-                fndKlingon = klingon
-                break
-
-        return fndKlingon
-
-    def _doWeHaveLineOfSight(self, quadrant: Quadrant, shooter: Klingon, endPoint: ArcadePoint) -> LineOfSightResponse:
-
-        startingPoint: ArcadePoint = ArcadePoint(x=shooter.center_x, y=shooter.center_y)
-
-        obstacles: SpriteList = SpriteList()
-
-        if quadrant.hasPlanet is True:
-            obstacles.append(quadrant.planet)
-
-        otherKlingons: Enemies = self.__buildEligibleKlingonObstacles(shooter=shooter, klingons=quadrant.klingons)
-
-        obstacles.extend(otherKlingons)
-
-        results: LineOfSightResponse = self._hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
-
-        self.logger.debug(f'{results=}')
-
-        return results
+    # def _findFiringKlingon(self, klingonId: EnemyId) -> Klingon:
+    #     """
+    #
+    #     Args:
+    #         klingonId:
+    #
+    #     Returns:  May return 'None' if the Enterprise killed him
+    #     """
+    #
+    #     fndKlingon: Klingon = cast(Klingon, None)
+    #     for klingon in self._klingonList:
+    #         klingon: Klingon = cast(Klingon, klingon)
+    #         if klingon.id == klingonId:
+    #             fndKlingon = klingon
+    #             break
+    #
+    #     return fndKlingon
 
     def _placeTorpedoMiss(self, quadrant: Quadrant, torpedoDud: KlingonTorpedo):
 
@@ -221,21 +179,33 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         self._placeMiss(quadrant=quadrant, torpedoDud=torpedoDud, miss=miss)
         self._misses.append(miss)
 
+    def _playCannotFireSound(self):
+        """
+        Implement empty base class method
+        """
+        self._soundKlingonCannotFire.play(volume=self._gameSettings.soundVolume.value)
+
     def _loadSounds(self):
 
         self._soundKlingonTorpedo    = self._loadSound(bareFileName='klingonTorpedo.wav')
         self._soundShieldHit         = self._loadSound(bareFileName='ShieldHit.wav')
         self._soundKlingonCannotFire = self._loadSound(bareFileName='KlingonCannotFire.wav')
 
-    def __fireKlingonTorpedo(self, klingon: Klingon, enterprise: Enterprise):
+    def _fireTorpedo(self, enemy: Enemy, enterprise: Enterprise):
+        """
+        Implement empty base class method
+        Args:
+            enemy:      Who is firing it
+            enterprise: The poor lowly enterprise is the target
+        """
 
-        self.logger.debug(f'Klingon @ {klingon.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
-        self._messageConsole.displayMessage(f'Klingon @ {klingon.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
+        self.logger.debug(f'Klingon @ {enemy.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
+        self._messageConsole.displayMessage(f'Klingon @ {enemy.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
         #
         # Use the enterprise arcade position rather than compute the sector center;  That way we
         # can use Arcade collision detection
         #
-        klingonPoint:    ArcadePoint = ArcadePoint(x=klingon.center_x, y=klingon.center_y)
+        klingonPoint:    ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
         enterprisePoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
 
         klingonTorpedo: KlingonTorpedo = KlingonTorpedo()
@@ -243,31 +213,10 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         klingonTorpedo.center_y = klingonPoint.y
         klingonTorpedo.inMotion = True
         klingonTorpedo.destinationPoint  = enterprisePoint
-        klingonTorpedo.firedFromPosition = klingon.gameCoordinates
-        klingonTorpedo.firedBy           = klingon.id
+        klingonTorpedo.firedFromPosition = enemy.gameCoordinates
+        klingonTorpedo.firedBy           = enemy.id
         klingonTorpedo.followers         = self.torpedoFollowers
 
         self.torpedoes.append(klingonTorpedo)
         self._soundKlingonTorpedo.play(volume=self._gameSettings.soundVolume.value)
         self.logger.info(f'{klingonTorpedo.firedFromPosition=}')
-
-    def __pointAtEnterprise(self, klingon: Klingon, enterprise: Enterprise):
-
-        currentPoint:     ArcadePoint = ArcadePoint(x=klingon.center_x, y=klingon.center_y)
-        destinationPoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
-
-        normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
-        klingon.angle = normalAngle + 125
-
-        self.logger.debug(f'{klingon.angle=}')
-
-    def __buildEligibleKlingonObstacles(self, shooter: Klingon, klingons: Enemies) -> Enemies:
-        """
-
-        Returns:  A list of klingons excluding the shooter
-        """
-        obstacles: Enemies = Enemies([])
-        for klingon in klingons:
-            if klingon.id != shooter.id:
-                obstacles.append(klingon)
-        return obstacles
