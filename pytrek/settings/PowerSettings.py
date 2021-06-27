@@ -16,13 +16,13 @@ class PowerSettings(BaseSubSetting):
     INITIAL_TORPEDO_COUNT:  str = 'initial_torpedo_count'
     DEFAULT_WARP_FACTOR:    str = 'default_warp_factor'
 
-    POWER_SETTINGS:  SettingsNameValues = {
+    POWER_SETTINGS:  SettingsNameValues = SettingsNameValues({
         INITIAL_ENERGY_LEVEL:   '5000',
         INITIAL_SHIELD_ENERGY:  '2500',
         INITIAL_TORPEDO_COUNT:  '10',
         MINIMUM_IMPULSE_ENERGY: '30',
         DEFAULT_WARP_FACTOR:    '3'
-    }
+    })
 
     def init(self, *args, **kwds):
         """

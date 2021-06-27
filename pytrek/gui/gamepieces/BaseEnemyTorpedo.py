@@ -1,3 +1,4 @@
+
 from typing import cast
 
 from arcade import SpriteList
@@ -53,6 +54,11 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
         self._firedFromPosition = newValue
         self.currentPosition    = newValue
 
+    @property
+    def followers(self) -> SpriteList:
+        return self._followers
+
+    @followers.setter
     def followers(self, newValues: SpriteList):
         """
         Reference back to global follower list
@@ -61,8 +67,6 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
             newValues:
         """
         self._followers = newValues
-
-    followers = property(None, followers)       # Write only property
 
     def update(self):
 

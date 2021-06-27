@@ -7,7 +7,6 @@ from collections import namedtuple
 
 from arcade import PointList
 from arcade import Sound
-from arcade import Sprite
 from arcade import SpriteList
 
 # noinspection PyPackageRequirements
@@ -21,7 +20,6 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.gui.MessageConsole import MessageConsole
-from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
 
 from pytrek.gui.gamepieces.BasicMiss import BasicMiss
 from pytrek.gui.gamepieces.GamePiece import GamePiece
@@ -83,7 +81,7 @@ class BaseMediator:
         lineOfSight: LineString = LineString([(startingPoint.x, startingPoint.y), (endPoint.x, endPoint.y)])
 
         for obstacle in obstacles:
-            obstacle: Sprite = cast(Sprite, obstacle)
+            # obstacle: Sprite = cast(Sprite, obstacle)
 
             pointList: PointList = obstacle.get_adjusted_hit_box()
             polygon:   Polygon   = Polygon(pointList)

@@ -1,12 +1,15 @@
-from logging import Logger
-from logging import getLogger
+
 from typing import Dict
 from typing import NewType
+
+from logging import Logger
+from logging import getLogger
 
 from sys import platform as sysPlatform
 
 from os import getenv as osGetEnv
 from os import sep as osSep
+from typing import cast
 
 from pytrek.Constants import GAME_SETTINGS_FILE_NAME
 from pytrek.Constants import THE_GREAT_MAC_PLATFORM
@@ -20,7 +23,7 @@ SettingsNameValues = NewType('SettingsNameValues', Dict[str, str])
 
 class SettingsCommon(BaseSubSetting):
 
-    settingsFileLocationAndName: str = None
+    settingsFileLocationAndName: str = cast(str, None)
 
     def init(self, *args, **kwds):
 

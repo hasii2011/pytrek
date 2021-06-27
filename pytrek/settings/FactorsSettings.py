@@ -24,7 +24,7 @@ class FactorsSettings(BaseSubSetting):
     BASIC_MISS_DISPLAY_INTERVAL: str = 'basic_miss_display_interval'
     PHOTON_TORPEDO_MISFIRE_RATE: str = 'photon_torpedo_misfire_rate'
 
-    FACTORS_SETTINGS: SettingsNameValues = {
+    FACTORS_SETTINGS: SettingsNameValues = SettingsNameValues({
         GAME_LENGTH_FACTOR:     '7.0',
         STAR_BASE_EXTENDER:     '2.0',
         STAR_BASE_MULTIPLIER:   '3.0',
@@ -39,7 +39,7 @@ class FactorsSettings(BaseSubSetting):
 
         BASIC_MISS_DISPLAY_INTERVAL: '5',
         PHOTON_TORPEDO_MISFIRE_RATE: '0.2'
-    }
+    })
 
     def init(self, *args, **kwds):
         """

@@ -121,8 +121,8 @@ class PhotonTorpedoMediator(BaseMediator):
             if enemy.power > 0:
                 expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=enemy, sprite_list=self._torpedoes)
 
-                for killerTorpedo in expendedTorpedoes:
-                    killerTorpedo: PhotonTorpedo = cast(PhotonTorpedo, killerTorpedo)
+                for sprite in expendedTorpedoes:
+                    killerTorpedo: PhotonTorpedo = cast(PhotonTorpedo, sprite)
                     self.logger.info(f'{killerTorpedo.id} hit')
 
                     self.__doExplosion(killerTorpedo)

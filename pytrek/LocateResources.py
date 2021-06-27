@@ -29,7 +29,7 @@ class LocateResources:
     def getResourcesPath(resourcePackageName: str, bareFileName: str) -> str:
         # Use this method in Python 3.9
         # from importlib_resources import files
-        # configFilePath: str  = files('org.hasii.pytrek.resources').joinpath(JSON_LOGGING_CONFIG_FILENAME)
+        # configFilePath: str  = files('pytrek.resources').joinpath(JSON_LOGGING_CONFIG_FILENAME)
         try:
             fqFileName: str = resource_filename(resourcePackageName, bareFileName)
         except (ValueError, Exception):
@@ -39,6 +39,6 @@ class LocateResources:
             from os import environ
             pathToResources: str = environ.get(f'{LocateResources.RESOURCE_ENV_VAR}')
             resourcesPath:   str = LocateResources.PACKAGE_TO_PATH_MAP[resourcePackageName]
-            fqFileName:      str = f'{pathToResources}/{resourcesPath}/{bareFileName}'
+            fqFileName = f'{pathToResources}/{resourcesPath}/{bareFileName}'
 
         return fqFileName

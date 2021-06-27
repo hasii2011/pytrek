@@ -16,12 +16,12 @@ class LimitsSettings(BaseSubSetting):
     MAXIMUM_STAR_BASES:  str = 'maximum_star_bases'
     MAXIMUM_PLANETS:     str = 'maximum_planets'
 
-    LIMITS_SETTINGS:  SettingsNameValues = {
+    LIMITS_SETTINGS:  SettingsNameValues = SettingsNameValues({
         MAXIMUM_STARS:      '4',
         MINIMUM_STAR_BASES: '2',
         MAXIMUM_STAR_BASES: '5',
         MAXIMUM_PLANETS:    '10'
-    }
+    })
 
     """
     This is a singleton based on the inheritance hierarchy

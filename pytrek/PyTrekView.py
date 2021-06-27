@@ -224,14 +224,14 @@ class PyTrekView(View):
         elif releasedKey == key.DOWN or releasedKey == key.X:
             self._enterprise.change_y = 0
 
-    def on_mouse_motion(self, x: int, y: int, delta_x: float, delta_y: float):
+    def on_mouse_motion(self, x: float, y: float, delta_x: float, delta_y: float):
         """
         Called whenever the mouse moves.
         """
         pass
         # print(f'Mouse ({x},{y})')
 
-    def on_mouse_press(self, x: int, y: int, button: int, key_modifiers: int):
+    def on_mouse_press(self, x: float, y: float, button: int, key_modifiers: int):
         """
         Called when the user presses a mouse button.
         """

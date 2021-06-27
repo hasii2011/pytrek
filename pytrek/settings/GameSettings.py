@@ -184,7 +184,7 @@ class GameSettings(Singleton):
 
     @debugAnnounceQuadrantCreation.setter
     def debugAnnounceQuadrantCreation(self, newValue: bool):
-        self._debug.debugAnnounceQuadrantCreation.debugAnnounceQuadrantCreation = newValue
+        self._debug.debugAnnounceQuadrantCreation = newValue
 
     @property
     def debugAddPlanet(self) -> bool:

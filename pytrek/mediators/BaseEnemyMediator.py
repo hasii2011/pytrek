@@ -1,5 +1,9 @@
+
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
+
 from random import choice as randomChoice
 
 from pytrek.engine.ArcadePoint import ArcadePoint
@@ -38,7 +42,7 @@ class BaseEnemyMediator(BaseMediator):
         oldSector: Sector = quadrant.getSector(sectorCoordinates=oldSectorCoordinates)
 
         oldSector.type   = SectorType.EMPTY
-        oldSector.sprite = None
+        oldSector.sprite = cast(GamePiece, None)
 
         newSector: Sector = quadrant.getSector(sectorCoordinates=newSectorCoordinates)
 

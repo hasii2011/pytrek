@@ -20,7 +20,7 @@ class DebugSettings(BaseSubSetting):
     DEBUG_COLLECT_KLINGON_QUADRANT_COORDINATES: str = 'debug_collect_klingon_quadrant_coordinates'
     DEBUG_ANNOUNCE_QUADRANT_CREATION:           str = 'debug_announce_quadrant_creation'
 
-    DEBUG_SETTINGS: SettingsNameValues = {
+    DEBUG_SETTINGS: SettingsNameValues = SettingsNameValues({
         DEBUG_ADD_KLINGONS:             'False',
         DEBUG_KLINGON_COUNT:            '2',
         DEBUG_ADD_COMMANDERS:           'False',
@@ -29,7 +29,7 @@ class DebugSettings(BaseSubSetting):
         DEBUG_COLLECT_KLINGON_QUADRANT_COORDINATES: 'False',
         DEBUG_ANNOUNCE_QUADRANT_CREATION:           'False',
         DEBUG_ADD_PLANET:                           'False',
-    }
+    })
 
     def init(self, *args, **kwds):
         """

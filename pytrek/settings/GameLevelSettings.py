@@ -19,11 +19,11 @@ class GameLevelSettings(BaseSubSetting):
     GAME_TYPE:    str = 'game_type'
     SOUND_VOLUME: str = 'sound_volume'
 
-    GAME_LEVEL_SETTINGS:  SettingsNameValues = {
+    GAME_LEVEL_SETTINGS:  SettingsNameValues = SettingsNameValues({
         PLAYER_TYPE:  PlayerType.Expert.name,
         GAME_TYPE:    GameType.Long.name,
         SOUND_VOLUME: SoundVolume.Medium.name,
-    }
+    })
 
     def init(self, *args, **kwds):
         """

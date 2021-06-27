@@ -77,9 +77,8 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         """
 
         expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=quadrant.enterprise, sprite_list=self.torpedoes)
-        for expendedTorpedo in expendedTorpedoes:
-
-            expendedTorpedo: KlingonTorpedo = cast(KlingonTorpedo, expendedTorpedo)
+        for sprite in expendedTorpedoes:
+            expendedTorpedo: KlingonTorpedo = cast(KlingonTorpedo, sprite)
             self.logger.info(f'{expendedTorpedo.id} arrived at destination')
             self._removeTorpedoFollowers(klingonTorpedo=expendedTorpedo)
 
@@ -144,9 +143,9 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
     def _removeTorpedoFollowers(self, klingonTorpedo: KlingonTorpedo):
 
-        followersToRemove: List[Sprite] = []
-        for follower in self.torpedoFollowers:
-            follower: KlingonTorpedoFollower = cast(KlingonTorpedoFollower, follower)
+        followersToRemove: List[KlingonTorpedoFollower] = []
+        for sprite in self.torpedoFollowers:
+            follower: KlingonTorpedoFollower = cast(KlingonTorpedoFollower, sprite)
             if follower.following == klingonTorpedo.id:
                 self.logger.debug(f'Removing follower: {follower.id}')
                 followersToRemove.append(follower)

@@ -69,16 +69,16 @@ class StatusConsole:
 
         self._statusProperties: PropertyNames = PropertyNames([])
 
-        self._statusProperties.append('shipCondition')
-        self._statusProperties.append('starDate')
-        self._statusProperties.append('currentQuadrantCoordinates')
-        self._statusProperties.append('currentSectorCoordinates')
-        self._statusProperties.append('energy')
-        self._statusProperties.append('shieldEnergy')
-        self._statusProperties.append('remainingGameTime')
-        self._statusProperties.append('remainingKlingons')
-        self._statusProperties.append('remainingCommanders')
-        self._statusProperties.append('torpedoCount')
+        self._statusProperties.append(PropertyName('shipCondition'))
+        self._statusProperties.append(PropertyName('starDate'))
+        self._statusProperties.append(PropertyName('currentQuadrantCoordinates'))
+        self._statusProperties.append(PropertyName('currentSectorCoordinates'))
+        self._statusProperties.append(PropertyName('energy'))
+        self._statusProperties.append(PropertyName('shieldEnergy'))
+        self._statusProperties.append(PropertyName('remainingGameTime'))
+        self._statusProperties.append(PropertyName('remainingKlingons'))
+        self._statusProperties.append(PropertyName('remainingCommanders'))
+        self._statusProperties.append(PropertyName('torpedoCount'))
 
     def draw(self):
 
