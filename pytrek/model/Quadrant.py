@@ -27,7 +27,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.settings.GameSettings import GameSettings
 
 SectorRow    = NewType('SectorRow', List[Sector])
-QuadrantGrid = NewType('GalaxyGrid', List[SectorRow])
+QuadrantGrid = NewType('QuadrantGrid', List[SectorRow])
 
 
 class Quadrant:
@@ -77,9 +77,9 @@ class Quadrant:
         if self._enterpriseCoordinates is not None:
 
             oldEnterpriseRow = self._sectors[coordinates.y]
-            oldSector = oldEnterpriseRow[self._enterpriseCoordinates.x]
+            oldSector: Sector = oldEnterpriseRow[self._enterpriseCoordinates.x]
             oldSector.type = SectorType.EMPTY
-            oldSector.sprite = None
+            oldSector.sprite = cast(GamePiece, None)
 
         self.logger.debug(f"Placing enterprise @quadrant: {coordinates}")
 
@@ -280,10 +280,10 @@ class Quadrant:
 
         liveKlingons: Enemies = Enemies([])
 
-        for enemy in enemies:
-            enemy: Klingon = cast(Klingon, enemy)
+        for deadEnemy in enemies:
+            enemy: Klingon = cast(Klingon, deadEnemy)
             if enemy.power == 0:
-                self.logger.info(f'Found dead Klingon: {enemy.id}')
+                self.logger.info(f'Found dead enemy: {enemy.id}')
                 self._klingonCount -= 1
                 sector: Sector = self.getSector(enemy.gameCoordinates)
                 sector.type = SectorType.EMPTY

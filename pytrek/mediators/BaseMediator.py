@@ -20,9 +20,11 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.gui.MessageConsole import MessageConsole
+from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
 
 from pytrek.gui.gamepieces.BasicMiss import BasicMiss
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
@@ -91,11 +93,11 @@ class BaseMediator:
 
         return LineOfSightResponse(answer=True, obstacle=None)
 
-    def _findTorpedoMisses(self, torpedoes: Torpedoes):
+    def _findTorpedoMisses(self, torpedoes: Torpedoes) -> List[BaseEnemyTorpedo]:
 
-        torpedoDuds: List[SmoothMotion] = []
-        for torpedo in torpedoes:
-            torpedo: SmoothMotion = cast(SmoothMotion, torpedo)
+        torpedoDuds: List[BaseEnemyTorpedo] = []
+        for smoothMotion in torpedoes:
+            torpedo: KlingonTorpedo = cast(KlingonTorpedo, smoothMotion)
             if torpedo.inMotion is False:
                 torpedoDuds.append(torpedo)
         return torpedoDuds
@@ -105,8 +107,8 @@ class BaseMediator:
         currentTime:     float = self._gameEngine.gameClock
         displayInterval: int   = self._gameSettings.basicMissDisplayInterval
 
-        for dud in misses:
-            dud: BasicMiss = cast(BasicMiss, dud)
+        for miss in misses:
+            dud: BasicMiss = cast(BasicMiss, miss)
             deltaTime: float = currentTime - dud.placedTime
             if deltaTime >= displayInterval:
                 gameCoordinates: Coordinates = dud.gameCoordinates
@@ -131,7 +133,7 @@ class BaseMediator:
         if isinstance(miss, KlingonTorpedoMiss):
             sectorType: SectorType = SectorType.KLINGON_TORPEDO_MISS
         else:
-            sectorType: SectorType = SectorType.ENTERPRISE_TORPEDO_MISS
+            sectorType = SectorType.ENTERPRISE_TORPEDO_MISS
 
         miss.gameCoordinates = gameCoordinates
         self.__placeMissInQuadrant(quadrant, gameCoordinates, sectorType)

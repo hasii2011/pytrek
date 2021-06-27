@@ -150,7 +150,7 @@ class BaseTorpedoMediator(BaseMediator):
 
         fndEnemy: Enemy = cast(Enemy, None)
         for enemy in enemies:
-            enemy: Enemy = cast(Enemy, enemy)
+            # enemy: Enemy = cast(Enemy, enemy)
             if enemy.id == enemyId:
                 fndEnemy = enemy
                 break

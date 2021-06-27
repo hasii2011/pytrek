@@ -30,6 +30,7 @@ from pytrek.Singleton import Singleton
 
 class GameEngine(Singleton):
 
+    # noinspection SpellCheckingInspection
     def init(self, *args, **kwds):
 
         self.logger: Logger = getLogger(__name__)
@@ -65,7 +66,7 @@ class GameEngine(Singleton):
         """
         Read only property
 
-        Returns:    The current real time since the game started (msecs)
+        Returns:    The current real time since the game started (milliseconds)
         """
         return self._gameClock
 
@@ -132,6 +133,7 @@ class GameEngine(Singleton):
 
         return quadrantEnergy
 
+    # noinspection SpellCheckingInspection
     def computeEnergyWhenBlocked(self, startSector: Coordinates, endSector: Coordinates) -> float:
         """
         C code:
@@ -157,24 +159,25 @@ class GameEngine(Singleton):
 
         return stopEnergy
 
+    # noinspection SpellCheckingInspection
     def computeShieldHit(self, torpedoHit: float) -> ShieldHitData:
         """
+        ```
+            pfac = 1.0/inshld;
 
-        pfac = 1.0/inshld;
+            # shields will take hits
+            double absorb, hitsh, propor = pfac*shield;
 
-        # shields will take hits
-        double absorb, hitsh, propor = pfac*shield;
-
-        if(propor < 0.1)
-            propor = 0.1;
-        hitsh = propor*chgfac*hit+1.0;
-        atackd=1;
-        absorb = 0.8*hitsh;
-        if (absorb > shield)
-            absorb = shield;
-        shield -= absorb;
-        hit -= hitsh;
-
+            if(propor < 0.1)
+                propor = 0.1;
+            hitsh = propor*chgfac*hit+1.0;
+            atackd=1;
+            absorb = 0.8*hitsh;
+            if (absorb > shield)
+                absorb = shield;
+            shield -= absorb;
+            hit -= hitsh;
+        ```
         Returns: Computed shield hit data
         """
         changeFactor:       float = 0.25 + (0.5 * self._intelligence.rand())
@@ -185,13 +188,14 @@ class GameEngine(Singleton):
             proportion = 0.1
         shieldHit: float = proportion * changeFactor * torpedoHit + 1.0
 
-        shieldAbsorptionValue: float = 0.8 * shieldHit
-        torpedoHit:            float = torpedoHit - shieldHit
+        shieldAbsorptionValue:   float = 0.8 * shieldHit
+        degradedTorpedoHitValue: float = torpedoHit - shieldHit
 
-        shieldHitData: ShieldHitData = ShieldHitData(shieldAbsorptionValue=shieldAbsorptionValue, degradedTorpedoHitValue=torpedoHit)
+        shieldHitData: ShieldHitData = ShieldHitData(shieldAbsorptionValue=shieldAbsorptionValue, degradedTorpedoHitValue=degradedTorpedoHitValue)
 
         return shieldHitData
 
+    # noinspection SpellCheckingInspection
     def computeHit(self, shooterPosition: Coordinates, targetPosition: Coordinates, klingonPower: float) -> float:
         """
          StarTrekScreen: Yowzah!  A dirty rotten Klingon at (7,7) took a shot at me (3,7)

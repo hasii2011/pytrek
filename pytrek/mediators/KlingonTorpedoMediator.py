@@ -96,7 +96,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
                 if self._devices.getDeviceStatus(DeviceType.Shields) == DeviceStatus.Up:
                     shieldHitData: ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=hitValue)
                 else:
-                    shieldHitData: ShieldHitData = ShieldHitData(degradedTorpedoHitValue=hitValue, shieldAbsorptionValue=0.0)
+                    shieldHitData = ShieldHitData(degradedTorpedoHitValue=hitValue, shieldAbsorptionValue=0.0)
                 shieldAbsorptionValue   = shieldHitData.shieldAbsorptionValue
                 degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
 

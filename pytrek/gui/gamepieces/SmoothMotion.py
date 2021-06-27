@@ -77,8 +77,10 @@ class SmoothMotion:
 
         # Are we close to the correct angle? If so, move forward.
         if abs(angleDiffRadians) < pi / 4:
-            self.change_x = cos(actualAngleRadians) * gamePiece.speed
-            self.change_y = sin(actualAngleRadians) * gamePiece.speed
+            # self.change_x = cos(actualAngleRadians) * gamePiece.speed
+            # self.change_y = sin(actualAngleRadians) * gamePiece.speed
+            gamePiece.change_x = cos(actualAngleRadians) * gamePiece.speed
+            gamePiece.change_y = sin(actualAngleRadians) * gamePiece.speed
 
         # Fine-tune our change_x/change_y if we are really close to destinationPoint
         # point and just need to set to that location.
@@ -86,7 +88,7 @@ class SmoothMotion:
         if abs(gamePiece.center_x - dest_x) < abs(gamePiece.change_x):
             gamePiece.center_x = dest_x
         else:
-            gamePiece.center_x += self.change_x
+            gamePiece.center_x += gamePiece.change_x
             traveling = True
 
         if abs(gamePiece.center_y - dest_y) < abs(gamePiece.change_y):

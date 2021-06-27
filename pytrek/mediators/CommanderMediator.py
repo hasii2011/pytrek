@@ -54,7 +54,7 @@ class CommanderMediator(BaseEnemyMediator):
             if self._checkEnemyMoveIsValid(quadrant=quadrant, targetCoordinates=newPosition):
                 break
             else:
-                newPosition: Coordinates = self._evade(currentLocation=oldPosition)
+                newPosition = self._evade(currentLocation=oldPosition)
         return newPosition
 
     def _checkEnemyMoveIsValid(self, quadrant: Quadrant, targetCoordinates: Coordinates) -> bool:

@@ -15,12 +15,12 @@ from arcade import load_spritesheet
 
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.Explosion import Explosion
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
-from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.PhotonTorpedo import PhotonTorpedo
 from pytrek.gui.gamepieces.PhotonTorpedoMiss import PhotonTorpedoMiss
 
@@ -89,7 +89,7 @@ class PhotonTorpedoMediator(BaseMediator):
 
                 clearLineOfSight: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant, startingPoint, endPoint)
                 if clearLineOfSight.answer is True:
-                    enemy: Klingon = cast(Klingon, enemy)
+                    # enemy: Klingon = cast(Klingon, enemy)
                     self._pointAtEnemy(enterprise=enterprise, enemy=enemy)
                     if self._intelligence.rand() <= self._gameSettings.photonTorpedoMisfireRate:
                         self._messageConsole.displayMessage(f'Torpedo pointed at {enemy} misfired')
@@ -116,8 +116,8 @@ class PhotonTorpedoMediator(BaseMediator):
         enemies.extend(quadrant.commanders)
 
         enterprise: Enterprise = quadrant.enterprise
-        for enemy in enemies:
-            enemy: Enemy = cast(Enemy, enemy)
+        for badGuy in enemies:
+            enemy: Enemy = cast(Enemy, badGuy)
             if enemy.power > 0:
                 expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=enemy, sprite_list=self._torpedoes)
 
@@ -135,10 +135,10 @@ class PhotonTorpedoMediator(BaseMediator):
 
     def _handleTorpedoMisses(self, quadrant: Quadrant):
 
-        torpedoDuds: List[PhotonTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self._torpedoes))
+        torpedoDuds: List[BaseEnemyTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self._torpedoes))
 
-        for torpedoDud in torpedoDuds:
-
+        for baseTorpedo in torpedoDuds:
+            torpedoDud: PhotonTorpedo = cast(PhotonTorpedo, baseTorpedo)
             self._messageConsole.displayMessage(f'{torpedoDud.id} missed {torpedoDud.firedAt} !!!!')
 
             miss: PhotonTorpedoMiss = PhotonTorpedoMiss(placedTime=self._gameEngine.gameClock)
@@ -211,7 +211,7 @@ class PhotonTorpedoMediator(BaseMediator):
         """
         obstacles: SpriteList = SpriteList()
         if quadrant.hasPlanet is True:
-            obstacles.append(quadrant._planet)
+            obstacles.append(quadrant.planet)
 
         results: LineOfSightResponse = self._hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
 
