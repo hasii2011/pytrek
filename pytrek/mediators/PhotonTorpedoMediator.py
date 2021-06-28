@@ -73,11 +73,11 @@ class PhotonTorpedoMediator(BaseMediator):
         soundVolume: float      = self._gameSettings.soundVolume.value
 
         enterprise: Enterprise = quadrant.enterprise
-        # klingons:   Klingons   = quadrant.klingons
 
         enemies: Enemies = Enemies([])
-        # noinspection PyTypeChecker
-        enemies = enemies + quadrant.klingons + quadrant.commanders
+        # enemies = enemies + quadrant.klingons + quadrant.commanders
+        enemies.extend(quadrant.klingons)
+        enemies.extend(quadrant.commanders)
 
         if len(enemies) == 0:
             self._messageConsole.displayMessage("Don't waste torpedoes.  Nothing to fire at")

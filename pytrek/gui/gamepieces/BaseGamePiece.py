@@ -10,7 +10,7 @@ from pytrek.model.Coordinates import Coordinates
 
 class BaseGamePiece(Sprite):
 
-    def __init__(self, filename: str = None, scale: float = 1.0):
+    def __init__(self, filename: str = '', scale: float = 1.0):
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=filename)
 

@@ -16,7 +16,7 @@ from pytrek.model.Coordinates import Coordinates
 
 class GamePiece(BaseGamePiece):
 
-    def __init__(self, filename: str = None, scale: float = 1.0):
+    def __init__(self, filename: str = '', scale: float = 1.0):
 
         super().__init__(filename=filename, scale=scale)
 

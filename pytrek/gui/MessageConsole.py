@@ -4,8 +4,8 @@ from typing import List
 from logging import Logger
 from logging import getLogger
 
-from arcade import color
 from arcade import draw_text
+from arcade.color import WHITE
 
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
@@ -23,8 +23,9 @@ class MessageConsole(Singleton):
     X_FIXED:                   int = 5
     Y_DECREMENT:               int = CONSOLE_FONT_SIZE + BETWEEN_LINE_MARGIN
 
-    CONSOLE_TEXT_COLOR: color = color.WHITE
+    CONSOLE_TEXT_COLOR = WHITE
 
+    # noinspection SpellCheckingInspection
     def init(self, *args, **kwds):
 
         self.logger: Logger = getLogger(__name__)

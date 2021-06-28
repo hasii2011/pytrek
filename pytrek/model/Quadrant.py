@@ -13,6 +13,7 @@ from pytrek.gui.gamepieces.Commander import Commander
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.gui.gamepieces.Planet import Planet
@@ -238,7 +239,7 @@ class Quadrant:
 
         klingon.power          = self._intelligence.computeKlingonPower()
         klingon.firingInterval = self._intelligence.computeKlingonFiringInterval()
-        klingon.lastTimeCheck  = self._gameEngine.gameClock // 1000
+        klingon.lastTimeCheck  = round(self._gameEngine.gameClock // 1000)
 
         sector.sprite = klingon
 
@@ -280,8 +281,8 @@ class Quadrant:
 
         liveKlingons: Enemies = Enemies([])
 
-        for deadEnemy in enemies:
-            enemy: Klingon = cast(Klingon, deadEnemy)
+        for zombie in enemies:
+            enemy: Enemy = cast(Enemy, zombie)
             if enemy.power == 0:
                 self.logger.info(f'Found dead enemy: {enemy.id}')
                 self._klingonCount -= 1

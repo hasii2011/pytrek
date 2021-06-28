@@ -14,11 +14,11 @@ class Explosion(Sprite):
 
         super().__init__()
 
-        self.textures: List[Texture] = textureList
-        self.sound:    Sound         = sound
+        self._textures: List[Texture] = textureList
+        self._sound:    Sound         = sound
 
         self.textureIdx:    int     = 0
-        self.texture:       Texture = self.textures[0]
+        self.texture:       Texture = self._textures[0]
         self._delayCounter: int     = 0
 
     def update(self):
@@ -28,9 +28,8 @@ class Explosion(Sprite):
         self._delayCounter += 1
         if self._delayCounter > Explosion.DELAY_FRAMES:
             self.textureIdx += 1
-            if self.textureIdx < len(self.textures):
-                self.texture = self.textures[self.textureIdx]
-                # self.sound.play()
+            if self.textureIdx < len(self._textures):
+                self.texture = self._textures[self.textureIdx]
             else:
                 self.remove_from_sprite_lists()
             self._delayCounter = 0

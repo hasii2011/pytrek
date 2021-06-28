@@ -6,12 +6,18 @@ from pkg_resources import resource_filename
 
 class LocateResources:
 
+    # noinspection SpellCheckingInspection
     RESOURCE_ENV_VAR:             str = 'RESOURCEPATH'
+    # noinspection SpellCheckingInspection
     RESOURCES_PACKAGE_NAME:       str = 'pytrek.resources'
+    # noinspection SpellCheckingInspection
     FONT_RESOURCES_PACKAGE_NAME:  str = 'pytrek.resources.fonts'
+    # noinspection SpellCheckingInspection
     IMAGE_RESOURCES_PACKAGE_NAME: str = 'pytrek.resources.images'
+    # noinspection SpellCheckingInspection
     SOUND_RESOURCES_PACKAGE_NAME: str = 'pytrek.resources.sounds'
 
+    # noinspection SpellCheckingInspection
     RESOURCES_PATH:       str = f'pytrek{osSep}resources'
     SOUND_RESOURCES_PATH: str = f'{RESOURCES_PATH}{osSep}sounds'
     IMAGE_RESOURCES_PATH: str = f'{RESOURCES_PATH}{osSep}images'
@@ -25,6 +31,7 @@ class LocateResources:
                                  SOUND_RESOURCES_PACKAGE_NAME: SOUND_RESOURCES_PATH
                                  }
 
+    # noinspection SpellCheckingInspection
     @staticmethod
     def getResourcesPath(resourcePackageName: str, bareFileName: str) -> str:
         # Use this method in Python 3.9
@@ -37,7 +44,8 @@ class LocateResources:
             # Maybe we are in an app
             #
             from os import environ
-            pathToResources: str = environ.get(f'{LocateResources.RESOURCE_ENV_VAR}')
+            # pathToResources: str = environ.get(LocateResources.RESOURCE_ENV_VAR)
+            pathToResources: str = environ[LocateResources.RESOURCE_ENV_VAR]
             resourcesPath:   str = LocateResources.PACKAGE_TO_PATH_MAP[resourcePackageName]
             fqFileName = f'{pathToResources}/{resourcesPath}/{bareFileName}'
 

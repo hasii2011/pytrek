@@ -8,9 +8,13 @@ from logging import getLogger
 
 from enum import Enum
 
+from arcade.color import BLUE
+from arcade.color import GREEN
+from arcade.color import RED
+from arcade.color import WHITE
 from arcade import View
-from arcade import color
 from arcade import draw_text
+from arcade.color import YELLOW
 
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
@@ -25,7 +29,7 @@ from pytrek.model.Coordinates import Coordinates
 
 SECTION_LABEL_FONT_SIZE: int = 16
 STATUS_LABEL_FONT_SIZE: int = 11
-STATUS_TEXT_COLOR: color = color.WHITE
+STATUS_TEXT_COLOR = WHITE           # has no type
 
 TITLE_MARGIN_X: int = 10
 TITLE_MARGIN_Y: int = 10
@@ -118,7 +122,7 @@ class StatusConsole:
             propertyValue: Union[Enum, float, int, str] = getattr(self._gameState, propertyName)
             propertyStr: str = ''
 
-            baseTextColor: color = STATUS_TEXT_COLOR
+            baseTextColor = STATUS_TEXT_COLOR
             if isinstance(propertyValue, ShipCondition):
                 propertyStr = propertyValue.__str__()
                 baseTextColor = self._getStatusColor(shipCondition=propertyValue)
@@ -134,18 +138,18 @@ class StatusConsole:
 
             runningY = runningY + INLINE_STATUS_OFFSET
 
-    def _getStatusColor(self, shipCondition: ShipCondition) -> color:
+    def _getStatusColor(self, shipCondition: ShipCondition):
 
         if shipCondition == ShipCondition.Green:
-            return color.GREEN
+            return GREEN
         elif shipCondition == ShipCondition.Yellow:
-            return color.YELLOW
+            return YELLOW
         elif shipCondition == ShipCondition.Red:
-            return color.RED
+            return RED
         elif shipCondition == ShipCondition.Docked:
-            return color.BLUE
+            return BLUE
         else:
-            return color.WHITE
+            return WHITE
 
     def _formatCoordinates(self, coordinates: Coordinates) -> str:
         """
