@@ -15,11 +15,12 @@ from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.ShieldHitData import ShieldHitData
 
+from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.BaseEnemy import EnemyId
 from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
-from pytrek.gui.gamepieces.Klingon import Klingon
+
 from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
 from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
@@ -84,7 +85,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
             self._removeTorpedoFollowers(klingonTorpedo=expendedTorpedo)
 
             firedBy: EnemyId = expendedTorpedo.firedBy
-            shootingKlingon: Klingon = self._findFiringEnemy(enemyId=firedBy, enemies=self.klingonList)
+            shootingKlingon: BaseEnemy = self._findFiringEnemy(enemyId=firedBy, enemies=quadrant.klingons)
 
             if shootingKlingon is not None:
                 shootingKlingon.angle = 0
@@ -135,7 +136,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
             firedBy: EnemyId = torpedoDud.firedBy
 
-            shootingKlingon: Klingon = self._findFiringEnemy(enemyId=firedBy, enemies=self.klingonList)
+            shootingKlingon: BaseEnemy = self._findFiringEnemy(enemyId=firedBy, enemies=quadrant.klingons)
             if shootingKlingon is not None:
                 self._messageConsole.displayMessage(f'{shootingKlingon.id} missed !!!!')
                 self._placeTorpedoMiss(quadrant=quadrant, torpedoDud=torpedoDud)

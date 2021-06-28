@@ -72,7 +72,6 @@ class QuadrantMediator(Singleton):
     @klingonList.setter
     def klingonList(self, newValues: SpriteList):
         self._klingonList     = newValues
-        self._ktm.klingonList = newValues
 
     @property
     def commanderList(self) -> SpriteList:

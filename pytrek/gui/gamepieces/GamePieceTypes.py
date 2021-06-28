@@ -1,12 +1,14 @@
 
 from typing import List
 from typing import NewType
+from typing import TypeVar
 from typing import Union
 
+from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.Commander import Commander
 from pytrek.gui.gamepieces.Klingon import Klingon
 
-Enemy   = NewType('Enemy',   Union[Klingon, Commander])
+Enemy   = NewType('Enemy',   BaseEnemy)
 Enemies = NewType('Enemies', List[Enemy])
 
 

@@ -36,14 +36,6 @@ class BaseTorpedoMediator(BaseMediator):
         self.logger.info(f'{self._lastTimeCheck=}')
 
     @property
-    def klingonList(self) -> Enemies:
-        return self._klingonList
-
-    @klingonList.setter
-    def klingonList(self, newValues: Enemies):
-        self._klingonList = newValues
-
-    @property
     def torpedoes(self) -> SpriteList:
         return self._torpedoes
 
@@ -104,7 +96,7 @@ class BaseTorpedoMediator(BaseMediator):
                     self._playCannotFireSound()
                     self._messageConsole.displayMessage(f'{enemy.id} cannot shoot, blocked by {lineOfSightResponse.obstacle.id}')
 
-                enemy.lastTimeCheck = currentTime
+                enemy.lastTimeCheck = round(currentTime)
 
     def _fireTorpedo(self, enemy: Enemy, enterprise: Enterprise):
         """

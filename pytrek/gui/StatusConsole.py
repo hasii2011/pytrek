@@ -12,9 +12,10 @@ from arcade.color import BLUE
 from arcade.color import GREEN
 from arcade.color import RED
 from arcade.color import WHITE
+from arcade.color import YELLOW
+
 from arcade import View
 from arcade import draw_text
-from arcade.color import YELLOW
 
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
