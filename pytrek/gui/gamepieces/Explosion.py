@@ -14,12 +14,12 @@ class Explosion(Sprite):
 
         super().__init__()
 
-        self._textures: List[Texture] = textureList
-        self._sound:    Sound         = sound
+        self._textures:     List[Texture] = textureList
+        self._sound:        Sound         = sound
+        self._textureIdx:   int           = 0
+        self._delayCounter: int           = 0
 
-        self.textureIdx:    int     = 0
-        self.texture:       Texture = self._textures[0]
-        self._delayCounter: int     = 0
+        self.texture = self._textures[0]
 
     def update(self):
 
@@ -27,9 +27,9 @@ class Explosion(Sprite):
         # of our frames, then delete this sprite.
         self._delayCounter += 1
         if self._delayCounter > Explosion.DELAY_FRAMES:
-            self.textureIdx += 1
-            if self.textureIdx < len(self._textures):
-                self.texture = self._textures[self.textureIdx]
+            self._textureIdx += 1
+            if self._textureIdx < len(self._textures):
+                self.texture = self._textures[self._textureIdx]
             else:
                 self.remove_from_sprite_lists()
             self._delayCounter = 0
