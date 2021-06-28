@@ -16,6 +16,7 @@ from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.ShieldHitData import ShieldHitData
 
 from pytrek.gui.gamepieces.BaseEnemy import EnemyId
+from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.Klingon import Klingon
@@ -127,7 +128,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
     def _handleKlingonTorpedoMisses(self, quadrant: Quadrant):
 
-        torpedoDuds: List[KlingonTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self.torpedoes))
+        torpedoDuds: List[BaseEnemyTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self.torpedoes))
 
         for torpedoDud in torpedoDuds:
             self._removeTorpedoFollowers(klingonTorpedo=torpedoDud)
@@ -141,7 +142,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
                 shootingKlingon.angle = 0
             torpedoDud.remove_from_sprite_lists()
 
-    def _removeTorpedoFollowers(self, klingonTorpedo: KlingonTorpedo):
+    def _removeTorpedoFollowers(self, klingonTorpedo: BaseEnemyTorpedo):
 
         followersToRemove: List[KlingonTorpedoFollower] = []
         for sprite in self.torpedoFollowers:
@@ -153,25 +154,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         for followerToRemove in followersToRemove:
             followerToRemove.remove_from_sprite_lists()
 
-    # def _findFiringKlingon(self, klingonId: EnemyId) -> Klingon:
-    #     """
-    #
-    #     Args:
-    #         klingonId:
-    #
-    #     Returns:  May return 'None' if the Enterprise killed him
-    #     """
-    #
-    #     fndKlingon: Klingon = cast(Klingon, None)
-    #     for klingon in self._klingonList:
-    #         klingon: Klingon = cast(Klingon, klingon)
-    #         if klingon.id == klingonId:
-    #             fndKlingon = klingon
-    #             break
-    #
-    #     return fndKlingon
-
-    def _placeTorpedoMiss(self, quadrant: Quadrant, torpedoDud: KlingonTorpedo):
+    def _placeTorpedoMiss(self, quadrant: Quadrant, torpedoDud: BaseEnemyTorpedo):
 
         miss: KlingonTorpedoMiss = KlingonTorpedoMiss(placedTime=self._gameEngine.gameClock)
 
