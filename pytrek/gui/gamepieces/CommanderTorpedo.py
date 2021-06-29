@@ -16,7 +16,7 @@ class CommanderTorpedo(BaseEnemyTorpedo):
 
         CommanderTorpedo.nextId += 1
 
-        super().__init__(filename=CommanderTorpedo.FILENAME, torpedoId=torpedoId)
+        super().__init__(filename=CommanderTorpedo.FILENAME, torpedoId=torpedoId, scale=0.4)
 
         self.logger: Logger = getLogger(__name__)
 

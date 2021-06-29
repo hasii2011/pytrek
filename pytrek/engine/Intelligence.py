@@ -76,6 +76,7 @@ class Intelligence(Singleton):
         remainingGameTime = self._gameSettings.gameLengthFactor * self._gameSettings.gameType.value
         return remainingGameTime
 
+    # noinspection SpellCheckingInspection
     def generateInitialKlingonCount(self) -> int:
         """
         ```
@@ -122,6 +123,7 @@ class Intelligence(Singleton):
 
         return int(remainingKlingons)
 
+    # noinspection SpellCheckingInspection
     def generateInitialCommanderCount(self, generatedKlingons: int) -> int:
         """
         incom = skill + 0.0625*inkling*Rand();
@@ -160,6 +162,7 @@ class Intelligence(Singleton):
 
         return coordinatesList
 
+    # noinspection SpellCheckingInspection
     def computeKlingonPower(self) -> float:
         """
         Regular klingon
@@ -171,6 +174,7 @@ class Intelligence(Singleton):
         kPower: float = (self.rand() * 150.0) + 300.0 + (25.0 * self._gameSettings.playerType.value)
         return kPower
 
+    # noinspection SpellCheckingInspection
     def computeCommanderPower(self) -> float:
         """
 
@@ -183,6 +187,7 @@ class Intelligence(Singleton):
         cPower: float = 950.0 + (400.0 * self.rand()) + (50.0 * self._gameState.playerType.value)
         return cPower
 
+    # noinspection SpellCheckingInspection
     def computeSuperCommanderPower(self) -> float:
         """
 
@@ -206,6 +211,12 @@ class Intelligence(Singleton):
 
         return randint(minFiringInterval, maxFiringInterval)
 
+    def computeCommanderFiringInterval(self) -> int:
+        minFiringInterval: int = self._gameSettings.minCommanderFiringInterval
+        maxFiringInterval: int = self._gameSettings.maxCommanderFiringInterval
+
+        return randint(minFiringInterval, maxFiringInterval)
+
     def computeCommanderMoveInterval(self) -> int:
         minMoveInterval: int = self._gameSettings.minCommanderMoveInterval
         maxMoveInterval: int = self._gameSettings.maxCommanderMoveInterval
@@ -218,6 +229,7 @@ class Intelligence(Singleton):
 
         return randint(minMoveInterval, maxMoveInterval)
 
+    # noinspection SpellCheckingInspection
     def computePlanetsInGalaxy(self) -> int:
         """
         Will some times generate 1 more than maximumPlanets;  Hence my patch

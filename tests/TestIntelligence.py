@@ -293,6 +293,36 @@ class TestIntelligence(TestBase):
             self.assertLessEqual(ans, maxFiringInterval, 'Cannot be above the  max')
             self.logger.debug(f'Random klingon firing interval: {ans}')
 
+    def testComputeCommanderFiringInterval(self):
+
+        minFiringInterval: int = self._settings.minCommanderFiringInterval
+        maxFiringInterval: int = self._settings.maxCommanderFiringInterval
+
+        generatedFiringIntervals: List[int] = []
+
+        for x in range(0, 100):
+            ans: int = self.smarty.computeCommanderFiringInterval()
+            generatedFiringIntervals.append(ans)
+            self.assertGreaterEqual(ans, minFiringInterval, 'Cannot be below the min')
+            self.assertLessEqual(ans, maxFiringInterval, 'Cannot be above the  max')
+
+        medianCount: int = median(generatedFiringIntervals)
+        meanCount:   int = mean(generatedFiringIntervals)
+        modeCount:   int = mode(generatedFiringIntervals)
+
+        minValue: int = min(generatedFiringIntervals)
+        maxValue: int = max(generatedFiringIntervals)
+        statsStr: str = (
+            f'median={medianCount} average={meanCount} mode={modeCount} {minValue=} {maxValue=}'
+        )
+        self.logger.info(statsStr)
+
+        expectedMinValue: int = self._settings.minCommanderFiringInterval
+        expectedMaxValue: int = self._settings.maxCommanderFiringInterval
+
+        self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
+        self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')
+
     def testComputeRandomPlanetType(self):
         for x in range(0, 10):
             planetType: PlanetType = self.smarty.computeRandomPlanetType()

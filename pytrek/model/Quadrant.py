@@ -263,6 +263,7 @@ class Quadrant:
         cPower            = self._intelligence.computeCommanderPower()
 
         commander.power = cPower
+        commander.firingInterval    = self._intelligence.computeCommanderFiringInterval()
         commander.timeSinceMovement = self._gameEngine.gameClock
 
         sector.sprite = commander

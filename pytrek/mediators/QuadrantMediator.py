@@ -21,6 +21,7 @@ from pytrek.gui.gamepieces.Commander import Commander
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.Klingon import Klingon
 from pytrek.mediators.CommanderMediator import CommanderMediator
+from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
 
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.KlingonMediator import KlingonMediator
@@ -36,9 +37,11 @@ from pytrek.Singleton import Singleton
 
 
 class QuadrantMediator(Singleton):
+
     """
     This class avoids putting UI logic (arcade) in the model class, Quadrant.
     """
+    # noinspection SpellCheckingInspection
     def init(self, *args, **kwds):
 
         self.logger: Logger = getLogger(__name__)
@@ -47,11 +50,12 @@ class QuadrantMediator(Singleton):
         self._gameState:  GameState  = GameState()
         self._computer:   Computer   = Computer()
 
-        self._ktm: KlingonTorpedoMediator = KlingonTorpedoMediator()
-        self._ptm: PhotonTorpedoMediator  = PhotonTorpedoMediator()
-        self._em:  EnterpriseMediator     = EnterpriseMediator()
-        self._km:  KlingonMediator        = KlingonMediator()
-        self._cm:  CommanderMediator      = CommanderMediator()
+        self._ktm: KlingonTorpedoMediator   = KlingonTorpedoMediator()
+        self._ctm: CommanderTorpedoMediator = CommanderTorpedoMediator()
+        self._ptm: PhotonTorpedoMediator    = PhotonTorpedoMediator()
+        self._em:  EnterpriseMediator       = EnterpriseMediator()
+        self._km:  KlingonMediator          = KlingonMediator()
+        self._cm:  CommanderMediator        = CommanderMediator()
 
         self._playerList:    SpriteList = SpriteList()
         self._klingonList:   SpriteList = SpriteList()
@@ -95,6 +99,7 @@ class QuadrantMediator(Singleton):
         self.klingonList.draw()
         self.commanderList.draw()
         self._ktm.draw()
+        self._ctm.draw()
         if quadrant.hasPlanet is True:
             quadrant.planet.draw()
 
@@ -111,7 +116,7 @@ class QuadrantMediator(Singleton):
         self.playerList.update()
 
         self._ktm.update(quadrant=quadrant)
-
+        self._ctm.update(quadrant=quadrant)
         self._ptm.update(quadrant=quadrant)
 
     def _updateQuadrant(self, quadrant):

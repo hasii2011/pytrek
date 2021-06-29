@@ -78,6 +78,12 @@ class TestGameSettings(TestBase):
     def testMaxKlingonFiringIntervalExistence(self):
         self.assertIsNotNone(self._settings.maxKlingonFiringInterval)
 
+    def testMinCommanderFiringIntervalExistence(self):
+        self.assertIsNotNone(self._settings.minCommanderFiringInterval)
+
+    def testMaxCommanderFiringIntervalExistence(self):
+        self.assertIsNotNone(self._settings.maxCommanderFiringInterval)
+
     def testDebugSettingsAddKlingons(self):
 
         saveSetting: bool = self._settings.debugAddKlingons

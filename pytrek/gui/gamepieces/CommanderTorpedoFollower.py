@@ -10,7 +10,7 @@ class CommanderTorpedoFollower(BaseTorpedoFollower):
 
     def __init__(self):
 
-        followerId: EnemyFollowerId = EnemyFollowerId(f'ComandernTorpedoFollower-{CommanderTorpedoFollower.nextId}')
+        followerId: EnemyFollowerId = EnemyFollowerId(f'CommanderTorpedoFollower-{CommanderTorpedoFollower.nextId}')
 
         super().__init__(filename=CommanderTorpedoFollower.FILENAME, followerId=followerId, scale=0.1)
 

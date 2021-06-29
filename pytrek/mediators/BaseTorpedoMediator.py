@@ -1,17 +1,26 @@
 
+from typing import List
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
-from typing import cast
 
 from arcade import SpriteList
 
 from pytrek.engine.ArcadePoint import ArcadePoint
+
+from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.BaseEnemy import EnemyId
+from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.BaseTorpedoFollower import BaseTorpedoFollower
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
+
 from pytrek.mediators.BaseMediator import BaseMediator
 from pytrek.mediators.BaseMediator import LineOfSightResponse
+from pytrek.mediators.BaseMediator import Torpedoes
 
 from pytrek.model.Quadrant import Quadrant
 
@@ -77,6 +86,30 @@ class BaseTorpedoMediator(BaseMediator):
         """
         pass
 
+    def _getTorpedoToFire(self, enemy: Enemy, enterprise: Enterprise) -> BaseEnemyTorpedo:
+        """
+        Must be implemented by subclass to create correct type of torpedo
+
+        Args:
+            enemy:      The Klingon, Commander, or Super Commander that is firing
+            enterprise: Where Captain Kirk is waiting
+
+        Returns:  A torpedo of the correct kind
+        """
+        pass
+
+    def _playCannotFireSound(self):
+        """
+        Implemented by subclass
+        """
+        pass
+
+    def _playTorpedoFiredSound(self):
+        """
+        Implemented by subclass
+        """
+        pass
+
     def _fireTorpedoesAtEnterpriseIfNecessary(self, quadrant: Quadrant, enemies: Enemies):
 
         currentTime: float = self._gameEngine.gameClock
@@ -100,18 +133,57 @@ class BaseTorpedoMediator(BaseMediator):
 
     def _fireTorpedo(self, enemy: Enemy, enterprise: Enterprise):
         """
-        Implemented by subclass to fire the specific torpedo
         Args:
             enemy:      Who is firing it
             enterprise: The poor lowly enterprise is the target
         """
-        pass
 
-    def _playCannotFireSound(self):
-        """
-        Implemented by subclass
-        """
-        pass
+        self.logger.debug(f'Klingon @ {enemy.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
+        self._messageConsole.displayMessage(f'Klingon @ {enemy.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
+
+        enemyTorpedo: BaseEnemyTorpedo = self._getTorpedoToFire(enemy, enterprise)
+
+        self.torpedoes.append(enemyTorpedo)
+        self._playTorpedoFiredSound()
+        # self._soundKlingonTorpedo.play(volume=self._gameSettings.soundVolume.value)
+
+        self.logger.info(f'{enemyTorpedo.firedFromPosition=}')
+
+    def _handleTorpedoMisses(self, quadrant: Quadrant):
+
+        torpedoDuds: List[BaseEnemyTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self.torpedoes))
+
+        for torpedoDud in torpedoDuds:
+            self._removeTorpedoFollowers(enemyTorpedo=torpedoDud)
+
+            firedBy: EnemyId = torpedoDud.firedBy
+
+            shootingKlingon: BaseEnemy = self._findFiringEnemy(enemyId=firedBy, enemies=quadrant.klingons)
+            if shootingKlingon is not None:
+                self._messageConsole.displayMessage(f'{shootingKlingon.id} missed !!!!')
+                self._placeTorpedoMiss(quadrant=quadrant, torpedoDud=torpedoDud)
+                shootingKlingon.angle = 0
+            torpedoDud.remove_from_sprite_lists()
+
+    def _removeTorpedoFollowers(self, enemyTorpedo: BaseEnemyTorpedo):
+
+        followersToRemove: List[BaseTorpedoFollower] = []
+        for sprite in self.torpedoFollowers:
+            follower: BaseTorpedoFollower = cast(BaseTorpedoFollower, sprite)
+            if follower.following == enemyTorpedo.id:
+                self.logger.debug(f'Removing follower: {follower.id}')
+                followersToRemove.append(follower)
+
+        for followerToRemove in followersToRemove:
+            followerToRemove.remove_from_sprite_lists()
+
+    def _placeTorpedoMiss(self, quadrant: Quadrant, torpedoDud: BaseEnemyTorpedo):
+
+        # TODO Make generic to BasicMiss
+        miss: KlingonTorpedoMiss = KlingonTorpedoMiss(placedTime=self._gameEngine.gameClock)
+
+        self._placeMiss(quadrant=quadrant, torpedoDud=torpedoDud, miss=miss)
+        self._misses.append(miss)
 
     def _doWeHaveLineOfSight(self, quadrant: Quadrant, shooter: Enemy, endPoint: ArcadePoint) -> LineOfSightResponse:
 

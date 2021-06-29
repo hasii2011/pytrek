@@ -15,8 +15,11 @@ class FactorsSettings(BaseSubSetting):
     STAR_BASE_EXTENDER:   str = 'star_base_extender'
     STAR_BASE_MULTIPLIER: str = 'star_base_multiplier'
 
-    MIN_KLINGON_FIRING_INTERVAL: str = 'min_klingon_firing_interval'
-    MAX_KLINGON_FIRING_INTERVAL: str = 'max_klingon_firing_interval'
+    MIN_KLINGON_FIRING_INTERVAL:   str = 'min_klingon_firing_interval'
+    MAX_KLINGON_FIRING_INTERVAL:   str = 'max_klingon_firing_interval'
+    MIN_COMMANDER_FIRING_INTERVAL: str = 'min_commander_firing_interval'
+    MAX_COMMANDER_FIRING_INTERVAL: str = 'max_Commander_firing_interval'
+
     MIN_COMMANDER_MOVE_INTERVAL: str = 'min_commander_move_interval'
     MAX_COMMANDER_MOVE_INTERVAL: str = 'max_commander_move_interval'
     MIN_KLINGON_MOVE_INTERVAL:   str = 'min_klingon_move_interval'
@@ -28,8 +31,12 @@ class FactorsSettings(BaseSubSetting):
         GAME_LENGTH_FACTOR:     '7.0',
         STAR_BASE_EXTENDER:     '2.0',
         STAR_BASE_MULTIPLIER:   '3.0',
+
         MIN_KLINGON_FIRING_INTERVAL: '7',
         MAX_KLINGON_FIRING_INTERVAL: '15',
+
+        MIN_COMMANDER_FIRING_INTERVAL: '5',
+        MAX_COMMANDER_FIRING_INTERVAL: '10',
 
         MIN_COMMANDER_MOVE_INTERVAL: '3',
         MAX_COMMANDER_MOVE_INTERVAL: '10',
@@ -41,6 +48,7 @@ class FactorsSettings(BaseSubSetting):
         PHOTON_TORPEDO_MISFIRE_RATE: '0.2'
     })
 
+    # noinspection SpellCheckingInspection
     def init(self, *args, **kwds):
         """
         This is a singleton based on the inheritance hierarchy
@@ -73,6 +81,14 @@ class FactorsSettings(BaseSubSetting):
     @property
     def maxKlingonFiringInterval(self) -> int:
         return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_KLINGON_FIRING_INTERVAL)
+
+    @property
+    def minCommanderFiringInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MIN_COMMANDER_FIRING_INTERVAL)
+
+    @property
+    def maxCommanderFiringInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_COMMANDER_FIRING_INTERVAL)
 
     @property
     def minCommanderMoveInterval(self) -> int:
