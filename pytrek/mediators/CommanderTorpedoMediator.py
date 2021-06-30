@@ -7,10 +7,15 @@ from logging import getLogger
 from arcade import Sound
 
 from pytrek.engine.ArcadePoint import ArcadePoint
+
 from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.BasicMiss import BasicMiss
 from pytrek.gui.gamepieces.CommanderTorpedo import CommanderTorpedo
+from pytrek.gui.gamepieces.CommanderTorpedoMiss import CommanderTorpedoMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+
+from pytrek.mediators.BaseMediator import Misses
 from pytrek.mediators.BaseTorpedoMediator import BaseTorpedoMediator
 
 from pytrek.model.Quadrant import Quadrant
@@ -46,7 +51,8 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.commanders)
         self.torpedoes.update()
 
-        self._handleTorpedoMisses(quadrant)
+        self._handleTorpedoMisses(quadrant, enemies=quadrant.commanders)
+        self._handleMissRemoval(quadrant, cast(Misses, self._misses))
 
     def _getTorpedoToFire(self, enemy: Enemy, enterprise: Enterprise) -> BaseEnemyTorpedo:
         """
@@ -72,6 +78,14 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         commanderTorpedo.followers = self.torpedoFollowers
 
         return commanderTorpedo
+
+    def _getTorpedoMiss(self) -> BasicMiss:
+        """
+        Implement empty base class method
+
+        Returns:  An appropriate 'miss' sprite
+        """
+        return CommanderTorpedoMiss(placedTime=self._gameEngine.gameClock)
 
     def _playCannotFireSound(self):
         """

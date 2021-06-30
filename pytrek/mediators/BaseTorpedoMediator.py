@@ -13,6 +13,7 @@ from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.BaseEnemy import EnemyId
 from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.BaseTorpedoFollower import BaseTorpedoFollower
+from pytrek.gui.gamepieces.BasicMiss import BasicMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
@@ -98,6 +99,14 @@ class BaseTorpedoMediator(BaseMediator):
         """
         pass
 
+    def _getTorpedoMiss(self) -> BasicMiss:
+        """
+        Implemented by subclass
+
+        Returns:  An appropriate 'miss' sprite
+        """
+        pass
+
     def _playCannotFireSound(self):
         """
         Implemented by subclass
@@ -149,7 +158,7 @@ class BaseTorpedoMediator(BaseMediator):
 
         self.logger.info(f'{enemyTorpedo.firedFromPosition=}')
 
-    def _handleTorpedoMisses(self, quadrant: Quadrant):
+    def _handleTorpedoMisses(self, quadrant: Quadrant, enemies: Enemies):
 
         torpedoDuds: List[BaseEnemyTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self.torpedoes))
 
@@ -158,7 +167,7 @@ class BaseTorpedoMediator(BaseMediator):
 
             firedBy: EnemyId = torpedoDud.firedBy
 
-            shootingKlingon: BaseEnemy = self._findFiringEnemy(enemyId=firedBy, enemies=quadrant.klingons)
+            shootingKlingon: BaseEnemy = self._findFiringEnemy(enemyId=firedBy, enemies=enemies)
             if shootingKlingon is not None:
                 self._messageConsole.displayMessage(f'{shootingKlingon.id} missed !!!!')
                 self._placeTorpedoMiss(quadrant=quadrant, torpedoDud=torpedoDud)
@@ -179,8 +188,7 @@ class BaseTorpedoMediator(BaseMediator):
 
     def _placeTorpedoMiss(self, quadrant: Quadrant, torpedoDud: BaseEnemyTorpedo):
 
-        # TODO Make generic to BasicMiss
-        miss: KlingonTorpedoMiss = KlingonTorpedoMiss(placedTime=self._gameEngine.gameClock)
+        miss: BasicMiss = self._getTorpedoMiss()
 
         self._placeMiss(quadrant=quadrant, torpedoDud=torpedoDud, miss=miss)
         self._misses.append(miss)

@@ -18,10 +18,12 @@ from pytrek.engine.ShieldHitData import ShieldHitData
 from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.BaseEnemy import EnemyId
 from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.BasicMiss import BasicMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
 from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
+from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
 
 from pytrek.mediators.BaseMediator import Misses
 from pytrek.mediators.BaseTorpedoMediator import BaseTorpedoMediator
@@ -60,7 +62,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         self.torpedoFollowers.update()
 
         self._handleKlingonTorpedoHits(quadrant)
-        self._handleTorpedoMisses(quadrant)
+        self._handleTorpedoMisses(quadrant, enemies=quadrant.klingons)
         self._handleMissRemoval(quadrant, cast(Misses, self._misses))
 
     def _handleKlingonTorpedoHits(self, quadrant: Quadrant):
@@ -124,41 +126,6 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         #     self.statistics.energy += self.statistics.shieldEnergy
         #     self.statistics.shieldEnergy = 0
 
-    # def _handleKlingonTorpedoMisses(self, quadrant: Quadrant):
-    #
-    #     torpedoDuds: List[BaseEnemyTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self.torpedoes))
-    #
-    #     for torpedoDud in torpedoDuds:
-    #         self._removeTorpedoFollowers(klingonTorpedo=torpedoDud)
-    #
-    #         firedBy: EnemyId = torpedoDud.firedBy
-    #
-    #         shootingKlingon: BaseEnemy = self._findFiringEnemy(enemyId=firedBy, enemies=quadrant.klingons)
-    #         if shootingKlingon is not None:
-    #             self._messageConsole.displayMessage(f'{shootingKlingon.id} missed !!!!')
-    #             self._placeTorpedoMiss(quadrant=quadrant, torpedoDud=torpedoDud)
-    #             shootingKlingon.angle = 0
-    #         torpedoDud.remove_from_sprite_lists()
-
-    # def _removeTorpedoFollowers(self, klingonTorpedo: BaseEnemyTorpedo):
-    #
-    #     followersToRemove: List[KlingonTorpedoFollower] = []
-    #     for sprite in self.torpedoFollowers:
-    #         follower: KlingonTorpedoFollower = cast(KlingonTorpedoFollower, sprite)
-    #         if follower.following == klingonTorpedo.id:
-    #             self.logger.debug(f'Removing follower: {follower.id}')
-    #             followersToRemove.append(follower)
-    #
-    #     for followerToRemove in followersToRemove:
-    #         followerToRemove.remove_from_sprite_lists()
-    #
-    # def _placeTorpedoMiss(self, quadrant: Quadrant, torpedoDud: BaseEnemyTorpedo):
-    #
-    #     miss: KlingonTorpedoMiss = KlingonTorpedoMiss(placedTime=self._gameEngine.gameClock)
-    #
-    #     self._placeMiss(quadrant=quadrant, torpedoDud=torpedoDud, miss=miss)
-    #     self._misses.append(miss)
-
     def _playCannotFireSound(self):
         """
         Implement empty base class method
@@ -205,3 +172,11 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         klingonTorpedo.followers = self.torpedoFollowers
 
         return klingonTorpedo
+
+    def _getTorpedoMiss(self) -> BasicMiss:
+        """
+        Implement empty base class method
+
+        Returns:  An appropriate 'miss' sprite
+        """
+        return KlingonTorpedoMiss(placedTime=self._gameEngine.gameClock)

@@ -8,9 +8,9 @@ from pytrek.gui.gamepieces.BaseGamePiece import BaseGamePiece
 
 class BasicMiss(BaseGamePiece):
 
-    def __init__(self, fileName: str, placedTime: float):
+    def __init__(self, fileName: str, placedTime: float, scale: float = 1.0):
 
-        super().__init__(fileName)
+        super().__init__(filename=fileName, scale=scale)
 
         self.logger:     Logger = getLogger(__name__)
         self._placedTime: float = placedTime
