@@ -5,9 +5,16 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
+from arcade import Sound
+from arcade import Sprite
 from arcade import SpriteList
+from arcade import check_for_collision_with_list
 
 from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.ShieldHitData import ShieldHitData
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.Devices import Devices
 
 from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.BaseEnemy import EnemyId
@@ -17,13 +24,14 @@ from pytrek.gui.gamepieces.BasicMiss import BasicMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
-from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
 
 from pytrek.mediators.BaseMediator import BaseMediator
 from pytrek.mediators.BaseMediator import LineOfSightResponse
 from pytrek.mediators.BaseMediator import Torpedoes
 
 from pytrek.model.Quadrant import Quadrant
+
+from pytrek.Constants import DEFAULT_FULL_SHIELDS
 
 
 class BaseTorpedoMediator(BaseMediator):
@@ -36,13 +44,17 @@ class BaseTorpedoMediator(BaseMediator):
 
         self.logger: Logger = BaseTorpedoMediator.clsLogger
 
+        self._devices: Devices = Devices()
+
         self._torpedoes:        SpriteList = SpriteList()
         self._torpedoFollowers: SpriteList = SpriteList(is_static=True)
         self._misses:           SpriteList = SpriteList()
 
         self._klingonList:      Enemies = cast (Enemies, None)
 
-        self._lastTimeCheck: float = self._gameEngine.gameClock / 1000
+        self._lastTimeCheck:  float = self._gameEngine.gameClock / 1000
+        self._soundShieldHit: Sound = self._loadSound(bareFileName='ShieldHit.wav')
+
         self.logger.info(f'{self._lastTimeCheck=}')
 
     @property
@@ -228,6 +240,69 @@ class BaseTorpedoMediator(BaseMediator):
                 break
 
         return fndEnemy
+
+    def _handleTorpedoHits(self, quadrant: Quadrant, enemies: Enemies):
+        """
+        For each torpedo use arcade to determine collision
+
+         * Remove it's followers
+         * Determine which Klingon fired it
+         * Determine how severe of a hit it was
+         * Adjust the Enterprise shield power value or the Enterprise power value itself
+        Args:
+            quadrant:  The current quadrant we are in
+        """
+        expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=quadrant.enterprise, sprite_list=self.torpedoes)
+        for sprite in expendedTorpedoes:
+            expendedTorpedo: BaseEnemyTorpedo = cast(BaseEnemyTorpedo, sprite)
+            self.logger.info(f'{expendedTorpedo.id} arrived at destination')
+            self._removeTorpedoFollowers(enemyTorpedo=expendedTorpedo)
+
+            firedBy: EnemyId = expendedTorpedo.firedBy
+            shootingEnemy: BaseEnemy = self._findFiringEnemy(enemyId=firedBy, enemies=enemies)
+
+            if shootingEnemy is not None:
+                shootingEnemy.angle = 0
+                self._computeDamage(quadrant, shootingEnemy)
+
+            expendedTorpedo.remove_from_sprite_lists()
+
+            if self._gameState.energy <= 0:
+                # alert(theMessage='Game Over!  The Enterprise is out of energy')
+                # sys.exit()
+                pass
+
+        # damagedDeviceType: DeviceType = self._intelligence.fryDevice(shieldHitData.degradedTorpedoHitValue)
+        # if damagedDeviceType is not None:
+        #     self.messageConsole.addText(f"Device: {damagedDeviceType} damaged")
+        #
+        # if damagedDeviceType == DeviceType.Shields:
+        #     self.messageConsole.addText("Shield energy transferred to Enterprise")
+        #     self.statistics.energy += self.statistics.shieldEnergy
+        #     self.statistics.shieldEnergy = 0
+
+    def _computeDamage(self, quadrant: Quadrant, shooter: BaseEnemy):
+
+        hitValue: float = self._computer.computeHitValueOnEnterprise(enemyPosition=shooter.gameCoordinates,
+                                                                     enterprisePosition=quadrant.enterpriseCoordinates,
+                                                                     enemyPower=shooter.power)
+        self.logger.debug(f"Original Hit Value: {hitValue:.4f} {shooter=}")
+        if self._devices.getDeviceStatus(DeviceType.Shields) == DeviceStatus.Up:
+            shieldHitData: ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=hitValue)
+        else:
+            shieldHitData = ShieldHitData(degradedTorpedoHitValue=hitValue, shieldAbsorptionValue=0.0)
+
+        shieldAbsorptionValue   = shieldHitData.shieldAbsorptionValue
+        degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
+
+        self._soundShieldHit.play()
+        self._gameEngine.degradeShields(shieldAbsorptionValue)
+
+        shieldPercentage: int = round((self._gameState.shieldEnergy / DEFAULT_FULL_SHIELDS) * 100)
+        shieldMsg:        str = f"Shields at {shieldPercentage} percent.  Enterprise energy degraded by: {degradedTorpedoHitValue:.2f}"
+
+        self._messageConsole.displayMessage(shieldMsg)
+        self._gameEngine.degradeEnergyLevel(shieldHitData.degradedTorpedoHitValue)
 
     def __pointAtEnterprise(self, enemy: Enemy, enterprise: Enterprise):
 

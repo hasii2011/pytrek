@@ -51,6 +51,7 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.commanders)
         self.torpedoes.update()
 
+        self._handleTorpedoHits(quadrant, enemies=quadrant.commanders)
         self._handleTorpedoMisses(quadrant, enemies=quadrant.commanders)
         self._handleMissRemoval(quadrant, cast(Misses, self._misses))
 

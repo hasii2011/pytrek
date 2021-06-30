@@ -1,6 +1,7 @@
 from logging import Logger, getLogger
 
 from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.CommanderTorpedoFollower import CommanderTorpedoFollower
 from pytrek.gui.gamepieces.GamePieceTypes import EnemyTorpedoId
 
 
@@ -28,11 +29,10 @@ class CommanderTorpedo(BaseEnemyTorpedo):
             x:  Arcade x
             y:  Arcade y
         """
-        # commanderTorpedoFollower: CommanderTorpedoFollower = CommanderTorpedoFollower()
-        #
-        # commanderTorpedoFollower.center_x  = x
-        # commanderTorpedoFollower.center_y  = y
-        # commanderTorpedoFollower.following = self._id
-        #
-        # self._followers.append(commanderTorpedoFollower)
-        pass
+        commanderTorpedoFollower: CommanderTorpedoFollower = CommanderTorpedoFollower()
+
+        commanderTorpedoFollower.center_x  = x
+        commanderTorpedoFollower.center_y  = y
+        commanderTorpedoFollower.following = self._id
+
+        self._followers.append(commanderTorpedoFollower)

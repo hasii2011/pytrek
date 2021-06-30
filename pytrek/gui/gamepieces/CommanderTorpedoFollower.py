@@ -12,6 +12,6 @@ class CommanderTorpedoFollower(BaseTorpedoFollower):
 
         followerId: EnemyFollowerId = EnemyFollowerId(f'CommanderTorpedoFollower-{CommanderTorpedoFollower.nextId}')
 
-        super().__init__(filename=CommanderTorpedoFollower.FILENAME, followerId=followerId, scale=0.1)
+        super().__init__(filename=CommanderTorpedoFollower.FILENAME, followerId=followerId, scale=0.7)
 
         CommanderTorpedoFollower.nextId += 1

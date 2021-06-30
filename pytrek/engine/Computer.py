@@ -126,21 +126,21 @@ class Computer(Singleton):
 
         return strValue
 
-    def computeHitValueOnEnterprise(self, klingonPosition: Coordinates, enterprisePosition: Coordinates, klingonPower: float) -> float:
+    def computeHitValueOnEnterprise(self, enemyPosition: Coordinates, enterprisePosition: Coordinates, enemyPower: float) -> float:
         """
         Based on the Klingon power value and the distance between the two
 
         Args:
-            klingonPosition:
+            enemyPosition:
             enterprisePosition:
-            klingonPower:
+            enemyPower:
 
         Returns:  The effective energy drainage on the Enterprise
         """
 
-        distance:  float = self.computeQuadrantDistance(startSector=klingonPosition, endSector=enterprisePosition)
+        distance:  float = self.computeQuadrantDistance(startSector=enemyPosition, endSector=enterprisePosition)
         hitFactor: float = 1.3 - distance
-        hit:       float = klingonPower * hitFactor
+        hit:       float = enemyPower * hitFactor
         return hit
 
     def computeHitValueOnKlingon(self, enterprisePosition: Coordinates, klingonPosition: Coordinates, klingonPower: float) -> float:
