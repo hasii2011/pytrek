@@ -29,7 +29,8 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
 
         super().__init__()
 
-        self._soundCommanderTorpedo: Sound = cast(Sound, None)
+        self._soundCommanderTorpedo:    Sound = cast(Sound, None)
+        self._soundCommanderCannotFire: Sound = cast(Sound, None)
 
         self._loadSounds()
 
@@ -92,7 +93,7 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         """
         We must implement this
         """
-        pass
+        self._soundCommanderCannotFire.play(self._gameSettings.soundVolume.value)
 
     def _playTorpedoFiredSound(self):
         """
@@ -102,4 +103,5 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
 
     def _loadSounds(self):
 
-        self._soundCommanderTorpedo = self._loadSound(bareFileName='CommanderTorpedo.wav')
+        self._soundCommanderTorpedo    = self._loadSound(bareFileName='CommanderTorpedo.wav')
+        self._soundCommanderCannotFire = self._loadSound(bareFileName='CommanderCannotFire.wav')
