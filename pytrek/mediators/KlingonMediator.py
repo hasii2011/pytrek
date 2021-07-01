@@ -10,7 +10,9 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.PlayerType import PlayerType
 
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.Klingon import Klingon
+
+from pytrek.gui.gamepieces.klingon.Klingon import Klingon
+
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.model.Quadrant import Quadrant

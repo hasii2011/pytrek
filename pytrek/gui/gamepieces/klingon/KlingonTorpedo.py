@@ -4,7 +4,7 @@ from logging import getLogger
 
 from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.GamePieceTypes import EnemyTorpedoId
-from pytrek.gui.gamepieces.KlingonTorpedoFollower import KlingonTorpedoFollower
+from pytrek.gui.gamepieces.klingon.KlingonTorpedoFollower import KlingonTorpedoFollower
 
 
 class KlingonTorpedo(BaseEnemyTorpedo):

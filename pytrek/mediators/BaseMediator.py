@@ -24,9 +24,10 @@ from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
 
 from pytrek.gui.gamepieces.BasicMiss import BasicMiss
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
-from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
+
+from pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
+from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant

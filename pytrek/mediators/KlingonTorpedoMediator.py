@@ -13,8 +13,8 @@ from pytrek.gui.gamepieces.BasicMiss import BasicMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
-from pytrek.gui.gamepieces.KlingonTorpedo import KlingonTorpedo
-from pytrek.gui.gamepieces.KlingonTorpedoMiss import KlingonTorpedoMiss
+from pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
+from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
 
 from pytrek.mediators.BaseMediator import Misses
 from pytrek.mediators.BaseTorpedoMediator import BaseTorpedoMediator

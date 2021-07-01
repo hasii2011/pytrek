@@ -15,7 +15,7 @@ from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
-from pytrek.gui.gamepieces.Klingon import Klingon
+from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.Planet import Planet
 from pytrek.gui.gamepieces.PlanetType import PlanetType
 
