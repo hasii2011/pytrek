@@ -16,7 +16,7 @@ from pytrek.engine.Computer import Computer
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
 
-from pytrek.gui.gamepieces.Commander import Commander
+from pytrek.gui.gamepieces.commander.Commander import Commander
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.gui.gamepieces.klingon.Klingon import Klingon

@@ -9,7 +9,7 @@ from logging import getLogger
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 
-from pytrek.gui.gamepieces.Commander import Commander
+from pytrek.gui.gamepieces.commander.Commander import Commander
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies

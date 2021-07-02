@@ -10,8 +10,8 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 
 from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.BasicMiss import BasicMiss
-from pytrek.gui.gamepieces.CommanderTorpedo import CommanderTorpedo
-from pytrek.gui.gamepieces.CommanderTorpedoMiss import CommanderTorpedoMiss
+from pytrek.gui.gamepieces.commander.CommanderTorpedo import CommanderTorpedo
+from pytrek.gui.gamepieces.commander.CommanderTorpedoMiss import CommanderTorpedoMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 

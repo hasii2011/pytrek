@@ -6,7 +6,7 @@ from logging import getLogger
 
 from arcade import Sound
 
-from pytrek.gui.gamepieces.Commander import Commander
+from pytrek.gui.gamepieces.commander.Commander import Commander
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
