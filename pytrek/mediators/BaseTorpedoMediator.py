@@ -16,11 +16,11 @@ from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 
-from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
-from pytrek.gui.gamepieces.BaseEnemy import EnemyId
-from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
-from pytrek.gui.gamepieces.BaseTorpedoFollower import BaseTorpedoFollower
-from pytrek.gui.gamepieces.BaseMiss import BaseMiss
+from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
+from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
+from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.base.BaseTorpedoFollower import BaseTorpedoFollower
+from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy

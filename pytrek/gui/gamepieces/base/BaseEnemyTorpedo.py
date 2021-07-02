@@ -6,7 +6,7 @@ from arcade import SpriteList
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 
-from pytrek.gui.gamepieces.BaseEnemy import EnemyId
+from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.GamePieceTypes import EnemyTorpedoId
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion

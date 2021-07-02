@@ -15,7 +15,7 @@ from arcade import load_spritesheet
 
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
-from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.Explosion import Explosion

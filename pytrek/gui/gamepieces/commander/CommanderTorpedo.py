@@ -1,6 +1,6 @@
 from logging import Logger, getLogger
 
-from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.commander.CommanderTorpedoFollower import CommanderTorpedoFollower
 from pytrek.gui.gamepieces.GamePieceTypes import EnemyTorpedoId
 

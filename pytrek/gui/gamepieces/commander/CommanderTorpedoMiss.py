@@ -1,5 +1,5 @@
 
-from pytrek.gui.gamepieces.BaseMiss import BaseMiss
+from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 
 
 class CommanderTorpedoMiss(BaseMiss):

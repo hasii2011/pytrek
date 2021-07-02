@@ -8,8 +8,8 @@ from arcade import Sound
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 
-from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
-from pytrek.gui.gamepieces.BaseMiss import BaseMiss
+from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.commander.CommanderTorpedo import CommanderTorpedo
 from pytrek.gui.gamepieces.commander.CommanderTorpedoMiss import CommanderTorpedoMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise

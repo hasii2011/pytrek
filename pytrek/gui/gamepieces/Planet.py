@@ -2,7 +2,8 @@ from logging import Logger
 from logging import getLogger
 
 
-from pytrek.gui.gamepieces.BaseGamePiece import BaseGamePiece
+from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
+
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.PlanetType import PlanetType
 

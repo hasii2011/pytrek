@@ -3,7 +3,7 @@ from logging import getLogger
 from typing import cast
 
 from pytrek.engine.ArcadePoint import ArcadePoint
-from pytrek.gui.gamepieces.BaseEnemy import EnemyId
+from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
 
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.GamePieceTypes import PhotonTorpedoId

@@ -20,9 +20,9 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.gui.MessageConsole import MessageConsole
-from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 
-from pytrek.gui.gamepieces.BaseMiss import BaseMiss
+from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 

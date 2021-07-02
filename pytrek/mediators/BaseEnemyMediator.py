@@ -9,7 +9,7 @@ from random import choice as randomChoice
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Direction import Direction
 
-from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
+from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.model.Coordinates import Coordinates

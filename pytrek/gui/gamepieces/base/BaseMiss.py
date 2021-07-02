@@ -3,7 +3,7 @@ from logging import Logger
 from logging import getLogger
 
 
-from pytrek.gui.gamepieces.BaseGamePiece import BaseGamePiece
+from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
 
 
 class BaseMiss(BaseGamePiece):

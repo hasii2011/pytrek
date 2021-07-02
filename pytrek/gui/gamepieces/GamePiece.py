@@ -9,7 +9,7 @@ from pytrek.Constants import QUADRANT_ROWS
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 
-from pytrek.gui.gamepieces.BaseGamePiece import BaseGamePiece
+from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
 
 from pytrek.model.Coordinates import Coordinates
 
