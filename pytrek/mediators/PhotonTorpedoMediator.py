@@ -24,10 +24,10 @@ from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.PhotonTorpedo import PhotonTorpedo
 from pytrek.gui.gamepieces.PhotonTorpedoMiss import PhotonTorpedoMiss
 
-from pytrek.mediators.BaseMediator import BaseMediator
-from pytrek.mediators.BaseMediator import LineOfSightResponse
-from pytrek.mediators.BaseMediator import Misses
-from pytrek.mediators.BaseMediator import Torpedoes
+from pytrek.mediators.base.BaseMediator import BaseMediator
+from pytrek.mediators.base.BaseMediator import LineOfSightResponse
+from pytrek.mediators.base.BaseMediator import Misses
+from pytrek.mediators.base.BaseMediator import Torpedoes
 
 from pytrek.model.Quadrant import Quadrant
 

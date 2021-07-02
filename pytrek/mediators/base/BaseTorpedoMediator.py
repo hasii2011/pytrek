@@ -25,9 +25,9 @@ from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
-from pytrek.mediators.BaseMediator import BaseMediator
-from pytrek.mediators.BaseMediator import LineOfSightResponse
-from pytrek.mediators.BaseMediator import Torpedoes
+from pytrek.mediators.base.BaseMediator import BaseMediator
+from pytrek.mediators.base.BaseMediator import LineOfSightResponse
+from pytrek.mediators.base.BaseMediator import Torpedoes
 
 from pytrek.model.Quadrant import Quadrant
 

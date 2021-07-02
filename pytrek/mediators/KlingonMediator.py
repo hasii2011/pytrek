@@ -17,7 +17,7 @@ from pytrek.model.Coordinates import Coordinates
 
 from pytrek.model.Quadrant import Quadrant
 
-from pytrek.mediators.BaseEnemyMediator import BaseEnemyMediator
+from pytrek.mediators.base.BaseEnemyMediator import BaseEnemyMediator
 
 
 class KlingonMediator(BaseEnemyMediator):

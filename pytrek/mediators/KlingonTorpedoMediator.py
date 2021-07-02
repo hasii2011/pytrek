@@ -16,8 +16,8 @@ from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
 
-from pytrek.mediators.BaseMediator import Misses
-from pytrek.mediators.BaseTorpedoMediator import BaseTorpedoMediator
+from pytrek.mediators.base.BaseMediator import Misses
+from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
 from pytrek.model.Quadrant import Quadrant
 

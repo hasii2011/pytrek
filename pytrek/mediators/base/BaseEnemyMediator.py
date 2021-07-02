@@ -17,7 +17,7 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
 
-from pytrek.mediators.BaseMediator import BaseMediator
+from pytrek.mediators.base.BaseMediator import BaseMediator
 
 
 class BaseEnemyMediator(BaseMediator):
