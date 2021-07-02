@@ -1,8 +1,8 @@
 
-from pytrek.gui.gamepieces.BasicMiss import BasicMiss
+from pytrek.gui.gamepieces.BaseMiss import BaseMiss
 
 
-class KlingonTorpedoMiss(BasicMiss):
+class KlingonTorpedoMiss(BaseMiss):
 
     FILENAME:        str = "KlingonTorpedoMiss.png"
 

@@ -20,7 +20,7 @@ from pytrek.gui.gamepieces.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.BaseEnemy import EnemyId
 from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.BaseTorpedoFollower import BaseTorpedoFollower
-from pytrek.gui.gamepieces.BasicMiss import BasicMiss
+from pytrek.gui.gamepieces.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
@@ -111,7 +111,7 @@ class BaseTorpedoMediator(BaseMediator):
         """
         pass
 
-    def _getTorpedoMiss(self) -> BasicMiss:
+    def _getTorpedoMiss(self) -> BaseMiss:
         """
         Implemented by subclass
 
@@ -200,7 +200,7 @@ class BaseTorpedoMediator(BaseMediator):
 
     def _placeTorpedoMiss(self, quadrant: Quadrant, torpedoDud: BaseEnemyTorpedo):
 
-        miss: BasicMiss = self._getTorpedoMiss()
+        miss: BaseMiss = self._getTorpedoMiss()
 
         self._placeMiss(quadrant=quadrant, torpedoDud=torpedoDud, miss=miss)
         self._misses.append(miss)

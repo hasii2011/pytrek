@@ -22,7 +22,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
 
-from pytrek.gui.gamepieces.BasicMiss import BasicMiss
+from pytrek.gui.gamepieces.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
@@ -42,7 +42,7 @@ from pytrek.GameState import GameState
 
 LineOfSightResponse = namedtuple('LineOfSightResponse', 'answer, obstacle')
 Torpedoes            = List[SmoothMotion]
-Misses               = List[BasicMiss]
+Misses               = List[BaseMiss]
 
 
 class BaseMediator:
@@ -109,14 +109,14 @@ class BaseMediator:
         displayInterval: int   = self._gameSettings.basicMissDisplayInterval
 
         for miss in misses:
-            dud: BasicMiss = cast(BasicMiss, miss)
+            dud: BaseMiss = cast(BaseMiss, miss)
             deltaTime: float = currentTime - dud.placedTime
             if deltaTime >= displayInterval:
                 gameCoordinates: Coordinates = dud.gameCoordinates
                 self.__removeMissInQuadrant(quadrant=quadrant, sectorCoordinates=gameCoordinates)
                 dud.remove_from_sprite_lists()
 
-    def _placeMiss(self, quadrant: Quadrant, torpedoDud: GamePiece, miss: BasicMiss):
+    def _placeMiss(self, quadrant: Quadrant, torpedoDud: GamePiece, miss: BaseMiss):
         """
         Convert to game coordinates
         Then to game point in order to get miss to center in sector

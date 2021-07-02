@@ -6,7 +6,7 @@ from logging import getLogger
 from pytrek.gui.gamepieces.BaseGamePiece import BaseGamePiece
 
 
-class BasicMiss(BaseGamePiece):
+class BaseMiss(BaseGamePiece):
 
     def __init__(self, fileName: str, placedTime: float, scale: float = 1.0):
 

@@ -9,7 +9,7 @@ from arcade import Sound
 from pytrek.engine.ArcadePoint import ArcadePoint
 
 from pytrek.gui.gamepieces.BaseEnemyTorpedo import BaseEnemyTorpedo
-from pytrek.gui.gamepieces.BasicMiss import BasicMiss
+from pytrek.gui.gamepieces.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
@@ -99,7 +99,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
         return klingonTorpedo
 
-    def _getTorpedoMiss(self) -> BasicMiss:
+    def _getTorpedoMiss(self) -> BaseMiss:
         """
         Implement empty base class method
 
