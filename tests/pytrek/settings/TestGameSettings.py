@@ -7,6 +7,7 @@ from unittest import main as unitTestMain
 
 from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 from tests.TestBase import TestBase
 
@@ -83,6 +84,48 @@ class TestGameSettings(TestBase):
 
     def testMaxCommanderFiringIntervalExistence(self):
         self.assertIsNotNone(self._settings.maxCommanderFiringInterval)
+
+    def testNoviceTorpedoSpeeds(self):
+
+        tpNovice: TorpedoSpeeds = self._settings.noviceTorpedoSpeeds
+
+        self.assertIsNotNone(tpNovice, 'We should at least get an object back')
+
+        self.assertEqual(-1, tpNovice.superCommander)
+
+    def testFairTorpedoSpeeds(self):
+
+        tpFair: TorpedoSpeeds = self._settings.fairTorpedoSpeeds
+
+        self.assertIsNotNone(tpFair, 'We should at least get an object back')
+
+        self.assertEqual(-1, tpFair.superCommander)
+
+    def testGoodTorpedoSpeeds(self):
+
+        tpGood: TorpedoSpeeds = self._settings.goodTorpedoSpeeds
+
+        self.assertIsNotNone(tpGood, 'We should at least get an object back')
+
+        self.assertEqual(4, tpGood.superCommander)
+
+    def testExpertTorpedoSpeeds(self):
+
+        tpExpert: TorpedoSpeeds = self._settings.expertTorpedoSpeeds
+
+        self.assertIsNotNone(tpExpert, 'We should at least get an object back')
+
+        self.assertEqual(4, tpExpert.commander)
+        self.assertEqual(4, tpExpert.superCommander)
+
+    def testEmeritusTorpedoSpeeds(self):
+
+        tpEmeritus: TorpedoSpeeds = self._settings.emeritusTorpedoSpeeds
+
+        self.assertIsNotNone(tpEmeritus, 'We should at least get an object back')
+
+        self.assertEqual(5, tpEmeritus.commander)
+        self.assertEqual(5, tpEmeritus.superCommander)
 
     def testDebugSettingsAddKlingons(self):
 

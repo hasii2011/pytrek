@@ -18,6 +18,8 @@ from pytrek.settings.LimitsSettings import LimitsSettings
 from pytrek.settings.PowerSettings import PowerSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.SoundVolume import SoundVolume
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+from pytrek.settings.TorpedoSpeedSettings import TorpedoSpeedSettings
 
 
 class GameSettings(Singleton):
@@ -28,12 +30,13 @@ class GameSettings(Singleton):
 
         self._config: ConfigParser = cast(ConfigParser, None)    # initialized when empty preferences created
 
-        self._settingsCommon: SettingsCommon    = SettingsCommon()
-        self._limits:         LimitsSettings    = LimitsSettings()
-        self._power:          PowerSettings     = PowerSettings()
-        self._gameLevel:      GameLevelSettings = GameLevelSettings()
-        self._factors:        FactorsSettings   = FactorsSettings()
-        self._debug:          DebugSettings     = DebugSettings()
+        self._settingsCommon: SettingsCommon       = SettingsCommon()
+        self._limits:         LimitsSettings       = LimitsSettings()
+        self._power:          PowerSettings        = PowerSettings()
+        self._gameLevel:      GameLevelSettings    = GameLevelSettings()
+        self._factors:        FactorsSettings      = FactorsSettings()
+        self._debug:          DebugSettings        = DebugSettings()
+        self._torpedoSpeeds:  TorpedoSpeedSettings = TorpedoSpeedSettings()
 
         self._createEmptySettings()
         self._loadSettings()
@@ -147,6 +150,26 @@ class GameSettings(Singleton):
         return self._factors.photonTorpedoMisfireRate
 
     @property
+    def noviceTorpedoSpeeds(self) -> TorpedoSpeeds:
+        return self._torpedoSpeeds.noviceTorpedoSpeeds
+
+    @property
+    def fairTorpedoSpeeds(self) -> TorpedoSpeeds:
+        return self._torpedoSpeeds.fairTorpedoSpeeds
+
+    @property
+    def goodTorpedoSpeeds(self) -> TorpedoSpeeds:
+        return self._torpedoSpeeds.goodTorpedoSpeeds
+
+    @property
+    def expertTorpedoSpeeds(self) -> TorpedoSpeeds:
+        return self._torpedoSpeeds.expertTorpedoSpeeds
+
+    @property
+    def emeritusTorpedoSpeeds(self) -> TorpedoSpeeds:
+        return self._torpedoSpeeds.emeritusTorpedoSpeeds
+
+    @property
     def debugAddKlingons(self) -> bool:
         return self._debug.debugAddKlingons
 
@@ -212,6 +235,7 @@ class GameSettings(Singleton):
         self._gameLevel.configParser      = self._config
         self._factors.configParser        = self._config
         self._debug.configParser          = self._config
+        self._torpedoSpeeds.configParser  = self._config
 
     def _loadSettings(self):
         """
@@ -240,3 +264,4 @@ class GameSettings(Singleton):
         self._gameLevel.addMissingSettings()
         self._factors.addMissingSettings()
         self._debug.addMissingSettings()
+        self._torpedoSpeeds.addMissingSettings()

@@ -32,7 +32,7 @@
             "propagate": "False"
         },
         "tests.TestIntelligence": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "TestComputer": {
@@ -44,11 +44,11 @@
             "propagate": "False"
         },
         "tests.pytrek.engine.TestGameEngine": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "tests.pytrek.gui.TestGamePiece": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "TestSmoothMotion": {
@@ -56,7 +56,7 @@
             "propagate": "False"
         },
         "pytrek.engine.GameEngine": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
 
