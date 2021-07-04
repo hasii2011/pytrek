@@ -13,23 +13,26 @@ from arcade import check_for_collision_with_list
 
 from arcade import load_spritesheet
 
-from pytrek.LocateResources import LocateResources
-from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
-
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.Explosion import Explosion
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
-from pytrek.gui.gamepieces.EnterpriseTorpedo import PhotonTorpedo
-from pytrek.gui.gamepieces.EnterpriseTorpedoMiss import PhotonTorpedoMiss
+from pytrek.gui.gamepieces.EnterpriseTorpedo import EnterpriseTorpedo
+from pytrek.gui.gamepieces.EnterpriseTorpedoMiss import EnterpriseTorpedoMiss
 
 from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse
 from pytrek.mediators.base.BaseMediator import Misses
 from pytrek.mediators.base.BaseMediator import Torpedoes
 
+from pytrek.LocateResources import LocateResources
+
+from pytrek.engine.ArcadePoint import ArcadePoint
+
 from pytrek.model.Quadrant import Quadrant
+
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class PhotonTorpedoMediator(BaseMediator):
@@ -122,7 +125,7 @@ class PhotonTorpedoMediator(BaseMediator):
                 expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=enemy, sprite_list=self._torpedoes)
 
                 for sprite in expendedTorpedoes:
-                    killerTorpedo: PhotonTorpedo = cast(PhotonTorpedo, sprite)
+                    killerTorpedo: EnterpriseTorpedo = cast(EnterpriseTorpedo, sprite)
                     self.logger.info(f'{killerTorpedo.id} hit')
 
                     self.__doExplosion(killerTorpedo)
@@ -138,10 +141,10 @@ class PhotonTorpedoMediator(BaseMediator):
         torpedoDuds: List[BaseEnemyTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self._torpedoes))
 
         for baseTorpedo in torpedoDuds:
-            torpedoDud: PhotonTorpedo = cast(PhotonTorpedo, baseTorpedo)
+            torpedoDud: EnterpriseTorpedo = cast(EnterpriseTorpedo, baseTorpedo)
             self._messageConsole.displayMessage(f'{torpedoDud.id} missed {torpedoDud.firedAt} !!!!')
 
-            miss: PhotonTorpedoMiss = PhotonTorpedoMiss(placedTime=self._gameEngine.gameClock)
+            miss: EnterpriseTorpedoMiss = EnterpriseTorpedoMiss(placedTime=self._gameEngine.gameClock)
             self._placeMiss(quadrant=quadrant, torpedoDud=torpedoDud, miss=miss)
             self._torpedoMiss.play(self._gameSettings.soundVolume.value)
             self._misses.append(miss)
@@ -171,7 +174,8 @@ class PhotonTorpedoMediator(BaseMediator):
         enterprisePoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
         klingonPoint:    ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
 
-        torpedo: PhotonTorpedo = PhotonTorpedo()
+        speeds: TorpedoSpeeds      = self._intelligence.getTorpedoSpeeds()
+        torpedo: EnterpriseTorpedo = EnterpriseTorpedo(speed=speeds.enterprise)
 
         torpedo.center_x = enterprisePoint.x
         torpedo.center_y = enterprisePoint.y
@@ -218,7 +222,7 @@ class PhotonTorpedoMediator(BaseMediator):
         self.logger.info(f'{results=}')
         return results
 
-    def __doExplosion(self, killerTorpedo: PhotonTorpedo):
+    def __doExplosion(self, killerTorpedo: EnterpriseTorpedo):
 
         explosion: Explosion = Explosion(textureList=self._torpedoTextures, sound=self._explosionSound)
         explosion.center_x = killerTorpedo.center_x

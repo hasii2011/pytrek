@@ -17,9 +17,9 @@ from pytrek.model.Coordinates import Coordinates
 
 class BaseEnemyTorpedo(GamePiece, SmoothMotion):
 
-    def __init__(self, filename: str, torpedoId: EnemyTorpedoId, scale: float = 1.0):
+    def __init__(self, filename: str, torpedoId: EnemyTorpedoId, speed: float = 3, scale: float = 1.0):
 
-        GamePiece.__init__(self, filename=filename, scale=scale)
+        GamePiece.__init__(self, filename=filename, speed=speed, scale=scale)
         SmoothMotion.__init__(self)
 
         self._id: EnemyTorpedoId = torpedoId

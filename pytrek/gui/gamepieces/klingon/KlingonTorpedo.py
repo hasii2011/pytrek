@@ -13,12 +13,12 @@ class KlingonTorpedo(BaseEnemyTorpedo):
 
     nextId: int = 0
 
-    def __init__(self):
+    def __init__(self, speed: float = 3.0):
 
         torpedoId: EnemyTorpedoId = EnemyTorpedoId(f'KlingonTorpedo-{KlingonTorpedo.nextId}')
         KlingonTorpedo.nextId += 1
 
-        super().__init__(filename=KlingonTorpedo.FILENAME, torpedoId=torpedoId)
+        super().__init__(filename=KlingonTorpedo.FILENAME, torpedoId=torpedoId, speed=speed)
         self.logger: Logger = getLogger(__name__)
 
     def _placeTorpedoFollower(self, x: float, y: float):

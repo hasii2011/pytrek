@@ -11,13 +11,13 @@ class CommanderTorpedo(BaseEnemyTorpedo):
 
     nextId: int = 0
 
-    def __init__(self):
+    def __init__(self, speed: float = 3.0):
 
         torpedoId: EnemyTorpedoId = EnemyTorpedoId(f'CommanderTorpedo-{CommanderTorpedo.nextId}')
 
         CommanderTorpedo.nextId += 1
 
-        super().__init__(filename=CommanderTorpedo.FILENAME, torpedoId=torpedoId, scale=0.4)
+        super().__init__(filename=CommanderTorpedo.FILENAME, speed=speed, torpedoId=torpedoId, scale=0.4)
 
         self.logger: Logger = getLogger(__name__)
 

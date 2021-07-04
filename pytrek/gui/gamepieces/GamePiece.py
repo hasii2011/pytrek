@@ -16,11 +16,11 @@ from pytrek.model.Coordinates import Coordinates
 
 class GamePiece(BaseGamePiece):
 
-    def __init__(self, filename: str = '', scale: float = 1.0):
+    def __init__(self, filename: str = '', speed: float = 2, scale: float = 1.0):
 
         super().__init__(filename=filename, scale=scale)
 
-        self._speed: float = 2
+        self._speed: float = speed
         """
         Max speed
         """

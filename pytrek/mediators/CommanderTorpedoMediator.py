@@ -19,6 +19,7 @@ from pytrek.mediators.base.BaseMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
 from pytrek.model.Quadrant import Quadrant
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class CommanderTorpedoMediator(BaseTorpedoMediator):
@@ -69,7 +70,9 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         klingonPoint:    ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
         enterprisePoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
 
-        commanderTorpedo: CommanderTorpedo = CommanderTorpedo()
+        speeds: TorpedoSpeeds = self._intelligence.getTorpedoSpeeds()
+
+        commanderTorpedo: CommanderTorpedo = CommanderTorpedo(speed=speeds.commander)
 
         commanderTorpedo.center_x = klingonPoint.x
         commanderTorpedo.center_y = klingonPoint.y

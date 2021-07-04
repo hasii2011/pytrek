@@ -20,6 +20,7 @@ from pytrek.mediators.base.BaseMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
 from pytrek.model.Quadrant import Quadrant
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class KlingonTorpedoMediator(BaseTorpedoMediator):
@@ -87,7 +88,9 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         klingonPoint:    ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
         enterprisePoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
 
-        klingonTorpedo: KlingonTorpedo = KlingonTorpedo()
+        speeds: TorpedoSpeeds = self._intelligence.getTorpedoSpeeds()
+
+        klingonTorpedo: KlingonTorpedo = KlingonTorpedo(speed=speeds.klingon)
 
         klingonTorpedo.center_x = klingonPoint.x
         klingonTorpedo.center_y = klingonPoint.y

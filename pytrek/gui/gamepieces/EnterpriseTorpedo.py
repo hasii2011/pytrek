@@ -11,24 +11,22 @@ from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 from pytrek.gui.gamepieces.SmoothMotion import RadianInfo
 
 
-class PhotonTorpedo(GamePiece, SmoothMotion):
+class EnterpriseTorpedo(GamePiece, SmoothMotion):
 
     FILENAME: str = 'PhotonTorpedo.png'
     nextId: int = 0
 
-    def __init__(self):
+    def __init__(self, speed: float = 3.0):
 
-        GamePiece.__init__(self, filename=PhotonTorpedo.FILENAME)
+        GamePiece.__init__(self, filename=EnterpriseTorpedo.FILENAME, speed=speed)
         SmoothMotion.__init__(self, imageRotation=0)
 
         self.logger: Logger = getLogger(__name__)
 
-        self._id:      PhotonTorpedoId = PhotonTorpedoId(f'Torpedo-{PhotonTorpedo.nextId}')
+        self._id:      PhotonTorpedoId = PhotonTorpedoId(f'Torpedo-{EnterpriseTorpedo.nextId}')
         self._firedAt: EnemyId         = cast(EnemyId, None)
 
-        self.speed = 3  # TODO make this a game setting so we can tweak it for playability
-
-        PhotonTorpedo.nextId += 1
+        EnterpriseTorpedo.nextId += 1
 
     @property
     def id(self) -> PhotonTorpedoId:
