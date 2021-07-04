@@ -22,6 +22,7 @@ from pytrek.model.Coordinates import Coordinates
 from pytrek.model.DataTypes import LRScanCoordinatesList
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 from tests.TestBase import TestBase
 
@@ -159,7 +160,7 @@ class TestIntelligence(TestBase):
             starDate: int = self.smarty.generateInitialStarDate()
             self.assertIsNotNone(starDate)
             self.assertGreater(starDate, 0, "No such thing as a 0 star date")
-            self.logger.debug(f"Initial stardate '{starDate}'")
+            self.logger.debug(f"Initial StarDate '{starDate}'")
 
     def testGenerateAdjacentCoordinatesBase(self):
         """
@@ -406,6 +407,17 @@ class TestIntelligence(TestBase):
 
         self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
         self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')
+
+    def testGetEmeritusTorpedoSpeeds(self):
+
+        savePlayerType: PlayerType = self._gameState.playerType
+
+        self._gameState.playerType = PlayerType.Emeritus
+
+        tp: TorpedoSpeeds = self.smarty.getTorpedoSpeeds()
+
+        self.assertEqual(PlayerType.Emeritus, tp.playerType, 'Looks like we got the wrong settings')
+        self._gameState.playerType = savePlayerType
 
     def _runKlingonCountTest(self) -> float:
 

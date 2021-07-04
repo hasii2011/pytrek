@@ -52,13 +52,14 @@ class TorpedoSpeedSettings(BaseSubSetting):
     def noviceTorpedoSpeeds(self) -> TorpedoSpeeds:
         speedStr: str           = self._config.get(TorpedoSpeedSettings.SPEED_SECTION, TorpedoSpeedSettings.NOVICE_PLAYER)
         tp:       TorpedoSpeeds = TorpedoSpeeds.toTorpedoSpeed(speedStr)
-
+        tp.playerType = PlayerType.Novice
         return tp
 
     @property
     def fairTorpedoSpeeds(self) -> TorpedoSpeeds:
         speedStr: str           = self._config.get(TorpedoSpeedSettings.SPEED_SECTION, TorpedoSpeedSettings.FAIR_PLAYER)
         tp:       TorpedoSpeeds = TorpedoSpeeds.toTorpedoSpeed(speedStr)
+        tp.playerType = PlayerType.Fair
 
         return tp
 
@@ -66,6 +67,7 @@ class TorpedoSpeedSettings(BaseSubSetting):
     def goodTorpedoSpeeds(self) -> TorpedoSpeeds:
         speedStr: str           = self._config.get(TorpedoSpeedSettings.SPEED_SECTION, TorpedoSpeedSettings.GOOD_PLAYER)
         tp:       TorpedoSpeeds = TorpedoSpeeds.toTorpedoSpeed(speedStr)
+        tp.playerType = PlayerType.Good
 
         return tp
 
@@ -74,11 +76,15 @@ class TorpedoSpeedSettings(BaseSubSetting):
         speedStr: str           = self._config.get(TorpedoSpeedSettings.SPEED_SECTION, TorpedoSpeedSettings.EXPERT_PLAYER)
         tp:       TorpedoSpeeds = TorpedoSpeeds.toTorpedoSpeed(speedStr)
 
+        tp.playerType = PlayerType.Expert
+
         return tp
 
     @property
     def emeritusTorpedoSpeeds(self) -> TorpedoSpeeds:
         speedStr: str           = self._config.get(TorpedoSpeedSettings.SPEED_SECTION, TorpedoSpeedSettings.EMERITUS_PLAYER)
         tp:       TorpedoSpeeds = TorpedoSpeeds.toTorpedoSpeed(speedStr)
+
+        tp.playerType = PlayerType.Emeritus
 
         return tp

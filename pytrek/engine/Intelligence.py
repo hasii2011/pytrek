@@ -1,4 +1,4 @@
-from random import choice
+
 from typing import List
 
 from logging import Logger
@@ -8,7 +8,7 @@ from logging import INFO
 from random import randint
 from random import randrange
 from random import random
-
+from random import choice
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
@@ -19,12 +19,14 @@ from pytrek.GameState import GameState
 from pytrek.Singleton import Singleton
 from pytrek.engine.Direction import Direction
 from pytrek.engine.LRScanCoordinates import LRScanCoordinates
+from pytrek.engine.PlayerType import PlayerType
 from pytrek.gui.gamepieces.PlanetType import PlanetType
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.DataTypes import LRScanCoordinatesList
 
 from pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class Intelligence(Singleton):
@@ -45,6 +47,29 @@ class Intelligence(Singleton):
 
         self._gameSettings: GameSettings = GameSettings()
         self._gameState:    GameState    = GameState()
+
+    def getTorpedoSpeeds(self) -> TorpedoSpeeds:
+        """
+        Get the TorpedoSpeeds based on the player type
+
+        Returns:  The appropriate torpedo speed object
+        """
+        playerType:  PlayerType   = self._gameState.playerType
+
+        if playerType == PlayerType.Novice:
+            retSpeed: TorpedoSpeeds = self._gameSettings.noviceTorpedoSpeeds
+        elif playerType == PlayerType.Fair:
+            retSpeed = self._gameSettings.fairTorpedoSpeeds
+        elif playerType == PlayerType.Good:
+            retSpeed = self._gameSettings.goodTorpedoSpeeds
+        elif playerType == PlayerType.Expert:
+            retSpeed = self._gameSettings.expertTorpedoSpeeds
+        elif playerType == PlayerType.Emeritus:
+            retSpeed = self._gameSettings.emeritusTorpedoSpeeds
+        else:
+            raise ValueError('Unknown Player Type')
+
+        return retSpeed
 
     def generateSectorCoordinates(self) -> Coordinates:
         """
