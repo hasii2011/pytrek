@@ -26,7 +26,7 @@ from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.KlingonMediator import KlingonMediator
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
-from pytrek.mediators.PhotonTorpedoMediator import PhotonTorpedoMediator
+from pytrek.mediators.EnterpriseTorpedoMediator import PhotonTorpedoMediator
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant

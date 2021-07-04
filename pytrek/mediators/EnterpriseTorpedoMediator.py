@@ -21,8 +21,8 @@ from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.Explosion import Explosion
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
-from pytrek.gui.gamepieces.PhotonTorpedo import PhotonTorpedo
-from pytrek.gui.gamepieces.PhotonTorpedoMiss import PhotonTorpedoMiss
+from pytrek.gui.gamepieces.EnterpriseTorpedo import PhotonTorpedo
+from pytrek.gui.gamepieces.EnterpriseTorpedoMiss import PhotonTorpedoMiss
 
 from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse
