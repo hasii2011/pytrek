@@ -30,7 +30,6 @@ from pytrek.Singleton import Singleton
 
 class GameEngine(Singleton):
 
-    # noinspection SpellCheckingInspection
     def init(self, *args, **kwds):
 
         self.logger: Logger = getLogger(__name__)

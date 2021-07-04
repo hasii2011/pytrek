@@ -1,19 +1,21 @@
 from enum import Enum
 
 
+# noinspection SpellCheckingInspection
 class SectorType(Enum):
 
-    UNKNOWN              = 'unknown'
+    UNKNOWN              = 'Unknown'
     ENTERPRISE           = 'Enterprise'
-    EMPTY                = 'empty'
-    STAR                 = 'star'
-    PLANET               = 'planet'
-    STARBASE             = 'starbase'
-    KLINGON              = 'klingon'
-    COMMANDER            = 'commander'
-    BLACK_HOLE           = 'blackhole'
-    PHOTON_TORPEDO       = 'photonTorpedo'
-    EXPLOSION            = 'explosion'
-    KLINGON_TORPEDO      = 'klingonTorpedo'
-    KLINGON_TORPEDO_MISS = 'klingonTorpedoMiss'
-    ENTERPRISE_TORPEDO_MISS = 'enterpriseTorpedoMiss'
+    EMPTY                = 'Empty'
+    STAR                 = 'Star'
+    PLANET               = 'Planet'
+    STARBASE             = 'Starbase'
+    KLINGON              = 'Klingon'
+    COMMANDER            = 'Commander'
+    SUPER_COMMANDER      = 'SuperCommader'
+    BLACK_HOLE           = 'Blackhole'
+    PHOTON_TORPEDO       = 'PhotonTorpedo'
+    EXPLOSION            = 'Explosion'
+    KLINGON_TORPEDO      = 'KlingonTorpedo'
+    KLINGON_TORPEDO_MISS = 'KlingonTorpedoMiss'
+    ENTERPRISE_TORPEDO_MISS = 'EnterpriseTorpedoMiss'
