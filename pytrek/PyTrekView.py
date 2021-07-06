@@ -322,7 +322,11 @@ class PyTrekView(View):
 
             self._gameState.remainingCommanders += nCommanders
 
-        self._quadrant.addSuperCommander()  # TODO create a DEBUG option
+        if self._gameSettings.debugAddSuperCommanders:
+            nSuperCommanders: int = self._gameSettings.debugSuperCommanderCount
+            for x in range(nSuperCommanders):
+                self._quadrant.addSuperCommander()
+            self._gameState.remainingSuperCommanders += nSuperCommanders
 
 
 def main():

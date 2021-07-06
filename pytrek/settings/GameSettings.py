@@ -194,6 +194,14 @@ class GameSettings(Singleton):
         return self._debug.debugCommanderCount
 
     @property
+    def debugAddSuperCommanders(self) -> bool:
+        return self._debug.debugAddSuperCommanders
+
+    @property
+    def debugSuperCommanderCount(self) -> int:
+        return self._debug.debugSuperCommanderCount
+
+    @property
     def debugPrintKlingonPlacement(self) -> bool:
         return self._debug.debugPrintKlingonPlacement
 
