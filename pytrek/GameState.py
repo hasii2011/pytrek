@@ -23,6 +23,7 @@ class GameState(Singleton):
         self._remainingGameTime:   float = 0.0
         self._remainingKlingons:   int   = 0
         self._remainingCommanders: int   = 0
+        self._remainingSuperCommanders: int = 0
         self._torpedoCount:        int   = 0
         self._shipCondition:       ShipCondition = ShipCondition.Green
 
@@ -100,6 +101,14 @@ class GameState(Singleton):
     @remainingCommanders.setter
     def remainingCommanders(self, theNewValue: int):
         self._remainingCommanders = theNewValue
+
+    @property
+    def remainingSuperCommanders(self) -> int:
+        return self._remainingSuperCommanders
+
+    @remainingSuperCommanders.setter
+    def remainingSuperCommanders(self, theNewValue: int):
+        self._remainingSuperCommanders = theNewValue
 
     @property
     def torpedoCount(self) -> int:

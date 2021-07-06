@@ -18,6 +18,7 @@ from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.Planet import Planet
 from pytrek.gui.gamepieces.PlanetType import PlanetType
+from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Sector import Sector
@@ -50,14 +51,17 @@ class Quadrant:
         self._gameEngine:   GameEngine   = GameEngine()
         self._gameSettings: GameSettings = GameSettings()
 
-        self._klingonCount:   int = 0
-        self._commanderCount: int = 0
+        self._klingonCount:        int = 0
+        self._commanderCount:      int = 0
+        self._superCommanderCount: int = 0
         self._hasStarBase:    bool = False
         self._hasPlanet:      bool = False
         self._scanned:        bool = False
 
-        self._klingons:   Enemies = Enemies([])
-        self._commanders: Enemies = Enemies([])
+        self._klingons:        Enemies = Enemies([])
+        self._commanders:      Enemies = Enemies([])
+        self._superCommanders: Enemies = Enemies([])
+
         self._planet: Planet = cast(Planet, None)
 
         self._enterprise:            Enterprise  = cast(Enterprise, None)
@@ -130,6 +134,22 @@ class Quadrant:
         return self._klingonCount
 
     @property
+    def commanderCount(self) -> int:
+        return self._commanderCount
+
+    @commanderCount.setter
+    def commanderCount(self, newValue: int):
+        self._commanderCount = newValue
+
+    @property
+    def superCommanderCount(self) -> int:
+        return self._superCommanderCount
+
+    @superCommanderCount.setter
+    def superCommanderCount(self, newValue: int):
+        self._superCommanderCount = newValue
+
+    @property
     def klingons(self) -> Enemies:
         return self._klingons
 
@@ -138,12 +158,8 @@ class Quadrant:
         return self._commanders
 
     @property
-    def commanderCount(self) -> int:
-        return self._commanderCount
-
-    @commanderCount.setter
-    def commanderCount(self, newValue: int):
-        self._commanderCount = newValue
+    def superCommanders(self) -> Enemies:
+        return self._superCommanders
 
     @property
     def scanned(self) -> bool:
@@ -200,6 +216,14 @@ class Quadrant:
         self._commanderCount += 1
         commander: Commander = self._placeACommander()
         self._commanders.append(commander)
+
+    def addSuperCommander(self):
+        """
+        """
+        self._superCommanderCount += 1
+        superCommander: SuperCommander = self._placeASuperCommander()
+        
+        self._superCommanders.append(superCommander)
 
     def addPlanet(self):
 
@@ -258,9 +282,9 @@ class Quadrant:
         sector      = self.getRandomEmptySector()
         sector.type = SectorType.COMMANDER
 
-        moveInterval: int = self._intelligence.computeCommanderMoveInterval()
-        commander         = Commander(coordinates=sector.coordinates, moveInterval=moveInterval)
-        cPower            = self._intelligence.computeCommanderPower()
+        moveInterval: int       = self._intelligence.computeCommanderMoveInterval()
+        commander:    Commander = Commander(coordinates=sector.coordinates, moveInterval=moveInterval)
+        cPower:       float     = self._intelligence.computeCommanderPower()
 
         commander.power = cPower
         commander.firingInterval    = self._intelligence.computeCommanderFiringInterval()
@@ -270,6 +294,26 @@ class Quadrant:
 
         self.logger.debug(f'Placed commander at quadrant: {self.coordinates} {commander=}')
         return commander
+
+    def _placeASuperCommander(self) -> SuperCommander:
+
+        sector: Sector      = self.getRandomEmptySector()
+        sector.type = SectorType.SUPER_COMMANDER
+
+        # moveInterval: int = self._intelligence.computeCommanderMoveInterval()
+        moveInterval: int = 3
+
+        superCommander: SuperCommander = SuperCommander(coordinates=sector.coordinates, moveInterval=moveInterval)
+
+        # scPower: float = self._intelligence.computeSuperCommanderPower()
+        scPower: float = 800.0
+
+        superCommander.power             = scPower
+        superCommander.firingInterval    = 3  # TODO: call intelligence
+        superCommander.timeSinceMovement = self._gameEngine.gameClock
+
+        sector.sprite = superCommander
+        return superCommander
 
     def removeDeadEnemies(self):
 

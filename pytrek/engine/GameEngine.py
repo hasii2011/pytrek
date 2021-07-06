@@ -8,6 +8,7 @@ from math import fabs
 from math import sqrt
 
 from pytrek.engine.Computer import Computer
+from pytrek.engine.PlayerType import PlayerType
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
@@ -55,8 +56,17 @@ class GameEngine(Singleton):
         self._gameState.remainingCommanders = self._intelligence.generateInitialCommanderCount(self._gameState.remainingKlingons)
 
         # Adjust total Klingon count by # of commanders
-        self._gameState.remainingKlingons = self._gameState.remainingKlingons - self._gameState.remainingCommanders
+        self._gameState.remainingKlingons        = self._gameState.remainingKlingons - self._gameState.remainingCommanders
 
+        playerType: PlayerType = self._gameState.playerType
+        # Novice and Fair players do not get Super Commanders
+        if playerType != PlayerType.Novice and playerType != PlayerType.Fair:
+            self._gameState.remainingSuperCommanders = self._intelligence.generateInitialSuperCommanderCount(self._gameState.remainingKlingons)
+
+            # Adjust total Klingons by # of super commanders
+            self._gameState.remainingKlingons = self._gameState.remainingKlingons - self._gameState.remainingSuperCommanders
+        else:
+            self._gameState.remainingSuperCommanders = 0
         self._accumulatedDelta: float = 0.0
         self._gameClock:        float = 0.0
 

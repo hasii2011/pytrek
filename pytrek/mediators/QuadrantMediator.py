@@ -20,6 +20,7 @@ from pytrek.gui.gamepieces.commander.Commander import Commander
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.gui.gamepieces.klingon.Klingon import Klingon
+from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
 from pytrek.mediators.CommanderMediator import CommanderMediator
 from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
@@ -57,9 +58,10 @@ class QuadrantMediator(Singleton):
         self._km:  KlingonMediator          = KlingonMediator()
         self._cm:  CommanderMediator        = CommanderMediator()
 
-        self._playerList:    SpriteList = SpriteList()
-        self._klingonList:   SpriteList = SpriteList()
-        self._commanderList: SpriteList = SpriteList()
+        self._playerList:         SpriteList = SpriteList()
+        self._klingonList:        SpriteList = SpriteList()
+        self._commanderList:      SpriteList = SpriteList()
+        self._superCommanderList: SpriteList = SpriteList()
 
     @property
     def playerList(self) -> SpriteList:
@@ -85,6 +87,14 @@ class QuadrantMediator(Singleton):
     def commanderList(self, newValues: SpriteList):
         self._commanderList = newValues
 
+    @property
+    def superCommanderList(self) -> SpriteList:
+        return self._superCommanderList
+
+    @superCommanderList.setter
+    def superCommanderList(self, newValues: SpriteList):
+        self._superCommanderList = newValues
+
     def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
         self._ptm.fireEnterpriseTorpedoesAtKlingons(quadrant=quadrant)
 
@@ -98,6 +108,7 @@ class QuadrantMediator(Singleton):
         self.playerList.draw()
         self.klingonList.draw()
         self.commanderList.draw()
+        self.superCommanderList.draw()
         self._ktm.draw()
         self._ctm.draw()
         if quadrant.hasPlanet is True:
@@ -140,29 +151,26 @@ class QuadrantMediator(Singleton):
                     elif sectorType == SectorType.COMMANDER:
                         # self._updateCommander(quadrant=quadrant, commander=cast(Commander, gamePiece))
                         self._cm.update(quadrant=quadrant, commander=cast(Commander, gamePiece))
+                    elif sectorType == sectorType.SUPER_COMMANDER:
+                        self._updateSuperCommander(gamePiece)
                     else:
                         assert False, 'Bad Game Piece'
 
-    def _updateKlingon(self, gamePiece: GamePiece):
+    def _updateSuperCommander(self, gamePiece: GamePiece):
         """
         TODO: Eventually, move this to the KlingonTorpedoMediator
 
         Args:
             gamePiece:
-
         """
-        # playerType: PlayerType = self._gameState.playerType
-        # if playerType == PlayerType.Emeritus or playerType == PlayerType.Expert:
-        #     pass    # TODO Klingons move
-        # else:
-        klingon: Klingon = cast(Klingon, gamePiece)
+        superCommander: SuperCommander = cast(SuperCommander, gamePiece)
 
-        arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(klingon.gameCoordinates)
+        arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(superCommander.gameCoordinates)
 
-        self.logger.warning(f'{arcadePoint=}')
+        self.logger.debug(f'{arcadePoint=}')
         # assert arcadePoint.y == 0.0, 'This sprite is off quadrant'
-        klingon.center_x = arcadePoint.x
-        klingon.center_y = arcadePoint.y
+        superCommander.center_x = arcadePoint.x
+        superCommander.center_y = arcadePoint.y
 
     def _noUpdateSector(self, sectorType: SectorType) -> bool:
         """

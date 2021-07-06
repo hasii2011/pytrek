@@ -121,6 +121,22 @@ class TestIntelligence(TestBase):
 
         self.assertTrue(ans, f'We are not in range: {medianCount=}')
 
+    def testGenerateInitialSuperCommanderCountPlayerTypeNovice(self):
+
+        self._runSuperCommanderCountTest(playerType=PlayerType.Novice, klingonCount=101, expectedSuperCommanderCount=10, assertionMsg='Novice Formula Changed')
+
+    def testGenerateInitialSuperCommanderCountPlayerTypeGood(self):
+
+        self._runSuperCommanderCountTest(playerType=PlayerType.Good, klingonCount=101, expectedSuperCommanderCount=10, assertionMsg='Good Formula Changed')
+
+    def testGenerateInitialSuperCommanderCountPlayerTypeExpert(self):
+
+        self._runSuperCommanderCountTest(playerType=PlayerType.Expert, klingonCount=100, expectedSuperCommanderCount=20, assertionMsg='Expert Formula Changed')
+
+    def testGenerateInitialSuperCommanderCountPlayerTypeEmeritus(self):
+
+        self._runSuperCommanderCountTest(playerType=PlayerType.Emeritus, klingonCount=100, expectedSuperCommanderCount=33, assertionMsg='Emeritus Changed')
+
     def testGetGameInitialTimeShort(self):
         """"""
         settings: GameSettings = self._settings
@@ -464,6 +480,14 @@ class TestIntelligence(TestBase):
         self.logger.info(statsStr)
 
         return medianStatistic
+
+    def _runSuperCommanderCountTest(self, playerType: PlayerType, klingonCount: int, expectedSuperCommanderCount: int, assertionMsg: str):
+
+        self._gameState.playerType = playerType
+
+        actualSuperCommanderCount: int = self.smarty.generateInitialSuperCommanderCount(numberOfKlingons=klingonCount)
+
+        self.assertEqual(expectedSuperCommanderCount, actualSuperCommanderCount, assertionMsg)
 
 
 def suite() -> TestSuite:

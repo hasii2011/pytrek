@@ -31,13 +31,11 @@ class Galaxy(Singleton):
 
     def init(self, *args, **kwds):
         """"""
-        self._gameEngine:    GameEngine    = GameEngine()
-        self._intelligence:  Intelligence  = Intelligence()
+        self._gameEngine:   GameEngine    = GameEngine()
+        self._intelligence: Intelligence  = Intelligence()
         self._gameState:    GameState     = GameState()
         self._gameSettings: GameSettings  = GameSettings()
 
-        # self.stats          = GameState()
-        # self.settings       = Settings()
         self.logger: Logger = getLogger(__name__)
 
         self.starBaseCount: int = 0
@@ -55,6 +53,8 @@ class Galaxy(Singleton):
 
         self.placeKlingonsInGalaxy()
         self.placeCommandersInGalaxy()
+        self.placeSuperCommandersInGalaxy()
+
         # self.placeStarBasesInGalaxy()
         self._placePlanets()
         self.setInitialQuadrant()
@@ -75,7 +75,8 @@ class Galaxy(Singleton):
         return self._currentQuadrant
 
     def placeKlingonsInGalaxy(self):
-        """"""
+        """
+        """
         self.logger.info(f'Placing {self._gameState.remainingKlingons} Klingons')
 
         for x in range(self._gameState.remainingKlingons):
@@ -100,6 +101,16 @@ class Galaxy(Singleton):
             quadrant    = self.getQuadrant(coordinates)
             quadrant.addCommander()
 
+    def placeSuperCommandersInGalaxy(self):
+        """
+        """
+        for x in range(self._gameState.remainingSuperCommanders):
+            coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
+            # if self._gameSettings.debugCollectSuperCommanderQuadrantCoordinates is True:
+            #     self._debugSuperCommanderQuadrants.append(coordinates)
+            quadrant    = self.getQuadrant(coordinates)
+            quadrant.addSuperCommander()
+
     def placeStarBasesInGalaxy(self):
         """"""
         # starBaseCount = self._intelligence.getInitialStarBaseCount()
@@ -110,7 +121,7 @@ class Galaxy(Singleton):
         #         quadrantCoordinates = self._intelligence.getRandomQuadrantCoordinates()
         #         quadrant = self.getQuadrant(quadrantCoordinates)
         #
-        #     self.logger.debug(f"Starbase at quadrant {quadrantCoordinates}")
+        #     self.logger.debug(f"StarBase at quadrant {quadrantCoordinates}")
         #     quadrant.addStarBase()
         #     starBaseCount -= 1
         pass
@@ -135,6 +146,7 @@ class Galaxy(Singleton):
                     self.logger.info(f"Created quadrant: ({x},{y})")
             self.quadrants.append(quadrantRow)
 
+    # noinspection SpellCheckingInspection
     def _placePlanets(self):
         """
         ```java

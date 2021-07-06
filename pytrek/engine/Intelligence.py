@@ -158,12 +158,38 @@ class Intelligence(Singleton):
 
         commanderCount = self._gameState.playerType.value * 0.0625 * generatedKlingons * self.rand()
         commanderCount = round(commanderCount)
-
         #
         # Adjust total Klingon count by # of commanders -- Game Engine should do this
         #
         # self.remainingKlingons = self.remainingKlingons - self.commanderCount
         return commanderCount
+
+    def generateInitialSuperCommanderCount(self, numberOfKlingons: int):
+        """
+        We will generate no more than
+        * 1 super commander per 10 Klingons (Novice, Fair, Good)
+        * 1 super commander per 5 Klingons (Expert)
+        * 1 super commander per 3 Klingons (Emeritus)
+
+        Args:
+            numberOfKlingons:  The current number of Klingons
+
+        Returns An appropriate number for generating Super Commanders:
+        """
+        #
+        # Adjust total Klingon count by # of commanders -- Game Engine should do this
+        #
+        playerType: PlayerType = self._gameState.playerType
+        if playerType == PlayerType.Novice or playerType == PlayerType.Fair or playerType == PlayerType.Good:
+            nSCount: int = numberOfKlingons // 10
+        elif playerType == PlayerType.Expert:
+            nSCount = numberOfKlingons // 5
+        elif playerType == PlayerType.Emeritus:
+            nSCount = numberOfKlingons // 3
+        else:
+            raise ValueError('Unknown Player Type')
+
+        return nSCount
 
     def generateInitialStarDate(self) -> int:
 

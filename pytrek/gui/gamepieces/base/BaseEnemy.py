@@ -15,9 +15,9 @@ class BaseEnemy(GamePiece, SmoothMotion):
     NEVER_MOVE_INTERVAL: int = 9999
     NEVER_FIRE_INTERVAL: int = 9999
 
-    def __init__(self, filename: str, coordinates: Coordinates, moveInterval: int = NEVER_MOVE_INTERVAL):
+    def __init__(self, filename: str, coordinates: Coordinates, moveInterval: int = NEVER_MOVE_INTERVAL, scale: float = 1.0):
 
-        GamePiece.__init__(self, filename=filename)
+        GamePiece.__init__(self, filename=filename, scale=scale)
         SmoothMotion.__init__(self)
 
         self.gameCoordinates = coordinates

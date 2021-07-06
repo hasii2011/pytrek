@@ -8,6 +8,7 @@ class PlayerType(Enum):
     * Length of game
     * Number of enemies
     * Initial Energy
+    * Super Commander Count
     """
     Novice   = 1
     Fair     = 2

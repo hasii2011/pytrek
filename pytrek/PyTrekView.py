@@ -271,6 +271,7 @@ class PyTrekView(View):
         """
         self.__makeKlingonSpriteList()
         self.__makeCommanderSpriteList()
+        self.__makeSuperCommanderSpriteList()
 
     def __makeCommanderSpriteList(self):
         if self._quadrant.commanderCount > 0:
@@ -282,6 +283,17 @@ class PyTrekView(View):
             self._quadrantMediator.commanderList = commanderSprites
         else:
             self._quadrantMediator.commanderList = SpriteList()
+
+    def __makeSuperCommanderSpriteList(self):
+        if self._quadrant.superCommanderCount > 0:
+            self._gameState.shipCondition = ShipCondition.Red
+            superCommanderSprites: SpriteList = SpriteList()
+            for superCommander in self._quadrant.superCommanders:
+                superCommanderSprites.append(superCommander)
+
+            self._quadrantMediator.superCommanderList = superCommanderSprites
+        else:
+            self._quadrantMediator.superCommanderList = SpriteList()
 
     def __makeKlingonSpriteList(self):
         if self._quadrant.klingonCount > 0:
@@ -309,6 +321,8 @@ class PyTrekView(View):
                 self._quadrant.addCommander()
 
             self._gameState.remainingCommanders += nCommanders
+
+        self._quadrant.addSuperCommander()  # TODO create a DEBUG option
 
 
 def main():

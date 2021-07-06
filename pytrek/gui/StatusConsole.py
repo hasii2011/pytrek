@@ -38,7 +38,7 @@ TITLE_FONT_OFFSET_Y: int = 24
 
 START_STATUS_OFFSET:   int = -30  # Because arcade 0,0 is at bottom left
 INLINE_STATUS_OFFSET:  int = -20
-STATUS_VALUE_X_OFFSET: int = 90
+STATUS_VALUE_X_OFFSET: int = 105
 
 PropertyName  = NewType('PropertyName', str)
 PropertyNames = NewType('PropertyNames', List[PropertyName])
@@ -61,6 +61,7 @@ class StatusConsole:
         'Game Time:',
         'Klingons:',
         'Commanders:',
+        'SCommanders:',
         'Torpedoes:'
     ]
 
@@ -83,6 +84,7 @@ class StatusConsole:
         self._statusProperties.append(PropertyName('remainingGameTime'))
         self._statusProperties.append(PropertyName('remainingKlingons'))
         self._statusProperties.append(PropertyName('remainingCommanders'))
+        self._statusProperties.append(PropertyName('remainingSuperCommanders'))
         self._statusProperties.append(PropertyName('torpedoCount'))
 
     def draw(self):
@@ -128,7 +130,7 @@ class StatusConsole:
                 propertyStr = propertyValue.__str__()
                 baseTextColor = self._getStatusColor(shipCondition=propertyValue)
             elif isinstance(propertyValue, float):
-                propertyStr = f'{propertyValue:.2f}'
+                propertyStr = f'{propertyValue:.0f}'
             elif isinstance(propertyValue, int):
                 propertyStr = str(propertyValue)
             elif isinstance(propertyValue, Coordinates):
