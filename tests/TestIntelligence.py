@@ -340,6 +340,36 @@ class TestIntelligence(TestBase):
         self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
         self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')
 
+    def testComputeSuperCommanderMoveInterval(self):
+
+        minMoveInterval: int = self._settings.minSuperCommanderMoveInterval
+        maxMoveInterval: int = self._settings.maxSuperCommanderMoveInterval
+
+        generatedMoveIntervals: List[int] = []
+
+        for x in range(0, 150):
+            ans: int = self.smarty.computeSuperCommanderMoveInterval()
+            generatedMoveIntervals.append(ans)
+            self.assertGreaterEqual(ans, minMoveInterval, 'Cannot be below the min')
+            self.assertLessEqual(ans, maxMoveInterval, 'Cannot be above the  max')
+
+        medianCount: int = median(generatedMoveIntervals)
+        meanCount:   int = mean(generatedMoveIntervals)
+        modeCount:   int = mode(generatedMoveIntervals)
+
+        minValue: int = min(generatedMoveIntervals)
+        maxValue: int = max(generatedMoveIntervals)
+        statsStr: str = (
+            f'median={medianCount} average={meanCount} mode={modeCount} {minValue=} {maxValue=}'
+        )
+        self.logger.info(statsStr)
+
+        expectedMinValue: int = self._settings.minSuperCommanderMoveInterval
+        expectedMaxValue: int = self._settings.maxSuperCommanderMoveInterval
+
+        self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
+        self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')
+
     def testComputeRandomPlanetType(self):
         for x in range(0, 10):
             planetType: PlanetType = self.smarty.computeRandomPlanetType()

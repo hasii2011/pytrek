@@ -268,6 +268,18 @@ class Intelligence(Singleton):
 
         return randint(minFiringInterval, maxFiringInterval)
 
+    def computeSuperCommanderFiringInterval(self) -> int:
+        minFiringInterval: int = self._gameSettings.minSuperCommanderFiringInterval
+        maxFiringInterval: int = self._gameSettings.maxSuperCommanderFiringInterval
+
+        return randint(minFiringInterval, maxFiringInterval)
+
+    def computeSuperCommanderMoveInterval(self) -> int:
+        minMoveInterval: int = self._gameSettings.minSuperCommanderMoveInterval
+        maxMoveInterval: int = self._gameSettings.maxSuperCommanderMoveInterval
+
+        return randint(minMoveInterval, maxMoveInterval)
+
     def computeCommanderMoveInterval(self) -> int:
         minMoveInterval: int = self._gameSettings.minCommanderMoveInterval
         maxMoveInterval: int = self._gameSettings.maxCommanderMoveInterval

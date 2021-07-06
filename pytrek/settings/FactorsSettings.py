@@ -18,12 +18,17 @@ class FactorsSettings(BaseSubSetting):
     MIN_KLINGON_FIRING_INTERVAL:   str = 'min_klingon_firing_interval'
     MAX_KLINGON_FIRING_INTERVAL:   str = 'max_klingon_firing_interval'
     MIN_COMMANDER_FIRING_INTERVAL: str = 'min_commander_firing_interval'
-    MAX_COMMANDER_FIRING_INTERVAL: str = 'max_Commander_firing_interval'
+    MAX_COMMANDER_FIRING_INTERVAL: str = 'max_commander_firing_interval'
+    MIN_SUPER_COMMANDER_FIRING_INTERVAL: str = 'min_super_commander_firing_interval'
+    MAX_SUPER_COMMANDER_FIRING_INTERVAL: str = 'max_super_commander_firing_interval'
 
-    MIN_COMMANDER_MOVE_INTERVAL: str = 'min_commander_move_interval'
-    MAX_COMMANDER_MOVE_INTERVAL: str = 'max_commander_move_interval'
     MIN_KLINGON_MOVE_INTERVAL:   str = 'min_klingon_move_interval'
     MAX_KLINGON_MOVE_INTERVAL:   str = 'max_klingon_move_interval'
+    MIN_COMMANDER_MOVE_INTERVAL: str = 'min_commander_move_interval'
+    MAX_COMMANDER_MOVE_INTERVAL: str = 'max_commander_move_interval'
+    MIN_SUPER_COMMANDER_MOVE_INTERVAL: str = 'min_super_commander_move_interval'
+    MAX_SUPER_COMMANDER_MOVE_INTERVAL: str = 'max_super_commander_move_interval'
+
     BASIC_MISS_DISPLAY_INTERVAL: str = 'basic_miss_display_interval'
     PHOTON_TORPEDO_MISFIRE_RATE: str = 'photon_torpedo_misfire_rate'
 
@@ -38,11 +43,17 @@ class FactorsSettings(BaseSubSetting):
         MIN_COMMANDER_FIRING_INTERVAL: '5',
         MAX_COMMANDER_FIRING_INTERVAL: '10',
 
-        MIN_COMMANDER_MOVE_INTERVAL: '3',
-        MAX_COMMANDER_MOVE_INTERVAL: '10',
+        MIN_SUPER_COMMANDER_FIRING_INTERVAL: '5',
+        MAX_SUPER_COMMANDER_FIRING_INTERVAL: '8',
 
         MIN_KLINGON_MOVE_INTERVAL:    '5',
         MAX_KLINGON_MOVE_INTERVAL:    '12',
+
+        MIN_COMMANDER_MOVE_INTERVAL: '3',
+        MAX_COMMANDER_MOVE_INTERVAL: '10',
+
+        MIN_SUPER_COMMANDER_MOVE_INTERVAL: '3',
+        MAX_SUPER_COMMANDER_MOVE_INTERVAL: '7',
 
         BASIC_MISS_DISPLAY_INTERVAL: '5',
         PHOTON_TORPEDO_MISFIRE_RATE: '0.2'
@@ -91,12 +102,12 @@ class FactorsSettings(BaseSubSetting):
         return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_COMMANDER_FIRING_INTERVAL)
 
     @property
-    def minCommanderMoveInterval(self) -> int:
-        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MIN_COMMANDER_MOVE_INTERVAL)
+    def minSuperCommanderFiringInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MIN_SUPER_COMMANDER_FIRING_INTERVAL)
 
     @property
-    def maxCommanderMoveInterval(self) -> int:
-        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_COMMANDER_MOVE_INTERVAL)
+    def maxSuperCommanderFiringInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_SUPER_COMMANDER_FIRING_INTERVAL)
 
     @property
     def minKlingonMoveInterval(self) -> int:
@@ -105,6 +116,24 @@ class FactorsSettings(BaseSubSetting):
     @property
     def maxKlingonMoveInterval(self) -> int:
         return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_KLINGON_MOVE_INTERVAL)
+
+    @property
+    def minCommanderMoveInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MIN_COMMANDER_MOVE_INTERVAL)
+
+    @property
+    def maxCommanderMoveInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_COMMANDER_MOVE_INTERVAL)
+
+
+    @property
+    def minSuperCommanderMoveInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MIN_SUPER_COMMANDER_MOVE_INTERVAL)
+
+    @property
+    def maxSuperCommanderMoveInterval(self) -> int:
+        return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_SUPER_COMMANDER_MOVE_INTERVAL)
+
 
     @property
     def basicMissDisplayInterval(self) -> int:

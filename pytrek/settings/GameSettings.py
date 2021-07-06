@@ -126,12 +126,28 @@ class GameSettings(Singleton):
         return self._factors.maxCommanderFiringInterval
 
     @property
+    def minSuperCommanderFiringInterval(self) -> int:
+        return self._factors.minSuperCommanderFiringInterval
+
+    @property
+    def maxSuperCommanderFiringInterval(self) -> int:
+        return self._factors.maxSuperCommanderFiringInterval
+
+    @property
     def minCommanderMoveInterval(self) -> int:
         return self._factors.minCommanderMoveInterval
 
     @property
     def maxCommanderMoveInterval(self) -> int:
         return self._factors.maxCommanderMoveInterval
+
+    @property
+    def minSuperCommanderMoveInterval(self) -> int:
+        return self._factors.minSuperCommanderMoveInterval
+
+    @property
+    def maxSuperCommanderMoveInterval(self) -> int:
+        return self._factors.maxSuperCommanderMoveInterval
 
     @property
     def minKlingonMoveInterval(self) -> int:

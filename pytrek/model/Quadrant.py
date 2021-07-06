@@ -300,8 +300,7 @@ class Quadrant:
         sector: Sector      = self.getRandomEmptySector()
         sector.type = SectorType.SUPER_COMMANDER
 
-        # moveInterval: int = self._intelligence.computeCommanderMoveInterval()
-        moveInterval: int = 3
+        moveInterval: int = self._intelligence.computeSuperCommanderMoveInterval()
 
         superCommander: SuperCommander = SuperCommander(coordinates=sector.coordinates, moveInterval=moveInterval)
 

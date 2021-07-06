@@ -51,7 +51,7 @@ class BaseEnemyMediator(BaseMediator):
 
     def _evade(self, currentLocation: Coordinates) -> Coordinates:
         """
-        Move commander around to avoid torpedoes
+        Move enemy around to avoid torpedoes
 
         Args:
             currentLocation:
