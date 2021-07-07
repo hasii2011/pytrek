@@ -49,6 +49,26 @@ class BaseEnemyMediator(BaseMediator):
         newSector.type   = SectorType.COMMANDER
         newSector.sprite = enemy
 
+    def _keepTryingToMoveUntilValid(self, quadrant: Quadrant, oldPosition: Coordinates):
+
+        newPosition: Coordinates = self._evade(currentLocation=oldPosition)
+
+        while True:
+            if self._checkEnemyMoveIsValid(quadrant=quadrant, targetCoordinates=newPosition):
+                break
+            else:
+                newPosition = self._evade(currentLocation=oldPosition)
+        return newPosition
+
+    def _checkEnemyMoveIsValid(self, quadrant: Quadrant, targetCoordinates: Coordinates) -> bool:
+
+        targetSector: Sector = quadrant.getSector(targetCoordinates)
+        if targetSector.type == SectorType.EMPTY:
+            return True
+        else:
+            self.logger.info(f'Commander cannot move to sector: {targetCoordinates} occupied by {targetSector.type}')
+            return False
+
     def _evade(self, currentLocation: Coordinates) -> Coordinates:
         """
         Move enemy around to avoid torpedoes

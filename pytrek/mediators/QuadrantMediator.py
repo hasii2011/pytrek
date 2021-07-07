@@ -28,6 +28,7 @@ from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.KlingonMediator import KlingonMediator
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 from pytrek.mediators.EnterpriseTorpedoMediator import PhotonTorpedoMediator
+from pytrek.mediators.SuperCommanderMediator import SuperCommanderMediator
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -57,6 +58,7 @@ class QuadrantMediator(Singleton):
         self._em:  EnterpriseMediator       = EnterpriseMediator()
         self._km:  KlingonMediator          = KlingonMediator()
         self._cm:  CommanderMediator        = CommanderMediator()
+        self._scm: SuperCommanderMediator   = SuperCommanderMediator()
 
         self._playerList:         SpriteList = SpriteList()
         self._klingonList:        SpriteList = SpriteList()
@@ -152,25 +154,10 @@ class QuadrantMediator(Singleton):
                         # self._updateCommander(quadrant=quadrant, commander=cast(Commander, gamePiece))
                         self._cm.update(quadrant=quadrant, commander=cast(Commander, gamePiece))
                     elif sectorType == sectorType.SUPER_COMMANDER:
-                        self._updateSuperCommander(gamePiece)
+                        # self._updateSuperCommander(gamePiece)
+                        self._scm.update(quadrant=quadrant, superCommander=cast(SuperCommander, gamePiece))
                     else:
                         assert False, 'Bad Game Piece'
-
-    def _updateSuperCommander(self, gamePiece: GamePiece):
-        """
-        TODO: Eventually, move this to the KlingonTorpedoMediator
-
-        Args:
-            gamePiece:
-        """
-        superCommander: SuperCommander = cast(SuperCommander, gamePiece)
-
-        arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(superCommander.gameCoordinates)
-
-        self.logger.debug(f'{arcadePoint=}')
-        # assert arcadePoint.y == 0.0, 'This sprite is off quadrant'
-        superCommander.center_x = arcadePoint.x
-        superCommander.center_y = arcadePoint.y
 
     def _noUpdateSector(self, sectorType: SectorType) -> bool:
         """
