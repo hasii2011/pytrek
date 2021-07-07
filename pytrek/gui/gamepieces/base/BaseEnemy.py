@@ -67,7 +67,6 @@ class BaseEnemy(GamePiece, SmoothMotion):
         """
 
         Returns:  Time since we last fired torpedoes
-
         """
         return self._lastTimeCheck
 
@@ -82,3 +81,9 @@ class BaseEnemy(GamePiece, SmoothMotion):
     @timeSinceMovement.setter
     def timeSinceMovement(self, newValue: float):
         self._timeSinceMovement = newValue
+
+    def __str__(self) -> str:
+        return f'{self.id}'
+
+    def __repr__(self) -> str:
+        return f'{self.id} {self.power=} {self.firingInterval=} {self.moveInterval=}'

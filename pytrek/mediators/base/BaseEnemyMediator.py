@@ -27,6 +27,30 @@ class BaseEnemyMediator(BaseMediator):
     def __init__(self):
         super().__init__()
 
+    def _playMoveSound(self):
+        """
+        Must be implemented by subclass or you will hear nada' if enemy moves
+        """
+        pass
+
+    def moveEnemy(self, quadrant: Quadrant, enemy: BaseEnemy):
+
+        currentTime:    float = self._gameEngine.gameClock
+        deltaClockTime: float = currentTime - enemy.timeSinceMovement
+        if deltaClockTime > enemy.moveInterval:
+
+            oldPosition: Coordinates = enemy.gameCoordinates
+            newPosition: Coordinates = self._keepTryingToMoveUntilValid(quadrant, oldPosition)
+
+            self.logger.info(f'Enemy {enemy} moves from {oldPosition} to {newPosition}')
+            self._enemyMovedUpdateQuadrant(quadrant=quadrant, enemy=enemy, newSectorCoordinates=newPosition, oldSectorCoordinates=oldPosition)
+
+            enemy.gameCoordinates = newPosition
+            self._toArcadePoint(enemy, newPosition)
+            enemy.timeSinceMovement = currentTime
+
+            self._playMoveSound()
+
     def _enemyMovedUpdateQuadrant(self, quadrant: Quadrant, enemy: BaseEnemy, newSectorCoordinates: Coordinates, oldSectorCoordinates: Coordinates):
         """
 

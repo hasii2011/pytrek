@@ -21,7 +21,7 @@ class SuperCommander(BaseEnemy):
 
         self.logger: Logger = getLogger(__name__)
 
-        self.id = EnemyId(f'Commander-{self.gameCoordinates}')
+        self.id = EnemyId(f'SuperCommander-{self.gameCoordinates}')
 
         # Compute at creation;  Mediator will move the commander
         arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(coordinates)

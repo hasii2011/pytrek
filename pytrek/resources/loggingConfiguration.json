@@ -35,6 +35,10 @@
             "level":     "INFO",
             "propagate": "False"
         },
+        "pytrek.mediators.base.BaseEnemyMediator": {
+            "level":     "INFO",
+            "propagate": "False"
+        },
         "pytrek.mediators.PhotonTorpedoMediator": {
             "level":     "WARNING",
             "propagate": "False"

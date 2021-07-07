@@ -8,7 +8,6 @@ from arcade import Sound
 
 from pytrek.gui.gamepieces.commander.Commander import Commander
 
-from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.mediators.base.BaseEnemyMediator import BaseEnemyMediator
@@ -27,22 +26,13 @@ class CommanderMediator(BaseEnemyMediator):
         self._loadSounds()
 
     def update(self, quadrant: Quadrant, commander: Commander):
+        self.moveEnemy(quadrant=quadrant, enemy=commander)
 
-        currentTime:    float = self._gameEngine.gameClock
-        deltaClockTime: float = currentTime - commander.timeSinceMovement
-        if deltaClockTime > commander.moveInterval:
-
-            oldPosition: Coordinates = commander.gameCoordinates
-            newPosition: Coordinates = self._keepTryingToMoveUntilValid(quadrant, oldPosition)
-
-            self.logger.info(f'Commander moves from {oldPosition} to {newPosition}')
-            self._enemyMovedUpdateQuadrant(quadrant=quadrant, enemy=commander, newSectorCoordinates=newPosition, oldSectorCoordinates=oldPosition)
-
-            commander.gameCoordinates = newPosition
-            self._toArcadePoint(commander, newPosition)
-            commander.timeSinceMovement = currentTime
-
-            self._commanderMove.play(self._gameSettings.soundVolume.value)
+    def _playMoveSound(self):
+        """
+        Override super class
+        """
+        self._commanderMove.play(self._gameSettings.soundVolume.value)
 
     def _loadSounds(self):
 
