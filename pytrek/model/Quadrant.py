@@ -316,8 +316,9 @@ class Quadrant:
 
     def removeDeadEnemies(self):
 
-        self._klingons   = self._removeZombies(self._klingons)
-        self._commanders = self._removeZombies(self._commanders)
+        self._klingons        = self._removeZombies(self._klingons)
+        self._commanders      = self._removeZombies(self._commanders)
+        self._superCommanders = self._removeZombies(self._superCommanders)
 
         # TODO:   Clean up Commanders and SuperCommanders
 

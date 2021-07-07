@@ -81,6 +81,7 @@ class PhotonTorpedoMediator(BaseMediator):
         # enemies = enemies + quadrant.klingons + quadrant.commanders
         enemies.extend(quadrant.klingons)
         enemies.extend(quadrant.commanders)
+        enemies.extend(quadrant.superCommanders)
 
         if len(enemies) == 0:
             self._messageConsole.displayMessage("Don't waste torpedoes.  Nothing to fire at")
@@ -117,6 +118,7 @@ class PhotonTorpedoMediator(BaseMediator):
 
         enemies.extend(quadrant.klingons)
         enemies.extend(quadrant.commanders)
+        enemies.extend(quadrant.superCommanders)
 
         enterprise: Enterprise = quadrant.enterprise
         for badGuy in enemies:
