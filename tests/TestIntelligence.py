@@ -1,4 +1,5 @@
 from statistics import mode
+from typing import Callable
 from typing import List
 
 from logging import Logger
@@ -49,7 +50,8 @@ class TestIntelligence(TestBase):
     SOUTH_WEST_EDGE_COORDINATES_COUNT: int = SOUTH_EAST_EDGE_COORDINATES_COUNT
 
     GENERATE_KLINGON_COUNT_LOOP_COUNT: int = 250
-    COMMAND_POWER_LOOP_COUNT:          int = 250
+    POWER_LOOP_COUNT:                  int = 250
+    RANGE_TESTS_LOOP_COUNT:            int = 50
 
     clsLogger: Logger = None
 
@@ -93,7 +95,7 @@ class TestIntelligence(TestBase):
 
         medianCount: float = self._runKlingonCountTest()
 
-        ans: bool = (medianCount >= 10.0) and (medianCount < 20.0)
+        ans: bool = (medianCount >= 9.0) and (medianCount < 20.0)
 
         self.assertTrue(ans, f'We are not in range: {medianCount=}')
 
@@ -379,7 +381,7 @@ class TestIntelligence(TestBase):
 
         self._gameState.playerType  = PlayerType.Novice
 
-        medianStatistic: float = self._runCommanderPowerTest()
+        medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
 
         ans: bool = (medianStatistic > 1150.0) and (medianStatistic < 1240.0)
 
@@ -389,9 +391,9 @@ class TestIntelligence(TestBase):
 
         self._gameState.playerType  = PlayerType.Emeritus
 
-        medianStatistic: float = self._runCommanderPowerTest()
+        medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
 
-        ans: bool = (medianStatistic > 1360.0) and (medianStatistic < 1430.0)
+        ans: bool = (medianStatistic > 1360.0) and (medianStatistic < 1442.0)
 
         self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
@@ -399,11 +401,28 @@ class TestIntelligence(TestBase):
 
         self._gameState.playerType  = PlayerType.Good
 
-        medianStatistic: float = self._runCommanderPowerTest()
+        for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
+            medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
+            ans:             bool = (medianStatistic >= 1248.0) and (medianStatistic <= 1340.0)
+            self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
-        ans: bool = (medianStatistic > 1265.0) and (medianStatistic < 1327.0)
+    def testComputeSuperCommanderPowerEmeritusPlayer(self):
 
-        self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
+        self._gameState.playerType  = PlayerType.Emeritus
+
+        for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
+            medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
+            ans:             bool = (medianStatistic > 1352.0) and (medianStatistic < 1445.0)
+            self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
+
+    def testComputeSuperCommanderPowerExpertPlayer(self):
+
+        self._gameState.playerType  = PlayerType.Expert
+
+        for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
+            medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
+            ans:              bool = (medianStatistic >= 1305.0) and (medianStatistic <= 1394.0)
+            self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
     def testComputeCommanderMoveInterval(self):
 
@@ -488,15 +507,17 @@ class TestIntelligence(TestBase):
 
         return medianCount
 
-    def _runCommanderPowerTest(self):
+    def _runPowerTest(self, computeCallback: Callable):
 
-        intelligence: Intelligence = self.smarty
+        # intelligence: Intelligence = self.smarty
 
         generatedPower: List[float] = []
 
-        for x in range(TestIntelligence.COMMAND_POWER_LOOP_COUNT):
+        for x in range(TestIntelligence.POWER_LOOP_COUNT):
 
-            commanderPower: float = intelligence.computeCommanderPower()
+            # commanderPower: float = intelligence.computeCommanderPower()
+            commanderPower: float = computeCallback()
+
             generatedPower.append(commanderPower)
 
         medianStatistic: float = median(generatedPower)

@@ -304,11 +304,8 @@ class Quadrant:
 
         superCommander: SuperCommander = SuperCommander(coordinates=sector.coordinates, moveInterval=moveInterval)
 
-        # scPower: float = self._intelligence.computeSuperCommanderPower()
-        scPower: float = 800.0
-
-        superCommander.power             = scPower
-        superCommander.firingInterval    = 3  # TODO: call intelligence
+        superCommander.power             = self._intelligence.computeSuperCommanderPower()
+        superCommander.firingInterval    = self._intelligence.computeSuperCommanderFiringInterval()
         superCommander.timeSinceMovement = self._gameEngine.gameClock
 
         sector.sprite = superCommander
