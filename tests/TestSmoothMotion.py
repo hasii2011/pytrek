@@ -1,4 +1,6 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
 
@@ -24,7 +26,7 @@ class TestSmoothMotion(TestBase):
     """
     TEST_ROTATIONAL_SPEED: int = 5
 
-    clsLogger: Logger = None
+    clsLogger: Logger = cast(Logger, None)
 
     @classmethod
     def setUpClass(cls):

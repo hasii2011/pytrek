@@ -1,4 +1,6 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
 
@@ -16,7 +18,7 @@ from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 class TestTorpedoSpeeds(TestBase):
     """
     """
-    clsLogger: Logger = None
+    clsLogger: Logger = cast(Logger, None)
 
     @classmethod
     def setUpClass(cls):

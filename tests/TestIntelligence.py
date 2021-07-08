@@ -1,4 +1,6 @@
-from statistics import mode
+
+from typing import cast
+
 from typing import Callable
 from typing import List
 
@@ -7,7 +9,7 @@ from logging import getLogger
 
 from statistics import median
 from statistics import mean
-
+from statistics import mode
 
 from unittest import TestSuite
 from unittest import main as unitTestMain
@@ -53,7 +55,7 @@ class TestIntelligence(TestBase):
     POWER_LOOP_COUNT:                  int = 250
     RANGE_TESTS_LOOP_COUNT:            int = 50
 
-    clsLogger: Logger = None
+    clsLogger: Logger = cast(Logger, None)
 
     @classmethod
     def setUpClass(cls):

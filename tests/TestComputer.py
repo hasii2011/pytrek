@@ -1,6 +1,9 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
+
 from math import degrees
 
 from unittest import TestSuite
@@ -31,7 +34,7 @@ class TestComputer(TestBase):
 
     SMALL_QUADRANT_DISTANCE: float = 0.60
 
-    clsLogger: Logger = None
+    clsLogger: Logger = cast(Logger, None)
 
     @classmethod
     def setUpClass(cls):

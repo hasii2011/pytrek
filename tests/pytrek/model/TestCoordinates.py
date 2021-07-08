@@ -1,4 +1,6 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
 
@@ -33,7 +35,7 @@ EXPECTED_Y_COORDINATE_SE_MOVEMENT: int = 5
 class TestCoordinates(TestBase):
     """
     """
-    clsLogger: Logger = None
+    clsLogger: Logger = cast(Logger, None)
 
     @classmethod
     def setUpClass(cls):

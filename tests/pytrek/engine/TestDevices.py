@@ -1,4 +1,6 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
 
@@ -18,7 +20,7 @@ from pytrek.engine.devices.Devices import Devices
 class TestDevices(TestBase):
     """
     """
-    clsLogger: Logger = None
+    clsLogger: Logger = cast(Logger, None)
 
     @classmethod
     def setUpClass(cls):

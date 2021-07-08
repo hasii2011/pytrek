@@ -1,4 +1,6 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
 
@@ -18,7 +20,7 @@ from pytrek.engine.GameEngine import GameEngine
 class TestGameEngine(TestBase):
     """
     """
-    clsLogger: Logger = None
+    clsLogger: Logger = cast(Logger, None)
 
     @classmethod
     def setUpClass(cls):
@@ -93,7 +95,7 @@ class TestGameEngine(TestBase):
 
     def _commonComputeHit(self, playerType: PlayerType) -> float:
 
-        self._gameState.skill = playerType
+        self._gameState.playerType = playerType
 
         shooterPosition: Coordinates = Coordinates(x=7, y=7)
         targetPosition:  Coordinates = Coordinates(x=3, y=7)

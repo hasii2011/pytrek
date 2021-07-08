@@ -1,5 +1,6 @@
 
 from typing import TextIO
+from typing import cast
 
 from logging import Logger
 from logging import getLogger
@@ -25,7 +26,7 @@ class TestGameState(TestBase):
 
     TEST_PICKLE_FILENAME: str = 'GameStats.json'
 
-    clsLogger: Logger = None
+    clsLogger: Logger = cast(Logger, None)
 
     @classmethod
     def setUpClass(cls):

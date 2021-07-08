@@ -83,7 +83,7 @@ class TestAll:
                 fixedName: str = module.replace('/', '.')
                 m = import_module(fixedName)
                 # noinspection PyUnresolvedReferences
-                fSuite.addTest(m.suite())
+                fSuite.addTest(m.suite())   # type: ignore
             except (ValueError, Exception) as e:
                 self.logger.error(f'Module import problem with: {module}:  {e}')
         return fSuite

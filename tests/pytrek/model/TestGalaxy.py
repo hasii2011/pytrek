@@ -22,7 +22,7 @@ from tests.TestBase import TestBase
 
 class TestGalaxy(TestBase):
 
-    clsLogger: Logger = None
+    clsLogger: Logger = cast(Logger, None)
 
     @classmethod
     def setUpClass(cls):
