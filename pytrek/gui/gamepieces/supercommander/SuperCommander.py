@@ -17,7 +17,7 @@ class SuperCommander(BaseEnemy):
 
     def __init__(self, coordinates: Coordinates, moveInterval: int):
 
-        super().__init__(filename=SuperCommander.FILENAME, coordinates=coordinates, moveInterval=moveInterval, scale=0.055)
+        super().__init__(filename=SuperCommander.FILENAME, coordinates=coordinates, moveInterval=moveInterval, scale=0.055, imageRotation=45)
 
         self.logger: Logger = getLogger(__name__)
 

@@ -32,7 +32,6 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         super().__init__()
 
         self._soundKlingonTorpedo:    Sound = cast(Sound, None)
-        # self._soundShieldHit:         Sound = cast(Sound, None)
         self._soundKlingonCannotFire: Sound = cast(Sound, None)
 
         self._loadSounds()
@@ -84,7 +83,6 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         # Use the enterprise arcade position rather than compute the sector center;  That way we
         # can use Arcade collision detection
         #
-
         klingonPoint:    ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
         enterprisePoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
 

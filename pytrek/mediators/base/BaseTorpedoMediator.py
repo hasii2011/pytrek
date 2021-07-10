@@ -50,8 +50,6 @@ class BaseTorpedoMediator(BaseMediator):
         self._torpedoFollowers: SpriteList = SpriteList(is_static=True)
         self._misses:           SpriteList = SpriteList()
 
-        self._klingonList:      Enemies = cast (Enemies, None)
-
         self._lastTimeCheck:  float = self._gameEngine.gameClock / 1000
         self._soundShieldHit: Sound = self._loadSound(bareFileName='ShieldHit.wav')
 
@@ -131,11 +129,20 @@ class BaseTorpedoMediator(BaseMediator):
         """
         pass
 
-    def _fireTorpedoesAtEnterpriseIfNecessary(self, quadrant: Quadrant, enemies: Enemies):
+    def _fireTorpedoesAtEnterpriseIfNecessary(self, quadrant: Quadrant, enemies: Enemies, rotationAngle: int = 125):
+        """
+
+        Args:
+            quadrant:   Quadrant we are in
+            enemies:    The enemies to fire from
+            rotationAngle: The offset to add to the image when pointing at enterprise
+
+        Returns:
+
+        """
 
         currentTime: float = self._gameEngine.gameClock
 
-        # klingons: List[Klingon] = quadrant.klingons
         for enemy in enemies:
             deltaClockTime: float = currentTime - enemy.lastTimeCheck
             if deltaClockTime > enemy.firingInterval:
@@ -144,7 +151,7 @@ class BaseTorpedoMediator(BaseMediator):
                 endPoint:            ArcadePoint = ArcadePoint(x=quadrant.enterprise.center_x, y=quadrant.enterprise.center_y)
                 lineOfSightResponse: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant, shooter=enemy, endPoint=endPoint)
                 if lineOfSightResponse.answer is True:
-                    self.__pointAtEnterprise(enemy=enemy, enterprise=quadrant.enterprise)
+                    self.__pointAtEnterprise(enemy=enemy, enterprise=quadrant.enterprise, rotationAngle=rotationAngle)
                     self._fireTorpedo(enemy=enemy, enterprise=quadrant.enterprise)
                 else:
                     self._playCannotFireSound()
@@ -159,14 +166,13 @@ class BaseTorpedoMediator(BaseMediator):
             enterprise: The poor lowly enterprise is the target
         """
 
-        self.logger.debug(f'Klingon @ {enemy.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
-        self._messageConsole.displayMessage(f'Klingon @ {enemy.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
+        self.logger.info(f'{enemy.id} @ {enemy.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
+        self._messageConsole.displayMessage(f'{enemy.id} @ {enemy.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
 
         enemyTorpedo: BaseEnemyTorpedo = self._getTorpedoToFire(enemy, enterprise)
 
         self.torpedoes.append(enemyTorpedo)
         self._playTorpedoFiredSound()
-        # self._soundKlingonTorpedo.play(volume=self._gameSettings.soundVolume.value)
 
         self.logger.info(f'{enemyTorpedo.firedFromPosition=}')
 
@@ -304,15 +310,15 @@ class BaseTorpedoMediator(BaseMediator):
         self._messageConsole.displayMessage(shieldMsg)
         self._gameEngine.degradeEnergyLevel(shieldHitData.degradedTorpedoHitValue)
 
-    def __pointAtEnterprise(self, enemy: Enemy, enterprise: Enterprise):
+    def __pointAtEnterprise(self, enemy: Enemy, enterprise: Enterprise, rotationAngle: int = 125):
 
         currentPoint:     ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
         destinationPoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
 
         normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
-        enemy.angle = normalAngle + 125
+        enemy.angle = normalAngle + rotationAngle
 
-        self.logger.debug(f'{enemy.angle=}')
+        self.logger.info(f'{normalAngle=} -  {enemy.angle=}')
 
     def __buildEligibleEnemyObstacles(self, shooter: Enemy, enemies: Enemies) -> Enemies:
         """

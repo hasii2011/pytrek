@@ -115,6 +115,7 @@ class QuadrantMediator(Singleton):
         self.superCommanderList.draw()
         self._ktm.draw()
         self._ctm.draw()
+        self._stm.draw()
         if quadrant.hasPlanet is True:
             quadrant.planet.draw()
 
@@ -133,6 +134,7 @@ class QuadrantMediator(Singleton):
         self._ktm.update(quadrant=quadrant)
         self._ctm.update(quadrant=quadrant)
         self._ptm.update(quadrant=quadrant)
+        self._stm.update(quadrant=quadrant)
 
     def _updateQuadrant(self, quadrant):
         for y in range(QUADRANT_ROWS):
@@ -148,15 +150,12 @@ class QuadrantMediator(Singleton):
                     if sectorType == SectorType.ENTERPRISE:
                         self._em.update(quadrant=quadrant)
                     elif sectorType == SectorType.KLINGON:
-                        # self._updateKlingon(gamePiece=gamePiece)
                         self._km.update(quadrant=quadrant, klingon=cast(Klingon, gamePiece))
                     elif self._noUpdateSector(sectorType=sectorType) is True:
                         pass
                     elif sectorType == SectorType.COMMANDER:
-                        # self._updateCommander(quadrant=quadrant, commander=cast(Commander, gamePiece))
                         self._cm.update(quadrant=quadrant, commander=cast(Commander, gamePiece))
                     elif sectorType == sectorType.SUPER_COMMANDER:
-                        # self._updateSuperCommander(gamePiece)
                         self._scm.update(quadrant=quadrant, superCommander=cast(SuperCommander, gamePiece))
                     else:
                         assert False, 'Bad Game Piece'

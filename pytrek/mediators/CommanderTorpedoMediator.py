@@ -50,7 +50,7 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         Args:
             quadrant:
         """
-        self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.commanders)
+        self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.commanders, rotationAngle=-90)
         self.torpedoes.update()
 
         self._handleTorpedoHits(quadrant, enemies=quadrant.commanders)

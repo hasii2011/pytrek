@@ -15,10 +15,23 @@ class BaseEnemy(GamePiece, SmoothMotion):
     NEVER_MOVE_INTERVAL: int = 9999
     NEVER_FIRE_INTERVAL: int = 9999
 
-    def __init__(self, filename: str, coordinates: Coordinates, moveInterval: int = NEVER_MOVE_INTERVAL, scale: float = 1.0):
+    def __init__(self, filename: str,
+                 coordinates:    Coordinates,
+                 moveInterval:   int = NEVER_MOVE_INTERVAL,
+                 scale:          float = 1.0,
+                 imageRotation:  int = SmoothMotion.IMAGE_ROTATION):
+        """
+
+        Args:
+            filename:       The image file name
+            coordinates:    The game sector coordinates within the quadrant
+            moveInterval:   How often this enemy moves
+            scale:          How to scale the image
+            imageRotation:  How much to rotate image when the enemy is shooting at Captain Kirk.
+        """
 
         GamePiece.__init__(self, filename=filename, scale=scale)
-        SmoothMotion.__init__(self)
+        SmoothMotion.__init__(self, imageRotation=imageRotation)
 
         self.gameCoordinates = coordinates
 
