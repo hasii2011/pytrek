@@ -29,6 +29,8 @@ from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 from tests.TestBase import TestBase
 
+ComputeCallBack = Callable[[], float]
+
 
 class TestIntelligence(TestBase):
 
@@ -509,7 +511,7 @@ class TestIntelligence(TestBase):
 
         return medianCount
 
-    def _runPowerTest(self, computeCallback: Callable):
+    def _runPowerTest(self, computeCallback: ComputeCallBack):
 
         # intelligence: Intelligence = self.smarty
 

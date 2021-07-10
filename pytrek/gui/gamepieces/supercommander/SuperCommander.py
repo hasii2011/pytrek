@@ -13,11 +13,11 @@ from pytrek.model.Coordinates import Coordinates
 
 class SuperCommander(BaseEnemy):
 
-    FILENAME: str = 'SuperCommander.png'
+    FILENAME: str = 'SuperCommander2.png'
 
     def __init__(self, coordinates: Coordinates, moveInterval: int):
 
-        super().__init__(filename=SuperCommander.FILENAME, coordinates=coordinates, moveInterval=moveInterval, scale=0.075)
+        super().__init__(filename=SuperCommander.FILENAME, coordinates=coordinates, moveInterval=moveInterval, scale=0.055)
 
         self.logger: Logger = getLogger(__name__)
 

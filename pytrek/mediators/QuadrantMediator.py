@@ -29,6 +29,7 @@ from pytrek.mediators.KlingonMediator import KlingonMediator
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 from pytrek.mediators.EnterpriseTorpedoMediator import PhotonTorpedoMediator
 from pytrek.mediators.SuperCommanderMediator import SuperCommanderMediator
+from pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedoMediator
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -52,13 +53,14 @@ class QuadrantMediator(Singleton):
         self._gameState:  GameState  = GameState()
         self._computer:   Computer   = Computer()
 
-        self._ktm: KlingonTorpedoMediator   = KlingonTorpedoMediator()
-        self._ctm: CommanderTorpedoMediator = CommanderTorpedoMediator()
-        self._ptm: PhotonTorpedoMediator    = PhotonTorpedoMediator()
-        self._em:  EnterpriseMediator       = EnterpriseMediator()
-        self._km:  KlingonMediator          = KlingonMediator()
-        self._cm:  CommanderMediator        = CommanderMediator()
-        self._scm: SuperCommanderMediator   = SuperCommanderMediator()
+        self._ktm: KlingonTorpedoMediator        = KlingonTorpedoMediator()
+        self._ctm: CommanderTorpedoMediator      = CommanderTorpedoMediator()
+        self._ptm: PhotonTorpedoMediator         = PhotonTorpedoMediator()
+        self._stm: SuperCommanderTorpedoMediator = SuperCommanderTorpedoMediator()
+        self._em:  EnterpriseMediator            = EnterpriseMediator()
+        self._km:  KlingonMediator               = KlingonMediator()
+        self._cm:  CommanderMediator             = CommanderMediator()
+        self._scm: SuperCommanderMediator        = SuperCommanderMediator()
 
         self._playerList:         SpriteList = SpriteList()
         self._klingonList:        SpriteList = SpriteList()
