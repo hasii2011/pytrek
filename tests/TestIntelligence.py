@@ -385,21 +385,21 @@ class TestIntelligence(TestBase):
 
         self._gameState.playerType  = PlayerType.Novice
 
-        medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
+        for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
+            medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
+            ans:              bool = (medianStatistic > 1150.0) and (medianStatistic < 1240.0)
 
-        ans: bool = (medianStatistic > 1150.0) and (medianStatistic < 1240.0)
-
-        self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
+            self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
     def testComputeCommanderPowerEmeritusPlayer(self):
 
         self._gameState.playerType  = PlayerType.Emeritus
 
-        medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
+        for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
+            medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
+            ans:             bool  = (medianStatistic >= 1358.0) and (medianStatistic <= 1442.0)
 
-        ans: bool = (medianStatistic > 1360.0) and (medianStatistic < 1442.0)
-
-        self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
+            self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
     def testComputeCommanderPowerGoodPlayer(self):
 
@@ -408,6 +408,7 @@ class TestIntelligence(TestBase):
         for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
             medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
             ans:             bool = (medianStatistic >= 1248.0) and (medianStatistic <= 1340.0)
+
             self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
     def testComputeSuperCommanderPowerEmeritusPlayer(self):
