@@ -11,7 +11,9 @@ from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedo import SuperCommanderTorpedo
+from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedoMiss import SuperCommanderTorpedoMiss
 
+from pytrek.mediators.base.BaseMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
 from pytrek.model.Quadrant import Quadrant
@@ -53,8 +55,8 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
         self.torpedoes.update()
 
         self._handleTorpedoHits(quadrant, enemies=quadrant.superCommanders)
-        # self._handleTorpedoMisses(quadrant, enemies=quadrant.superCommanders)
-        # self._handleMissRemoval(quadrant, cast(Misses, self._misses))
+        self._handleTorpedoMisses(quadrant, enemies=quadrant.superCommanders)
+        self._handleMissRemoval(quadrant, cast(Misses, self._misses))
 
     def _getTorpedoToFire(self, enemy: Enemy, enterprise: Enterprise) -> BaseEnemyTorpedo:
         """
@@ -89,7 +91,7 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
 
         Returns:  An appropriate 'miss' sprite
         """
-        pass
+        return SuperCommanderTorpedoMiss(placedTime=self._gameEngine.gameClock)
 
     def _playCannotFireSound(self):
         """
