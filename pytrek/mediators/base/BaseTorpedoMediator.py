@@ -129,6 +129,12 @@ class BaseTorpedoMediator(BaseMediator):
         """
         pass
 
+    def _playTorpedoExplodedSound(self):
+        """
+        Implemented by subclass
+        """
+        pass
+
     def _fireTorpedoesAtEnterpriseIfNecessary(self, quadrant: Quadrant, enemies: Enemies, rotationAngle: int = 125):
         """
 
@@ -272,6 +278,7 @@ class BaseTorpedoMediator(BaseMediator):
                 self._computeDamage(quadrant, shootingEnemy)
 
             expendedTorpedo.remove_from_sprite_lists()
+            self._playTorpedoExplodedSound()
 
             if self._gameState.energy <= 0:
                 # alert(theMessage='Game Over!  The Enterprise is out of energy')

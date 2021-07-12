@@ -64,6 +64,12 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         """
         self._soundKlingonTorpedo.play(volume=self._gameSettings.soundVolume.value)
 
+    def _playTorpedoExplodedSound(self):
+        """
+        We must implement this
+        """
+        pass
+
     def _loadSounds(self):
 
         self._soundKlingonTorpedo    = self._loadSound(bareFileName='klingonTorpedo.wav')

@@ -105,6 +105,12 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
         """
         self._soundSuperCommanderTorpedo.play(volume=self._gameSettings.soundVolume.value)
 
+    def _playTorpedoExplodedSound(self):
+        """
+        We must implement this
+        """
+        pass
+
     def _loadSounds(self):
 
         self._soundSuperCommanderTorpedo    = self._loadSound(bareFileName='SuperCommanderTorpedo.wav')
