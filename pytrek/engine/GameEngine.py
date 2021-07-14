@@ -7,7 +7,11 @@ from math import sin
 from math import fabs
 from math import sqrt
 
+from random import choice
+
 from pytrek.engine.Computer import Computer
+from pytrek.engine.Direction import Direction
+from pytrek.engine.DirectionData import DirectionData
 from pytrek.engine.PlayerType import PlayerType
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
@@ -300,3 +304,52 @@ class GameEngine(Singleton):
             self._gameClock += self._accumulatedDelta
             self._accumulatedDelta = 0.0
             self.logger.debug(f'Game Clock: {self._gameClock:.3f}')
+
+    def computeCloseCoordinates(self, targetCoordinates: Coordinates) -> DirectionData:
+        """
+
+        Args:
+            targetCoordinates:  The location occupied by an object that we bumped up against
+
+        Returns:  Coordinates somewhere around the target we bumped
+
+        """
+        x: int = targetCoordinates.x
+        y: int = targetCoordinates.y
+        newX: int = 0
+        newY: int = 0
+        direction: Direction = self.randomDirection()
+        if direction == Direction.North:
+            newX = x
+            newY = y - 1
+        elif direction == Direction.South:
+            newX = x
+            newY = y + 1
+        elif direction == Direction.East:
+            newX = x + 1
+            newY = y
+        elif direction == Direction.West:
+            newX = x - 1
+            newY = y
+        elif direction == Direction.NorthEast:
+            newX = x + 1
+            newY = y - 1
+        elif direction == Direction.SouthEast:
+            newX = x + 1
+            newY = y + 1
+        elif direction == Direction.NorthWest:
+            newX = x - 1
+            newY = y - 1
+        elif direction == Direction.SouthWest:
+            newX = x - 1
+            newY = y + 1
+
+        closeCoordinates: Coordinates = Coordinates(x=newX, y=newY)
+
+        directionData: DirectionData = DirectionData(coordinates=closeCoordinates, direction=direction)
+
+        return directionData
+
+    def randomDirection(self) -> Direction:
+        """"""
+        return choice(list(Direction))

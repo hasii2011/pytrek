@@ -8,6 +8,7 @@ from arcade import Sound
 from arcade import SpriteList
 
 from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.DirectionData import DirectionData
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
@@ -79,9 +80,11 @@ class EnterpriseMediator(BaseMediator):
                 self._gameState.energy -= stopEnergy
                 #
                 # TODO move Enterprise "Close" to where it was 'blocked'
+                directionData: DirectionData = self._gameEngine.computeCloseCoordinates(targetCoordinates=targetCoordinates)
+                self.logger.info(f'{directionData=}')
 
         # StarTrekScreen.quitIfTimeExpired()
-        # self._dockIfAdjacentToStarbase()
+        # self._dockIfAdjacentToStarBase()
 
     def warp(self):
         pass
