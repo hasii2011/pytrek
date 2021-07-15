@@ -35,6 +35,10 @@
             "level":     "INFO",
             "propagate": "False"
         },
+        "pytrek.mediators.EnterpriseMediator": {
+            "level":     "INFO",
+            "propagate": "False"
+        },
         "pytrek.mediators.base.BaseEnemyMediator": {
             "level":     "WARNING",
             "propagate": "False"

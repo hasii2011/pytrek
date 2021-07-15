@@ -250,6 +250,21 @@ class Quadrant:
 
         return sector
 
+    def isSectorEmpty(self, sectorCoordinates: Coordinates) -> bool:
+        """
+
+        Args:
+            sectorCoordinates:   The coordinates to check
+
+        Returns: True if sector is unoccupied else False
+        """
+        ans: bool = False
+
+        checkSector: Sector = self.getSector(sectorCoordinates=sectorCoordinates)
+        if checkSector.type == SectorType.EMPTY:
+            ans = True
+        return ans
+
     def _placeAKlingon(self) -> Klingon:
         """
         Creates a enemy and places it at a random empty sector

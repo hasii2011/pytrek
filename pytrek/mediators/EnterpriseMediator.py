@@ -12,6 +12,7 @@ from pytrek.engine.DirectionData import DirectionData
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
 
 from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse
@@ -30,9 +31,10 @@ class EnterpriseMediator(BaseMediator):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._soundImpulse:        Sound = cast(Sound, None)
-        self._soundUnableToComply: Sound = cast(Sound, None)
-        self._soundRepeatRequest:  Sound = cast(Sound, None)
+        self._soundImpulse:            Sound = cast(Sound, None)
+        self._soundUnableToComply:     Sound = cast(Sound, None)
+        self._soundRepeatRequest:      Sound = cast(Sound, None)
+        self._soundEnterpriseBlocked:  Sound = cast(Sound, None)
 
         self._loadSounds()
 
@@ -68,7 +70,7 @@ class EnterpriseMediator(BaseMediator):
             results: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant=quadrant, startingPoint=startingPoint, endPoint=endPoint)
             if results.answer is True:
                 self.__updateQuadrant(quadrant=quadrant, currentCoordinates=enterpriseCoordinates, targetCoordinates=targetCoordinates)
-                quadrant.enterprise.inMotion    = True
+                quadrant.enterprise.inMotion  = True
                 quadrant.enterpriseCoordinates = targetCoordinates
                 self._gameEngine.impulse(newCoordinates=targetCoordinates, quadrant=quadrant, enterprise=quadrant.enterprise)
                 self._soundImpulse.play(volume=soundVolume)
@@ -76,12 +78,19 @@ class EnterpriseMediator(BaseMediator):
                 self._messageConsole.displayMessage(f'Destination is blocked by: {results.obstacle.id}')
                 self._soundRepeatRequest.play(volume=soundVolume)
 
-                stopEnergy: float = self._gameEngine.computeEnergyWhenBlocked(startSector=enterpriseCoordinates, endSector=targetCoordinates)
+                baseGamePiece:      BaseGamePiece = cast(BaseGamePiece, results.obstacle)
+                blockerCoordinates: Coordinates   = baseGamePiece.gameCoordinates
+                stopEnergy: float = self._gameEngine.computeEnergyWhenBlocked(startSector=enterpriseCoordinates, endSector=blockerCoordinates)
                 self._gameState.energy -= stopEnergy
-                #
-                # TODO move Enterprise "Close" to where it was 'blocked'
-                directionData: DirectionData = self._gameEngine.computeCloseCoordinates(targetCoordinates=targetCoordinates)
-                self.logger.info(f'{directionData=}')
+
+                directionData: DirectionData = self._determineCloseCoordinatesToBlockedObject(quadrant=quadrant, targetCoordinates=blockerCoordinates)
+
+                self.logger.info(f'Move Enterprise to: {directionData.coordinates}')
+                self.__updateQuadrant(quadrant=quadrant, currentCoordinates=enterpriseCoordinates, targetCoordinates=directionData.coordinates)
+                quadrant.enterprise.inMotion   = True
+                quadrant.enterpriseCoordinates = directionData.coordinates
+                self._gameEngine.impulse(newCoordinates=directionData.coordinates, quadrant=quadrant, enterprise=quadrant.enterprise)
+                self._soundEnterpriseBlocked.play(volume=soundVolume)
 
         # StarTrekScreen.quitIfTimeExpired()
         # self._dockIfAdjacentToStarBase()
@@ -91,9 +100,10 @@ class EnterpriseMediator(BaseMediator):
 
     def _loadSounds(self):
 
-        self._soundImpulse        = self._loadSound(bareFileName='impulse.wav')
-        self._soundUnableToComply = self._loadSound(bareFileName='unableToComply.wav')
-        self._soundRepeatRequest  = self._loadSound(bareFileName='pleaseRepeatRequest.wav')
+        self._soundImpulse           = self._loadSound(bareFileName='impulse.wav')
+        self._soundUnableToComply    = self._loadSound(bareFileName='unableToComply.wav')
+        self._soundRepeatRequest     = self._loadSound(bareFileName='pleaseRepeatRequest.wav')
+        self._soundEnterpriseBlocked = self._loadSound(bareFileName='EnterpriseBlocked.wav')
 
     def _doWeHaveLineOfSight(self, quadrant: Quadrant, startingPoint: ArcadePoint, endPoint: ArcadePoint) -> LineOfSightResponse:
         """
@@ -107,13 +117,31 @@ class EnterpriseMediator(BaseMediator):
         """
         obstacles: SpriteList = SpriteList()
         if quadrant.hasPlanet is True:
-            obstacles.append(quadrant._planet)
+            obstacles.append(quadrant.planet)
         obstacles.extend(quadrant.klingons)
         obstacles.extend(quadrant.commanders)
         results: LineOfSightResponse = self._hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
 
         self.logger.info(f'{results=}')
         return results
+
+    def _determineCloseCoordinatesToBlockedObject(self, quadrant: Quadrant, targetCoordinates: Coordinates) -> DirectionData:
+        """
+        Get Enterprise "Close" coordinates to where it was 'blocked'
+        Args:
+            quadrant:           The quadrant we are in
+            targetCoordinates:
+
+        Returns:
+        """
+        directionData: DirectionData = self._gameEngine.computeCloseCoordinates(targetCoordinates=targetCoordinates)
+        self.logger.info(f'{directionData=}')
+
+        while directionData.coordinates.valid() is False or quadrant.isSectorEmpty(sectorCoordinates=directionData.coordinates) is False:
+            directionData = self._gameEngine.computeCloseCoordinates(targetCoordinates=targetCoordinates)
+            self.logger.info(f'Try again: {directionData=}')
+
+        return directionData
 
     def __updateQuadrant(self, quadrant: Quadrant, currentCoordinates: Coordinates, targetCoordinates: Coordinates) -> Quadrant:
         """
