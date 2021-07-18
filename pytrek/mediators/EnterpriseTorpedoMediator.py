@@ -46,11 +46,12 @@ class PhotonTorpedoMediator(BaseMediator):
         self._misses:     SpriteList = SpriteList()
         self._explosions: SpriteList = SpriteList()
 
-        self._photonTorpedoFired: Sound = cast(Sound, None)
-        self._explosionSound:     Sound = cast(Sound, None)
-        self._noKlingonsSound:    Sound = cast(Sound, None)
-        self._torpedoMisfire:     Sound = cast(Sound, None)
-        self._torpedoMiss:        Sound = cast(Sound, None)
+        self._photonTorpedoFired:  Sound = cast(Sound, None)
+        self._explosionSound:      Sound = cast(Sound, None)
+        self._noKlingonsSound:     Sound = cast(Sound, None)
+        self._torpedoMisfire:      Sound = cast(Sound, None)
+        self._torpedoMiss:         Sound = cast(Sound, None)
+        self._soundUnableToComply: Sound = cast(Sound, None)
 
         self._loadSounds()
 
@@ -71,29 +72,36 @@ class PhotonTorpedoMediator(BaseMediator):
 
     def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
 
+        if self._gameState.torpedoCount <= 0:
+            self._soundUnableToComply.play(volume=self._gameSettings.soundVolume.value)
+            self._messageConsole.displayMessage("You are out of photon torpedoes!!")
+            return  # Take a short cut out of here
+
         self._messageConsole.displayMessage("Firing Torpedoes!!")
 
         soundVolume: float      = self._gameSettings.soundVolume.value
-
-        enterprise: Enterprise = quadrant.enterprise
+        enterprise:  Enterprise = quadrant.enterprise
 
         enemies: Enemies = Enemies([])
-        # enemies = enemies + quadrant.klingons + quadrant.commanders
         enemies.extend(quadrant.klingons)
         enemies.extend(quadrant.commanders)
         enemies.extend(quadrant.superCommanders)
 
-        if len(enemies) == 0:
+        numberOfEnemies: int = len(enemies)
+        if numberOfEnemies == 0:
             self._messageConsole.displayMessage("Don't waste torpedoes.  Nothing to fire at")
             self._noKlingonsSound.play(volume=soundVolume)
         else:
             startingPoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
+            #
+            #  Only fire as many torpedoes as we have available
+            #  TODO:  Fire only 'N' torpedoes at randomly selected enemies
+            #
             for enemy in enemies:
                 endPoint: ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
 
                 clearLineOfSight: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant, startingPoint, endPoint)
                 if clearLineOfSight.answer is True:
-                    # enemy: Klingon = cast(Klingon, enemy)
                     self._pointAtEnemy(enterprise=enterprise, enemy=enemy)
                     if self._intelligence.rand() <= self._gameSettings.photonTorpedoMisfireRate:
                         self._messageConsole.displayMessage(f'Torpedo pointed at {enemy} misfired')
@@ -113,7 +121,6 @@ class PhotonTorpedoMediator(BaseMediator):
 
     def _handleTorpedoHits(self, quadrant: Quadrant):
 
-        # klingons:   Klingons  = quadrant.klingons
         enemies: Enemies = Enemies([])
 
         enemies.extend(quadrant.klingons)
@@ -155,11 +162,12 @@ class PhotonTorpedoMediator(BaseMediator):
 
     def _loadSounds(self):
 
-        self._photonTorpedoFired = self._loadSound('photonTorpedo.wav')
-        self._explosionSound     = self._loadSound('SmallExplosion.wav')
-        self._noKlingonsSound    = self._loadSound('inaccurateError.wav')
-        self._torpedoMisfire     = self._loadSound('PhotonTorpedoMisfire.wav')
-        self._torpedoMiss        = self._loadSound('PhotonTorpedoMiss.wav')
+        self._photonTorpedoFired  = self._loadSound(bareFileName='photonTorpedo.wav')
+        self._explosionSound      = self._loadSound(bareFileName='SmallExplosion.wav')
+        self._noKlingonsSound     = self._loadSound(bareFileName='inaccurateError.wav')
+        self._torpedoMisfire      = self._loadSound(bareFileName='PhotonTorpedoMisfire.wav')
+        self._torpedoMiss         = self._loadSound(bareFileName='PhotonTorpedoMiss.wav')
+        self._soundUnableToComply = self._loadSound(bareFileName='unableToComply.wav')
 
     def _pointAtEnemy(self, enemy: Enemy, enterprise: Enterprise):
 
