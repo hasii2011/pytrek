@@ -334,6 +334,7 @@ def main():
     arcadeWindow: Window     = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     gameView:     PyTrekView = PyTrekView()
 
+    arcadeWindow.set_exclusive_keyboard()
     arcadeWindow.show_view(gameView)
 
     gameView.setup()

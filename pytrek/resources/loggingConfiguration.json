@@ -32,11 +32,11 @@
             "propagate": "False"
         },
         "pytrek.mediators.QuadrantMediator": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         },
         "pytrek.mediators.EnterpriseMediator": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         },
         "pytrek.mediators.base.BaseEnemyMediator": {
@@ -44,7 +44,7 @@
             "propagate": "False"
         },
         "pytrek.mediators.base.BaseTorpedoMediator": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         },
         "pytrek.mediators.PhotonTorpedoMediator": {
