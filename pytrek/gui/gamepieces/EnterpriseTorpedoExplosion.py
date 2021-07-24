@@ -6,7 +6,7 @@ from arcade import Sprite
 from arcade import Texture
 
 
-class Explosion(Sprite):
+class EnterpriseTorpedoExplosion(Sprite):
 
     DELAY_FRAMES: int = 8
 
@@ -26,7 +26,7 @@ class Explosion(Sprite):
         # Update to the next frame of the animation. If we are at the end
         # of our frames, then delete this sprite.
         self._delayCounter += 1
-        if self._delayCounter > Explosion.DELAY_FRAMES:
+        if self._delayCounter > EnterpriseTorpedoExplosion.DELAY_FRAMES:
             self._textureIdx += 1
             if self._textureIdx < len(self._textures):
                 self.texture = self._textures[self._textureIdx]
