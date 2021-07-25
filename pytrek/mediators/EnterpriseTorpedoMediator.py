@@ -234,7 +234,7 @@ class PhotonTorpedoMediator(BaseMediator):
 
     def __doExplosion(self, killerTorpedo: EnterpriseTorpedo):
 
-        explosion: EnterpriseTorpedoExplosion = EnterpriseTorpedoExplosion(textureList=self._torpedoTextures, sound=self._explosionSound)
+        explosion: EnterpriseTorpedoExplosion = EnterpriseTorpedoExplosion(textureList=self._torpedoTextures)
         explosion.center_x = killerTorpedo.center_x
         explosion.center_y = killerTorpedo.center_y
 

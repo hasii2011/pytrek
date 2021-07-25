@@ -10,12 +10,11 @@ class EnterpriseTorpedoExplosion(Sprite):
 
     DELAY_FRAMES: int = 8
 
-    def __init__(self, textureList: List[Texture], sound: Sound):
+    def __init__(self, textureList: List[Texture], scale: float = 1.0):
 
-        super().__init__()
+        super().__init__(scale=0.5)
 
         self._textures:     List[Texture] = textureList
-        self._sound:        Sound         = sound
         self._textureIdx:   int           = 0
         self._delayCounter: int           = 0
 
