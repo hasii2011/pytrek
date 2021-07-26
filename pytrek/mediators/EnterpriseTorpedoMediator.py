@@ -8,7 +8,6 @@ from logging import getLogger
 from arcade import Sound
 from arcade import Sprite
 from arcade import SpriteList
-from arcade import Texture
 from arcade import check_for_collision_with_list
 
 from arcade import load_spritesheet
@@ -20,6 +19,7 @@ from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.EnterpriseTorpedo import EnterpriseTorpedo
 from pytrek.gui.gamepieces.EnterpriseTorpedoMiss import EnterpriseTorpedoMiss
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
 from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse
@@ -55,7 +55,7 @@ class PhotonTorpedoMediator(BaseMediator):
 
         self._loadSounds()
 
-        self._torpedoTextures: List[Texture] = self._loadPhotonTorpedoExplosions()
+        self._torpedoTextures: TextureList = self._loadPhotonTorpedoExplosions()
 
     # noinspection PyUnusedLocal
     def draw(self, quadrant: Quadrant):
@@ -196,7 +196,7 @@ class PhotonTorpedoMediator(BaseMediator):
         self._torpedoes.append(torpedo)
         self._messageConsole.displayMessage(f'Enterprise fire from: {enterprise.gameCoordinates} at Klingon {enemy.id}')
 
-    def _loadPhotonTorpedoExplosions(self) -> List[Texture]:
+    def _loadPhotonTorpedoExplosions(self) -> TextureList:
         """
         Cache the torpedo explosion textures
 
@@ -209,7 +209,7 @@ class PhotonTorpedoMediator(BaseMediator):
         bareFileName: str = f'EnterpriseTorpedoExplosionSheet.png'
         fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
 
-        explosions: List[Texture] = load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount)
+        explosions: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
 
         return explosions
 

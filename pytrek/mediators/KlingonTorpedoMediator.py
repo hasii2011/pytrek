@@ -1,17 +1,22 @@
 
+from typing import List
 from typing import cast
 
 from logging import Logger
 from logging import getLogger
 
 from arcade import Sound
+from arcade import Texture
+from arcade import load_texture
 
+from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
 
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
 from pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
@@ -33,6 +38,8 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
         self._soundKlingonTorpedo:    Sound = cast(Sound, None)
         self._soundKlingonCannotFire: Sound = cast(Sound, None)
+
+        self._torpedoTextures: List[Texture] = self._loadTorpedoExplosions()
 
         self._loadSounds()
 
@@ -75,6 +82,19 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         self._soundKlingonTorpedo    = self._loadSound(bareFileName='klingonTorpedo.wav')
         # self._soundShieldHit         = self._loadSound(bareFileName='ShieldHit.wav')
         self._soundKlingonCannotFire = self._loadSound(bareFileName='KlingonCannotFire.wav')
+
+    def _loadTorpedoExplosions(self) -> TextureList:
+
+        textureList: TextureList = TextureList([])
+
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
+                                                           bareFileName='explosion_rays_blue.png')
+
+        texture = load_texture(fqFileName)
+
+        textureList.append(texture)
+
+        return textureList
 
     def _getTorpedoToFire(self, enemy: Enemy, enterprise: Enterprise) -> BaseEnemyTorpedo:
         """

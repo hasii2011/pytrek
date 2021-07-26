@@ -1,34 +1,13 @@
 
-from typing import List
-
-from arcade import Sound
-from arcade import Sprite
-from arcade import Texture
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
 
-class EnterpriseTorpedoExplosion(Sprite):
+class EnterpriseTorpedoExplosion(BaseTorpedoExplosion):
 
     DELAY_FRAMES: int = 8
 
-    def __init__(self, textureList: List[Texture], scale: float = 1.0):
+    def __init__(self, textureList: TextureList):
 
-        super().__init__(scale=0.5)
+        super().__init__(textureList=textureList, delayFrames=EnterpriseTorpedoExplosion.DELAY_FRAMES, scale=0.5)
 
-        self._textures:     List[Texture] = textureList
-        self._textureIdx:   int           = 0
-        self._delayCounter: int           = 0
-
-        self.texture = self._textures[0]
-
-    def update(self):
-
-        # Update to the next frame of the animation. If we are at the end
-        # of our frames, then delete this sprite.
-        self._delayCounter += 1
-        if self._delayCounter > EnterpriseTorpedoExplosion.DELAY_FRAMES:
-            self._textureIdx += 1
-            if self._textureIdx < len(self._textures):
-                self.texture = self._textures[self._textureIdx]
-            else:
-                self.remove_from_sprite_lists()
-            self._delayCounter = 0

@@ -1,11 +1,9 @@
 """
+Used to test sprites that used a time based tiled image sheet to display themselves
 """
-from typing import List
 from typing import cast
 
-from arcade import Sound
 from arcade import SpriteList
-from arcade import Texture
 from arcade import Window
 from arcade import color
 
@@ -19,6 +17,7 @@ from arcade import key as arcadeKey
 from pytrek.LocateResources import LocateResources
 
 from pytrek.gui.gamepieces.EnterpriseTorpedoExplosion import EnterpriseTorpedoExplosion
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
 SCREEN_WIDTH:  int = 800
 SCREEN_HEIGHT: int = 600
@@ -36,29 +35,24 @@ class TestSpriteSheet(Window):
 
         set_background_color(color.BLACK)
 
-        self._explosions:     SpriteList = SpriteList()
-        self._explosionSound: Sound      = cast(Sound, None)
+        self._sprites:     SpriteList = SpriteList()
 
-        self._torpedoTextures: List[Texture] = self._loadPhotonTorpedoExplosions()
+        self._enterpriseTorpedoTextures: TextureList = self._loadEnterpriseTorpedoExplosions()
 
     def setup(self):
         """
         Set up the game here. Call this function to restart the game.
         """
-        explosion: EnterpriseTorpedoExplosion = EnterpriseTorpedoExplosion(textureList=self._torpedoTextures)
-        explosion.center_x = SCREEN_WIDTH // 2
-        explosion.center_y = SCREEN_HEIGHT // 2
+        explosion = self._getEnterpriseTorpedoExplosion()
 
-        self._explosions.append(explosion)
-
-        self._explosionSound = self._loadSound(bareFileName='SmallExplosion.wav')
+        self._sprites.append(explosion)
 
     def on_draw(self):
         """
         Render the screen.
         """
         start_render()
-        self._explosions.draw()
+        self._sprites.draw()
 
     def on_update(self, delta_time):
         """
@@ -66,7 +60,7 @@ class TestSpriteSheet(Window):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        self._explosions.update()
+        self._sprites.update()
 
     def on_key_release(self, releasedKey: int, key_modifiers: int):
         """
@@ -78,7 +72,22 @@ class TestSpriteSheet(Window):
             # noinspection PyProtectedMember
             os._exit(0)
 
-    def _loadPhotonTorpedoExplosions(self) -> List[Texture]:
+    def _getEnterpriseTorpedoExplosion(self) -> EnterpriseTorpedoExplosion:
+
+        explosion: EnterpriseTorpedoExplosion = EnterpriseTorpedoExplosion(textureList=self._enterpriseTorpedoTextures)
+
+        halfScreenWidth: int = SCREEN_WIDTH // 2
+        halfScreenHeight: int = SCREEN_HEIGHT // 2
+
+        explosion.center_x = halfScreenWidth // 2
+        explosion.center_y = halfScreenHeight // 2
+
+        return explosion
+
+    def _getKlingonTorpedoExplosion(self):
+        pass
+
+    def _loadEnterpriseTorpedoExplosions(self) -> TextureList:
         """
         Cache the torpedo explosion textures
 
@@ -91,16 +100,9 @@ class TestSpriteSheet(Window):
         bareFileName: str = f'EnterpriseTorpedoExplosionSheet.png'
         fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
 
-        explosions: List[Texture] = load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount)
+        explosions: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
 
         return explosions
-
-    def _loadSound(self, bareFileName: str) -> Sound:
-
-        fqFileName: str   = LocateResources.getResourcesPath(LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName)
-        sound:      Sound = Sound(fqFileName)
-
-        return sound
 
 
 def main():
