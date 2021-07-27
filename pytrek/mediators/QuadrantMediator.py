@@ -27,7 +27,7 @@ from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.KlingonMediator import KlingonMediator
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
-from pytrek.mediators.EnterpriseTorpedoMediator import PhotonTorpedoMediator
+from pytrek.mediators.EnterpriseTorpedoMediator import EnterpriseTorpedoMediator
 from pytrek.mediators.SuperCommanderMediator import SuperCommanderMediator
 from pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedoMediator
 
@@ -55,7 +55,7 @@ class QuadrantMediator(Singleton):
 
         self._ktm: KlingonTorpedoMediator        = KlingonTorpedoMediator()
         self._ctm: CommanderTorpedoMediator      = CommanderTorpedoMediator()
-        self._ptm: PhotonTorpedoMediator         = PhotonTorpedoMediator()
+        self._ptm: EnterpriseTorpedoMediator         = EnterpriseTorpedoMediator()
         self._stm: SuperCommanderTorpedoMediator = SuperCommanderTorpedoMediator()
         self._em:  EnterpriseMediator            = EnterpriseMediator()
         self._km:  KlingonMediator               = KlingonMediator()

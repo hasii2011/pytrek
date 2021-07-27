@@ -35,7 +35,7 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
-class PhotonTorpedoMediator(BaseMediator):
+class EnterpriseTorpedoMediator(BaseMediator):
 
     def __init__(self):
 
@@ -55,7 +55,11 @@ class PhotonTorpedoMediator(BaseMediator):
 
         self._loadSounds()
 
-        self._torpedoTextures: TextureList = self._loadPhotonTorpedoExplosions()
+        self._torpedoExplosionTextures: TextureList = self._loadPhotonTorpedoExplosions()
+
+    @property
+    def torpedoExplosionTextures(self) -> TextureList:
+        return self._torpedoExplosionTextures
 
     # noinspection PyUnusedLocal
     def draw(self, quadrant: Quadrant):
@@ -234,7 +238,7 @@ class PhotonTorpedoMediator(BaseMediator):
 
     def __doExplosion(self, killerTorpedo: EnterpriseTorpedo):
 
-        explosion: EnterpriseTorpedoExplosion = EnterpriseTorpedoExplosion(textureList=self._torpedoTextures)
+        explosion: EnterpriseTorpedoExplosion = EnterpriseTorpedoExplosion(textureList=self._torpedoExplosionTextures)
         explosion.center_x = killerTorpedo.center_x
         explosion.center_y = killerTorpedo.center_y
 

@@ -1,7 +1,6 @@
 """
 Used to test sprites that used a time based tiled image sheet to display themselves
 """
-from typing import cast
 
 from arcade import SpriteList
 from arcade import Window
@@ -9,15 +8,21 @@ from arcade import color
 
 from arcade import set_background_color
 from arcade import start_render
-from arcade import load_spritesheet
 
 from arcade import run as arcadeRun
 from arcade import key as arcadeKey
 
-from pytrek.LocateResources import LocateResources
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
 from pytrek.gui.gamepieces.EnterpriseTorpedoExplosion import EnterpriseTorpedoExplosion
-from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosion import KlingonTorpedoExplosion
+
+from pytrek.mediators.EnterpriseTorpedoMediator import EnterpriseTorpedoMediator
+from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
+
+from pytrek.LocateResources import LocateResources
+
+from pytrek.settings.SettingsCommon import SettingsCommon
 
 SCREEN_WIDTH:  int = 800
 SCREEN_HEIGHT: int = 600
@@ -37,15 +42,21 @@ class TestSpriteSheet(Window):
 
         self._sprites:     SpriteList = SpriteList()
 
-        self._enterpriseTorpedoTextures: TextureList = self._loadEnterpriseTorpedoExplosions()
+        em: EnterpriseTorpedoMediator = EnterpriseTorpedoMediator()
+        km: KlingonTorpedoMediator    = KlingonTorpedoMediator()
+
+        self._enterpriseTorpedoTextures: TextureList = em.torpedoExplosionTextures
+        self._klingonTorpedoTextures:    TextureList = km.torpedoExplosionTextures
 
     def setup(self):
         """
         Set up the game here. Call this function to restart the game.
         """
-        explosion = self._getEnterpriseTorpedoExplosion()
+        enterpriseTorpedoExplosion: EnterpriseTorpedoExplosion = self._getEnterpriseTorpedoExplosion()
+        klingonTorpedoExplosion:    KlingonTorpedoExplosion    = self._getKlingonTorpedoExplosion()
 
-        self._sprites.append(explosion)
+        self._sprites.append(enterpriseTorpedoExplosion)
+        self._sprites.append(klingonTorpedoExplosion)
 
     def on_draw(self):
         """
@@ -71,12 +82,14 @@ class TestSpriteSheet(Window):
             # noinspection PyUnresolvedReferences
             # noinspection PyProtectedMember
             os._exit(0)
+        elif releasedKey == arcadeKey.A:
+            self.setup()
 
     def _getEnterpriseTorpedoExplosion(self) -> EnterpriseTorpedoExplosion:
 
         explosion: EnterpriseTorpedoExplosion = EnterpriseTorpedoExplosion(textureList=self._enterpriseTorpedoTextures)
 
-        halfScreenWidth: int = SCREEN_WIDTH // 2
+        halfScreenWidth:  int = SCREEN_WIDTH // 2
         halfScreenHeight: int = SCREEN_HEIGHT // 2
 
         explosion.center_x = halfScreenWidth // 2
@@ -84,31 +97,26 @@ class TestSpriteSheet(Window):
 
         return explosion
 
-    def _getKlingonTorpedoExplosion(self):
-        pass
+    def _getKlingonTorpedoExplosion(self) -> KlingonTorpedoExplosion:
 
-    def _loadEnterpriseTorpedoExplosions(self) -> TextureList:
-        """
-        Cache the torpedo explosion textures
+        explosion: KlingonTorpedoExplosion = KlingonTorpedoExplosion(textureList=self._klingonTorpedoTextures)
 
-        Returns:  The texture list
-        """
-        nColumns:  int = 8
-        tileCount: int = 21
-        spriteWidth:  int = 128
-        spriteHeight: int = 128
-        bareFileName: str = f'EnterpriseTorpedoExplosionSheet.png'
-        fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
+        halfScreenWidth:  int = SCREEN_WIDTH // 2
+        halfScreenHeight: int = SCREEN_HEIGHT // 2
 
-        explosions: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
+        explosion.center_x = halfScreenWidth  + 200
+        explosion.center_y = halfScreenHeight + 200
 
-        return explosions
+        return explosion
 
 
 def main():
     """
     Main method
     """
+    LocateResources.setupSystemLogging()
+    SettingsCommon.determineSettingsLocation()
+
     window: TestSpriteSheet = TestSpriteSheet(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
     arcadeRun()

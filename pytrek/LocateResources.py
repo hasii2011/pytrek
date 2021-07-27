@@ -3,6 +3,10 @@ from os import sep as osSep
 
 from pkg_resources import resource_filename
 
+from json import load as jsonLoad
+
+import logging.config
+
 
 class LocateResources:
 
@@ -30,6 +34,19 @@ class LocateResources:
                                  IMAGE_RESOURCES_PACKAGE_NAME: IMAGE_RESOURCES_PATH,
                                  SOUND_RESOURCES_PACKAGE_NAME: SOUND_RESOURCES_PATH
                                  }
+
+    @staticmethod
+    def setupSystemLogging():
+
+        configFilePath: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.RESOURCES_PACKAGE_NAME,
+                                                               bareFileName=LocateResources.JSON_LOGGING_CONFIG_FILENAME)
+
+        with open(configFilePath, 'r') as loggingConfigurationFile:
+            configurationDictionary = jsonLoad(loggingConfigurationFile)
+
+        logging.config.dictConfig(configurationDictionary)
+        logging.logProcesses = False
+        logging.logThreads   = False
 
     # noinspection SpellCheckingInspection
     @staticmethod

@@ -1,12 +1,10 @@
 
-from typing import List
 from typing import cast
 
 from logging import Logger
 from logging import getLogger
 
 from arcade import Sound
-from arcade import Texture
 from arcade import load_texture
 
 from pytrek.LocateResources import LocateResources
@@ -19,6 +17,7 @@ from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
 from pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
+from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosionColor import KlingonTorpedoExplosionColor
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
 
 from pytrek.mediators.base.BaseMediator import Misses
@@ -39,9 +38,13 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         self._soundKlingonTorpedo:    Sound = cast(Sound, None)
         self._soundKlingonCannotFire: Sound = cast(Sound, None)
 
-        self._torpedoTextures: List[Texture] = self._loadTorpedoExplosions()
+        self._explosionTextures: TextureList = self._loadTorpedoExplosions()
 
         self._loadSounds()
+
+    @property
+    def torpedoExplosionTextures(self) -> TextureList:
+        return self._explosionTextures
 
     def draw(self):
 
@@ -87,12 +90,14 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
         textureList: TextureList = TextureList([])
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='explosion_rays_blue.png')
+        for explosionColor in KlingonTorpedoExplosionColor:
 
-        texture = load_texture(fqFileName)
+            bareFileName: str = f'KlingonTorpedoExplosion{explosionColor.value}.png'
+            fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
 
-        textureList.append(texture)
+            texture = load_texture(fqFileName)
+
+            textureList.append(texture)
 
         return textureList
 
