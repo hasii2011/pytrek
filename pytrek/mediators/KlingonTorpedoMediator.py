@@ -7,23 +7,28 @@ from logging import getLogger
 from arcade import Sound
 from arcade import load_texture
 
-from pytrek.LocateResources import LocateResources
-from pytrek.engine.ArcadePoint import ArcadePoint
-
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
-from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+
 from pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
+from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosion import KlingonTorpedoExplosion
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosionColor import KlingonTorpedoExplosionColor
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
 
 from pytrek.mediators.base.BaseMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
+from pytrek.LocateResources import LocateResources
+
+from pytrek.engine.ArcadePoint import ArcadePoint
+
 from pytrek.model.Quadrant import Quadrant
+
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
@@ -51,12 +56,14 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         self.torpedoes.draw()
         self.torpedoFollowers.draw()
         self.torpedoDuds.draw()
+        self.torpedoExplosions.draw()
 
     def update(self, quadrant: Quadrant):
 
         self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.klingons)
         self.torpedoes.update()
         self.torpedoFollowers.update()
+        self.torpedoExplosions.update()
 
         self._handleTorpedoHits(quadrant, enemies=quadrant.klingons)
         self._handleTorpedoMisses(quadrant, enemies=quadrant.klingons)
@@ -130,6 +137,15 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         klingonTorpedo.followers = self.torpedoFollowers
 
         return klingonTorpedo
+
+    def _getTorpedoExplosion(self) -> BaseTorpedoExplosion:
+        """
+        Must be implemented by subclass to create correct type of torpedo explosion
+
+        Returns: An explosion of the correct type
+
+        """
+        return KlingonTorpedoExplosion(textureList=self._explosionTextures)
 
     def _getTorpedoMiss(self) -> BaseMiss:
         """

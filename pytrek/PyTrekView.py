@@ -4,10 +4,6 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-import logging.config
-
-from json import load as jsonLoad
-
 import arcade
 # noinspection PyPackageRequirements
 from PIL import ImageFont
@@ -73,7 +69,7 @@ class PyTrekView(View):
 
     def __init__(self):
 
-        self._setupSystemLogging()
+        LocateResources.setupSystemLogging()
 
         super().__init__()
 
@@ -243,17 +239,6 @@ class PyTrekView(View):
         Called when a user releases a mouse button.
         """
         pass
-
-    def _setupSystemLogging(self):
-        configFilePath: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.RESOURCES_PACKAGE_NAME,
-                                                               bareFileName=LocateResources.JSON_LOGGING_CONFIG_FILENAME)
-
-        with open(configFilePath, 'r') as loggingConfigurationFile:
-            configurationDictionary = jsonLoad(loggingConfigurationFile)
-
-        logging.config.dictConfig(configurationDictionary)
-        logging.logProcesses = False
-        logging.logThreads   = False
 
     def _switchViewBack(self):
         self.window.show_view(self)

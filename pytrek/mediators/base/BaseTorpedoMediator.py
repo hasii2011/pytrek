@@ -19,6 +19,7 @@ from pytrek.engine.devices.Devices import Devices
 from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
 from pytrek.gui.gamepieces.base.BaseTorpedoFollower import BaseTorpedoFollower
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
@@ -47,6 +48,7 @@ class BaseTorpedoMediator(BaseMediator):
         self._devices: Devices = Devices()
 
         self._torpedoes:        SpriteList = SpriteList()
+        self._explosions:       SpriteList = SpriteList()
         self._torpedoFollowers: SpriteList = SpriteList(is_static=True)
         self._misses:           SpriteList = SpriteList()
 
@@ -83,6 +85,10 @@ class BaseTorpedoMediator(BaseMediator):
     def torpedoDuds(self, newValues: SpriteList):
         self._misses = newValues
 
+    @property
+    def torpedoExplosions(self) -> SpriteList:
+        return self._explosions
+
     def draw(self):
         """
         Implemented by subclass
@@ -106,6 +112,15 @@ class BaseTorpedoMediator(BaseMediator):
             enterprise: Where Captain Kirk is waiting
 
         Returns:  A torpedo of the correct kind
+        """
+        pass
+
+    def _getTorpedoExplosion(self) -> BaseTorpedoExplosion:
+        """
+        Must be implemented by subclass to create correct type of torpedo explosion
+
+        Returns: An explosion of the correct type
+
         """
         pass
 
@@ -277,8 +292,9 @@ class BaseTorpedoMediator(BaseMediator):
                 shootingEnemy.angle = 0
                 self._computeDamage(quadrant, shootingEnemy)
 
+            self.__doExplosion(expendedTorpedo=expendedTorpedo)
+
             expendedTorpedo.remove_from_sprite_lists()
-            self._playTorpedoExplodedSound()
 
             if self._gameState.energy <= 0:
                 # alert(theMessage='Game Over!  The Enterprise is out of energy')
@@ -337,3 +353,15 @@ class BaseTorpedoMediator(BaseMediator):
             if enemy.id != shooter.id:
                 obstacles.append(enemy)
         return obstacles
+
+    def __doExplosion(self, expendedTorpedo: BaseEnemyTorpedo):
+
+        self._playTorpedoExplodedSound()
+
+        # TODO Super Commander not yet implemented
+        explosion: BaseTorpedoExplosion = self._getTorpedoExplosion()
+        if explosion is not None:
+            explosion.center_x = expendedTorpedo.center_x
+            explosion.center_y = expendedTorpedo.center_y
+
+            self._explosions.append(explosion)
