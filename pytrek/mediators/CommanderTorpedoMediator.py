@@ -5,12 +5,17 @@ from logging import Logger
 from logging import getLogger
 
 from arcade import Sound
+from arcade import load_spritesheet
 
+from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
 
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 from pytrek.gui.gamepieces.commander.CommanderTorpedo import CommanderTorpedo
+from pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion
 from pytrek.gui.gamepieces.commander.CommanderTorpedoMiss import CommanderTorpedoMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
@@ -34,6 +39,11 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         self._soundCommanderCannotFire: Sound = cast(Sound, None)
 
         self._loadSounds()
+        self._explosionTextures: TextureList = self._loadTorpedoExplosionTextures()
+
+    @property
+    def torpedoExplosionTextures(self) -> TextureList:
+        return self._explosionTextures
 
     def draw(self):
         """
@@ -42,6 +52,7 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         self.torpedoes.draw()
         self.torpedoFollowers.draw()
         self.torpedoDuds.draw()
+        self.torpedoExplosions.draw()
 
     def update(self, quadrant: Quadrant):
         """
@@ -52,6 +63,7 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         """
         self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.commanders, rotationAngle=-90)
         self.torpedoes.update()
+        self.torpedoExplosions.update()
 
         self._handleTorpedoHits(quadrant, enemies=quadrant.commanders)
         self._handleTorpedoMisses(quadrant, enemies=quadrant.commanders)
@@ -84,6 +96,15 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
 
         return commanderTorpedo
 
+    def _getTorpedoExplosion(self) -> BaseTorpedoExplosion:
+        """
+        Must be implemented by subclass to create correct type of torpedo explosion
+
+        Returns: An explosion of the correct type
+
+        """
+        return CommanderTorpedoExplosion(textureList=self._explosionTextures)
+
     def _getTorpedoMiss(self) -> BaseMiss:
         """
         Implement empty base class method
@@ -114,3 +135,16 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
 
         self._soundCommanderTorpedo    = self._loadSound(bareFileName='CommanderTorpedo.wav')
         self._soundCommanderCannotFire = self._loadSound(bareFileName='CommanderCannotFire.wav')
+
+    def _loadTorpedoExplosionTextures(self) -> TextureList:
+
+        nColumns:  int = 5
+        tileCount: int = 23
+        spriteWidth:  int = 64
+        spriteHeight: int = 64
+        bareFileName: str = f'CommanderTorpedoExplosionSpriteSheet.png'
+        fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
+
+        textureList: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
+
+        return textureList

@@ -15,7 +15,9 @@ from arcade import key as arcadeKey
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
 from pytrek.gui.gamepieces.EnterpriseTorpedoExplosion import EnterpriseTorpedoExplosion
+from pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosion import KlingonTorpedoExplosion
+from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
 
 from pytrek.mediators.EnterpriseTorpedoMediator import EnterpriseTorpedoMediator
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
@@ -44,9 +46,11 @@ class TestSpriteSheet(Window):
 
         em: EnterpriseTorpedoMediator = EnterpriseTorpedoMediator()
         km: KlingonTorpedoMediator    = KlingonTorpedoMediator()
+        cm: CommanderTorpedoMediator  = CommanderTorpedoMediator()
 
-        self._enterpriseTorpedoTextures: TextureList = em.torpedoExplosionTextures
-        self._klingonTorpedoTextures:    TextureList = km.torpedoExplosionTextures
+        self._enterpriseTorpedoExplosionTextures: TextureList = em.torpedoExplosionTextures
+        self._klingonTorpedoExplosionTextures:    TextureList = km.torpedoExplosionTextures
+        self._commanderTorpedoExplosionTextures:  TextureList = cm.torpedoExplosionTextures
 
     def setup(self):
         """
@@ -54,9 +58,11 @@ class TestSpriteSheet(Window):
         """
         enterpriseTorpedoExplosion: EnterpriseTorpedoExplosion = self._getEnterpriseTorpedoExplosion()
         klingonTorpedoExplosion:    KlingonTorpedoExplosion    = self._getKlingonTorpedoExplosion()
+        commanderTorpedoExplosion:  CommanderTorpedoExplosion = self._getCommanderTorpedoExplosion()
 
         self._sprites.append(enterpriseTorpedoExplosion)
         self._sprites.append(klingonTorpedoExplosion)
+        self._sprites.append(commanderTorpedoExplosion)
 
     def on_draw(self):
         """
@@ -87,7 +93,7 @@ class TestSpriteSheet(Window):
 
     def _getEnterpriseTorpedoExplosion(self) -> EnterpriseTorpedoExplosion:
 
-        explosion: EnterpriseTorpedoExplosion = EnterpriseTorpedoExplosion(textureList=self._enterpriseTorpedoTextures)
+        explosion: EnterpriseTorpedoExplosion = EnterpriseTorpedoExplosion(textureList=self._enterpriseTorpedoExplosionTextures)
 
         halfScreenWidth:  int = SCREEN_WIDTH // 2
         halfScreenHeight: int = SCREEN_HEIGHT // 2
@@ -99,12 +105,24 @@ class TestSpriteSheet(Window):
 
     def _getKlingonTorpedoExplosion(self) -> KlingonTorpedoExplosion:
 
-        explosion: KlingonTorpedoExplosion = KlingonTorpedoExplosion(textureList=self._klingonTorpedoTextures)
+        explosion: KlingonTorpedoExplosion = KlingonTorpedoExplosion(textureList=self._klingonTorpedoExplosionTextures)
 
         halfScreenWidth:  int = SCREEN_WIDTH // 2
         halfScreenHeight: int = SCREEN_HEIGHT // 2
 
         explosion.center_x = halfScreenWidth  + 200
+        explosion.center_y = halfScreenHeight + 200
+
+        return explosion
+
+    def _getCommanderTorpedoExplosion(self) -> CommanderTorpedoExplosion:
+
+        explosion: CommanderTorpedoExplosion = CommanderTorpedoExplosion(textureList=self._commanderTorpedoExplosionTextures)
+
+        halfScreenWidth:  int = SCREEN_WIDTH // 2
+        halfScreenHeight: int = SCREEN_HEIGHT // 2
+
+        explosion.center_x = halfScreenWidth  - 200
         explosion.center_y = halfScreenHeight + 200
 
         return explosion

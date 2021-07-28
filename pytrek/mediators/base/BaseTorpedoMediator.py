@@ -20,6 +20,7 @@ from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 from pytrek.gui.gamepieces.base.BaseTorpedoFollower import BaseTorpedoFollower
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.Enterprise import Enterprise
@@ -112,6 +113,14 @@ class BaseTorpedoMediator(BaseMediator):
             enterprise: Where Captain Kirk is waiting
 
         Returns:  A torpedo of the correct kind
+        """
+        pass
+
+    def _loadTorpedoExplosionTextures(self) -> TextureList:
+        """
+        Subclasses must implement this method
+
+        Returns:  The textures (images) that display an explosion
         """
         pass
 
