@@ -18,6 +18,9 @@ class DebugSettings(BaseSubSetting):
     DEBUG_SUPER_COMMANDER_COUNT:    str = 'debug_super_commander_count'
     DEBUG_PRINT_KLINGON_PLACEMENT:  str = 'debug_print_klingon_placement'
     DEBUG_ADD_PLANET:               str = 'debug_add_planet'
+    DEBUG_NO_KLINGONS:              str = 'debug_no_klingons'
+    DEBUG_NO_COMMANDERS:            str = 'debug_no_commanders'
+    DEBUG_NO_SUPER_COMMANDERS:      str = 'debug_no_super_commanders'
 
     DEBUG_COLLECT_KLINGON_QUADRANT_COORDINATES:         str = 'debug_collect_klingon_quadrant_coordinates'
     DEBUG_COLLECT_COMMANDER_QUADRANT_COORDINATES:       str = 'debug_collect_commander_quadrant_coordinates'
@@ -37,6 +40,9 @@ class DebugSettings(BaseSubSetting):
         DEBUG_COLLECT_SUPER_COMMANDER_QUADRANT_COORDINATES: 'False',
         DEBUG_ANNOUNCE_QUADRANT_CREATION:           'False',
         DEBUG_ADD_PLANET:                           'False',
+        DEBUG_NO_KLINGONS:                          'False',
+        DEBUG_NO_COMMANDERS:                        'False',
+        DEBUG_NO_SUPER_COMMANDERS:                  'False',
     })
 
     def init(self, *args, **kwds):
@@ -128,4 +134,31 @@ class DebugSettings(BaseSubSetting):
     @debugAddPlanet.setter
     def debugAddPlanet(self, newValue: bool):
         self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_PLANET, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def debugNoKlingons(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_KLINGONS)
+
+    @debugNoKlingons.setter
+    def debugNoKlingons(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_KLINGONS, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def debugNoCommanders(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_COMMANDERS)
+
+    @debugNoCommanders.setter
+    def debugNoCommanders(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_COMMANDERS, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def debugNoSuperCommanders(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_SUPER_COMMANDERS)
+
+    @debugNoSuperCommanders.setter
+    def debugNoSuperCommanders(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_SUPER_COMMANDERS, str(newValue))
         self._settingsCommon.saveSettings()

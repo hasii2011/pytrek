@@ -249,6 +249,30 @@ class GameSettings(Singleton):
     def debugAddPlanet(self, newValue: bool):
         self._debug.debugAddPlanet = newValue
 
+    @property
+    def debugNoKlingons(self) -> bool:
+        return self._debug.debugNoKlingons
+
+    @debugNoKlingons.setter
+    def debugNoKlingons(self, newValue: bool):
+        self._debug.debugNoKlingons = newValue
+
+    @property
+    def debugNoCommanders(self) -> bool:
+        return self._debug.debugNoCommanders
+
+    @debugNoCommanders.setter
+    def debugNoCommanders(self, newValue: bool):
+        self._debug.debugNoCommanders = newValue
+
+    @property
+    def debugNoSuperCommanders(self) -> bool:
+        return self._debug.debugNoSuperCommanders
+
+    @debugNoSuperCommanders.setter
+    def debugNoSuperCommanders(self, newValue: bool):
+        self._debug.debugNoSuperCommanders = newValue
+
     def _createEmptySettings(self):
 
         self._config: ConfigParser = ConfigParser()

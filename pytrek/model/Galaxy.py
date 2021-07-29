@@ -43,22 +43,36 @@ class Galaxy(Singleton):
         self._currentQuadrant: Quadrant   = cast(Quadrant, None)
         self.quadrants:        GalaxyGrid = GalaxyGrid([])  # 2D array aka python list
 
-        """
-        For debugging purposes, collect a list of the coordinates where we placed Klingons;  
-        There may be duplicate coordinates if we randomly picked the same quadrant
-        """
-        if self._gameSettings.debugCollectKlingonQuadrantCoordinates is True:
-            self._debugKlingonQuadrants: List[Coordinates] = []
         self._createGalaxy()
 
-        # TODO  Debug option for No Klingon, No commanders, No Super Commanders
-        self.placeKlingonsInGalaxy()
-        self.placeCommandersInGalaxy()
-        self.placeSuperCommandersInGalaxy()
+        self._addEnemies()
 
         # self.placeStarBasesInGalaxy()
         self._placePlanets()
         self.setInitialQuadrant()
+
+    def _addEnemies(self):
+
+        gameSettings: GameSettings = self._gameSettings
+        """
+            For debugging purposes, collect a list of the coordinates where we placed Klingons;  
+            There may be duplicate coordinates if we randomly picked the same quadrant
+            """
+        if gameSettings.debugCollectKlingonQuadrantCoordinates is True:
+            self._debugKlingonQuadrants: List[Coordinates] = []
+
+        if gameSettings.debugNoKlingons is True:
+            self._gameState.remainingKlingons = 0
+        else:
+            self.placeKlingonsInGalaxy()
+        if gameSettings.debugNoCommanders is True:
+            self._gameState.remainingCommanders = 0
+        else:
+            self.placeCommandersInGalaxy()
+        if gameSettings.debugNoSuperCommanders is True:
+            self._gameState.remainingSuperCommanders = 0
+        else:
+            self.placeSuperCommandersInGalaxy()
 
     def updateGalaxy(self):
         """"""
