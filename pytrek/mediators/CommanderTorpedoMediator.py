@@ -7,16 +7,18 @@ from logging import getLogger
 from arcade import Sound
 from arcade import load_spritesheet
 
-from pytrek.LocateResources import LocateResources
+
 from pytrek.engine.ArcadePoint import ArcadePoint
 
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+
 from pytrek.gui.gamepieces.commander.CommanderTorpedo import CommanderTorpedo
 from pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion
 from pytrek.gui.gamepieces.commander.CommanderTorpedoMiss import CommanderTorpedoMiss
+
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
@@ -24,6 +26,9 @@ from pytrek.mediators.base.BaseMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
 from pytrek.model.Quadrant import Quadrant
+
+from pytrek.LocateResources import LocateResources
+
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 

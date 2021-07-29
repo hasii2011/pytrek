@@ -133,8 +133,8 @@ class QuadrantMediator(Singleton):
 
         self._ktm.update(quadrant=quadrant)
         self._ctm.update(quadrant=quadrant)
-        self._ptm.update(quadrant=quadrant)
         self._stm.update(quadrant=quadrant)
+        self._ptm.update(quadrant=quadrant)
 
     def _updateQuadrant(self, quadrant):
         for y in range(QUADRANT_ROWS):

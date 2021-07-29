@@ -51,6 +51,7 @@ class Galaxy(Singleton):
             self._debugKlingonQuadrants: List[Coordinates] = []
         self._createGalaxy()
 
+        # TODO  Debug option for No Klingon, No commanders, No Super Commanders
         self.placeKlingonsInGalaxy()
         self.placeCommandersInGalaxy()
         self.placeSuperCommandersInGalaxy()

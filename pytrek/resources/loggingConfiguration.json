@@ -40,11 +40,11 @@
             "propagate": "False"
         },
         "pytrek.mediators.base.BaseEnemyMediator": {
-            "level":     "WARNING",
+            "level":     "INFO",
             "propagate": "False"
         },
         "pytrek.mediators.base.BaseTorpedoMediator": {
-            "level":     "WARNING",
+            "level":     "DEBUG",
             "propagate": "False"
         },
         "pytrek.mediators.PhotonTorpedoMediator": {

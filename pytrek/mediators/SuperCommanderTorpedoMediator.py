@@ -5,11 +5,14 @@ from logging import Logger
 from logging import getLogger
 
 from arcade import Sound
+from arcade import load_spritesheet
 
+from pytrek.LocateResources import LocateResources
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedo import SuperCommanderTorpedo
 from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedoMiss import SuperCommanderTorpedoMiss
 
@@ -35,6 +38,11 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
         self._soundSuperCommanderCannotFire: Sound = cast(Sound, None)
 
         self._loadSounds()
+        self._explosionTextures: TextureList = self._loadTorpedoExplosionTextures()
+
+    @property
+    def torpedoExplosionTextures(self) -> TextureList:
+        return self._explosionTextures
 
     def draw(self):
         """
@@ -43,6 +51,7 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
         self.torpedoes.draw()
         self.torpedoFollowers.draw()
         self.torpedoDuds.draw()
+        self.torpedoExplosions.draw()
 
     def update(self, quadrant: Quadrant):
         """
@@ -53,6 +62,7 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
         """
         self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.superCommanders, rotationAngle=-90)
         self.torpedoes.update()
+        self.torpedoExplosions.update()
 
         self._handleTorpedoHits(quadrant, enemies=quadrant.superCommanders)
         self._handleTorpedoMisses(quadrant, enemies=quadrant.superCommanders)
@@ -115,3 +125,16 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
 
         self._soundSuperCommanderTorpedo    = self._loadSound(bareFileName='SuperCommanderTorpedo.wav')
         self._soundSuperCommanderCannotFire = self._loadSound(bareFileName='SuperCommanderCannotFire.wav')
+
+    def _loadTorpedoExplosionTextures(self) -> TextureList:
+
+        nColumns:  int = 3
+        tileCount: int = 9
+        spriteWidth:  int = 32
+        spriteHeight: int = 32
+        bareFileName: str = f'SuperCommanderTorpedoExplosionSpriteSheet.png'
+        fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
+
+        textureList: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
+
+        return textureList
