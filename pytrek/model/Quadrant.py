@@ -204,11 +204,17 @@ class Quadrant:
 
         return sector
 
-    def addKlingon(self):
-        """"""
+    def addKlingon(self) -> Klingon:
+        """
+        Returns the added klingon for use by our testing/debugging code
+
+        Returns:  The 'added' Klingon
+        """
         self._klingonCount += 1
         klingon: Klingon = self._placeAKlingon()
         self._klingons.append(klingon)
+
+        return klingon
 
     def addCommander(self):
         """
