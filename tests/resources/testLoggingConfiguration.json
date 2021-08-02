@@ -35,6 +35,10 @@
             "level": "WARNING",
             "propagate": "False"
         },
+        "Test Shooter": {
+            "level": "INFO",
+            "propagate": "False"
+        },
         "TestComputer": {
             "level": "WARNING",
             "propagate": "False"

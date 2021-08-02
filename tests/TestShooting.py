@@ -34,10 +34,11 @@ from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
 
-from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.commander.Commander import Commander
 from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
@@ -57,7 +58,7 @@ from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.LocateResources import LocateResources
 
 from pytrek.GameState import GameState
-
+from tests.TestBase import TestBase
 
 SCREEN_TITLE:  str = "Test Shooting"
 
@@ -69,13 +70,17 @@ class TestShooting(View):
 
     MADE_UP_PRETTY_MAIN_NAME: str = "Test Shooter"
 
+    PALETTE_KLINGON_ID:         str = 'paletteKlingon'
+    PALETTE_COMMANDER_ID:       str = 'paletteCommander'
+    PALETTE_SUPER_COMMANDER_ID: str = 'paletteSuperCommander'
+
     def __init__(self):
 
         super().__init__()
 
         self.logger: Logger = getLogger(TestShooting.MADE_UP_PRETTY_MAIN_NAME)
 
-        set_background_color(color.BLACK)
+        set_background_color(color.WHITE)
 
         self.background:  Texture    = cast(Texture, None)
         self._enterprise: Enterprise = cast(Enterprise, None)
@@ -94,7 +99,10 @@ class TestShooting(View):
         self._intelligence: Intelligence = cast(Intelligence, None)
         self._computer:     Computer     = cast(Computer, None)
 
-        self._sprites:     SpriteList = SpriteList()
+        self._sprites:       SpriteList = SpriteList()
+        self._staticSprites: SpriteList = SpriteList()
+
+        self._selectedSprite: Sprite = cast(Sprite, None)
 
     def setup(self):
         """
@@ -133,6 +141,7 @@ class TestShooting(View):
 
         self._makeEnemySpriteLists()
 
+        self._makeGamePiecePalette()
         self.logger.info(f'Setup Complete')
 
     def on_draw(self):
@@ -146,6 +155,8 @@ class TestShooting(View):
         self._quadrantMediator.draw(quadrant=self._quadrant)
         self._statusConsole.draw()
         self._messageConsole.draw()
+
+        self._staticSprites.draw()
 
     def on_update(self, delta_time):
         """
@@ -174,25 +185,39 @@ class TestShooting(View):
         elif releasedKey == arcadeKey.S:
             pass
 
-    def on_mouse_press(self, x: float, y: float, button: int, keyModifiers: int):
+    def on_mouse_release(self, x: float, y: float, button: int, keyModifiers: int):
         """
         Called when the user presses a mouse button.
         """
-        print(f'{button=} {keyModifiers=}')
+        self.logger.info(f'{button=} {keyModifiers=}')
         if button == MOUSE_BUTTON_LEFT and keyModifiers == 0:
-            klingon: Klingon = self._quadrant.addKlingon()
 
-            gameCoordinates: Coordinates = self._computer.computeCoordinates(x=x, y=y)
+            if self._selectedSprite is None:
+                clickedPaletteSprites: List[Sprite] = get_sprites_at_point(point=(x, y), sprite_list=self._staticSprites)
+
+                for paletteSprite in clickedPaletteSprites:
+
+                    paletteSprite.color = color.BLACK
+                    # paletteSprite.draw_hit_box(color=color.BLACK)
+                    self._selectedSprite = paletteSprite
+            else:
+                self.logger.info(f'Clear selected Sprite')
+                self._selectedSprite.color = color.WHITE
+                self._selectedSprite = None
+
+            # klingon: Klingon = self._quadrant.addKlingon()
             #
-            # Recompute a 'centered' arcade point
-            arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(gameCoordinates)
-            klingon.gameCoordinates = gameCoordinates
-            klingon.center_x = arcadePoint.x
-            klingon.center_y = arcadePoint.y
-
-            self._quadrantMediator.klingonList.append(klingon)
+            # gameCoordinates: Coordinates = self._computer.computeCoordinates(x=x, y=y)
+            #
+            # # Recompute a 'centered' arcade point
+            # arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(gameCoordinates)
+            # klingon.gameCoordinates = gameCoordinates
+            # klingon.center_x = arcadePoint.x
+            # klingon.center_y = arcadePoint.y
+            #
+            # self._quadrantMediator.klingonList.append(klingon)
         elif button == MOUSE_BUTTON_LEFT and keyModifiers == arcadeKey.MOD_CTRL:
-            clickedEnemies: List[Sprite] = get_sprites_at_point(point=(x,y), sprite_list=self._quadrantMediator.klingonList)
+            clickedEnemies: List[Sprite] = get_sprites_at_point(point=(x, y), sprite_list=self._quadrantMediator.klingonList)
 
             for enemy in clickedEnemies:
                 print(f'Delete {enemy}')
@@ -219,6 +244,31 @@ class TestShooting(View):
         self.__makeKlingonSpriteList()
         self.__makeCommanderSpriteList()
         self.__makeSuperCommanderSpriteList()
+
+    def _makeGamePiecePalette(self):
+        """
+        These are the static icons that can be dragged on screen
+
+        """
+        bogusCoordinates: Coordinates = Coordinates(-1, -1)
+        paletteKlingon: Klingon = Klingon(coordinates=bogusCoordinates)
+        paletteKlingon.id = TestShooting.PALETTE_KLINGON_ID
+        paletteKlingon.center_x = 32
+        paletteKlingon.center_y = 150
+
+        paletteCommander: Commander = Commander(coordinates=bogusCoordinates, moveInterval=-1)
+        paletteCommander.id = TestShooting.PALETTE_COMMANDER_ID
+        paletteCommander.center_x = paletteKlingon.center_x + 64
+        paletteCommander.center_y = 150
+
+        paletteSuperCommander: SuperCommander = SuperCommander(coordinates=bogusCoordinates, moveInterval=-1)
+        paletteSuperCommander.id = TestShooting.PALETTE_SUPER_COMMANDER_ID
+        paletteSuperCommander.center_x = paletteCommander.center_x + 64
+        paletteSuperCommander.center_y = 150
+
+        self._staticSprites.append(paletteKlingon)
+        self._staticSprites.append(paletteCommander)
+        self._staticSprites.append(paletteSuperCommander)
 
     def __makeCommanderSpriteList(self):
         if self._quadrant.commanderCount > 0:
@@ -280,7 +330,7 @@ def main():
     """
     Main method
     """
-    LocateResources.setupSystemLogging()
+    TestBase.setUpLogging()
     SettingsCommon.determineSettingsLocation()
 
     arcadeWindow: Window     = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
