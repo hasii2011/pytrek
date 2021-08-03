@@ -212,16 +212,22 @@ class Quadrant:
         """
         self._klingonCount += 1
         klingon: Klingon = self._placeAKlingon()
-        self._klingons.append(klingon)
+        self._klingons.append(cast(Enemy, klingon))
 
         return klingon
 
-    def addCommander(self):
+    def addCommander(self) -> Commander:
         """
+        Returns the added  commander for use by our testing/debugging code
+
+        Returns:  The 'added' Commander
         """
         self._commanderCount += 1
         commander: Commander = self._placeACommander()
-        self._commanders.append(commander)
+
+        self._commanders.append(cast(Enemy, commander))
+
+        return commander
 
     def addSuperCommander(self) -> SuperCommander:
         """
@@ -232,7 +238,7 @@ class Quadrant:
         self._superCommanderCount += 1
         superCommander: SuperCommander = self._placeASuperCommander()
         
-        self._superCommanders.append(superCommander)
+        self._superCommanders.append(cast(Enemy, superCommander))
 
         return superCommander
 

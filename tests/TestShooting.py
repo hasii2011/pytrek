@@ -201,30 +201,25 @@ class TestShooting(View):
                 clickedPaletteSprites: List[Sprite] = get_sprites_at_point(point=(x, y), sprite_list=self._staticSprites)
 
                 for paletteSprite in clickedPaletteSprites:
-
                     paletteSprite.color = color.BLACK
                     self._selectedGamePiece = paletteSprite
             else:
-                enemy: BaseEnemy = cast(BaseEnemy, self._selectedGamePiece)
-                if enemy.id == TestShooting.PALETTE_KLINGON_ID:
-                    klingon: Klingon = self._quadrant.addKlingon()
-                    added:   bool    = self._addEnemyToTestGrid(enemy=klingon, x=x, y=y)
-                    if added is True:
-                        self._quadrantMediator.klingonList.append(klingon)
-                elif enemy.id == TestShooting.PALETTE_SUPER_COMMANDER_ID:
-                    superCommander: SuperCommander = self._quadrant.addSuperCommander()
-                    added:          bool           = self._addEnemyToTestGrid(enemy=superCommander, x=x, y=y)
-                    if added is True:
-                        self._quadrantMediator.superCommanderList.append(superCommander)
+                # A palette sprite is selected
+                self._placeSpriteOnBoard(x=x, y=y)
 
                 self.logger.info(f'Clear selected Sprite')
                 self._selectedGamePiece.color = color.WHITE
-                self._selectedGamePiece = None
+                self._selectedGamePiece       = cast(GamePiece, None)
 
         elif button == MOUSE_BUTTON_LEFT and keyModifiers == arcadeKey.MOD_CTRL:
             # Try klingons first
             clickedEnemies: List[Sprite] = get_sprites_at_point(point=(x, y), sprite_list=self._quadrantMediator.klingonList)
 
+            # The Commanders
+            if len(clickedEnemies) == 0:
+                clickedEnemies = get_sprites_at_point(point=(x, y), sprite_list=self._quadrantMediator.commanderList)
+
+            # Must be Super Commanders
             if len(clickedEnemies) == 0:
                 clickedEnemies = get_sprites_at_point(point=(x, y), sprite_list=self._quadrantMediator.superCommanderList)
 
@@ -235,16 +230,34 @@ class TestShooting(View):
         arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
         self._quadrantMediator.handleMousePress(quadrant=self._quadrant, arcadePoint=arcadePoint, button=button, keyModifiers=keyModifiers)
 
+    def _placeSpriteOnBoard(self, x: float, y: float):
+
+        enemy: BaseEnemy = cast(BaseEnemy, self._selectedGamePiece)
+
+        if enemy.id == TestShooting.PALETTE_KLINGON_ID:
+            klingon: Klingon = self._quadrant.addKlingon()
+            added: bool = self._addEnemyToTestGrid(enemy=klingon, x=x, y=y)
+            if added is True:
+                self._quadrantMediator.klingonList.append(klingon)
+        elif enemy.id == TestShooting.PALETTE_COMMANDER_ID:
+            commander: Commander = self._quadrant.addCommander()
+            added = self._addEnemyToTestGrid(enemy=commander, x=x, y=y)
+            if added is True:
+                self._quadrantMediator.commanderList.append(commander)
+
+        elif enemy.id == TestShooting.PALETTE_SUPER_COMMANDER_ID:
+            superCommander: SuperCommander = self._quadrant.addSuperCommander()
+            added = self._addEnemyToTestGrid(enemy=superCommander, x=x, y=y)
+            if added is True:
+                self._quadrantMediator.superCommanderList.append(superCommander)
+
     def _fireKlingonTorpedo(self):
         """
         We are testing so we'll access protected methods
         """
         # noinspection PyProtectedMember
         ktm: KlingonTorpedoMediator = self._quadrantMediator._ktm
-        for sprite in self._quadrantMediator.klingonList:
-            enemy: Enemy = cast(Enemy, sprite)
-            # noinspection PyProtectedMember
-            ktm._fireTorpedo(enemy=enemy, enterprise=self._enterprise)
+        self.__fireEnemyTorpedo(torpedoMediator=ktm, enemySprites=self._quadrantMediator.klingonList)
 
     def _fireCommanderTorpedo(self):
         """
@@ -252,10 +265,7 @@ class TestShooting(View):
         """
         # noinspection PyProtectedMember
         ctm: CommanderTorpedoMediator = self._quadrantMediator._ctm
-        for sprite in self._quadrantMediator.commanderList:
-            enemy: Enemy = cast(Enemy, sprite)
-            # noinspection PyProtectedMember
-            ctm._fireTorpedo(enemy=enemy, enterprise=self._enterprise)
+        self.__fireEnemyTorpedo(torpedoMediator=ctm, enemySprites=self._quadrantMediator.commanderList)
 
     def _fireSuperCommanderTorpedo(self):
         """
@@ -263,13 +273,7 @@ class TestShooting(View):
         """
         # noinspection PyProtectedMember
         stm: SuperCommanderTorpedoMediator = self._quadrantMediator._stm
-
-        # noinspection PyProtectedMember
         self.__fireEnemyTorpedo(torpedoMediator=stm, enemySprites=self._quadrantMediator.superCommanderList)
-        # for sprite in self._quadrantMediator.superCommanderList:
-        #     enemy: Enemy = cast(Enemy, sprite)
-        #     # noinspection PyProtectedMember
-        #     stm._fireTorpedo(enemy=enemy, enterprise=self._enterprise)
 
     def __fireEnemyTorpedo(self, torpedoMediator: BaseTorpedoMediator, enemySprites: SpriteList):
 
