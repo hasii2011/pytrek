@@ -223,13 +223,18 @@ class Quadrant:
         commander: Commander = self._placeACommander()
         self._commanders.append(commander)
 
-    def addSuperCommander(self):
+    def addSuperCommander(self) -> SuperCommander:
         """
+        Returns the added super commander for use by our testing/debugging code
+
+        Returns:  The 'added' SuperCommander
         """
         self._superCommanderCount += 1
         superCommander: SuperCommander = self._placeASuperCommander()
         
         self._superCommanders.append(superCommander)
+
+        return superCommander
 
     def addPlanet(self):
 

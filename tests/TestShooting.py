@@ -33,15 +33,20 @@ from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.commander.Commander import Commander
 from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
+from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
 
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
+from pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedoMediator
+from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -102,7 +107,7 @@ class TestShooting(View):
         self._sprites:       SpriteList = SpriteList()
         self._staticSprites: SpriteList = SpriteList()
 
-        self._selectedSprite: Sprite = cast(Sprite, None)
+        self._selectedGamePiece: GamePiece = cast(GamePiece, None)
 
     def setup(self):
         """
@@ -181,9 +186,9 @@ class TestShooting(View):
         elif releasedKey == arcadeKey.K:
             self._fireKlingonTorpedo()
         elif releasedKey == arcadeKey.C:
-            pass
+            self._fireCommanderTorpedo()
         elif releasedKey == arcadeKey.S:
-            pass
+            self._fireSuperCommanderTorpedo()
 
     def on_mouse_release(self, x: float, y: float, button: int, keyModifiers: int):
         """
@@ -192,32 +197,36 @@ class TestShooting(View):
         self.logger.info(f'{button=} {keyModifiers=}')
         if button == MOUSE_BUTTON_LEFT and keyModifiers == 0:
 
-            if self._selectedSprite is None:
+            if self._selectedGamePiece is None:
                 clickedPaletteSprites: List[Sprite] = get_sprites_at_point(point=(x, y), sprite_list=self._staticSprites)
 
                 for paletteSprite in clickedPaletteSprites:
 
                     paletteSprite.color = color.BLACK
-                    # paletteSprite.draw_hit_box(color=color.BLACK)
-                    self._selectedSprite = paletteSprite
+                    self._selectedGamePiece = paletteSprite
             else:
-                self.logger.info(f'Clear selected Sprite')
-                self._selectedSprite.color = color.WHITE
-                self._selectedSprite = None
+                enemy: BaseEnemy = cast(BaseEnemy, self._selectedGamePiece)
+                if enemy.id == TestShooting.PALETTE_KLINGON_ID:
+                    klingon: Klingon = self._quadrant.addKlingon()
+                    added:   bool    = self._addEnemyToTestGrid(enemy=klingon, x=x, y=y)
+                    if added is True:
+                        self._quadrantMediator.klingonList.append(klingon)
+                elif enemy.id == TestShooting.PALETTE_SUPER_COMMANDER_ID:
+                    superCommander: SuperCommander = self._quadrant.addSuperCommander()
+                    added:          bool           = self._addEnemyToTestGrid(enemy=superCommander, x=x, y=y)
+                    if added is True:
+                        self._quadrantMediator.superCommanderList.append(superCommander)
 
-            # klingon: Klingon = self._quadrant.addKlingon()
-            #
-            # gameCoordinates: Coordinates = self._computer.computeCoordinates(x=x, y=y)
-            #
-            # # Recompute a 'centered' arcade point
-            # arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(gameCoordinates)
-            # klingon.gameCoordinates = gameCoordinates
-            # klingon.center_x = arcadePoint.x
-            # klingon.center_y = arcadePoint.y
-            #
-            # self._quadrantMediator.klingonList.append(klingon)
+                self.logger.info(f'Clear selected Sprite')
+                self._selectedGamePiece.color = color.WHITE
+                self._selectedGamePiece = None
+
         elif button == MOUSE_BUTTON_LEFT and keyModifiers == arcadeKey.MOD_CTRL:
+            # Try klingons first
             clickedEnemies: List[Sprite] = get_sprites_at_point(point=(x, y), sprite_list=self._quadrantMediator.klingonList)
+
+            if len(clickedEnemies) == 0:
+                clickedEnemies = get_sprites_at_point(point=(x, y), sprite_list=self._quadrantMediator.superCommanderList)
 
             for enemy in clickedEnemies:
                 print(f'Delete {enemy}')
@@ -236,6 +245,38 @@ class TestShooting(View):
             enemy: Enemy = cast(Enemy, sprite)
             # noinspection PyProtectedMember
             ktm._fireTorpedo(enemy=enemy, enterprise=self._enterprise)
+
+    def _fireCommanderTorpedo(self):
+        """
+        We are testing so we'll access protected methods
+        """
+        # noinspection PyProtectedMember
+        ctm: CommanderTorpedoMediator = self._quadrantMediator._ctm
+        for sprite in self._quadrantMediator.commanderList:
+            enemy: Enemy = cast(Enemy, sprite)
+            # noinspection PyProtectedMember
+            ctm._fireTorpedo(enemy=enemy, enterprise=self._enterprise)
+
+    def _fireSuperCommanderTorpedo(self):
+        """
+        We are testing so we'll access protected methods
+        """
+        # noinspection PyProtectedMember
+        stm: SuperCommanderTorpedoMediator = self._quadrantMediator._stm
+
+        # noinspection PyProtectedMember
+        self.__fireEnemyTorpedo(torpedoMediator=stm, enemySprites=self._quadrantMediator.superCommanderList)
+        # for sprite in self._quadrantMediator.superCommanderList:
+        #     enemy: Enemy = cast(Enemy, sprite)
+        #     # noinspection PyProtectedMember
+        #     stm._fireTorpedo(enemy=enemy, enterprise=self._enterprise)
+
+    def __fireEnemyTorpedo(self, torpedoMediator: BaseTorpedoMediator, enemySprites: SpriteList):
+
+        for sprite in enemySprites:
+            enemy: Enemy = cast(Enemy, sprite)
+            # noinspection PyProtectedMember
+            torpedoMediator._fireTorpedo(enemy=enemy, enterprise=self._enterprise)
 
     def _makeEnemySpriteLists(self):
         """
@@ -269,6 +310,22 @@ class TestShooting(View):
         self._staticSprites.append(paletteKlingon)
         self._staticSprites.append(paletteCommander)
         self._staticSprites.append(paletteSuperCommander)
+
+    def _addEnemyToTestGrid(self, enemy: BaseEnemy, x: float, y: float,) -> bool:
+
+        added: bool = True
+        gameCoordinates: Coordinates = self._computer.computeCoordinates(x=x, y=y)
+        if gameCoordinates.valid() is True:
+            # Recompute a 'centered' arcade point
+            arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(gameCoordinates)
+
+            enemy.gameCoordinates = gameCoordinates
+            enemy.center_x = arcadePoint.x
+            enemy.center_y = arcadePoint.y
+        else:
+            added = False
+
+        return added
 
     def __makeCommanderSpriteList(self):
         if self._quadrant.commanderCount > 0:

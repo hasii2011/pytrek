@@ -83,7 +83,10 @@
         "pytrek.gui.gamepieces.SmoothMotion": {
             "level": "WARNING",
             "propagate": "False"
+        },
+        "pytrek.mediators.base.BaseTorpedoMediator": {
+            "level":     "DEBUG",
+            "propagate": "False"
         }
-
     }
 }
