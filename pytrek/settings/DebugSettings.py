@@ -10,39 +10,39 @@ class DebugSettings(BaseSubSetting):
 
     DEBUG_SECTION: str = 'Debug'
 
-    DEBUG_ADD_KLINGONS:             str = 'debug_add_klingons'
-    DEBUG_KLINGON_COUNT:            str = 'debug_klingon_count'
-    DEBUG_ADD_COMMANDERS:           str = 'debug_add_commanders'
-    DEBUG_COMMANDER_COUNT:          str = 'debug_commander_count'
-    DEBUG_ADD_SUPER_COMMANDERS:     str = 'debug_add_super_commanders'
-    DEBUG_SUPER_COMMANDER_COUNT:    str = 'debug_super_commander_count'
-    DEBUG_PRINT_KLINGON_PLACEMENT:  str = 'debug_print_klingon_placement'
-    DEBUG_ADD_PLANET:               str = 'debug_add_planet'
-    DEBUG_NO_KLINGONS:              str = 'debug_no_klingons'
-    DEBUG_NO_COMMANDERS:            str = 'debug_no_commanders'
-    DEBUG_NO_SUPER_COMMANDERS:      str = 'debug_no_super_commanders'
+    ADD_KLINGONS:             str = 'add_klingons'
+    KLINGON_COUNT:            str = 'klingon_count'
+    ADD_COMMANDERS:           str = 'add_commanders'
+    COMMANDER_COUNT:          str = 'commander_count'
+    ADD_SUPER_COMMANDERS:     str = 'add_super_commanders'
+    SUPER_COMMANDER_COUNT:    str = 'super_commander_count'
+    PRINT_KLINGON_PLACEMENT:  str = 'print_klingon_placement'
+    ADD_PLANET:               str = 'add_planet'
+    NO_KLINGONS:              str = 'no_klingons'
+    NO_COMMANDERS:            str = 'no_commanders'
+    NO_SUPER_COMMANDERS:      str = 'no_super_commanders'
 
-    DEBUG_COLLECT_KLINGON_QUADRANT_COORDINATES:         str = 'debug_collect_klingon_quadrant_coordinates'
-    DEBUG_COLLECT_COMMANDER_QUADRANT_COORDINATES:       str = 'debug_collect_commander_quadrant_coordinates'
-    DEBUG_COLLECT_SUPER_COMMANDER_QUADRANT_COORDINATES: str = 'debug_collect_super_commander_quadrant_coordinates'
-    DEBUG_ANNOUNCE_QUADRANT_CREATION:                   str = 'debug_announce_quadrant_creation'
+    COLLECT_KLINGON_QUADRANT_COORDINATES:         str = 'collect_klingon_quadrant_coordinates'
+    COLLECT_COMMANDER_QUADRANT_COORDINATES:       str = 'collect_commander_quadrant_coordinates'
+    COLLECT_SUPER_COMMANDER_QUADRANT_COORDINATES: str = 'collect_super_commander_quadrant_coordinates'
+    ANNOUNCE_QUADRANT_CREATION:                   str = 'announce_quadrant_creation'
 
     DEBUG_SETTINGS: SettingsNameValues = SettingsNameValues({
-        DEBUG_ADD_KLINGONS:             'False',
-        DEBUG_KLINGON_COUNT:            '2',
-        DEBUG_ADD_COMMANDERS:           'False',
-        DEBUG_COMMANDER_COUNT:          '2',
-        DEBUG_ADD_SUPER_COMMANDERS:     'False',
-        DEBUG_SUPER_COMMANDER_COUNT:    '1',
-        DEBUG_PRINT_KLINGON_PLACEMENT:  'False',
-        DEBUG_COLLECT_KLINGON_QUADRANT_COORDINATES:         'False',
-        DEBUG_COLLECT_COMMANDER_QUADRANT_COORDINATES:       'False',
-        DEBUG_COLLECT_SUPER_COMMANDER_QUADRANT_COORDINATES: 'False',
-        DEBUG_ANNOUNCE_QUADRANT_CREATION:           'False',
-        DEBUG_ADD_PLANET:                           'False',
-        DEBUG_NO_KLINGONS:                          'False',
-        DEBUG_NO_COMMANDERS:                        'False',
-        DEBUG_NO_SUPER_COMMANDERS:                  'False',
+        ADD_KLINGONS: 'False',
+        KLINGON_COUNT: '2',
+        ADD_COMMANDERS: 'False',
+        COMMANDER_COUNT: '2',
+        ADD_SUPER_COMMANDERS: 'False',
+        SUPER_COMMANDER_COUNT: '1',
+        PRINT_KLINGON_PLACEMENT: 'False',
+        COLLECT_KLINGON_QUADRANT_COORDINATES: 'False',
+        COLLECT_COMMANDER_QUADRANT_COORDINATES: 'False',
+        COLLECT_SUPER_COMMANDER_QUADRANT_COORDINATES: 'False',
+        ANNOUNCE_QUADRANT_CREATION: 'False',
+        ADD_PLANET: 'False',
+        NO_KLINGONS: 'False',
+        NO_COMMANDERS: 'False',
+        NO_SUPER_COMMANDERS: 'False',
     })
 
     def init(self, *args, **kwds):
@@ -60,105 +60,105 @@ class DebugSettings(BaseSubSetting):
 
     @property
     def addKlingons(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_KLINGONS)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.ADD_KLINGONS)
 
     @addKlingons.setter
     def addKlingons(self, newValue: bool):
-        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_KLINGONS, str(newValue))
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.ADD_KLINGONS, str(newValue))
         self._settingsCommon.saveSettings()
 
     @property
     def klingonCount(self) -> int:
-        return self._config.getint(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_KLINGON_COUNT)
+        return self._config.getint(DebugSettings.DEBUG_SECTION, DebugSettings.KLINGON_COUNT)
 
     @klingonCount.setter
     def klingonCount(self, newValue: int):
-        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_KLINGON_COUNT, str(newValue))
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.KLINGON_COUNT, str(newValue))
         self._settingsCommon.saveSettings()
 
     @property
     def addCommanders(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_COMMANDERS)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.ADD_COMMANDERS)
 
     @property
     def commanderCount(self) -> int:
-        return self._config.getint(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_COMMANDER_COUNT)
+        return self._config.getint(DebugSettings.DEBUG_SECTION, DebugSettings.COMMANDER_COUNT)
 
     @property
     def addSuperCommanders(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_SUPER_COMMANDERS)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.ADD_SUPER_COMMANDERS)
 
     @property
     def superCommanderCount(self) -> int:
-        return self._config.getint(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_SUPER_COMMANDER_COUNT)
+        return self._config.getint(DebugSettings.DEBUG_SECTION, DebugSettings.SUPER_COMMANDER_COUNT)
 
     @property
     def printKlingonPlacement(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_PRINT_KLINGON_PLACEMENT)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.PRINT_KLINGON_PLACEMENT)
 
     @printKlingonPlacement.setter
     def printKlingonPlacement(self, newValue: bool):
-        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_PRINT_KLINGON_PLACEMENT, str(newValue))
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.PRINT_KLINGON_PLACEMENT, str(newValue))
         self._settingsCommon.saveSettings()
 
     @property
     def collectKlingonQuadrantCoordinates(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_COLLECT_KLINGON_QUADRANT_COORDINATES)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.COLLECT_KLINGON_QUADRANT_COORDINATES)
 
     @collectKlingonQuadrantCoordinates.setter
     def collectKlingonQuadrantCoordinates(self, newValue: bool):
-        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_COLLECT_KLINGON_QUADRANT_COORDINATES, str(newValue))
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.COLLECT_KLINGON_QUADRANT_COORDINATES, str(newValue))
         self._settingsCommon.saveSettings()
 
     @property
     def collectCommanderQuadrantCoordinates(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_COLLECT_COMMANDER_QUADRANT_COORDINATES)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.COLLECT_COMMANDER_QUADRANT_COORDINATES)
 
     @property
     def collectSuperCommanderQuadrantCoordinates(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_COLLECT_SUPER_COMMANDER_QUADRANT_COORDINATES)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.COLLECT_SUPER_COMMANDER_QUADRANT_COORDINATES)
 
     @property
     def announceQuadrantCreation(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ANNOUNCE_QUADRANT_CREATION)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.ANNOUNCE_QUADRANT_CREATION)
 
     @announceQuadrantCreation.setter
     def announceQuadrantCreation(self, newValue: bool):
-        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ANNOUNCE_QUADRANT_CREATION, str(newValue))
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.ANNOUNCE_QUADRANT_CREATION, str(newValue))
         self._settingsCommon.saveSettings()
 
     @property
     def addPlanet(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_PLANET)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.ADD_PLANET)
 
     @addPlanet.setter
     def addPlanet(self, newValue: bool):
-        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_ADD_PLANET, str(newValue))
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.ADD_PLANET, str(newValue))
         self._settingsCommon.saveSettings()
 
     @property
     def noKlingons(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_KLINGONS)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.NO_KLINGONS)
 
     @noKlingons.setter
     def noKlingons(self, newValue: bool):
-        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_KLINGONS, str(newValue))
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.NO_KLINGONS, str(newValue))
         self._settingsCommon.saveSettings()
 
     @property
     def noCommanders(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_COMMANDERS)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.NO_COMMANDERS)
 
     @noCommanders.setter
     def noCommanders(self, newValue: bool):
-        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_COMMANDERS, str(newValue))
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.NO_COMMANDERS, str(newValue))
         self._settingsCommon.saveSettings()
 
     @property
     def noSuperCommanders(self) -> bool:
-        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_SUPER_COMMANDERS)
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.NO_SUPER_COMMANDERS)
 
     @noSuperCommanders.setter
     def noSuperCommanders(self, newValue: bool):
-        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.DEBUG_NO_SUPER_COMMANDERS, str(newValue))
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.NO_SUPER_COMMANDERS, str(newValue))
         self._settingsCommon.saveSettings()
