@@ -187,91 +187,91 @@ class GameSettings(Singleton):
 
     @property
     def debugAddKlingons(self) -> bool:
-        return self._debug.debugAddKlingons
+        return self._debug.addKlingons
 
     @debugAddKlingons.setter
     def debugAddKlingons(self, newValue: bool):
-        self._debug.debugAddKlingons = newValue
+        self._debug.addKlingons = newValue
 
     @property
     def debugKlingonCount(self) -> int:
-        return self._debug.debugKlingonCount
+        return self._debug.klingonCount
 
     @debugKlingonCount.setter
     def debugKlingonCount(self, newValue: int):
-        self._debug.debugKlingonCount = newValue
+        self._debug.klingonCount = newValue
 
     @property
     def debugAddCommanders(self) -> bool:
-        return self._debug.debugAddCommanders
+        return self._debug.addCommanders
 
     @property
     def debugCommanderCount(self) -> int:
-        return self._debug.debugCommanderCount
+        return self._debug.commanderCount
 
     @property
     def debugAddSuperCommanders(self) -> bool:
-        return self._debug.debugAddSuperCommanders
+        return self._debug.addSuperCommanders
 
     @property
     def debugSuperCommanderCount(self) -> int:
-        return self._debug.debugSuperCommanderCount
+        return self._debug.superCommanderCount
 
     @property
     def debugPrintKlingonPlacement(self) -> bool:
-        return self._debug.debugPrintKlingonPlacement
+        return self._debug.printKlingonPlacement
 
     @debugPrintKlingonPlacement.setter
     def debugPrintKlingonPlacement(self, newValue: bool):
-        self._debug.debugPrintKlingonPlacement = newValue
+        self._debug.printKlingonPlacement = newValue
 
     @property
     def debugCollectKlingonQuadrantCoordinates(self) -> bool:
-        return self._debug.debugCollectKlingonQuadrantCoordinates
+        return self._debug.collectKlingonQuadrantCoordinates
 
     @debugCollectKlingonQuadrantCoordinates.setter
     def debugCollectKlingonQuadrantCoordinates(self, newValue: bool):
-        self._debug.debugCollectKlingonQuadrantCoordinates = newValue
+        self._debug.collectKlingonQuadrantCoordinates = newValue
 
     @property
     def debugAnnounceQuadrantCreation(self) -> bool:
-        return self._debug.debugAnnounceQuadrantCreation
+        return self._debug.announceQuadrantCreation
 
     @debugAnnounceQuadrantCreation.setter
     def debugAnnounceQuadrantCreation(self, newValue: bool):
-        self._debug.debugAnnounceQuadrantCreation = newValue
+        self._debug.announceQuadrantCreation = newValue
 
     @property
     def debugAddPlanet(self) -> bool:
-        return self._debug.debugAddPlanet
+        return self._debug.addPlanet
 
     @debugAddPlanet.setter
     def debugAddPlanet(self, newValue: bool):
-        self._debug.debugAddPlanet = newValue
+        self._debug.addPlanet = newValue
 
     @property
     def debugNoKlingons(self) -> bool:
-        return self._debug.debugNoKlingons
+        return self._debug.noKlingons
 
     @debugNoKlingons.setter
     def debugNoKlingons(self, newValue: bool):
-        self._debug.debugNoKlingons = newValue
+        self._debug.noKlingons = newValue
 
     @property
     def debugNoCommanders(self) -> bool:
-        return self._debug.debugNoCommanders
+        return self._debug.noCommanders
 
     @debugNoCommanders.setter
     def debugNoCommanders(self, newValue: bool):
-        self._debug.debugNoCommanders = newValue
+        self._debug.noCommanders = newValue
 
     @property
     def debugNoSuperCommanders(self) -> bool:
-        return self._debug.debugNoSuperCommanders
+        return self._debug.noSuperCommanders
 
     @debugNoSuperCommanders.setter
     def debugNoSuperCommanders(self, newValue: bool):
-        self._debug.debugNoSuperCommanders = newValue
+        self._debug.noSuperCommanders = newValue
 
     def _createEmptySettings(self):
 
