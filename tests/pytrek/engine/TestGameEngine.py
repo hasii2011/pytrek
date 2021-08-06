@@ -9,6 +9,7 @@ from logging import getLogger
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction
 from pytrek.engine.DirectionData import DirectionData
 from pytrek.engine.PlayerType import PlayerType
@@ -43,9 +44,39 @@ class TestGameEngine(TestBase):
         self.logger:      Logger     = TestGameEngine.clsLogger
         self._gameEngine: GameEngine = GameEngine()
         self._gameState:  GameState  = GameState()
+        self._computer:   Computer   = Computer()
 
     def tearDown(self):
         pass
+
+    def testDoPhasersMaxDistance(self):
+
+        shooterCoordinates: Coordinates = Coordinates(0, 0)
+        targetCoordinates:  Coordinates = Coordinates(9, 9)
+
+        expectedPhaserHit: float = 218.6
+        self._runPhaserTest(shooterCoordinates=shooterCoordinates, targetCoordinates=targetCoordinates, expectedPhaserHit=expectedPhaserHit)
+
+    def testDoPhasersShortDistance(self):
+        shooterCoordinates: Coordinates = Coordinates(0, 4)
+        targetCoordinates:  Coordinates = Coordinates(4, 4)
+
+        expectedPhaserHit: float = 239.68
+        self._runPhaserTest(shooterCoordinates=shooterCoordinates, targetCoordinates=targetCoordinates, expectedPhaserHit=expectedPhaserHit)
+
+    def testHitThem(self):
+        shooterCoordinates: Coordinates = Coordinates(0, 0)
+        targetCoordinates:  Coordinates = Coordinates(9, 9)
+        distance:           float        = self._computer.computeQuadrantDistance(startSector=shooterCoordinates, endSector=targetCoordinates)
+        enemyPower:         float        = 500.0
+
+        powerDrain: float = self._gameEngine.hitThem(distance=distance, hit=218.6, enemyPower=enemyPower)
+
+        minPowerDrain: float = 329
+
+        self.assertGreater(powerDrain, minPowerDrain, 'Did not calculate the minimum power drain')
+
+        self.logger.info(f'{powerDrain=}')
 
     def testComputeShieldHit(self):
 
@@ -191,6 +222,17 @@ class TestGameEngine(TestBase):
             if value is False:
                 return False
         return True
+
+    def _runPhaserTest(self, shooterCoordinates: Coordinates, targetCoordinates: Coordinates, expectedPhaserHit: float):
+
+        distance:           float        = self._computer.computeQuadrantDistance(startSector=shooterCoordinates, endSector=targetCoordinates)
+        enemyPower:         float       = 500.0
+        powerAmount:        float       = 500.0
+
+        phaserHit: float = self._gameEngine.doPhasers(distance=distance, enemyPower=enemyPower, powerAmount=powerAmount)
+
+        self.assertAlmostEqual(expectedPhaserHit, phaserHit, places=1)
+        self.logger.info(f'{phaserHit=}')
 
 
 def suite() -> TestSuite:

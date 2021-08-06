@@ -15,13 +15,15 @@ class PowerSettings(BaseSubSetting):
     MINIMUM_IMPULSE_ENERGY: str = 'minimum_impulse_energy'
     INITIAL_TORPEDO_COUNT:  str = 'initial_torpedo_count'
     DEFAULT_WARP_FACTOR:    str = 'default_warp_factor'
+    PHASER_FACTOR:          str = 'phaser_factor'
 
     POWER_SETTINGS:  SettingsNameValues = SettingsNameValues({
         INITIAL_ENERGY_LEVEL:   '5000',
         INITIAL_SHIELD_ENERGY:  '2500',
         INITIAL_TORPEDO_COUNT:  '10',
         MINIMUM_IMPULSE_ENERGY: '30',
-        DEFAULT_WARP_FACTOR:    '3'
+        DEFAULT_WARP_FACTOR:    '3',
+        PHASER_FACTOR:          '2.0'
     })
 
     def init(self, *args, **kwds):
@@ -52,3 +54,11 @@ class PowerSettings(BaseSubSetting):
     @property
     def minimumImpulseEnergy(self) -> int:
         return self._config.getint(PowerSettings.POWER_SECTION, PowerSettings.MINIMUM_IMPULSE_ENERGY)
+
+    @property
+    def defaultWarpFactor(self) -> int:
+        return self._config.getint(PowerSettings.POWER_SECTION, PowerSettings.DEFAULT_WARP_FACTOR)
+
+    @property
+    def phaserFactor(self) -> float:
+        return self._config.getfloat(PowerSettings.POWER_SECTION, PowerSettings.PHASER_FACTOR)

@@ -60,6 +60,12 @@ class TestGameSettings(TestBase):
     def testMinimumImpulseEnergyExistence(self):
         self.assertIsNotNone(self._settings.minimumImpulseEnergy)
 
+    def testDefaultWarpFactorExistence(self):
+        self.assertIsNotNone(self._settings.defaultWarpFactor)
+
+    def testPhaserFactor(self):
+        self.assertEqual(2.0, self._settings.phaserFactor, 'Looks like we change the default phaser power factor')
+
     def testPlayerTypeExistence(self):
         self.assertIsNotNone(self._settings.playerType)
 

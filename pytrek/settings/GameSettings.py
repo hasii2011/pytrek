@@ -74,6 +74,14 @@ class GameSettings(Singleton):
         return self._power.minimumImpulseEnergy
 
     @property
+    def defaultWarpFactor(self) -> int:
+        return self._power.defaultWarpFactor
+
+    @property
+    def phaserFactor(self) -> float:
+        return self._power.phaserFactor
+
+    @property
     def playerType(self) -> PlayerType:
         return self._gameLevel.playerType
 

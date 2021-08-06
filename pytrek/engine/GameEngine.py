@@ -21,6 +21,7 @@ from pytrek.engine.ShieldHitData import ShieldHitData
 from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -353,3 +354,80 @@ class GameEngine(Singleton):
     def randomDirection(self) -> Direction:
         """"""
         return choice(list(Direction))
+
+    def doPhasers(self, distance: float, enemyPower: float, powerAmount: float):
+        # noinspection SpellCheckingInspection
+        """
+        This codes does a single hit at a time
+
+        Caller should check to make sure there is an enemy at the target coordinates
+        Caller should indicate via console message that we are locked on target
+
+        ```java
+            hits[i] = fabs(game.kpower[i])/(PHASEFAC*pow(0.90,game.kdist[i]));
+
+           over = (0.01 + 0.05*tk.rand())*hits[i];
+           temp = powrem;
+           powrem -= hits[i] + over;
+           if (powrem <= 0 && temp < hits[i]) hits[i] = temp;
+           if (powrem <= 0) over = 0.0;
+           extra += over;
+           bursts [i] = hits [i] + over;
+        ```
+        Args:
+            distance:       sector distance between enterprise and enemy we are shooting at
+            enemyPower:     The enemy's power reserve
+            powerAmount:    The amount of power to expend
+        Returns:
+        """
+        rPow:   float = powerAmount
+        powRem: float = rPow
+
+        self._gameState.energy -= rPow
+
+        phaserFactor: float = self._gameSettings.phaserFactor
+
+        hit:  float = fabs(enemyPower / phaserFactor * pow(0.90, distance))
+        over: float = (0.01 + 0.05 * self._intelligence.rand()) * hit
+
+        temp: float = powRem
+
+        powRem = hit + over
+        if powRem <= 0 and temp < hit:
+            hit = temp
+
+        return hit
+
+    def hitThem(self, distance: float, hit: float, enemyPower: float) -> float:
+        # noinspection SpellCheckingInspection
+        """
+        ```c
+            dustfac = 0.9 + 0.01*Rand();
+            hit = wham*pow(dustfac,kdist[kk]);
+            kpini = kpower[kk];
+            kp = fabs(kpini);
+            if (phasefac*hit < kp) kp = phasefac*hit;
+            kpower[kk] -= (kpower[kk] < 0 ? -kp: kp);
+            kpow = kpower[kk];
+        ```
+        Args:
+            distance:   sector distance between enterprise and enemy we are shooting at
+            hit:        Hit to apply to enemy
+            enemyPower: The power the enemy we want to hurt currently has
+
+        Returns:  The power drain to apply to the enemy
+        """
+
+        phaserFactor: float = self._gameSettings.phaserFactor
+
+        wham:       float = hit
+        dustFactor: float = 0.8 + 0.01 * self._intelligence.rand()
+
+        damage: float = wham * pow(dustFactor, distance)
+
+        kpInit: float = enemyPower
+        kp:     float = fabs(kpInit)
+        if phaserFactor * damage < kp:
+            kp = phaserFactor * damage
+
+        return kp

@@ -206,6 +206,8 @@ class PyTrekView(View):
             self.window.show_view(longRangeSensorView)
         elif pressedKey == key.T:
             self._quadrantMediator.fireEnterpriseTorpedoesAtKlingons(self._quadrant)
+        elif pressedKey == key.P:
+            pass    # Fire Phasers !!!
 
     def on_key_release(self, releasedKey: int, key_modifiers: int):
         """
