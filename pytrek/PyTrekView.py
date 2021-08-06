@@ -184,16 +184,7 @@ class PyTrekView(View):
         For a full list of keys, see:
         https://arcade.academy/arcade.key.html
         """
-        # TODO this code needs to go away
-        if pressedKey == key.UP:
-            self._enterprise.change_y = MOVEMENT_SPEED
-        elif pressedKey == key.DOWN:
-            self._enterprise.change_y = -MOVEMENT_SPEED
-        elif pressedKey == arcade.key.LEFT:
-            self._enterprise.change_x = -MOVEMENT_SPEED
-        elif pressedKey == arcade.key.RIGHT:
-            self._enterprise.change_x = MOVEMENT_SPEED
-        elif pressedKey == arcade.key.Q:
+        if pressedKey == arcade.key.Q:
             import os
             # noinspection PyUnresolvedReferences
             # noinspection PyProtectedMember
@@ -205,22 +196,9 @@ class PyTrekView(View):
             longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(viewCompleteCallback=self._switchViewBack)
             self.window.show_view(longRangeSensorView)
         elif pressedKey == key.T:
-            self._quadrantMediator.fireEnterpriseTorpedoesAtKlingons(self._quadrant)
+            self._quadrantMediator.fireEnterpriseTorpedoes(self._quadrant)
         elif pressedKey == key.P:
-            pass    # Fire Phasers !!!
-
-    def on_key_release(self, releasedKey: int, key_modifiers: int):
-        """
-        Called whenever the user lets off a previously pressed key.
-        """
-        if releasedKey == key.LEFT or releasedKey == key.A:
-            self._enterprise.change_x = 0
-        elif releasedKey == key.RIGHT or releasedKey == key.D:
-            self._enterprise.change_x = 0
-        elif releasedKey == key.UP or releasedKey == key.W:
-            self._enterprise.change_y = 0
-        elif releasedKey == key.DOWN or releasedKey == key.X:
-            self._enterprise.change_y = 0
+            self._quadrantMediator.firePhasers(self._quadrant)
 
     def on_mouse_motion(self, x: float, y: float, delta_x: float, delta_y: float):
         """

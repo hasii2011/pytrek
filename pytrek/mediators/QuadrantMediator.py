@@ -25,6 +25,7 @@ from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 from pytrek.mediators.CommanderMediator import CommanderMediator
 from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
+from pytrek.mediators.EnterprisePhaserMediator import EnterprisePhaserMediator
 from pytrek.mediators.KlingonMediator import KlingonMediator
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 from pytrek.mediators.EnterpriseTorpedoMediator import EnterpriseTorpedoMediator
@@ -49,18 +50,21 @@ class QuadrantMediator(Singleton):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._gameEngine: GameEngine = GameEngine()
-        self._gameState:  GameState  = GameState()
-        self._computer:   Computer   = Computer()
+        self._gameEngine:   GameEngine   = GameEngine()
+        self._gameState:    GameState    = GameState()
+        self._computer:     Computer     = Computer()
 
         self._ktm: KlingonTorpedoMediator        = KlingonTorpedoMediator()
         self._ctm: CommanderTorpedoMediator      = CommanderTorpedoMediator()
-        self._ptm: EnterpriseTorpedoMediator         = EnterpriseTorpedoMediator()
+        self._ptm: EnterpriseTorpedoMediator     = EnterpriseTorpedoMediator()
         self._stm: SuperCommanderTorpedoMediator = SuperCommanderTorpedoMediator()
+
         self._em:  EnterpriseMediator            = EnterpriseMediator()
         self._km:  KlingonMediator               = KlingonMediator()
         self._cm:  CommanderMediator             = CommanderMediator()
         self._scm: SuperCommanderMediator        = SuperCommanderMediator()
+
+        self._epm: EnterprisePhaserMediator      = EnterprisePhaserMediator()
 
         self._playerList:         SpriteList = SpriteList()
         self._klingonList:        SpriteList = SpriteList()
@@ -99,8 +103,11 @@ class QuadrantMediator(Singleton):
     def superCommanderList(self, newValues: SpriteList):
         self._superCommanderList = newValues
 
-    def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
+    def fireEnterpriseTorpedoes(self, quadrant: Quadrant):
         self._ptm.fireEnterpriseTorpedoesAtKlingons(quadrant=quadrant)
+
+    def firePhasers(self, quadrant: Quadrant):
+        self._epm.firePhasers(quadrant=quadrant)
 
     # noinspection PyUnusedLocal
     def handleMousePress(self, quadrant: Quadrant, arcadePoint: ArcadePoint, button: int, keyModifiers: int):
