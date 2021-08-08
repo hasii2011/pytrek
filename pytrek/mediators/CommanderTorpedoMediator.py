@@ -13,7 +13,7 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
-from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+from pytrek.gui.gamepieces.base.BaseAnimator import TextureList
 
 from pytrek.gui.gamepieces.commander.CommanderTorpedo import CommanderTorpedo
 from pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion

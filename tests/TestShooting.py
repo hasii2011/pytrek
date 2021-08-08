@@ -42,6 +42,7 @@ from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
+from pytrek.mediators.EnterprisePhaserMediator import EnterprisePhaserMediator
 
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
@@ -189,6 +190,8 @@ class TestShooting(View):
             self._fireCommanderTorpedo()
         elif releasedKey == arcadeKey.S:
             self._fireSuperCommanderTorpedo()
+        elif releasedKey == arcadeKey.P:
+            self._firePhasers()
 
     def on_mouse_release(self, x: float, y: float, button: int, keyModifiers: int):
         """
@@ -274,6 +277,13 @@ class TestShooting(View):
         # noinspection PyProtectedMember
         stm: SuperCommanderTorpedoMediator = self._quadrantMediator._stm
         self.__fireEnemyTorpedo(torpedoMediator=stm, enemySprites=self._quadrantMediator.superCommanderList)
+
+    def _firePhasers(self):
+
+        # noinspection PyProtectedMember
+        epm: EnterprisePhaserMediator = self._quadrantMediator._epm
+
+        epm.firePhasers(quadrant=self._quadrant)
 
     def __fireEnemyTorpedo(self, torpedoMediator: BaseTorpedoMediator, enemySprites: SpriteList):
 

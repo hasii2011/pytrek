@@ -5,11 +5,17 @@ from logging import Logger
 from logging import getLogger
 
 from arcade import Sound
+from arcade import Sprite
+from arcade import load_spritesheet
 
 from pytrek.LocateResources import LocateResources
+from pytrek.engine.Computer import Computer
+from pytrek.engine.GameEngine import GameEngine
 from pytrek.gui.MessageConsole import MessageConsole
 
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+from pytrek.model.Coordinates import Coordinates
 
 from pytrek.model.Quadrant import Quadrant
 
@@ -22,7 +28,9 @@ class EnterprisePhaserMediator:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._gameSettings:   GameSettings  = GameSettings()
+        self._gameSettings:   GameSettings   = GameSettings()
+        self._gameEngine:     GameEngine     = GameEngine()
+        self._computer:       Computer       = Computer()
         self._messageConsole: MessageConsole = MessageConsole()
 
         self._soundPhaser:         Sound = cast(Sound, None)
@@ -30,7 +38,9 @@ class EnterprisePhaserMediator:
 
         self._loadSounds()
 
-    def firePhasers(self, quadrant: Quadrant):
+        self._phaserFireTextures: TextureList = self._loadFirePhaserTextures()
+
+    def firePhasers(self, quadrant: Quadrant, phaserPower: float = 300.0):
 
         enemies: Enemies = Enemies([])
         enemies.extend(quadrant.klingons)
@@ -41,7 +51,28 @@ class EnterprisePhaserMediator:
             self._soundUnableToComply.play(volume=self._gameSettings.soundVolume.value)
             self._messageConsole.displayMessage("Nothing to fire at")
         else:
-            self._soundPhaser.play(volume=self._gameSettings.soundVolume.value)
+            gameEngine: GameEngine = self._gameEngine
+            enterpriseCoordinates: Coordinates = quadrant.enterpriseCoordinates
+
+            for enemy in enemies:
+                distance: float = self._computer.computeQuadrantDistance(startSector=enterpriseCoordinates, endSector=enemy.gameCoordinates)
+
+                hit: float = gameEngine.doPhasers(distance=distance, enemyPower=enemy.power, powerAmount=phaserPower)
+                enemyDrain: float = gameEngine.hitThem(distance=distance, hit=hit, enemyPower=enemy.power)
+
+                enemy.power -= enemyDrain
+                msg: str = f'Unit hit {enemyDrain:.2f} on {enemy.gameCoordinates} available: {enemy.power:.2f}'
+
+                self._messageConsole.displayMessage(msg)
+                self.logger.info(msg)
+                self._soundPhaser.play(volume=self._gameSettings.soundVolume.value)
+                if enemy.power < 0.0:
+                    deadMsg: str = f'Enemy at {enemy.gameCoordinates} dead'
+
+                    self._messageConsole.displayMessage(deadMsg)
+                    self.logger.info(deadMsg)
+                    sprite: Sprite = cast(Sprite, enemy)
+                    sprite.remove_from_sprite_lists()
 
     def _loadSounds(self):
         self._soundPhaser         = self._loadSound('PhaserFire.wav')
@@ -53,3 +84,16 @@ class EnterprisePhaserMediator:
         sound: Sound = Sound(fqFileName)
 
         return sound
+
+    def _loadFirePhaserTextures(self) -> TextureList:
+
+        nColumns:  int = 3
+        tileCount: int = 9
+        spriteWidth:  int = 32
+        spriteHeight: int = 32
+        bareFileName: str = f'PhaserSpriteSheet.png'
+        fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
+
+        textureList: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
+
+        return textureList

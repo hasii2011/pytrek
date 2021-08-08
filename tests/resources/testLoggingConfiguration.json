@@ -84,8 +84,8 @@
             "level": "WARNING",
             "propagate": "False"
         },
-        "pytrek.mediators.base.BaseTorpedoMediator": {
-            "level":     "DEBUG",
+        "pytrek.mediators.EnterprisePhaserMediator": {
+            "level":     "INFO",
             "propagate": "False"
         }
     }

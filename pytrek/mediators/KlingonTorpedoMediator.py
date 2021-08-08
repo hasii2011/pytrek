@@ -10,7 +10,7 @@ from arcade import load_texture
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
-from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+from pytrek.gui.gamepieces.base.BaseAnimator import TextureList
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
@@ -19,6 +19,7 @@ from pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosion import KlingonTorpedoExplosion
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosionColor import KlingonTorpedoExplosionColor
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
+
 
 from pytrek.mediators.base.BaseMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
