@@ -40,6 +40,9 @@ class EnterprisePhaserMediator:
 
         self._phaserFireTextures: TextureList = self._loadFirePhaserTextures()
 
+    def phaserFireTextures(self) -> TextureList:
+        return self._phaserFireTextures
+
     def firePhasers(self, quadrant: Quadrant, phaserPower: float = 300.0):
 
         enemies: Enemies = Enemies([])
@@ -88,9 +91,9 @@ class EnterprisePhaserMediator:
     def _loadFirePhaserTextures(self) -> TextureList:
 
         nColumns:  int = 3
-        tileCount: int = 9
-        spriteWidth:  int = 32
-        spriteHeight: int = 32
+        tileCount: int = 17
+        spriteWidth:  int = 231
+        spriteHeight: int = 134
         bareFileName: str = f'PhaserSpriteSheet.png'
         fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
 
