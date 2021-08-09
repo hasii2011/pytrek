@@ -66,6 +66,19 @@ class Computer(Singleton):
 
         return ArcadePoint(x=x, y=y)
 
+    @classmethod
+    def computeCenterPoint(cls, start: ArcadePoint, end: ArcadePoint) -> ArcadePoint:
+
+        x1: float = start.x
+        x2: float = end.x
+        y1: float = start.y
+        y2: float = end.y
+
+        midX: float = (x1 + x2) // 2
+        midY: float = (y1 + y2) // 2
+
+        return ArcadePoint(x=midX, y=midY)
+
     def computeSectorCoordinates(self, x: float, y: float) -> Coordinates:
         """
         From an arcade screen point determine which sector in quadrant
@@ -128,6 +141,7 @@ class Computer(Singleton):
 
     def computeHitValueOnEnterprise(self, enemyPosition: Coordinates, enterprisePosition: Coordinates, enemyPower: float) -> float:
         """
+        TODO: Move this to GameEngine
         Based on the Klingon power value and the distance between the two
 
         Args:
@@ -144,7 +158,9 @@ class Computer(Singleton):
         return hit
 
     def computeHitValueOnKlingon(self, enterprisePosition: Coordinates, klingonPosition: Coordinates, klingonPower: float) -> float:
+        # noinspection SpellCheckingInspection
         """
+        TODO: Move this to GameEngine
 
             bullseye = (15.0 - course)*0.5235988;
             r = (rand() + rand()) * 0.5 - 0.5;
@@ -247,6 +263,7 @@ class Computer(Singleton):
         return distance
 
     def _computeCourse(self, start: Coordinates, end: Coordinates) -> float:
+        # noinspection SpellCheckingInspection
         """
         These were original calculations;   Mine seem more correct.
 
@@ -264,10 +281,5 @@ class Computer(Singleton):
         deltaX: int = end.x - start.x
         deltaY: int = end.y - start.y
         course: float = atan2(deltaY, deltaX)
-        # jx    = start.x
-        # jy    = start.y
-        # sectx = end.x
-        # secty = end.x
-        # course: float = 1.90985 * atan2((secty - jy), (jx - sectx))
 
         return course

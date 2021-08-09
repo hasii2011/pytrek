@@ -39,7 +39,7 @@
             "level": "INFO",
             "propagate": "False"
         },
-        "TestComputer": {
+        "tests.TestComputer": {
             "level": "WARNING",
             "propagate": "False"
         },

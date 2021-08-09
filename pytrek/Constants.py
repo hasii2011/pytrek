@@ -1,5 +1,5 @@
 
-CONSOLE_HEIGHT:       int = 190
+CONSOLE_HEIGHT:   int = 190
 
 SCREEN_WIDTH:     int = 800
 SCREEN_HEIGHT:    int = 640 + CONSOLE_HEIGHT

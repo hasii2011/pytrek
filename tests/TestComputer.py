@@ -13,12 +13,15 @@ from pytrek.Constants import MAX_SECTOR_X_COORDINATE
 from pytrek.Constants import MAX_SECTOR_Y_COORDINATE
 from pytrek.Constants import MIN_SECTOR_X_COORDINATE
 from pytrek.Constants import MIN_SECTOR_Y_COORDINATE
+from pytrek.Constants import QUADRANT_GRID_WIDTH
+from pytrek.Constants import SCREEN_HEIGHT
+
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.KlingonPower import KlingonPower
+from pytrek.engine.Computer import Computer
 
 from pytrek.model.Coordinates import Coordinates
 
-from pytrek.engine.Computer import Computer
 from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase
@@ -383,6 +386,42 @@ class TestComputer(TestBase):
                 self.assertLess(kHit, testKlingonPower, 'Single torpedo can almost never kill a Klingon')
             else:
                 self.logger.info(f'Iteration: {x} killed a Klingon')
+
+    def testComputeCenterPointLong(self):
+
+        startPoint: ArcadePoint = ArcadePoint(x=10, y=10)
+        endPoint:   ArcadePoint = ArcadePoint(x=SCREEN_HEIGHT-10, y=QUADRANT_GRID_WIDTH-10)
+
+        midPoint: ArcadePoint = Computer.computeCenterPoint(start=startPoint, end=endPoint)
+
+        self.logger.debug(f'{startPoint=} {endPoint=} {midPoint=}')
+
+        expectedPoint: ArcadePoint = ArcadePoint(x=415, y=320)
+        self.assertEqual(expectedPoint, midPoint, 'Long Center point does not match')
+
+    def testComputeCenterPointShort(self):
+
+        startPoint: ArcadePoint = ArcadePoint(x=400, y=400)
+        endPoint:   ArcadePoint = ArcadePoint(x=600, y=600)
+
+        midPoint: ArcadePoint = Computer.computeCenterPoint(start=startPoint, end=endPoint)
+
+        self.logger.debug(f'{startPoint=} {endPoint=} {midPoint=}')
+
+        expectedPoint: ArcadePoint = ArcadePoint(x=500, y=500)
+        self.assertEqual(expectedPoint, midPoint, 'Short Center point does not match')
+
+    def testComputeCenterPointMid(self):
+
+        startPoint: ArcadePoint = ArcadePoint(x=0, y=0)
+        endPoint:   ArcadePoint = ArcadePoint(x=400, y=400)
+
+        midPoint: ArcadePoint = Computer.computeCenterPoint(start=startPoint, end=endPoint)
+
+        self.logger.debug(f'{startPoint=} {endPoint=} {midPoint=}')
+
+        expectedPoint: ArcadePoint = ArcadePoint(x=200, y=200)
+        self.assertEqual(expectedPoint, midPoint, 'Mid Center point does not match')
 
 
 def suite() -> TestSuite:

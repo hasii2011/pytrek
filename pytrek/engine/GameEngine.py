@@ -21,7 +21,6 @@ from pytrek.engine.ShieldHitData import ShieldHitData
 from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
