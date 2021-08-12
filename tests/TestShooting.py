@@ -260,7 +260,7 @@ class TestShooting(View):
         """
         # noinspection PyProtectedMember
         ktm: KlingonTorpedoMediator = self._quadrantMediator._ktm
-        self.__fireEnemyTorpedo(torpedoMediator=ktm, enemySprites=self._quadrantMediator.klingonList)
+        self.__fireEnemyTorpedo(torpedoMediator=ktm, enemySprites=self._quadrantMediator.klingonList, rotationAngle=Klingon.ROTATION_ANGLE)
 
     def _fireCommanderTorpedo(self):
         """
@@ -268,7 +268,7 @@ class TestShooting(View):
         """
         # noinspection PyProtectedMember
         ctm: CommanderTorpedoMediator = self._quadrantMediator._ctm
-        self.__fireEnemyTorpedo(torpedoMediator=ctm, enemySprites=self._quadrantMediator.commanderList)
+        self.__fireEnemyTorpedo(torpedoMediator=ctm, enemySprites=self._quadrantMediator.commanderList, rotationAngle=Commander.ROTATION_ANGLE)
 
     def _fireSuperCommanderTorpedo(self):
         """
@@ -276,7 +276,7 @@ class TestShooting(View):
         """
         # noinspection PyProtectedMember
         stm: SuperCommanderTorpedoMediator = self._quadrantMediator._stm
-        self.__fireEnemyTorpedo(torpedoMediator=stm, enemySprites=self._quadrantMediator.superCommanderList)
+        self.__fireEnemyTorpedo(torpedoMediator=stm, enemySprites=self._quadrantMediator.superCommanderList, rotationAngle=SuperCommander.ROTATION_ANGLE)
 
     def _firePhasers(self):
 
@@ -285,10 +285,12 @@ class TestShooting(View):
 
         epm.firePhasers(quadrant=self._quadrant)
 
-    def __fireEnemyTorpedo(self, torpedoMediator: BaseTorpedoMediator, enemySprites: SpriteList):
+    def __fireEnemyTorpedo(self, torpedoMediator: BaseTorpedoMediator, enemySprites: SpriteList, rotationAngle: int = 0):
 
         for sprite in enemySprites:
             enemy: Enemy = cast(Enemy, sprite)
+            # noinspection PyProtectedMember
+            torpedoMediator._pointAtEnterprise(enemy=enemy, enterprise=self._enterprise, rotationAngle=rotationAngle)
             # noinspection PyProtectedMember
             torpedoMediator._fireTorpedo(enemy=enemy, enterprise=self._enterprise)
 

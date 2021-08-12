@@ -175,12 +175,7 @@ class EnterpriseTorpedoMediator(BaseMediator):
 
     def _pointAtEnemy(self, enemy: Enemy, enterprise: Enterprise):
 
-        currentPoint:     ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
-        destinationPoint: ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
-
-        normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
-        enterprise.angle = normalAngle + 125
-
+        self._pointAtTarget(shooter=enterprise, target=enemy)
         self._messageConsole.displayMessage(f'Enterprise firing on course {enterprise.angle:.2f}')
 
     def _fireTorpedo(self, enterprise: Enterprise, enemy: Enemy):

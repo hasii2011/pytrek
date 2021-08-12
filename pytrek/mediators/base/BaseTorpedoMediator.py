@@ -181,7 +181,7 @@ class BaseTorpedoMediator(BaseMediator):
                 endPoint:            ArcadePoint = ArcadePoint(x=quadrant.enterprise.center_x, y=quadrant.enterprise.center_y)
                 lineOfSightResponse: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant, shooter=enemy, endPoint=endPoint)
                 if lineOfSightResponse.answer is True:
-                    self.__pointAtEnterprise(enemy=enemy, enterprise=quadrant.enterprise, rotationAngle=rotationAngle)
+                    self._pointAtEnterprise(enemy=enemy, enterprise=quadrant.enterprise, rotationAngle=rotationAngle)
                     self._fireTorpedo(enemy=enemy, enterprise=quadrant.enterprise)
                 else:
                     self._playCannotFireSound()
@@ -342,15 +342,16 @@ class BaseTorpedoMediator(BaseMediator):
         self._messageConsole.displayMessage(shieldMsg)
         self._gameEngine.degradeEnergyLevel(shieldHitData.degradedTorpedoHitValue)
 
-    def __pointAtEnterprise(self, enemy: Enemy, enterprise: Enterprise, rotationAngle: int = 125):
+    def _pointAtEnterprise(self, enemy: Enemy, enterprise: Enterprise, rotationAngle: int = 125):
 
-        currentPoint:     ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
-        destinationPoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
-
-        normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
-        enemy.angle = normalAngle + rotationAngle
-
-        self.logger.info(f'{normalAngle=} -  {enemy.angle=}')
+        self._pointAtTarget(shooter=enemy, target=enterprise, rotationAngle=rotationAngle)
+        # currentPoint:     ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
+        # destinationPoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
+        #
+        # normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
+        # enemy.angle = normalAngle + rotationAngle
+        #
+        # self.logger.info(f'{normalAngle=} -  {enemy.angle=}')
 
     def __buildEligibleEnemyObstacles(self, shooter: Enemy, enemies: Enemies) -> Enemies:
         """

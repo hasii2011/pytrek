@@ -8,7 +8,8 @@ from pytrek.model.Coordinates import Coordinates
 
 class Klingon(BaseEnemy):
 
-    FILENAME: str = 'KlingonD7.png'
+    FILENAME:       str = 'KlingonD7.png'
+    ROTATION_ANGLE: int = 125   # Orientation of sprite
 
     def __init__(self, coordinates: Coordinates, moveInterval: int = 0):
         """

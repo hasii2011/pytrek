@@ -14,6 +14,7 @@ from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
 from pytrek.gui.gamepieces.base.BaseAnimator import TextureList
+from pytrek.gui.gamepieces.commander.Commander import Commander
 
 from pytrek.gui.gamepieces.commander.CommanderTorpedo import CommanderTorpedo
 from pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion
@@ -66,7 +67,7 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         Args:
             quadrant:
         """
-        self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.commanders, rotationAngle=-90)
+        self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.commanders, rotationAngle=Commander.ROTATION_ANGLE)
         self.torpedoes.update()
         self.torpedoExplosions.update()
         self.torpedoFollowers.update()

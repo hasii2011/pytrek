@@ -13,6 +13,7 @@ from pytrek.gui.gamepieces.base.BaseAnimator import TextureList
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
 from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedo import SuperCommanderTorpedo
 from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedoMiss import SuperCommanderTorpedoMiss
@@ -63,7 +64,7 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
         Args:
             quadrant:
         """
-        self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.superCommanders, rotationAngle=-90)
+        self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.superCommanders, rotationAngle=SuperCommander.ROTATION_ANGLE)
         self.torpedoes.update()
         self.torpedoFollowers.update()
         self.torpedoExplosions.update()

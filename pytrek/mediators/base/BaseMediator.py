@@ -61,6 +61,16 @@ class BaseMediator:
 
         self._messageConsole: MessageConsole = MessageConsole()
 
+    def _pointAtTarget(self, shooter: GamePiece, target: GamePiece, rotationAngle: int = 125):
+
+        currentPoint:     ArcadePoint = ArcadePoint(x=shooter.center_x, y=shooter.center_y)
+        destinationPoint: ArcadePoint = ArcadePoint(x=target.center_x,  y=target.center_y)
+
+        normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
+        shooter.angle = normalAngle + rotationAngle
+
+        BaseMediator.clsLogger.info(f'{normalAngle=} -  {shooter.angle=}')
+
     def _loadSound(self, bareFileName: str) -> Sound:
 
         fqFileName: str   = LocateResources.getResourcesPath(LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName)
