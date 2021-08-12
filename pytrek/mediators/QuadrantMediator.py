@@ -123,10 +123,10 @@ class QuadrantMediator(Singleton):
         self._ktm.draw()
         self._ctm.draw()
         self._stm.draw()
+        self._ptm.draw(quadrant=quadrant)
+        self._epm.draw(quadrant=quadrant)
         if quadrant.hasPlanet is True:
             quadrant.planet.draw()
-
-        self._ptm.draw(quadrant=quadrant)
 
     def update(self, quadrant: Quadrant):
 
@@ -140,8 +140,9 @@ class QuadrantMediator(Singleton):
 
         self._ktm.update(quadrant=quadrant)
         self._ctm.update(quadrant=quadrant)
-        self._stm.update(quadrant=quadrant)
         self._ptm.update(quadrant=quadrant)
+        self._stm.update(quadrant=quadrant)
+        self._epm.update(quadrant=quadrant)
 
     def _updateQuadrant(self, quadrant):
         for y in range(QUADRANT_ROWS):

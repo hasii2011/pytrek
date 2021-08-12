@@ -6,14 +6,20 @@ from logging import getLogger
 
 from arcade import Sound
 from arcade import Sprite
+from arcade import SpriteList
 from arcade import load_spritesheet
 
+from pytrek.GameState import GameState
 from pytrek.LocateResources import LocateResources
+from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.gui.MessageConsole import MessageConsole
+from pytrek.gui.gamepieces.Enterprise import Enterprise
 
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.PhaserBolt import PhaserBolt
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 from pytrek.model.Coordinates import Coordinates
 
@@ -30,6 +36,7 @@ class EnterprisePhaserMediator:
 
         self._gameSettings:   GameSettings   = GameSettings()
         self._gameEngine:     GameEngine     = GameEngine()
+        self._gameState:      GameState      = GameState()
         self._computer:       Computer       = Computer()
         self._messageConsole: MessageConsole = MessageConsole()
 
@@ -38,7 +45,16 @@ class EnterprisePhaserMediator:
 
         self._loadSounds()
 
+        self._phaserBolts: SpriteList = SpriteList()
         self._phaserFireTextures: TextureList = self._loadFirePhaserTextures()
+
+    # noinspection PyUnusedLocal
+    def draw(self, quadrant: Quadrant):
+        self._phaserBolts.draw()
+
+    # noinspection PyUnusedLocal
+    def update(self, quadrant: Quadrant):
+        self._phaserBolts.update()
 
     def phaserFireTextures(self) -> TextureList:
         return self._phaserFireTextures
@@ -57,10 +73,11 @@ class EnterprisePhaserMediator:
             gameEngine: GameEngine = self._gameEngine
             enterpriseCoordinates: Coordinates = quadrant.enterpriseCoordinates
 
+            self._gameState.energy -= phaserPower
             for enemy in enemies:
                 distance: float = self._computer.computeQuadrantDistance(startSector=enterpriseCoordinates, endSector=enemy.gameCoordinates)
 
-                hit: float = gameEngine.doPhasers(distance=distance, enemyPower=enemy.power, powerAmount=phaserPower)
+                hit:        float = gameEngine.doPhasers(distance=distance, enemyPower=enemy.power, powerAmount=phaserPower)
                 enemyDrain: float = gameEngine.hitThem(distance=distance, hit=hit, enemyPower=enemy.power)
 
                 enemy.power -= enemyDrain
@@ -68,14 +85,29 @@ class EnterprisePhaserMediator:
 
                 self._messageConsole.displayMessage(msg)
                 self.logger.info(msg)
+
+                self._placePhaserBolt(enterprise=quadrant.enterprise, enemy=enemy)
                 self._soundPhaser.play(volume=self._gameSettings.soundVolume.value)
-                if enemy.power < 0.0:
+                if enemy.power <= 0.0:
                     deadMsg: str = f'Enemy at {enemy.gameCoordinates} dead'
 
                     self._messageConsole.displayMessage(deadMsg)
                     self.logger.info(deadMsg)
                     sprite: Sprite = cast(Sprite, enemy)
                     sprite.remove_from_sprite_lists()
+
+    def _placePhaserBolt(self, enterprise: Enterprise, enemy: Enemy):
+
+        start: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
+        end:   ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
+        centerPoint: ArcadePoint = self._computer.computeCenterPoint(start=start, end=end)
+
+        phaserBolt: PhaserBolt = PhaserBolt(textureList=self._phaserFireTextures)
+
+        phaserBolt.center_x = centerPoint.x
+        phaserBolt.center_y = centerPoint.y
+
+        self._phaserBolts.append(phaserBolt)
 
     def _loadSounds(self):
         self._soundPhaser         = self._loadSound('PhaserFire.wav')

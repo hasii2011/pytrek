@@ -379,27 +379,32 @@ class GameEngine(Singleton):
             powerAmount:    The amount of power to expend
         Returns:
         """
+        PHASER_BURST_TO_FINISH_K: float = 20.0
+
         rPow:   float = powerAmount
         powRem: float = rPow
 
-        self._gameState.energy -= rPow
+        if enemyPower <= PHASER_BURST_TO_FINISH_K:
+            hit: float = PHASER_BURST_TO_FINISH_K
+        else:
+            phaserFactor: float = self._gameSettings.phaserFactor
 
-        phaserFactor: float = self._gameSettings.phaserFactor
+            hit = fabs(enemyPower / phaserFactor * pow(0.90, distance))
+            over: float = (0.01 + 0.05 * self._intelligence.rand()) * hit
 
-        hit:  float = fabs(enemyPower / phaserFactor * pow(0.90, distance))
-        over: float = (0.01 + 0.05 * self._intelligence.rand()) * hit
+            temp: float = powRem
 
-        temp: float = powRem
-
-        powRem = hit + over
-        if powRem <= 0 and temp < hit:
-            hit = temp
+            powRem = hit + over
+            if powRem <= 0 and temp < hit:
+                hit = temp
 
         return hit
 
     def hitThem(self, distance: float, hit: float, enemyPower: float) -> float:
         # noinspection SpellCheckingInspection
         """
+        Register phaser hit on enemy
+
         ```c
             dustfac = 0.9 + 0.01*Rand();
             hit = wham*pow(dustfac,kdist[kk]);

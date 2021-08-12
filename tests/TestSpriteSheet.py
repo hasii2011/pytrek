@@ -18,7 +18,7 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
-from pytrek.gui.gamepieces.PhaserFire import PhaserFire
+from pytrek.gui.gamepieces.PhaserBolt import PhaserBolt
 from pytrek.gui.gamepieces.EnterpriseTorpedoExplosion import EnterpriseTorpedoExplosion
 
 from pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion
@@ -95,7 +95,7 @@ class TestSpriteSheet(Window):
         klingonTorpedoExplosion:        KlingonTorpedoExplosion        = self._getKlingonTorpedoExplosion()
         commanderTorpedoExplosion:      CommanderTorpedoExplosion      = self._getCommanderTorpedoExplosion()
         superCommanderTorpedoExplosion: SuperCommanderTorpedoExplosion = self._getSuperCommanderTorpedoExplosion()
-        phaserFire:                     PhaserFire                     = self._getPhaserFire()
+        phaserFire:                     PhaserBolt                     = self._getPhaserFire()
 
         self._sprites.append(enterpriseTorpedoExplosion)
         self._sprites.append(klingonTorpedoExplosion)
@@ -217,9 +217,9 @@ class TestSpriteSheet(Window):
 
         return explosion
 
-    def _getPhaserFire(self) -> PhaserFire:
+    def _getPhaserFire(self) -> PhaserBolt:
 
-        phaserFire: PhaserFire = PhaserFire(textureList=self._phaserFireTextures)
+        phaserFire: PhaserBolt = PhaserBolt(textureList=self._phaserFireTextures)
 
         arcadePoint: ArcadePoint = self.phaserFirePoint
 

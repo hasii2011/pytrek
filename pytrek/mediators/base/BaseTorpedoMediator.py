@@ -345,13 +345,6 @@ class BaseTorpedoMediator(BaseMediator):
     def _pointAtEnterprise(self, enemy: Enemy, enterprise: Enterprise, rotationAngle: int = 125):
 
         self._pointAtTarget(shooter=enemy, target=enterprise, rotationAngle=rotationAngle)
-        # currentPoint:     ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
-        # destinationPoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
-        #
-        # normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
-        # enemy.angle = normalAngle + rotationAngle
-        #
-        # self.logger.info(f'{normalAngle=} -  {enemy.angle=}')
 
     def __buildEligibleEnemyObstacles(self, shooter: Enemy, enemies: Enemies) -> Enemies:
         """
