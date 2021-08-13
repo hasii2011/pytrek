@@ -383,13 +383,13 @@ class GameEngine(Singleton):
             powerAmount:    The amount of power to expend
         Returns:
         """
-        PHASER_BURST_TO_FINISH_K: float = 20.0
+        phaserBurstToTerminate: float = self._gameSettings.phaserBurstToTerminate
 
         rPow:   float = powerAmount
         powRem: float = rPow
 
-        if enemyPower <= PHASER_BURST_TO_FINISH_K:
-            hit: float = PHASER_BURST_TO_FINISH_K
+        if enemyPower <= phaserBurstToTerminate:
+            hit: float = phaserBurstToTerminate
         else:
             phaserFactor: float = self._gameSettings.phaserFactor
 

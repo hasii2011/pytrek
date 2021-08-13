@@ -174,6 +174,10 @@ class GameSettings(Singleton):
         return self._factors.photonTorpedoMisfireRate
 
     @property
+    def phaserBurstToTerminate(self) -> float:
+        return self._factors.phaserBurstToTerminate
+
+    @property
     def noviceTorpedoSpeeds(self) -> TorpedoSpeeds:
         return self._torpedoSpeeds.noviceTorpedoSpeeds
 

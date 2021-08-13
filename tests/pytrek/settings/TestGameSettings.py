@@ -93,6 +93,9 @@ class TestGameSettings(TestBase):
     def testMaxCommanderFiringIntervalExistence(self):
         self.assertIsNotNone(self._settings.maxCommanderFiringInterval)
 
+    def testPhaserBurstToTerminateExistence(self):
+        self.assertIsNotNone(self._settings.phaserBurstToTerminate)
+
     def testNoviceTorpedoSpeeds(self):
 
         tpNovice: TorpedoSpeeds = self._settings.noviceTorpedoSpeeds

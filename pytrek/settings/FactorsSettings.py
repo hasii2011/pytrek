@@ -31,6 +31,7 @@ class FactorsSettings(BaseSubSetting):
 
     BASIC_MISS_DISPLAY_INTERVAL: str = 'basic_miss_display_interval'
     PHOTON_TORPEDO_MISFIRE_RATE: str = 'photon_torpedo_misfire_rate'
+    PHASER_BURST_TO_TERMINATE:   str = 'phaser_burst_to_terminate'
 
     FACTORS_SETTINGS: SettingsNameValues = SettingsNameValues({
         GAME_LENGTH_FACTOR:     '7.0',
@@ -56,7 +57,8 @@ class FactorsSettings(BaseSubSetting):
         MAX_SUPER_COMMANDER_MOVE_INTERVAL: '7',
 
         BASIC_MISS_DISPLAY_INTERVAL: '5',
-        PHOTON_TORPEDO_MISFIRE_RATE: '0.2'
+        PHOTON_TORPEDO_MISFIRE_RATE: '0.2',
+        PHASER_BURST_TO_TERMINATE: '20.0'
     })
 
     # noinspection SpellCheckingInspection
@@ -125,7 +127,6 @@ class FactorsSettings(BaseSubSetting):
     def maxCommanderMoveInterval(self) -> int:
         return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_COMMANDER_MOVE_INTERVAL)
 
-
     @property
     def minSuperCommanderMoveInterval(self) -> int:
         return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MIN_SUPER_COMMANDER_MOVE_INTERVAL)
@@ -134,7 +135,6 @@ class FactorsSettings(BaseSubSetting):
     def maxSuperCommanderMoveInterval(self) -> int:
         return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.MAX_SUPER_COMMANDER_MOVE_INTERVAL)
 
-
     @property
     def basicMissDisplayInterval(self) -> int:
         return self._config.getint(FactorsSettings.FACTORS_SECTION, FactorsSettings.BASIC_MISS_DISPLAY_INTERVAL)
@@ -142,3 +142,7 @@ class FactorsSettings(BaseSubSetting):
     @property
     def photonTorpedoMisfireRate(self) -> float:
         return self._config.getfloat(FactorsSettings.FACTORS_SECTION, FactorsSettings.PHOTON_TORPEDO_MISFIRE_RATE)
+
+    @property
+    def phaserBurstToTerminate(self) -> float:
+        return self._config.getfloat(FactorsSettings.FACTORS_SECTION, FactorsSettings.PHASER_BURST_TO_TERMINATE)
