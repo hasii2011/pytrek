@@ -7,15 +7,17 @@ from logging import getLogger
 from arcade import Sound
 from arcade import load_spritesheet
 
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 from pytrek.gui.gamepieces.base.BaseAnimator import TextureList
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
 
-from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
-
 from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedo import SuperCommanderTorpedo
+from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedoExplosion import SuperCommanderTorpedoExplosion
 from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedoMiss import SuperCommanderTorpedoMiss
 
 from pytrek.mediators.base.MissesMediator import Misses
@@ -125,6 +127,15 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
         We must implement this
         """
         pass
+
+    def _getTorpedoExplosion(self) -> BaseTorpedoExplosion:
+        """
+        We must implement this
+
+        Returns: An explosion of the correct type
+
+        """
+        return SuperCommanderTorpedoExplosion(textureList=self._explosionTextures)
 
     def _loadSounds(self):
 
