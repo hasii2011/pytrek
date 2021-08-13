@@ -21,8 +21,8 @@ from pytrek.gui.gamepieces.EnterpriseTorpedo import EnterpriseTorpedo
 from pytrek.gui.gamepieces.EnterpriseTorpedoMiss import EnterpriseTorpedoMiss
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
+from pytrek.mediators.base.BaseMediator import LineOfSightResponse
 from pytrek.mediators.base.MissesMediator import MissesMediator
-from pytrek.mediators.base.MissesMediator import LineOfSightResponse
 from pytrek.mediators.base.MissesMediator import Misses
 from pytrek.mediators.base.MissesMediator import Torpedoes
 

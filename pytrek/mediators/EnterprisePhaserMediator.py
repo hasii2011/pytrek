@@ -12,7 +12,6 @@ from arcade import load_spritesheet
 from pytrek.GameState import GameState
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
-from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
@@ -21,6 +20,7 @@ from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.PhaserBolt import PhaserBolt
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.model.Quadrant import Quadrant
@@ -28,16 +28,17 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.settings.GameSettings import GameSettings
 
 
-class EnterprisePhaserMediator:
+class EnterprisePhaserMediator(BaseMediator):
 
     def __init__(self):
+
+        super().__init__()
 
         self.logger: Logger = getLogger(__name__)
 
         self._gameSettings:   GameSettings   = GameSettings()
         self._gameEngine:     GameEngine     = GameEngine()
         self._gameState:      GameState      = GameState()
-        self._computer:       Computer       = Computer()
         self._messageConsole: MessageConsole = MessageConsole()
 
         self._soundPhaser:         Sound = cast(Sound, None)
@@ -106,6 +107,8 @@ class EnterprisePhaserMediator:
 
         phaserBolt.center_x = centerPoint.x
         phaserBolt.center_y = centerPoint.y
+
+        self._pointAtTarget(shooter=phaserBolt, target=enterprise, rotationAngle=180)
 
         self._phaserBolts.append(phaserBolt)
 

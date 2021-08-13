@@ -15,7 +15,7 @@ from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
 
 from pytrek.mediators.base.MissesMediator import MissesMediator
-from pytrek.mediators.base.MissesMediator import LineOfSightResponse
+from pytrek.mediators.base.BaseMediator import LineOfSightResponse
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant

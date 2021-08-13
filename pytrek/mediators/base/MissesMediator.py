@@ -3,19 +3,7 @@ from logging import getLogger
 from typing import List
 from typing import cast
 
-from collections import namedtuple
-
-from arcade import PointList
-from arcade import Sound
-from arcade import SpriteList
-
-# noinspection PyPackageRequirements
-from shapely.geometry import LineString
-# noinspection PyPackageRequirements
-from shapely.geometry import Polygon
-
 from pytrek.engine.ArcadePoint import ArcadePoint
-from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 
@@ -36,73 +24,30 @@ from pytrek.model.SectorType import SectorType
 
 from pytrek.settings.GameSettings import GameSettings
 
-from pytrek.LocateResources import LocateResources
-
 from pytrek.GameState import GameState
 
-LineOfSightResponse = namedtuple('LineOfSightResponse', 'answer, obstacle')
+from pytrek.mediators.base.BaseMediator import BaseMediator
+
 Torpedoes            = List[SmoothMotion]
 Misses               = List[BaseMiss]
 
 
-class MissesMediator:
+class MissesMediator(BaseMediator):
 
     clsLogger: Logger = getLogger(__name__)
     """
-    Has common stuff that many mediators will need
+    Has common stuff to handle torpedo misses
     """
     def __init__(self):
 
-        self._computer:       Computer     = Computer()
+        super().__init__()
+
         self._gameState:      GameState    = GameState()
         self._gameEngine:     GameEngine   = GameEngine()
         self._intelligence:   Intelligence = Intelligence()
         self._gameSettings:   GameSettings = GameSettings()
 
         self._messageConsole: MessageConsole = MessageConsole()
-
-    def _pointAtTarget(self, shooter: GamePiece, target: GamePiece, rotationAngle: int = 125):
-
-        currentPoint:     ArcadePoint = ArcadePoint(x=shooter.center_x, y=shooter.center_y)
-        destinationPoint: ArcadePoint = ArcadePoint(x=target.center_x,  y=target.center_y)
-
-        normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
-        shooter.angle = normalAngle + rotationAngle
-
-        MissesMediator.clsLogger.info(f'{normalAngle=} -  {shooter.angle=}')
-
-    def _loadSound(self, bareFileName: str) -> Sound:
-
-        fqFileName: str   = LocateResources.getResourcesPath(LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName)
-        sound:      Sound = Sound(fqFileName)
-
-        return sound
-
-    def _hasLineOfSight(self, startingPoint: ArcadePoint, endPoint: ArcadePoint, obstacles: SpriteList) -> LineOfSightResponse:
-        """
-        This is my replacement for Arcade's has_line_of_sight();  The function is only returning a boolean and not the sprite
-        or sprite's that are obstacles
-
-        Args:
-            startingPoint:
-            endPoint:
-            obstacles:
-
-        Returns:  A LineOfSightResponse named tuple
-        """
-
-        lineOfSight: LineString = LineString([(startingPoint.x, startingPoint.y), (endPoint.x, endPoint.y)])
-
-        for obstacle in obstacles:
-            # obstacle: Sprite = cast(Sprite, obstacle)
-
-            pointList: PointList = obstacle.get_adjusted_hit_box()
-            polygon:   Polygon   = Polygon(pointList)
-            ans: bool = polygon.crosses(lineOfSight)
-            if ans is True:
-                return LineOfSightResponse(answer=False, obstacle=obstacle)
-
-        return LineOfSightResponse(answer=True, obstacle=None)
 
     def _findTorpedoMisses(self, torpedoes: Torpedoes) -> List[BaseEnemyTorpedo]:
 
