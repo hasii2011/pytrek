@@ -21,6 +21,10 @@ from pytrek.engine.ShieldHitData import ShieldHitData
 from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.commander.Commander import Commander
+from pytrek.gui.gamepieces.klingon.Klingon import Klingon
+from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -435,3 +439,17 @@ class GameEngine(Singleton):
             kp = phaserFactor * damage
 
         return kp
+
+    def decrementEnemyCount(self, enemy: Enemy):
+        """
+        Decrements the appropriate counter
+        Args:
+            enemy:  The enemy we just whacked
+        """
+
+        if isinstance(enemy, Klingon) is True:
+            self._gameState.remainingKlingons -= 1
+        elif isinstance(enemy, Commander) is True:
+            self._gameState.remainingCommanders -= 1
+        elif isinstance(enemy, SuperCommander):
+            self._gameState.remainingSuperCommanders -= 1
