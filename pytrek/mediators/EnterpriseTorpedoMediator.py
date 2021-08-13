@@ -21,10 +21,10 @@ from pytrek.gui.gamepieces.EnterpriseTorpedo import EnterpriseTorpedo
 from pytrek.gui.gamepieces.EnterpriseTorpedoMiss import EnterpriseTorpedoMiss
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
-from pytrek.mediators.base.BaseMediator import BaseMediator
-from pytrek.mediators.base.BaseMediator import LineOfSightResponse
-from pytrek.mediators.base.BaseMediator import Misses
-from pytrek.mediators.base.BaseMediator import Torpedoes
+from pytrek.mediators.base.MissesMediator import MissesMediator
+from pytrek.mediators.base.MissesMediator import LineOfSightResponse
+from pytrek.mediators.base.MissesMediator import Misses
+from pytrek.mediators.base.MissesMediator import Torpedoes
 
 from pytrek.LocateResources import LocateResources
 
@@ -35,7 +35,7 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
-class EnterpriseTorpedoMediator(BaseMediator):
+class EnterpriseTorpedoMediator(MissesMediator):
 
     def __init__(self):
 

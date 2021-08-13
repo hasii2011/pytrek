@@ -14,8 +14,8 @@ from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
 
-from pytrek.mediators.base.BaseMediator import BaseMediator
-from pytrek.mediators.base.BaseMediator import LineOfSightResponse
+from pytrek.mediators.base.MissesMediator import MissesMediator
+from pytrek.mediators.base.MissesMediator import LineOfSightResponse
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -23,7 +23,7 @@ from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
 
 
-class EnterpriseMediator(BaseMediator):
+class EnterpriseMediator(MissesMediator):
 
     def __init__(self):
 

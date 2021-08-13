@@ -18,7 +18,7 @@ from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedo import SuperCommanderTorpedo
 from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedoMiss import SuperCommanderTorpedoMiss
 
-from pytrek.mediators.base.BaseMediator import Misses
+from pytrek.mediators.base.MissesMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
 from pytrek.model.Quadrant import Quadrant

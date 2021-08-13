@@ -21,7 +21,7 @@ from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosionColor import KlingonTo
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
 
 
-from pytrek.mediators.base.BaseMediator import Misses
+from pytrek.mediators.base.MissesMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
 from pytrek.LocateResources import LocateResources

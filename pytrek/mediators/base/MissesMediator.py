@@ -45,7 +45,7 @@ Torpedoes            = List[SmoothMotion]
 Misses               = List[BaseMiss]
 
 
-class BaseMediator:
+class MissesMediator:
 
     clsLogger: Logger = getLogger(__name__)
     """
@@ -69,7 +69,7 @@ class BaseMediator:
         normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
         shooter.angle = normalAngle + rotationAngle
 
-        BaseMediator.clsLogger.info(f'{normalAngle=} -  {shooter.angle=}')
+        MissesMediator.clsLogger.info(f'{normalAngle=} -  {shooter.angle=}')
 
     def _loadSound(self, bareFileName: str) -> Sound:
 

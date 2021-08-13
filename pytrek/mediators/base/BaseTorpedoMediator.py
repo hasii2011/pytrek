@@ -27,16 +27,16 @@ from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
-from pytrek.mediators.base.BaseMediator import BaseMediator
-from pytrek.mediators.base.BaseMediator import LineOfSightResponse
-from pytrek.mediators.base.BaseMediator import Torpedoes
+from pytrek.mediators.base.MissesMediator import MissesMediator
+from pytrek.mediators.base.MissesMediator import LineOfSightResponse
+from pytrek.mediators.base.MissesMediator import Torpedoes
 
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.Constants import DEFAULT_FULL_SHIELDS
 
 
-class BaseTorpedoMediator(BaseMediator):
+class BaseTorpedoMediator(MissesMediator):
 
     clsLogger: Logger = getLogger(__name__)
 

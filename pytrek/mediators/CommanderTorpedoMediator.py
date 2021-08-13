@@ -23,7 +23,7 @@ from pytrek.gui.gamepieces.commander.CommanderTorpedoMiss import CommanderTorped
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
-from pytrek.mediators.base.BaseMediator import Misses
+from pytrek.mediators.base.MissesMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
 from pytrek.model.Quadrant import Quadrant
