@@ -9,6 +9,7 @@ from logging import getLogger
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 
+from pytrek.gui.gamepieces.StarBase import StarBase
 from pytrek.gui.gamepieces.commander.Commander import Commander
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
@@ -62,10 +63,12 @@ class Quadrant:
         self._commanders:      Enemies = Enemies([])
         self._superCommanders: Enemies = Enemies([])
 
-        self._planet: Planet = cast(Planet, None)
+        self._planet:   Planet = cast(Planet, None)
+        self._starBase: StarBase = cast(StarBase, None)
 
         self._enterprise:            Enterprise  = cast(Enterprise, None)
         self._enterpriseCoordinates: Coordinates = cast(Coordinates, None)
+        self._starBaseCoordinates:   Coordinates = cast(Coordinates, None)
 
         self._createQuadrant()
 
@@ -190,6 +193,10 @@ class Quadrant:
     def planet(self) -> Planet:
         return self._planet
 
+    @property
+    def starBase(self) -> StarBase:
+        return self._starBase
+
     def getSector(self, sectorCoordinates: Coordinates) -> Sector:
         """
 
@@ -252,6 +259,12 @@ class Quadrant:
         planetType: PlanetType = self._intelligence.computeRandomPlanetType()
         self._planet = Planet(planetType=planetType, sectorCoordinates=sector.coordinates)
 
+    def addStarBase(self):
+        """
+        """
+        self._hasStarBase = True
+        self.placeAStarBase()
+
     def getRandomEmptySector(self) -> Sector:
         """
 
@@ -281,6 +294,31 @@ class Quadrant:
         if checkSector.type == SectorType.EMPTY:
             ans = True
         return ans
+
+    def removeDeadEnemies(self):
+
+        self._klingons        = self._removeZombies(self._klingons)
+        self._commanders      = self._removeZombies(self._commanders)
+        self._superCommanders = self._removeZombies(self._superCommanders)
+
+        # TODO:   Clean up Commanders and SuperCommanders
+
+    def placeAStarBase(self):
+        """
+        Randomly place a StarBase
+        """
+        self.logger.info(f"StarBase @Quadrant {self.coordinates}")
+
+        sector: Sector = self.getRandomEmptySector()
+        sector.type    = SectorType.STARBASE
+
+        self._starBaseCoordinates = sector.coordinates
+
+        self._starBase = StarBase(sectorCoordinates=self._starBaseCoordinates)
+
+        sector.sprite = self._starBase
+
+        self.logger.info(f"Star Base @Sector {sector}")
 
     def _placeAKlingon(self) -> Klingon:
         """
@@ -342,14 +380,6 @@ class Quadrant:
 
         sector.sprite = superCommander
         return superCommander
-
-    def removeDeadEnemies(self):
-
-        self._klingons        = self._removeZombies(self._klingons)
-        self._commanders      = self._removeZombies(self._commanders)
-        self._superCommanders = self._removeZombies(self._superCommanders)
-
-        # TODO:   Clean up Commanders and SuperCommanders
 
     def _removeZombies(self, enemies: Enemies):
 

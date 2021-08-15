@@ -47,7 +47,7 @@ class Galaxy(Singleton):
 
         self._addEnemies()
 
-        # self.placeStarBasesInGalaxy()
+        self.placeStarBasesInGalaxy()
         self._placePlanets()
         self.setInitialQuadrant()
 
@@ -127,18 +127,19 @@ class Galaxy(Singleton):
             quadrant.addSuperCommander()
 
     def placeStarBasesInGalaxy(self):
-        """"""
-        # starBaseCount = self._intelligence.getInitialStarBaseCount()
-        # while starBaseCount != 0:
-        #     quadrantCoordinates = self._intelligence.getRandomQuadrantCoordinates()
-        #     quadrant            = self.getQuadrant(quadrantCoordinates)
-        #     while quadrant.hasStarBase() is True:
-        #         quadrantCoordinates = self._intelligence.getRandomQuadrantCoordinates()
-        #         quadrant = self.getQuadrant(quadrantCoordinates)
-        #
-        #     self.logger.debug(f"StarBase at quadrant {quadrantCoordinates}")
-        #     quadrant.addStarBase()
-        #     starBaseCount -= 1
+        """
+        """
+        starBaseCount = self._intelligence.generateInitialStarBaseCount()
+        while starBaseCount != 0:
+            quadrantCoordinates = self._intelligence.generateQuadrantCoordinates()
+            quadrant            = self.getQuadrant(quadrantCoordinates)
+            while quadrant.hasStarBase is False:
+                quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
+                quadrant:            Quadrant    = self.getQuadrant(quadrantCoordinates)
+
+                self.logger.debug(f"StarBase at quadrant {quadrantCoordinates}")
+                quadrant.addStarBase()
+            starBaseCount -= 1
         pass
 
     def getQuadrant(self, quadrantCoordinates: Coordinates) -> Quadrant:

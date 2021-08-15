@@ -18,6 +18,7 @@ class DebugSettings(BaseSubSetting):
     SUPER_COMMANDER_COUNT:    str = 'super_commander_count'
     PRINT_KLINGON_PLACEMENT:  str = 'print_klingon_placement'
     ADD_PLANET:               str = 'add_planet'
+    ADD_STAR_BASE:            str = 'add_star_base'
     NO_KLINGONS:              str = 'no_klingons'
     NO_COMMANDERS:            str = 'no_commanders'
     NO_SUPER_COMMANDERS:      str = 'no_super_commanders'
@@ -40,6 +41,7 @@ class DebugSettings(BaseSubSetting):
         COLLECT_SUPER_COMMANDER_QUADRANT_COORDINATES: 'False',
         ANNOUNCE_QUADRANT_CREATION: 'False',
         ADD_PLANET: 'False',
+        ADD_STAR_BASE: 'False',
         NO_KLINGONS: 'False',
         NO_COMMANDERS: 'False',
         NO_SUPER_COMMANDERS: 'False',
@@ -134,6 +136,15 @@ class DebugSettings(BaseSubSetting):
     @addPlanet.setter
     def addPlanet(self, newValue: bool):
         self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.ADD_PLANET, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def addStarBase(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.ADD_STAR_BASE)
+
+    @addStarBase.setter
+    def addStarBase(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.ADD_STAR_BASE, str(newValue))
         self._settingsCommon.saveSettings()
 
     @property

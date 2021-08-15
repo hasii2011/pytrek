@@ -262,6 +262,14 @@ class GameSettings(Singleton):
         self._debug.addPlanet = newValue
 
     @property
+    def debugAddStarBase(self) -> bool:
+        return self._debug.addStarBase
+
+    @debugAddStarBase.setter
+    def debugAddStarBase(self, newValue: bool):
+        self._debug.addStarBase = newValue
+
+    @property
     def debugNoKlingons(self) -> bool:
         return self._debug.noKlingons
 

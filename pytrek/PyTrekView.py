@@ -230,6 +230,9 @@ class PyTrekView(View):
         if self._gameSettings.debugAddPlanet is True:
             self._quadrant.addPlanet()
 
+        if self._gameSettings.debugAddStarBase is True:
+            self._quadrant.addStarBase()
+
     def _makeEnemySpriteLists(self):
         """
         Place enemies in the appropriate sprite lists

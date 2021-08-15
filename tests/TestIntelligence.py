@@ -56,6 +56,7 @@ class TestIntelligence(TestBase):
     GENERATE_KLINGON_COUNT_LOOP_COUNT: int = 250
     POWER_LOOP_COUNT:                  int = 250
     RANGE_TESTS_LOOP_COUNT:            int = 50
+    MAX_STAR_BASE_CALLS:                int = 100
 
     clsLogger: Logger = cast(Logger, None)
 
@@ -68,18 +69,18 @@ class TestIntelligence(TestBase):
     def setUp(self):
         self.logger: Logger = TestIntelligence.clsLogger
 
-        self._gameEngine: GameEngine   = GameEngine()     # TODO: when https://github.com/hasii2011/PyArcadeStarTrek/issues/9 is fixed don't needs this
-        self.smarty:      Intelligence = Intelligence()
-        self._settings:   GameSettings = GameSettings()
-        self._gameState:  GameState    = GameState()
+        self._gameEngine:   GameEngine   = GameEngine()
+        self._gameSettings: GameSettings = GameSettings()
+        self._gameState:    GameState    = GameState()
+        self.smarty:        Intelligence = Intelligence()
 
-        self._savePlayerType: PlayerType = self._settings.playerType
-        self._saveGameType:   GameType   = self._settings.gameType
+        self._savePlayerType: PlayerType = self._gameSettings.playerType
+        self._saveGameType:   GameType   = self._gameSettings.gameType
 
     def tearDown(self):
 
-        self._settings.playerType = self._savePlayerType
-        self._settings.gameType   = self._saveGameType
+        self._gameSettings.playerType = self._savePlayerType
+        self._gameSettings.gameType   = self._saveGameType
 
     def testGetRandomSectorCoordinates(self):
         """"""
@@ -145,7 +146,7 @@ class TestIntelligence(TestBase):
 
     def testGetGameInitialTimeShort(self):
         """"""
-        settings: GameSettings = self._settings
+        settings: GameSettings = self._gameSettings
 
         settings.gameType = GameType.Short
 
@@ -156,7 +157,7 @@ class TestIntelligence(TestBase):
 
     def testGetInitialGameTimeLong(self):
         """"""
-        settings: GameSettings = self._settings
+        settings: GameSettings = self._gameSettings
 
         settings.gameType = GameType.Long
 
@@ -167,7 +168,7 @@ class TestIntelligence(TestBase):
 
     def testGetInitialGameTimeMedium(self):
         """"""
-        settings: GameSettings = self._settings
+        settings: GameSettings = self._gameSettings
 
         settings.gameType = GameType.Medium
 
@@ -299,7 +300,7 @@ class TestIntelligence(TestBase):
             self.assertLess(answer, 1.0, 'Follow the specification please')
 
     def testComputePlanetsInGalaxy(self):
-        maxPlanets: int = self._settings.maximumPlanets
+        maxPlanets: int = self._gameSettings.maximumPlanets
         for x in range(0, 10):
             answer: int = self.smarty.computePlanetsInGalaxy()
             self.logger.debug(f'testComputePlanetsInGalaxy1 - Iteration {x}, {answer=}')
@@ -307,8 +308,8 @@ class TestIntelligence(TestBase):
 
     def testComputeKlingonFiringInterval(self):
 
-        minFiringInterval: int = self._settings.minKlingonFiringInterval
-        maxFiringInterval: int = self._settings.maxKlingonFiringInterval
+        minFiringInterval: int = self._gameSettings.minKlingonFiringInterval
+        maxFiringInterval: int = self._gameSettings.maxKlingonFiringInterval
 
         for x in range(0, 100):
             ans: int = self.smarty.computeKlingonFiringInterval()
@@ -318,8 +319,8 @@ class TestIntelligence(TestBase):
 
     def testComputeCommanderFiringInterval(self):
 
-        minFiringInterval: int = self._settings.minCommanderFiringInterval
-        maxFiringInterval: int = self._settings.maxCommanderFiringInterval
+        minFiringInterval: int = self._gameSettings.minCommanderFiringInterval
+        maxFiringInterval: int = self._gameSettings.maxCommanderFiringInterval
 
         generatedFiringIntervals: List[int] = []
 
@@ -340,16 +341,16 @@ class TestIntelligence(TestBase):
         )
         self.logger.info(statsStr)
 
-        expectedMinValue: int = self._settings.minCommanderFiringInterval
-        expectedMaxValue: int = self._settings.maxCommanderFiringInterval
+        expectedMinValue: int = self._gameSettings.minCommanderFiringInterval
+        expectedMaxValue: int = self._gameSettings.maxCommanderFiringInterval
 
         self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
         self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')
 
     def testComputeSuperCommanderMoveInterval(self):
 
-        minMoveInterval: int = self._settings.minSuperCommanderMoveInterval
-        maxMoveInterval: int = self._settings.maxSuperCommanderMoveInterval
+        minMoveInterval: int = self._gameSettings.minSuperCommanderMoveInterval
+        maxMoveInterval: int = self._gameSettings.maxSuperCommanderMoveInterval
 
         generatedMoveIntervals: List[int] = []
 
@@ -370,8 +371,8 @@ class TestIntelligence(TestBase):
         )
         self.logger.info(statsStr)
 
-        expectedMinValue: int = self._settings.minSuperCommanderMoveInterval
-        expectedMaxValue: int = self._settings.maxSuperCommanderMoveInterval
+        expectedMinValue: int = self._gameSettings.minSuperCommanderMoveInterval
+        expectedMaxValue: int = self._gameSettings.maxSuperCommanderMoveInterval
 
         self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
         self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')
@@ -447,8 +448,8 @@ class TestIntelligence(TestBase):
         )
         self.logger.info(statsStr)
 
-        expectedMinValue: int = self._settings.minCommanderMoveInterval
-        expectedMaxValue: int = self._settings.maxCommanderMoveInterval
+        expectedMinValue: int = self._gameSettings.minCommanderMoveInterval
+        expectedMaxValue: int = self._gameSettings.maxCommanderMoveInterval
 
         self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
         self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')
@@ -472,8 +473,8 @@ class TestIntelligence(TestBase):
         )
         self.logger.info(statsStr)
 
-        expectedMinValue: int = self._settings.minKlingonMoveInterval
-        expectedMaxValue: int = self._settings.maxKlingonMoveInterval
+        expectedMinValue: int = self._gameSettings.minKlingonMoveInterval
+        expectedMaxValue: int = self._gameSettings.maxKlingonMoveInterval
 
         self.assertEqual(expectedMinValue, minValue, 'We are below the expected value')
         self.assertEqual(expectedMaxValue, maxValue, 'We are above the expected value')
@@ -488,6 +489,29 @@ class TestIntelligence(TestBase):
 
         self.assertEqual(PlayerType.Emeritus, tp.playerType, 'Looks like we got the wrong settings')
         self._gameState.playerType = savePlayerType
+
+    def testGenerateInitialStarBaseCount(self):
+
+        minimumStarBases: int = self._gameSettings.minimumStarBases
+        maximumStarBases: int = self._gameSettings.maximumStarBases
+
+        generatedCount: List[int] = []
+        for x in range(0, TestIntelligence.MAX_STAR_BASE_CALLS):
+            starBaseCount: int = self.smarty.generateInitialStarBaseCount()
+
+            self.assertLessEqual(starBaseCount, maximumStarBases,    'Too many StarBases generated')
+            self.assertGreaterEqual(starBaseCount, minimumStarBases, 'Too few StarBases generated')
+            generatedCount.append(starBaseCount)
+
+        medianStatistic: float = median(generatedCount)
+        meanStatistic:   float = mean(generatedCount)
+        modeStatistic:   float = mode(generatedCount)
+
+        statsStr: str = (
+            f'Initial StarBase count statistics: '
+            f'median={medianStatistic:.2f} average={meanStatistic:.2f} mode={modeStatistic:.2f}'
+        )
+        self.logger.info(statsStr)
 
     def _runKlingonCountTest(self) -> float:
 
@@ -513,8 +537,6 @@ class TestIntelligence(TestBase):
         return medianCount
 
     def _runPowerTest(self, computeCallback: ComputeCallBack):
-
-        # intelligence: Intelligence = self.smarty
 
         generatedPower: List[float] = []
 

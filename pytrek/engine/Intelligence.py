@@ -196,6 +196,41 @@ class Intelligence(Singleton):
         starDate: int = int(100.0 * (31.0 * random()) * 20.0)
         return starDate
 
+    def generateInitialStarBaseCount(self) -> int:
+        # noinspection SpellCheckingInspection
+        """
+        Calculate and returns the star base count for the game start
+        With the default values guarantees a minimum of 2 and a maximum of 5
+
+        ```c
+        d.rembase = 3.0*Rand()+2.0;
+        ```
+
+        Returns:    A StarBase count
+        """
+        multiplier: float = self._gameSettings.starBaseMultiplier
+        extender:   float = self._gameSettings.starBaseExtender
+        # double rb = (3.0 * ourGPRandomGenerator.nextDouble()) + 2.0;
+        nextDouble = random()
+        self.logger.debug("nextDouble: %s", str(nextDouble))
+
+        retBaseCount: float = (multiplier * nextDouble) + extender
+
+        retBaseCount = round(retBaseCount)
+        self.logger.info("calculated retBaseCount: %s", str(retBaseCount))
+
+        minimumStarBases: int = self._gameSettings.minimumStarBases
+        maximumStarBases: int = self._gameSettings.maximumStarBases
+
+        if retBaseCount < minimumStarBases:
+            retBaseCount = minimumStarBases
+            self.logger.info(f"adjusted retBaseCount: %s", str(retBaseCount))
+        elif retBaseCount > maximumStarBases:
+            retBaseCount = maximumStarBases
+            self.logger.info(f"adjusted retBaseCount: %s", str(retBaseCount))
+
+        return int(retBaseCount)
+
     def generateAdjacentCoordinates(self, centerCoordinates: Coordinates) -> LRScanCoordinatesList:
 
         coordinatesList: LRScanCoordinatesList = LRScanCoordinatesList([])

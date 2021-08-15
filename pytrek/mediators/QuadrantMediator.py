@@ -127,6 +127,8 @@ class QuadrantMediator(Singleton):
         self._epm.draw(quadrant=quadrant)
         if quadrant.hasPlanet is True:
             quadrant.planet.draw()
+        if quadrant.hasStarBase is True:
+            quadrant.starBase.draw()
 
     def update(self, quadrant: Quadrant):
 
@@ -178,7 +180,7 @@ class QuadrantMediator(Singleton):
         """
         ans: bool = False
 
-        if sectorType == SectorType.PLANET or sectorType == SectorType.KLINGON_TORPEDO_MISS or sectorType == SectorType.ENTERPRISE_TORPEDO_MISS:
+        if sectorType == SectorType.PLANET or sectorType == SectorType.KLINGON_TORPEDO_MISS or sectorType == SectorType.ENTERPRISE_TORPEDO_MISS or sectorType == SectorType.STARBASE:
             ans = True
 
         return ans
