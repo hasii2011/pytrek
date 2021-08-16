@@ -38,7 +38,7 @@ TITLE_FONT_OFFSET_Y: int = 24
 
 START_STATUS_OFFSET:   int = -30  # Because arcade 0,0 is at bottom left
 INLINE_STATUS_OFFSET:  int = -20
-STATUS_VALUE_X_OFFSET: int = 105
+STATUS_VALUE_X_OFFSET: int = 100
 
 PropertyName  = NewType('PropertyName', str)
 PropertyNames = NewType('PropertyNames', List[PropertyName])

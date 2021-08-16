@@ -453,3 +453,30 @@ class GameEngine(Singleton):
             self._gameState.remainingCommanders -= 1
         elif isinstance(enemy, SuperCommander):
             self._gameState.remainingSuperCommanders -= 1
+
+    def shipAdjacentToBase(self, shipPosition: Coordinates, basePosition: Coordinates) -> bool:
+        """
+        ```Java
+            adjacent = ((int) Math.abs(sc.x-game.base.x) <= 1) &&  ( (int) Math.abs(sc.y-game.base.y) <= 1);
+        ```
+        Args:
+            shipPosition:
+            basePosition:
+
+        Returns: 'True' if were are adjacent to the Star Base, else 'False'
+        """
+        adjacent: bool = False
+
+        if abs(shipPosition.x - basePosition.x) <= 1 and abs(shipPosition.y - basePosition.y) <= 1:
+            adjacent = True
+
+        return adjacent
+
+    def resetEnergyLevels(self):
+
+        self._gameState.energy          = self._gameSettings.initialEnergyLevel
+        self._gameState.shieldEnergy    = self._gameSettings.initialShieldEnergy
+        self._gameState.torpedoCount    = self._gameSettings.initialTorpedoCount
+
+        # TODO
+        # self._gameState.lifeSupportReserves = self._gameSettings.initialLifeSupportReserves

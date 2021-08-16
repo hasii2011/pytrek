@@ -9,6 +9,7 @@ from arcade import SpriteList
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.DirectionData import DirectionData
+from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
@@ -97,6 +98,10 @@ class EnterpriseMediator(MissesMediator):
 
         self._gameEngine.impulse(newCoordinates=targetCoordinates, quadrant=quadrant, enterprise=quadrant.enterprise)
         self._soundImpulse.play(volume=soundVolume)
+        if quadrant.klingonCount > 0 or quadrant.commanderCount > 0 or quadrant.superCommanderCount > 0:
+            self._gameState.shipCondition = ShipCondition.Red
+        else:
+            self._gameState.shipCondition = ShipCondition.Green
 
     def _doBlockedImpulseMove(self, quadrant: Quadrant, enterpriseCoordinates: Coordinates, results: LineOfSightResponse):
         """
@@ -167,10 +172,10 @@ class EnterpriseMediator(MissesMediator):
 
     def _loadSounds(self):
 
-        self._soundImpulse           = self._loadSound(bareFileName='impulse.wav')
-        self._soundUnableToComply    = self._loadSound(bareFileName='unableToComply.wav')
-        self._soundRepeatRequest     = self._loadSound(bareFileName='pleaseRepeatRequest.wav')
-        self._soundEnterpriseBlocked = self._loadSound(bareFileName='EnterpriseBlocked.wav')
+        self._soundImpulse           = self.loadSound(bareFileName='impulse.wav')
+        self._soundUnableToComply    = self.loadSound(bareFileName='unableToComply.wav')
+        self._soundRepeatRequest     = self.loadSound(bareFileName='pleaseRepeatRequest.wav')
+        self._soundEnterpriseBlocked = self.loadSound(bareFileName='EnterpriseBlocked.wav')
 
     def __updateQuadrant(self, quadrant: Quadrant, currentCoordinates: Coordinates, targetCoordinates: Coordinates) -> Quadrant:
         """

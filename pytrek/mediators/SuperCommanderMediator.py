@@ -35,4 +35,4 @@ class SuperCommanderMediator(BaseEnemyMediator):
         self._superCommanderMove.play(self._gameSettings.soundVolume.value)
 
     def _loadSounds(self):
-        self._superCommanderMove = self._loadSound(bareFileName='SuperCommanderMove.wav')
+        self._superCommanderMove = self.loadSound(bareFileName='SuperCommanderMove.wav')

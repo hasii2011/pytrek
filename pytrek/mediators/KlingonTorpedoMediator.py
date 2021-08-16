@@ -90,9 +90,9 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
     def _loadSounds(self):
 
-        self._soundKlingonTorpedo    = self._loadSound(bareFileName='klingonTorpedo.wav')
+        self._soundKlingonTorpedo    = self.loadSound(bareFileName='klingonTorpedo.wav')
         # self._soundShieldHit         = self._loadSound(bareFileName='ShieldHit.wav')
-        self._soundKlingonCannotFire = self._loadSound(bareFileName='KlingonCannotFire.wav')
+        self._soundKlingonCannotFire = self.loadSound(bareFileName='KlingonCannotFire.wav')
 
     def _loadTorpedoExplosionTextures(self) -> TextureList:
 

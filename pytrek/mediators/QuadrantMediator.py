@@ -6,6 +6,7 @@ from logging import getLogger
 from logging import DEBUG
 
 from arcade import MOUSE_BUTTON_RIGHT
+from arcade import Sound
 from arcade import SpriteList
 
 from pytrek.Constants import QUADRANT_COLUMNS
@@ -15,6 +16,8 @@ from pytrek.GameState import GameState
 from pytrek.engine.Computer import Computer
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.ShipCondition import ShipCondition
+from pytrek.gui.MessageConsole import MessageConsole
 
 from pytrek.gui.gamepieces.commander.Commander import Commander
 from pytrek.gui.gamepieces.GamePiece import GamePiece
@@ -31,6 +34,7 @@ from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 from pytrek.mediators.EnterpriseTorpedoMediator import EnterpriseTorpedoMediator
 from pytrek.mediators.SuperCommanderMediator import SuperCommanderMediator
 from pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedoMediator
+from pytrek.mediators.base.BaseMediator import BaseMediator
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -38,6 +42,7 @@ from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
 
 from pytrek.Singleton import Singleton
+from pytrek.settings.GameSettings import GameSettings
 
 
 class QuadrantMediator(Singleton):
@@ -52,6 +57,7 @@ class QuadrantMediator(Singleton):
 
         self._gameEngine:   GameEngine   = GameEngine()
         self._gameState:    GameState    = GameState()
+        self._gameSettings: GameSettings = GameSettings()
         self._computer:     Computer     = Computer()
 
         self._ktm: KlingonTorpedoMediator        = KlingonTorpedoMediator()
@@ -66,10 +72,17 @@ class QuadrantMediator(Singleton):
 
         self._epm: EnterprisePhaserMediator      = EnterprisePhaserMediator()
 
+        self._messageConsole: MessageConsole = MessageConsole()
+
         self._playerList:         SpriteList = SpriteList()
         self._klingonList:        SpriteList = SpriteList()
         self._commanderList:      SpriteList = SpriteList()
         self._superCommanderList: SpriteList = SpriteList()
+
+        self._soundUnableToComply: Sound = cast(Sound, None)
+        self._soundDocked:         Sound = cast(Sound, None)
+
+        self._loadSounds()
 
     @property
     def playerList(self) -> SpriteList:
@@ -108,6 +121,28 @@ class QuadrantMediator(Singleton):
 
     def firePhasers(self, quadrant: Quadrant):
         self._epm.firePhasers(quadrant=quadrant)
+
+    def dock(self, quadrant: Quadrant):
+        """
+        TODO:  Move this code to a more relevant place
+        Args:
+            quadrant:
+        """
+
+        if quadrant.hasStarBase is False:
+            self._soundUnableToComply.play(volume=self._gameSettings.soundVolume.value)
+            self._messageConsole.displayMessage(f'No Star Base in quadrant')
+            return
+        shipPosition: Coordinates = quadrant.enterprise.gameCoordinates
+        basePosition: Coordinates = quadrant.starBase.gameCoordinates
+        if self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition) is True:
+            self._gameState.shipCondition = ShipCondition.Docked
+            self._gameEngine.resetEnergyLevels()
+            self._messageConsole.displayMessage(f'Docked.')
+            self._soundDocked.play(volume=self._gameSettings.soundVolume.value)
+        else:
+            self._soundUnableToComply.play(volume=self._gameSettings.soundVolume.value)
+            self._messageConsole.displayMessage(f'You are not adjacent to base')
 
     # noinspection PyUnusedLocal
     def handleMousePress(self, quadrant: Quadrant, arcadePoint: ArcadePoint, button: int, keyModifiers: int):
@@ -180,7 +215,13 @@ class QuadrantMediator(Singleton):
         """
         ans: bool = False
 
-        if sectorType == SectorType.PLANET or sectorType == SectorType.KLINGON_TORPEDO_MISS or sectorType == SectorType.ENTERPRISE_TORPEDO_MISS or sectorType == SectorType.STARBASE:
+        if sectorType == SectorType.PLANET or sectorType == SectorType.KLINGON_TORPEDO_MISS or \
+                sectorType == SectorType.ENTERPRISE_TORPEDO_MISS or sectorType == SectorType.STARBASE:
             ans = True
 
         return ans
+
+    def _loadSounds(self):
+
+        self._soundUnableToComply = BaseMediator.loadSound(bareFileName='unableToComply.wav')
+        self._soundDocked         = BaseMediator.loadSound(bareFileName='Docked.wav')

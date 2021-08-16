@@ -49,6 +49,99 @@ class TestGameEngine(TestBase):
     def tearDown(self):
         pass
 
+    def testShipAdjacentToBaseNorth(self):
+        """
+        In these tests the base is always at sector coordinates 5,5
+        """
+
+        shipPosition: Coordinates = Coordinates(x=4, y=5)
+        basePosition: Coordinates = Coordinates(x=5, y=5)
+
+        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+
+        self.assertTrue(adjacent, 'We are directly north')
+
+    def testShipAdjacentToBaseSouth(self):
+
+        shipPosition: Coordinates = Coordinates(x=5, y=5)
+        basePosition: Coordinates = Coordinates(x=6, y=5)
+
+        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+
+        self.assertTrue(adjacent, 'We are directly south')
+
+    def testShipAdjacentToBaseEast(self):
+
+        shipPosition: Coordinates = Coordinates(x=6, y=5)
+        basePosition: Coordinates = Coordinates(x=5, y=5)
+
+        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+
+        self.assertTrue(adjacent, 'We are directly east')
+
+    def testShipAdjacentToBaseWest(self):
+
+        shipPosition: Coordinates = Coordinates(x=4, y=5)
+        basePosition: Coordinates = Coordinates(x=5, y=5)
+
+        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+
+        self.assertTrue(adjacent, 'We are directly west')
+
+    def testShipAdjacentToBaseNorthEast(self):
+
+        shipPosition: Coordinates = Coordinates(x=4, y=6)
+        basePosition: Coordinates = Coordinates(x=5, y=5)
+
+        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+
+        self.assertTrue(adjacent, 'We are directly NorthEast')
+
+    def testShipAdjacentToBaseNorthWest(self):
+
+        shipPosition: Coordinates = Coordinates(x=4, y=4)
+        basePosition: Coordinates = Coordinates(x=5, y=5)
+
+        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+
+        self.assertTrue(adjacent, 'We are directly NorthWest')
+
+    def testShipAdjacentToBaseSouthEast(self):
+
+        shipPosition: Coordinates = Coordinates(x=6, y=6)
+        basePosition: Coordinates = Coordinates(x=5, y=5)
+
+        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+
+        self.assertTrue(adjacent, 'We are directly SouthEast')
+
+    def testShipAdjacentToBaseSouthWest(self):
+
+        shipPosition: Coordinates = Coordinates(x=6, y=4)
+        basePosition: Coordinates = Coordinates(x=5, y=5)
+
+        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+
+        self.assertTrue(adjacent, 'We are directly SouthWest')
+
+    def testShipAdjacentToBaseNotAdjacentClose(self):
+
+        shipPosition: Coordinates = Coordinates(x=7, y=7)
+        basePosition: Coordinates = Coordinates(x=5, y=5)
+
+        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+
+        self.assertFalse(adjacent, 'We are pretty close but not adjacent')
+
+    def testShipAdjacentToBaseNotAdjacentVeryFar(self):
+
+        shipPosition: Coordinates = Coordinates(x=9, y=9)
+        basePosition: Coordinates = Coordinates(x=5, y=5)
+
+        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+
+        self.assertFalse(adjacent, 'We are very far and not adjacent')
+
     def testDoPhasersMaxDistance(self):
 
         shooterCoordinates: Coordinates = Coordinates(0, 0)

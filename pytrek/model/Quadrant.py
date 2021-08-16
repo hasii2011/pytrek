@@ -320,6 +320,19 @@ class Quadrant:
 
         self.logger.info(f"Star Base @Sector {sector}")
 
+    def decrementEnemyCount(self, enemy: Enemy):
+        """
+        Decrements the appropriate counter
+        Args:
+            enemy:  The enemy we just whacked
+        """
+        if isinstance(enemy, Klingon) is True:
+            self._klingonCount -= 1
+        elif isinstance(enemy, Commander) is True:
+            self._commanderCount -= 1
+        elif isinstance(enemy, SuperCommander):
+            self._superCommanderCount -= 1
+
     def _placeAKlingon(self) -> Klingon:
         """
         Creates a enemy and places it at a random empty sector

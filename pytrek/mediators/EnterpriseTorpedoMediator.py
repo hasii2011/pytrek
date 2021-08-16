@@ -166,12 +166,12 @@ class EnterpriseTorpedoMediator(MissesMediator):
 
     def _loadSounds(self):
 
-        self._photonTorpedoFired  = self._loadSound(bareFileName='photonTorpedo.wav')
-        self._explosionSound      = self._loadSound(bareFileName='SmallExplosion.wav')
-        self._noKlingonsSound     = self._loadSound(bareFileName='inaccurateError.wav')
-        self._torpedoMisfire      = self._loadSound(bareFileName='PhotonTorpedoMisfire.wav')
-        self._torpedoMiss         = self._loadSound(bareFileName='PhotonTorpedoMiss.wav')
-        self._soundUnableToComply = self._loadSound(bareFileName='unableToComply.wav')
+        self._photonTorpedoFired  = self.loadSound(bareFileName='photonTorpedo.wav')
+        self._explosionSound      = self.loadSound(bareFileName='SmallExplosion.wav')
+        self._noKlingonsSound     = self.loadSound(bareFileName='inaccurateError.wav')
+        self._torpedoMisfire      = self.loadSound(bareFileName='PhotonTorpedoMisfire.wav')
+        self._torpedoMiss         = self.loadSound(bareFileName='PhotonTorpedoMiss.wav')
+        self._soundUnableToComply = self.loadSound(bareFileName='unableToComply.wav')
 
     def _pointAtEnemy(self, enemy: Enemy, enterprise: Enterprise):
 

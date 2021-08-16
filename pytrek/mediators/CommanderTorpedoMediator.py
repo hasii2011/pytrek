@@ -23,6 +23,7 @@ from pytrek.gui.gamepieces.commander.CommanderTorpedoMiss import CommanderTorped
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
+from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.mediators.base.MissesMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
@@ -140,8 +141,8 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
 
     def _loadSounds(self):
 
-        self._soundCommanderTorpedo    = self._loadSound(bareFileName='CommanderTorpedo.wav')
-        self._soundCommanderCannotFire = self._loadSound(bareFileName='CommanderCannotFire.wav')
+        self._soundCommanderTorpedo    = BaseMediator.loadSound(bareFileName='CommanderTorpedo.wav')
+        self._soundCommanderCannotFire = BaseMediator.loadSound(bareFileName='CommanderCannotFire.wav')
 
     def _loadTorpedoExplosionTextures(self) -> TextureList:
 

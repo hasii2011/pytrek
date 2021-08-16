@@ -81,7 +81,8 @@ class EnterprisePhaserMediator(BaseMediator):
                 self._placePhaserBolt(enterprise=quadrant.enterprise, enemy=enemy)
                 self._soundPhaser.play(volume=self._gameSettings.soundVolume.value)
                 if enemy.power <= 0.0:
-                    self._killEnemy(enemy=enemy)
+                    self._killEnemy(quadrant=quadrant,
+                                    enemy=enemy)
 
     def _placePhaserBolt(self, enterprise: Enterprise, enemy: Enemy):
 
@@ -99,15 +100,8 @@ class EnterprisePhaserMediator(BaseMediator):
         self._phaserBolts.append(phaserBolt)
 
     def _loadSounds(self):
-        self._soundPhaser         = self._loadSound('PhaserFire.wav')
-        self._soundUnableToComply = self._loadSound(bareFileName='unableToComply.wav')
-
-    def _loadSound(self, bareFileName: str) -> Sound:
-
-        fqFileName: str = LocateResources.getResourcesPath(LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName)
-        sound: Sound = Sound(fqFileName)
-
-        return sound
+        self._soundPhaser         = self.loadSound('PhaserFire.wav')
+        self._soundUnableToComply = self.loadSound(bareFileName='unableToComply.wav')
 
     def _loadFirePhaserTextures(self) -> TextureList:
 
@@ -143,7 +137,7 @@ class EnterprisePhaserMediator(BaseMediator):
         self._messageConsole.displayMessage(msg)
         self.logger.info(msg)
 
-    def _killEnemy(self, enemy: Enemy):
+    def _killEnemy(self, quadrant: Quadrant, enemy: Enemy):
         """
         Remove enemy from board and update the game engine
         Args:
@@ -155,6 +149,7 @@ class EnterprisePhaserMediator(BaseMediator):
         self._messageConsole.displayMessage(deadMsg)
         self.logger.info(deadMsg)
         self._gameEngine.decrementEnemyCount(enemy=enemy)
+        quadrant.decrementEnemyCount(enemy=enemy)
 
         sprite: Sprite = cast(Sprite, enemy)
         sprite.remove_from_sprite_lists()

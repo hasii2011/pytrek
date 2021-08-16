@@ -199,6 +199,8 @@ class PyTrekView(View):
             self._quadrantMediator.fireEnterpriseTorpedoes(self._quadrant)
         elif pressedKey == key.P:
             self._quadrantMediator.firePhasers(self._quadrant)
+        elif pressedKey == key.D:
+            self._quadrantMediator.dock(self._quadrant)
 
     def on_mouse_motion(self, x: float, y: float, delta_x: float, delta_y: float):
         """

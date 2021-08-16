@@ -139,8 +139,8 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
 
     def _loadSounds(self):
 
-        self._soundSuperCommanderTorpedo    = self._loadSound(bareFileName='SuperCommanderTorpedo.wav')
-        self._soundSuperCommanderCannotFire = self._loadSound(bareFileName='SuperCommanderCannotFire.wav')
+        self._soundSuperCommanderTorpedo    = self.loadSound(bareFileName='SuperCommanderTorpedo.wav')
+        self._soundSuperCommanderCannotFire = self.loadSound(bareFileName='SuperCommanderCannotFire.wav')
 
     def _loadTorpedoExplosionTextures(self) -> TextureList:
 

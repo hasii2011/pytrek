@@ -35,4 +35,4 @@ class KlingonMediator(BaseEnemyMediator):
 
     def _loadSounds(self):
 
-        self._klingonMove = self._loadSound('KlingonMove.wav')
+        self._klingonMove = self.loadSound('KlingonMove.wav')

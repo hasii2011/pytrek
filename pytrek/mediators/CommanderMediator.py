@@ -10,6 +10,7 @@ from pytrek.gui.gamepieces.commander.Commander import Commander
 
 from pytrek.model.Quadrant import Quadrant
 
+from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.mediators.base.BaseEnemyMediator import BaseEnemyMediator
 
 
@@ -36,4 +37,4 @@ class CommanderMediator(BaseEnemyMediator):
 
     def _loadSounds(self):
 
-        self._commanderMove = self._loadSound(bareFileName='CommanderMove.wav')
+        self._commanderMove = BaseMediator.loadSound(bareFileName='CommanderMove.wav')

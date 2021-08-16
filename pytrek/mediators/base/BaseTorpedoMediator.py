@@ -27,8 +27,9 @@ from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
-from pytrek.mediators.base.MissesMediator import MissesMediator
+from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse
+from pytrek.mediators.base.MissesMediator import MissesMediator
 from pytrek.mediators.base.MissesMediator import Torpedoes
 
 from pytrek.model.Quadrant import Quadrant
@@ -54,7 +55,7 @@ class BaseTorpedoMediator(MissesMediator):
         self._misses:           SpriteList = SpriteList()
 
         self._lastTimeCheck:  float = self._gameEngine.gameClock / 1000
-        self._soundShieldHit: Sound = self._loadSound(bareFileName='ShieldHit.wav')
+        self._soundShieldHit: Sound = BaseMediator.loadSound(bareFileName='ShieldHit.wav')
 
         self.logger.info(f'{self._lastTimeCheck=}')
 
