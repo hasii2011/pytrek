@@ -32,7 +32,8 @@ class LongRangeSensorScanView(View):
         super().__init__()
 
         self._viewCompleteCallback: Callable = viewCompleteCallback
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='LongRangeSensorBackground.png')
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
+                                                           bareFileName='LongRangeSensorBackground.png')
 
         self.texture = load_texture(fqFileName)
 
@@ -45,8 +46,8 @@ class LongRangeSensorScanView(View):
         self._mediator: LongRangeSensorScanMediator = LongRangeSensorScanMediator(view=self,
                                                                                   graphicCenterX=self._graphicCenterX,
                                                                                   graphicCenterY=self._graphicCenterY)
-        self._gameEngine:         GameEngine                  = GameEngine()
-        self._gameState:          GameState                   = GameState()
+        self._gameEngine: GameEngine = GameEngine()
+        self._gameState:  GameState  = GameState()
 
     def on_draw(self):
         """

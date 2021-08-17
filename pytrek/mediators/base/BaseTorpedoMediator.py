@@ -249,6 +249,8 @@ class BaseTorpedoMediator(MissesMediator):
 
         if quadrant.hasPlanet is True:
             obstacles.append(quadrant.planet)
+        if quadrant.hasStarBase is True:
+            obstacles.append(quadrant.starBase)
 
         otherEnemies: Enemies = self.__buildEligibleEnemyObstacles(shooter=shooter, enemies=quadrant.klingons)
 

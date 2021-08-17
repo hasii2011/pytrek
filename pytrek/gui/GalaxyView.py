@@ -24,7 +24,8 @@ class GalaxyView(View):
         super().__init__()
 
         self._viewCompleteCallback: Callable = viewCompleteCallback
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='GalaxyScanBackground.png')
+        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
+                                                           bareFileName='GalaxyScanBackground.png')
 
         self.texture = load_texture(fqFileName)
 
