@@ -55,6 +55,11 @@
             "level": "WARNING",
             "propagate": "False"
         },
+        "pytrek.gui.CourseDistanceDialog": {
+            "level":     "INFO",
+            "propagate": "False"
+        },
+
         "TestSmoothMotion": {
             "level": "WARNING",
             "propagate": "False"
@@ -63,7 +68,6 @@
             "level": "WARNING",
             "propagate": "False"
         },
-
         "pytrek.engine.Intelligence": {
             "level": "WARNING",
             "propagate": "False"
