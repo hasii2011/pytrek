@@ -244,6 +244,66 @@ class TestGameEngine(TestBase):
 
         self.logger.debug(f'All directions tested: {testedDirections=}')
 
+    def testComputeEnergyForWarpTravelMediumDistanceMediumSpeed(self):
+
+        energy: float = self._gameEngine.computeEnergyForWarpTravel(travelDistance=5, warpFactor=5.0)
+
+        self.logger.info(f'{energy=}')
+
+        expectedEnergy: float = 255.05
+        decimalPlace:   int   = 2
+        self.assertAlmostEqual(expectedEnergy, energy, decimalPlace, 'Nominal test does not compute')
+
+    def testComputeEnergyForWarpTravelMediumDistanceMaximumSpeed(self):
+
+        energy: float = self._gameEngine.computeEnergyForWarpTravel(travelDistance=5, warpFactor=9.9)
+
+        self.logger.info(f'{energy=}')
+
+        expectedEnergy: float = 1945.65
+        decimalPlace:   int   = 2
+        self.assertAlmostEqual(expectedEnergy, energy, decimalPlace, 'Nominal test does not compute')
+
+    def testComputeEnergyForWarpTravelMediumDistanceMinimumSpeed(self):
+
+        energy: float = self._gameEngine.computeEnergyForWarpTravel(travelDistance=5, warpFactor=1.0)
+
+        self.logger.info(f'{energy=}')
+
+        expectedEnergy: float = 7.05
+        decimalPlace:   int   = 2
+        self.assertAlmostEqual(expectedEnergy, energy, decimalPlace, 'Nominal test does not compute')
+
+    def testComputeEnergyForWarpTravelMaximumDistanceMediumSpeed(self):
+
+        energy: float = self._gameEngine.computeEnergyForWarpTravel(travelDistance=12, warpFactor=5.0)
+
+        self.logger.info(f'{energy=}')
+
+        expectedEnergy: float = 262.05
+        decimalPlace:   int   = 2
+        self.assertAlmostEqual(expectedEnergy, energy, decimalPlace, 'Nominal test does not compute')
+
+    def testComputeEnergyForWarpTravelMaximumDistanceMaximumSpeed(self):
+
+        energy: float = self._gameEngine.computeEnergyForWarpTravel(travelDistance=12, warpFactor=9.9)
+
+        self.logger.info(f'{energy=}')
+
+        expectedEnergy: float = 1952.65
+        decimalPlace:   int   = 2
+        self.assertAlmostEqual(expectedEnergy, energy, decimalPlace, 'Nominal test does not compute')
+
+    def testComputeEnergyForWarpTravelMaximumDistanceMinimumSpeed(self):
+
+        energy: float = self._gameEngine.computeEnergyForWarpTravel(travelDistance=12, warpFactor=1.0)
+
+        self.logger.info(f'{energy=}')
+
+        expectedEnergy: float = 14.05
+        decimalPlace:   int   = 2
+        self.assertAlmostEqual(expectedEnergy, energy, decimalPlace, 'Nominal test does not compute')
+
     def _commonComputeHit(self, playerType: PlayerType) -> float:
 
         self._gameState.playerType = playerType

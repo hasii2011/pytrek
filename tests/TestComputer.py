@@ -5,12 +5,16 @@ from logging import Logger
 from logging import getLogger
 
 from math import degrees
+from math import floor
 
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from pytrek.Constants import MAX_QUADRANT_X_COORDINATE
+from pytrek.Constants import MAX_QUADRANT_Y_COORDINATE
 from pytrek.Constants import MAX_SECTOR_X_COORDINATE
 from pytrek.Constants import MAX_SECTOR_Y_COORDINATE
+from pytrek.Constants import MIN_QUADRANT_X_COORDINATE
 from pytrek.Constants import MIN_SECTOR_X_COORDINATE
 from pytrek.Constants import MIN_SECTOR_Y_COORDINATE
 from pytrek.Constants import QUADRANT_GRID_WIDTH
@@ -36,6 +40,9 @@ class TestComputer(TestBase):
     MAX_QUADRANT_PERPENDICULAR_DISTANCE = 0.9
 
     SMALL_QUADRANT_DISTANCE: float = 0.60
+
+    MIN_GALACTIC_DISTANCE: float = 0.0
+    MAX_GALACTIC_DISTANCE: float = 9.0
 
     clsLogger: Logger = cast(Logger, None)
 
@@ -140,6 +147,23 @@ class TestComputer(TestBase):
         distance = self.smarty.computeQuadrantDistance(startSector=startSectorCoordinates, endSector=endSectorCoordinates)
         self.logger.info(f"West/East distance is: {distance}")
 
+    def testComputeGalacticDistanceWestToEast(self):
+        """
+        Not going to retest distance computations between inter-quadrant and galactic travel
+        as galactic is just 10 times more expensive
+        """
+
+        startQuadrantCoordinates = Coordinates(MAX_QUADRANT_X_COORDINATE, floor(MAX_QUADRANT_Y_COORDINATE // 2))
+        endQuadrantCoordinates   = Coordinates(MIN_QUADRANT_X_COORDINATE, floor(MAX_QUADRANT_Y_COORDINATE // 2))
+
+        self.logger.info(f"West to East quadrant coordinates {startQuadrantCoordinates}, {endQuadrantCoordinates}")
+
+        distance = self.smarty.computeGalacticDistance(startQuadrantCoordinates=startQuadrantCoordinates, endQuadrantCoordinates=endQuadrantCoordinates)
+        self.logger.info(f"Galactic West/East distance is: {distance}")
+
+        self.assertGreater(distance, TestComputer.MIN_GALACTIC_DISTANCE, "East/West calculation failed less than zero")
+        self.assertEqual(distance,   TestComputer.MAX_GALACTIC_DISTANCE, "Incorrect East/West distance")
+
     def testValueStringEmptyQuadrant(self):
 
         strValue = self.smarty.createValueString(klingonCount=0, commanderCount=0, hasStarBase=False)
@@ -152,28 +176,28 @@ class TestComputer(TestBase):
         strValue = self.smarty.createValueString(klingonCount=3, commanderCount=0, hasStarBase=False)
 
         self.assertIsNotNone(strValue, "Where is my string")
-        self.assertEqual("300", strValue, "Must contain 3 Klingons and no starbase")
+        self.assertEqual("300", strValue, "Must contain 3 Klingons and no StarBase")
 
-    def testValueStringMultiKlingonAndStarbase(self):
+    def testValueStringMultiKlingonAndStarBase(self):
 
         strValue = self.smarty.createValueString(klingonCount=4, commanderCount=0, hasStarBase=True)
 
         self.assertIsNotNone(strValue, "Where is my string")
-        self.assertEqual("410", strValue, "Must contain 4 Klingons and a starbase")
+        self.assertEqual("410", strValue, "Must contain 4 Klingons and a StarBase")
 
-    def testValueStringMultiKlingonCommanderAndStarbase(self):
+    def testValueStringMultiKlingonCommanderAndStarBase(self):
 
         strValue = self.smarty.createValueString(klingonCount=4, commanderCount=1, hasStarBase=True)
 
         self.assertIsNotNone(strValue, "Where is my string")
-        self.assertEqual("510", strValue, "Must contain 4 Klingons and a starbase")
+        self.assertEqual("510", strValue, "Must contain 4 Klingons and a StarBase")
 
-    def testValueStringMultiKlingonCommanderAndNoStarbase(self):
+    def testValueStringMultiKlingonCommanderAndNoStarBase(self):
 
         strValue = self.smarty.createValueString(klingonCount=4, commanderCount=1, hasStarBase=False)
 
         self.assertIsNotNone(strValue, "Where is my string")
-        self.assertEqual("500", strValue, "Must contain 4 Klingons and a starbase")
+        self.assertEqual("500", strValue, "Must contain 4 Klingons and a StarBase")
 
     def testGalaxyArcadePosition_212_786(self):
 

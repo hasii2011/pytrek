@@ -118,6 +118,10 @@ class Computer(Singleton):
         """
         return self._computeDistance(startSector, endSector, Computer.QUADRANT_TRAVEL_FACTOR)
 
+    def computeGalacticDistance(self, startQuadrantCoordinates: Coordinates, endQuadrantCoordinates: Coordinates) -> float:
+        """"""
+        return self._computeDistance(startQuadrantCoordinates, endQuadrantCoordinates, Computer.GALACTIC_TRAVEL_FACTOR)
+
     def createValueString(self, klingonCount: int, commanderCount: int, hasStarBase: bool) -> str:
         """
         Turn the input parameters into a numeric string that can be used to display

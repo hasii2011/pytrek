@@ -11,9 +11,10 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.DirectionData import DirectionData
 from pytrek.engine.ShipCondition import ShipCondition
 
+from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
+
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
 
 from pytrek.mediators.base.MissesMediator import MissesMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse
@@ -33,6 +34,7 @@ class EnterpriseMediator(MissesMediator):
         self.logger: Logger = getLogger(__name__)
 
         self._soundImpulse:            Sound = cast(Sound, None)
+        self._soundWarp:               Sound = cast(Sound, None)
         self._soundUnableToComply:     Sound = cast(Sound, None)
         self._soundRepeatRequest:      Sound = cast(Sound, None)
         self._soundEnterpriseBlocked:  Sound = cast(Sound, None)
@@ -78,7 +80,14 @@ class EnterpriseMediator(MissesMediator):
         # self._dockIfAdjacentToStarBase()
 
     def warp(self):
-        pass
+        #
+        # Get warp speed and target quadrant coordinates from user
+        # Stub out for now
+        warpSpeed: float = 5.0
+        destinationCoordinates: Coordinates = Coordinates(x=0, y=0)
+
+        self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
+        self._soundWarp.play(volume=self._gameSettings.soundVolume.value)
 
     def _doImpulseMove(self, quadrant: Quadrant, enterpriseCoordinates: Coordinates, targetCoordinates: Coordinates):
         """
@@ -93,8 +102,9 @@ class EnterpriseMediator(MissesMediator):
         soundVolume: float = self._gameSettings.soundVolume.value
 
         self.__updateQuadrant(quadrant=quadrant, currentCoordinates=enterpriseCoordinates, targetCoordinates=targetCoordinates)
-        quadrant.enterprise.inMotion   = True
+        quadrant.enterprise.destinationPoint = GamePiece.gamePositionToScreenPosition(gameCoordinates=targetCoordinates)
         quadrant.enterpriseCoordinates = targetCoordinates
+        quadrant.enterprise.inMotion   = True
 
         self._gameEngine.impulse(newCoordinates=targetCoordinates, quadrant=quadrant, enterprise=quadrant.enterprise)
         self._soundImpulse.play(volume=soundVolume)
@@ -173,6 +183,7 @@ class EnterpriseMediator(MissesMediator):
     def _loadSounds(self):
 
         self._soundImpulse           = self.loadSound(bareFileName='impulse.wav')
+        self._soundWarp              = self.loadSound(bareFileName='warp.wav')
         self._soundUnableToComply    = self.loadSound(bareFileName='unableToComply.wav')
         self._soundRepeatRequest     = self.loadSound(bareFileName='pleaseRepeatRequest.wav')
         self._soundEnterpriseBlocked = self.loadSound(bareFileName='EnterpriseBlocked.wav')
@@ -193,5 +204,7 @@ class EnterpriseMediator(MissesMediator):
 
         currentSector.type = SectorType.EMPTY
         targetSector.type  = SectorType.ENTERPRISE
+        targetSector.sprite = currentSector.sprite
+        currentSector.sprite = cast(GamePiece, None)
 
         return quadrant

@@ -150,6 +150,21 @@ class GameEngine(Singleton):
 
         return quadrantEnergy
 
+    def computeEnergyForWarpTravel(self, travelDistance: float, warpFactor: float) -> float:
+        """
+
+        Args:
+            travelDistance: How far
+            warpFactor:     How fast
+
+        Returns:    The energy need to travel this far.
+        """
+        wCube:          float = warpFactor ** 3
+        shieldValue:    int   = self._devices.getDevice(DeviceType.Shields).deviceStatus.value
+        requiredEnergy: float = (travelDistance + 0.05) + wCube * (shieldValue + 1)
+
+        return requiredEnergy
+
     # noinspection SpellCheckingInspection
     def computeEnergyWhenBlocked(self, startSector: Coordinates, endSector: Coordinates) -> float:
         """

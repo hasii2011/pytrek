@@ -5,7 +5,6 @@ from logging import Logger
 from logging import getLogger
 from logging import DEBUG
 
-from arcade import MOUSE_BUTTON_RIGHT
 from arcade import Sound
 from arcade import SpriteList
 
@@ -27,7 +26,6 @@ from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
 from pytrek.mediators.CommanderMediator import CommanderMediator
 from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
-from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.EnterprisePhaserMediator import EnterprisePhaserMediator
 from pytrek.mediators.KlingonMediator import KlingonMediator
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
@@ -65,7 +63,6 @@ class QuadrantMediator(Singleton):
         self._ptm: EnterpriseTorpedoMediator     = EnterpriseTorpedoMediator()
         self._stm: SuperCommanderTorpedoMediator = SuperCommanderTorpedoMediator()
 
-        self._em:  EnterpriseMediator            = EnterpriseMediator()
         self._km:  KlingonMediator               = KlingonMediator()
         self._cm:  CommanderMediator             = CommanderMediator()
         self._scm: SuperCommanderMediator        = SuperCommanderMediator()
@@ -146,9 +143,7 @@ class QuadrantMediator(Singleton):
 
     # noinspection PyUnusedLocal
     def handleMousePress(self, quadrant: Quadrant, arcadePoint: ArcadePoint, button: int, keyModifiers: int):
-
-        if button == MOUSE_BUTTON_RIGHT:
-            self._em.impulse(quadrant=quadrant, arcadePoint=arcadePoint)
+        pass
 
     def draw(self, quadrant: Quadrant):
         self.playerList.draw()
@@ -192,9 +187,7 @@ class QuadrantMediator(Singleton):
                 sectorType: SectorType = sector.type
 
                 if sectorType != SectorType.EMPTY:
-                    if sectorType == SectorType.ENTERPRISE:
-                        self._em.update(quadrant=quadrant)
-                    elif sectorType == SectorType.KLINGON:
+                    if sectorType == SectorType.KLINGON:
                         self._km.update(quadrant=quadrant, klingon=cast(Klingon, gamePiece))
                     elif self._noUpdateSector(sectorType=sectorType) is True:
                         pass
@@ -216,7 +209,8 @@ class QuadrantMediator(Singleton):
         ans: bool = False
 
         if sectorType == SectorType.PLANET or sectorType == SectorType.KLINGON_TORPEDO_MISS or \
-                sectorType == SectorType.ENTERPRISE_TORPEDO_MISS or sectorType == SectorType.STARBASE:
+                sectorType == SectorType.ENTERPRISE_TORPEDO_MISS or sectorType == SectorType.STARBASE or \
+                sectorType == SectorType.ENTERPRISE:
             ans = True
 
         return ans

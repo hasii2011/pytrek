@@ -37,6 +37,7 @@ from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -89,7 +90,9 @@ class PyTrekView(View):
         self._galaxy:       Galaxy       = cast(Galaxy, None)
         self._quadrant:     Quadrant     = cast(Quadrant, None)
 
-        self._quadrantMediator: QuadrantMediator = cast(QuadrantMediator, None)
+        self._quadrantMediator:   QuadrantMediator   = cast(QuadrantMediator, None)
+        self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
+
         self._statusConsole:    StatusConsole    = cast(StatusConsole, None)
         self._messageConsole:   MessageConsole   = cast(MessageConsole, None)
 
@@ -135,7 +138,9 @@ class PyTrekView(View):
         self._gameState.currentSectorCoordinates = currentSectorCoordinates
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
-        self._quadrantMediator = QuadrantMediator()
+        self._quadrantMediator   = QuadrantMediator()
+        self._enterpriseMediator = EnterpriseMediator()
+
         self._statusConsole    = StatusConsole(gameView=self)
         self._messageConsole   = MessageConsole()
 
@@ -175,6 +180,8 @@ class PyTrekView(View):
         """
         # self.physicsEngine.update()
         self._quadrantMediator.update(quadrant=self._quadrant)
+        self._enterpriseMediator.update(quadrant=self._quadrant)
+
         self._gameEngine.updateRealTimeClock(deltaTime=delta_time)
 
     def on_key_press(self, pressedKey: int, key_modifiers: int):
@@ -201,6 +208,8 @@ class PyTrekView(View):
             self._quadrantMediator.firePhasers(self._quadrant)
         elif pressedKey == key.D:
             self._quadrantMediator.dock(self._quadrant)
+        elif pressedKey == key.W:
+            self._enterpriseMediator.warp()
 
     def on_mouse_motion(self, x: float, y: float, delta_x: float, delta_y: float):
         """
@@ -214,7 +223,8 @@ class PyTrekView(View):
         Called when the user presses a mouse button.
         """
         arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
-        self._quadrantMediator.handleMousePress(quadrant=self._quadrant, arcadePoint=arcadePoint, button=button, keyModifiers=key_modifiers)
+        self._enterpriseMediator.impulse(quadrant=self._quadrant, arcadePoint=arcadePoint)
+        # self._quadrantMediator.handleMousePress(quadrant=self._quadrant, arcadePoint=arcadePoint, button=button, keyModifiers=key_modifiers)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
