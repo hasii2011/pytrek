@@ -5,9 +5,9 @@ from arcade import run as arcadeRun
 
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
-from pytrek.gui.CourseDistanceDialog import CourseDistanceAnswer
+from pytrek.gui.WarpTravelDialog import WarpTravelAnswer
 
-from pytrek.gui.CourseDistanceDialog import CourseDistanceDialog
+from pytrek.gui.WarpTravelDialog import WarpTravelDialog
 from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase
@@ -28,14 +28,14 @@ def main():
     arcadeWindow.clear()
     arcadeWindow.set_exclusive_keyboard(exclusive=True)
 
-    testCDView:  CourseDistanceDialog = CourseDistanceDialog(completeCallback=completeCallback)
+    testCDView:  WarpTravelDialog = WarpTravelDialog(completeCallback=completeCallback)
 
     arcadeWindow.show_view(testCDView)
 
     arcadeRun()
 
 
-def completeCallback(answer: CourseDistanceAnswer):
+def completeCallback(answer: WarpTravelAnswer):
 
     print(f'{answer=}')
 

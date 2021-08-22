@@ -89,7 +89,7 @@ class PyTrekView(View):
         self._galaxy:       Galaxy       = cast(Galaxy, None)
         self._quadrant:     Quadrant     = cast(Quadrant, None)
 
-        self._quadrantMediator:      QuadrantMediator      = cast(QuadrantMediator, None)
+        self._quadrantMediator: QuadrantMediator = cast(QuadrantMediator, None)
         self._statusConsole:    StatusConsole    = cast(StatusConsole, None)
         self._messageConsole:   MessageConsole   = cast(MessageConsole, None)
 
