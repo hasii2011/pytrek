@@ -406,8 +406,8 @@ def main():
     TestBase.setUpLogging()
     SettingsCommon.determineSettingsLocation()
 
-    arcadeWindow: Window     = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    shootingView:     TestShooting = TestShooting()
+    arcadeWindow: Window       = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    shootingView: TestShooting = TestShooting()
 
     arcadeWindow.set_exclusive_keyboard(exclusive=True)
     arcadeWindow.show_view(shootingView)

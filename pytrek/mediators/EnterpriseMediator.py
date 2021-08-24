@@ -83,7 +83,7 @@ class EnterpriseMediator(MissesMediator):
         #
         # Get warp speed and target quadrant coordinates from user
         # Stub out for now
-        warpSpeed: float = 5.0
+        warpSpeed:              float      = 5.0
         destinationCoordinates: Coordinates = Coordinates(x=0, y=0)
 
         self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
