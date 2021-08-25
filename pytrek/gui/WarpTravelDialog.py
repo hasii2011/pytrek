@@ -14,7 +14,7 @@ from logging import getLogger
 from arcade import View
 from arcade import color
 from arcade import draw_lrwh_rectangle_textured
-from arcade import key
+# from arcade import key
 from arcade import load_texture
 from arcade import start_render
 
@@ -124,6 +124,7 @@ class WarpTravelDialog(View):
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
                                                            bareFileName='QuadrantBackground.png')
         self._background = load_texture(fqFileName)
+        self.window.background_color = color.WHITE
 
     def setup(self):
         """
@@ -154,19 +155,6 @@ class WarpTravelDialog(View):
         start_render()
         # Draw the background texture
         draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_HEIGHT, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self._background)
-
-    def on_key_press(self, pressedKey: int, key_modifiers: int):
-        """
-        Called whenever a key on the keyboard is pressed.
-
-        For a full list of keys, see:
-        https://arcade.academy/arcade.key.html
-        """
-        if pressedKey == key.Q:
-            import os
-            # noinspection PyUnresolvedReferences
-            # noinspection PyProtectedMember
-            os._exit(0)
 
     def _createQuadrantControls(self, labelX: int, ySlot: int):
         """
@@ -290,6 +278,7 @@ class WarpTravelDialog(View):
                 coordinates: Coordinates      = Coordinates(x=int(self._xCoordinate), y=int(self._yCoordinate))
                 answer:      WarpTravelAnswer = WarpTravelAnswer(coordinates=coordinates, warpFactor=self._warpFactor, dialogAnswer=DialogAnswer.Ok)
                 self._errorLabel.text = ''
+                self._uiManager.purge_ui_elements()
                 self._completeCallback(answer)
             else:
                 self._errorLabel.text = WarpTravelDialog.INVALID_COORDINATE_MESSAGE
@@ -302,6 +291,7 @@ class WarpTravelDialog(View):
 
         answer: WarpTravelAnswer = WarpTravelAnswer(coordinates=Coordinates(-1, -1), warpFactor=0.0, dialogAnswer=DialogAnswer.Cancelled)
 
+        self._uiManager.purge_ui_elements()
         self._completeCallback(answer)
 
     def _validateCoordinates(self, xCoordinate: str, yCoordinate: str) -> bool:

@@ -6,10 +6,15 @@ from logging import getLogger
 
 from arcade import Sound
 from arcade import SpriteList
+from arcade import View
+from arcade import color
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.DirectionData import DirectionData
 from pytrek.engine.ShipCondition import ShipCondition
+from pytrek.gui.WarpTravelDialog import DialogAnswer
+from pytrek.gui.WarpTravelDialog import WarpTravelAnswer
+from pytrek.gui.WarpTravelDialog import WarpTravelDialog
 
 from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
 
@@ -27,10 +32,11 @@ from pytrek.model.SectorType import SectorType
 
 class EnterpriseMediator(MissesMediator):
 
-    def __init__(self):
+    def __init__(self, view: View):
 
         super().__init__()
 
+        self._view:  View = view
         self.logger: Logger = getLogger(__name__)
 
         self._soundImpulse:            Sound = cast(Sound, None)
@@ -83,11 +89,22 @@ class EnterpriseMediator(MissesMediator):
         #
         # Get warp speed and target quadrant coordinates from user
         # Stub out for now
-        warpSpeed:              float      = 5.0
-        destinationCoordinates: Coordinates = Coordinates(x=0, y=0)
+        warpTravelDialog: WarpTravelDialog = WarpTravelDialog(completeCallback=self._warpTravelDialogComplete)
 
-        self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
-        self._soundWarp.play(volume=self._gameSettings.soundVolume.value)
+        self._view.window.show_view(warpTravelDialog)
+
+    def _warpTravelDialogComplete(self, warpTravelAnswer: WarpTravelAnswer):
+
+        self._view.window.show_view(self._view)
+
+        if warpTravelAnswer.dialogAnswer == DialogAnswer.Ok:
+            warpSpeed:              float       = warpTravelAnswer.warpFactor
+            destinationCoordinates: Coordinates = warpTravelAnswer.coordinates
+
+            self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
+            self._soundWarp.play(volume=self._gameSettings.soundVolume.value)
+
+        self._view.window.background_color = color.BLACK
 
     def _doImpulseMove(self, quadrant: Quadrant, enterpriseCoordinates: Coordinates, targetCoordinates: Coordinates):
         """

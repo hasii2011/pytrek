@@ -139,7 +139,7 @@ class PyTrekView(View):
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
         self._quadrantMediator   = QuadrantMediator()
-        self._enterpriseMediator = EnterpriseMediator()
+        self._enterpriseMediator = EnterpriseMediator(view=self)
 
         self._statusConsole    = StatusConsole(gameView=self)
         self._messageConsole   = MessageConsole()
