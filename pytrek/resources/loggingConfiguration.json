@@ -36,7 +36,7 @@
             "propagate": "False"
         },
         "pytrek.mediators.EnterpriseMediator": {
-            "level":     "WARNING",
+            "level":     "INFO",
             "propagate": "False"
         },
         "pytrek.mediators.base.BaseEnemyMediator": {
@@ -60,7 +60,7 @@
             "propagate": "False"
         },
         "pytrek.mediators.KlingonTorpedoMediator": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         },
         "pytrek.gui.CourseDistanceDialog": {

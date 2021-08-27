@@ -7,22 +7,28 @@ from logging import getLogger
 from arcade import Sound
 from arcade import SpriteList
 from arcade import View
+from arcade import Window
 from arcade import color
+
+from arcade import schedule
+from arcade import unschedule
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.DirectionData import DirectionData
 from pytrek.engine.ShipCondition import ShipCondition
+
+from pytrek.gui.UITypes import WarpTravelCallback
+from pytrek.gui.WarpEffect import WarpEffect
 from pytrek.gui.WarpTravelDialog import DialogAnswer
 from pytrek.gui.WarpTravelDialog import WarpTravelAnswer
 from pytrek.gui.WarpTravelDialog import WarpTravelDialog
 
-from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
-
-from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.gui.gamepieces.GamePiece import GamePiece
-
 from pytrek.mediators.base.MissesMediator import MissesMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse
+
+from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -32,19 +38,24 @@ from pytrek.model.SectorType import SectorType
 
 class EnterpriseMediator(MissesMediator):
 
-    def __init__(self, view: View):
+    def __init__(self, view: View, warpTravelCallback: WarpTravelCallback):
 
         super().__init__()
 
-        self._view:  View = view
+        self._view:               View = view
+        self._warpTravelCallback: WarpTravelCallback = warpTravelCallback
+
         self.logger: Logger = getLogger(__name__)
 
         self._soundImpulse:            Sound = cast(Sound, None)
-        self._soundWarp:               Sound = cast(Sound, None)
+        # self._soundWarp:               Sound = cast(Sound, None)
         self._soundUnableToComply:     Sound = cast(Sound, None)
         self._soundRepeatRequest:      Sound = cast(Sound, None)
         self._soundEnterpriseBlocked:  Sound = cast(Sound, None)
 
+        self._warpEffect:             WarpEffect  = cast(WarpEffect, None)
+        self._warpSpeed:              float       = 0.0
+        self._destinationCoordinates: Coordinates = cast(Coordinates, None)
         self._loadSounds()
 
     def update(self, quadrant: Quadrant):
@@ -94,17 +105,49 @@ class EnterpriseMediator(MissesMediator):
         self._view.window.show_view(warpTravelDialog)
 
     def _warpTravelDialogComplete(self, warpTravelAnswer: WarpTravelAnswer):
+        """
+        The callback when we get an answer on whether or not we are traveling to
+        another quadrant
 
-        self._view.window.show_view(self._view)
-
+        Args:
+            warpTravelAnswer:  The answer with data if answered `Ok`
+        """
         if warpTravelAnswer.dialogAnswer == DialogAnswer.Ok:
-            warpSpeed:              float       = warpTravelAnswer.warpFactor
-            destinationCoordinates: Coordinates = warpTravelAnswer.coordinates
+            self._warpSpeed              = warpTravelAnswer.warpFactor
+            self._destinationCoordinates = warpTravelAnswer.coordinates
 
-            self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
-            self._soundWarp.play(volume=self._gameSettings.soundVolume.value)
+            viewWindow:   Window = self._view.window
+            screenWidth:  int    = viewWindow.width
+            screenHeight: int    = viewWindow.height
+            warpEffect: WarpEffect = WarpEffect(screenWidth=screenWidth, screenHeight=screenHeight)
+
+            viewWindow.show_view(warpEffect)
+
+            warpEffect.setup()
+            self._warpEffect = warpEffect
+            # I do not know what a Number is  tell mypy so
+            schedule(function_pointer=self.doWarpWhenEffectComplete, interval=1.0)  # type: ignore
+        else:
+            self._view.window.show_view(self._view)
+
+        # self._soundWarp.play(volume=self._gameSettings.soundVolume.value)
 
         self._view.window.background_color = color.BLACK
+
+    def doWarpWhenEffectComplete(self, deltaTime: float):
+
+        effectComplete: bool = self._warpEffect.isEffectComplete()
+
+        self.logger.info(f'Is warp effect complete {deltaTime} {effectComplete=}')
+
+        if effectComplete is True:
+            unschedule(self.doWarpWhenEffectComplete)
+            self._view.window.show_view(self._view)
+            #
+            # Callback to someone (presumably top level view) to let them know
+            # it is time to warp;
+            #
+            self._warpTravelCallback(self._warpSpeed, self._destinationCoordinates)
 
     def _doImpulseMove(self, quadrant: Quadrant, enterpriseCoordinates: Coordinates, targetCoordinates: Coordinates):
         """
@@ -200,7 +243,7 @@ class EnterpriseMediator(MissesMediator):
     def _loadSounds(self):
 
         self._soundImpulse           = self.loadSound(bareFileName='impulse.wav')
-        self._soundWarp              = self.loadSound(bareFileName='warp.wav')
+        # self._soundWarp              = self.loadSound(bareFileName='warp.wav')
         self._soundUnableToComply    = self.loadSound(bareFileName='unableToComply.wav')
         self._soundRepeatRequest     = self.loadSound(bareFileName='pleaseRepeatRequest.wav')
         self._soundEnterpriseBlocked = self.loadSound(bareFileName='EnterpriseBlocked.wav')

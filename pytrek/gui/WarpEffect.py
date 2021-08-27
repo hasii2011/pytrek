@@ -63,8 +63,11 @@ class WarpEffect(View):
     def setup(self):
         """ Set up the game variables. Call to re-start the game. """
         # Create your sprites and sprite lists here
-        self._emitter = self._warpEffectEmitter()
+        self._emitter = self._createWarpEffectEmitter()
         self._playing = False
+
+    def isEffectComplete(self) -> bool:
+        return self._emitter.can_reap()
 
     def on_draw(self):
         """
@@ -75,7 +78,7 @@ class WarpEffect(View):
         # the screen to the background color, and erase what we drew last frame.
         start_render()
         self._emitter.draw()
-        draw_text("Particles: " + str(self._emitter.get_count()), 10, 30, color.PALE_GOLD, 12)
+        draw_text("Warping: " + str(self._emitter.get_count()), 10, 30, color.PALE_GOLD, 12)
 
         # Call draw() on all your sprite lists below
 
@@ -92,12 +95,7 @@ class WarpEffect(View):
 
     def on_key_release(self, releasedKey: int, key_modifiers: int):
 
-        if releasedKey == arcadeKey.Q:
-            import os
-            # noinspection PyUnresolvedReferences
-            # noinspection PyProtectedMember
-            os._exit(0)
-        elif releasedKey == arcadeKey.A:
+        if releasedKey == arcadeKey.A:
             self.setup()
 
     def on_mouse_release(self, x, y, button, key_modifiers):
@@ -106,7 +104,7 @@ class WarpEffect(View):
         """
         pass
 
-    def _warpEffectEmitter(self) -> Emitter:
+    def _createWarpEffectEmitter(self) -> Emitter:
         """
         Random particle textures
         """

@@ -139,7 +139,7 @@ class PyTrekView(View):
         self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
 
         self._quadrantMediator   = QuadrantMediator()
-        self._enterpriseMediator = EnterpriseMediator(view=self)
+        self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
 
         self._statusConsole    = StatusConsole(gameView=self)
         self._messageConsole   = MessageConsole()
@@ -231,6 +231,10 @@ class PyTrekView(View):
         Called when a user releases a mouse button.
         """
         pass
+
+    def _enterpriseHasWarped(self, warpSpeed: float, destinationCoordinates: Coordinates):
+
+        self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
 
     def _switchViewBack(self):
         self.window.show_view(self)
