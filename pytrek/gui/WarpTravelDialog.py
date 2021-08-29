@@ -276,7 +276,8 @@ class WarpTravelDialog(View):
             valid = self._validateCoordinates(xCoordinate=self._xCoordinate, yCoordinate=self._yCoordinate)
             if valid is True:
                 coordinates: Coordinates      = Coordinates(x=int(self._xCoordinate), y=int(self._yCoordinate))
-                answer:      WarpTravelAnswer = WarpTravelAnswer(coordinates=coordinates, warpFactor=self._warpFactor, dialogAnswer=DialogAnswer.Ok)
+                warpFactor:  float            = float(self._warpFactor)
+                answer:      WarpTravelAnswer = WarpTravelAnswer(coordinates=coordinates, warpFactor=warpFactor, dialogAnswer=DialogAnswer.Ok)
                 self._errorLabel.text = ''
                 self._uiManager.purge_ui_elements()
                 self._completeCallback(answer)

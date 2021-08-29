@@ -214,7 +214,7 @@ class EnterpriseTorpedoMediator(MissesMediator):
 
     def _doWeHaveLineOfSight(self, quadrant: Quadrant, startingPoint: ArcadePoint, endPoint: ArcadePoint) -> LineOfSightResponse:
         """
-        Check to see if planets or StarBases prevent
+        Check to see if a planet or a StarBase prevents
         the Enterprise from shooting at the enemy
 
         Args:
@@ -225,6 +225,8 @@ class EnterpriseTorpedoMediator(MissesMediator):
         obstacles: SpriteList = SpriteList()
         if quadrant.hasPlanet is True:
             obstacles.append(quadrant.planet)
+        if quadrant.hasStarBase is True:
+            obstacles.append(quadrant.starBase)
 
         results: LineOfSightResponse = self._hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
 

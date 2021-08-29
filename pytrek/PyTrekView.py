@@ -234,6 +234,15 @@ class PyTrekView(View):
 
     def _enterpriseHasWarped(self, warpSpeed: float, destinationCoordinates: Coordinates):
 
+        currentCoordinates: Coordinates = self._quadrant.coordinates
+        travelDistance:     float       = self._computer.computeGalacticDistance(startQuadrantCoordinates=currentCoordinates,
+                                                                                 endQuadrantCoordinates=destinationCoordinates)
+
+        energyConsumed: float = self._gameEngine.computeEnergyForWarpTravel(travelDistance=travelDistance, warpFactor=warpSpeed)
+        self._gameState.energy -= energyConsumed
+        self._gameEngine.updateTimeAfterWarpTravel(travelDistance=travelDistance, warpFactor=warpSpeed)
+
+        self.logger.info(f'After warp travel: {energyConsumed=}')
         self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
 
     def _switchViewBack(self):

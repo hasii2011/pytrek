@@ -49,6 +49,56 @@ class TestGameEngine(TestBase):
     def tearDown(self):
         pass
 
+    def testUpdateTimeAfterWarpTravelShortWarpSpeedLow(self):
+
+        previousStarDate:       float = self._gameState.starDate
+        previousRemainGameTime: float = self._gameState.remainingGameTime
+
+        travelDistance: float = 1.0
+        warpFactor:     float = 1.0
+
+        self._gameEngine.updateTimeAfterWarpTravel(travelDistance=travelDistance, warpFactor=warpFactor)
+
+        updatedOpTime:  float = self._gameState.opTime
+        expectedOpTime: float = 10.0
+
+        self.assertEqual(expectedOpTime, updatedOpTime, 'Operation Time incorrectly calculated')
+        
+        expectedStarDate: float = previousStarDate + updatedOpTime
+        actualStarDate:   float = self._gameState.starDate
+
+        self.assertEqual(expectedStarDate, actualStarDate, 'StarDate was inappropriately updated')
+
+        expectedRemainingGameTime: float = previousRemainGameTime - updatedOpTime
+        actualRemainingGameTime:   float = self._gameState.remainingGameTime
+
+        self.assertEqual(expectedRemainingGameTime, actualRemainingGameTime, 'Remaining Game Time was inappropriately updated')
+
+    def testUpdateTimeAfterWarpTravelLong(self):
+
+        previousStarDate: float = self._gameState.starDate
+        previousRemainGameTime: float = self._gameState.remainingGameTime
+
+        travelDistance: float = 9.0
+        warpFactor:     float = 9.0
+
+        self._gameEngine.updateTimeAfterWarpTravel(travelDistance=travelDistance, warpFactor=warpFactor)
+
+        updatedOpTime:  float = self._gameState.opTime
+        expectedOpTime: float = 1.11
+
+        self.assertAlmostEqual(expectedOpTime, updatedOpTime, 2, 'Operation Time incorrectly calculated')
+
+        expectedStarDate: float = previousStarDate + updatedOpTime
+        actualStarDate:   float = self._gameState.starDate
+
+        self.assertEqual(expectedStarDate, actualStarDate, 'StarDate was inappropriately updated')
+
+        expectedRemainingGameTime: float = previousRemainGameTime - updatedOpTime
+        actualRemainingGameTime:   float = self._gameState.remainingGameTime
+
+        self.assertEqual(expectedRemainingGameTime, actualRemainingGameTime, 'Remaining Game Time was inappropriately updated')
+
     def testShipAdjacentToBaseNorth(self):
         """
         In these tests the base is always at sector coordinates 5,5

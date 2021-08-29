@@ -120,7 +120,22 @@ class GameEngine(Singleton):
         """
         elapsedTime = travelDistance / 0.095
         self._gameState.opTime = elapsedTime
-        # self.eventEngine.fixDevices()
+        # self.eventEngine.fixDevices()     TODO  Probably does not belong here
+        self.updateTime(elapsedTime=elapsedTime)
+
+    def updateTimeAfterWarpTravel(self, travelDistance: float, warpFactor: float):
+        # noinspection SpellCheckingInspection
+        """
+        Time = 10.0*dist/wfacsq;
+
+        Args:
+            travelDistance:  The travel distance
+            warpFactor:      The warp factor we are using to get there
+        """
+        warpSquared: float = warpFactor ** 2
+        elapsedTime: float = 10.0 * travelDistance / warpSquared
+        self._gameState.opTime = elapsedTime
+        # self._eventEngine.fixDevices()        TODO  Probably does not belong here
         self.updateTime(elapsedTime=elapsedTime)
 
     def updateTime(self, elapsedTime: float):
