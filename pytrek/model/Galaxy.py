@@ -89,6 +89,10 @@ class Galaxy(Singleton):
     def currentQuadrant(self) -> Quadrant:
         return self._currentQuadrant
 
+    @currentQuadrant.setter
+    def currentQuadrant(self, quadrant: Quadrant):
+        self._currentQuadrant = quadrant
+
     def placeKlingonsInGalaxy(self):
         """
         """

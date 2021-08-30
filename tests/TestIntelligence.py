@@ -36,9 +36,9 @@ class TestIntelligence(TestBase):
 
     DEFAULT_GAME_LENGTH: float         = 210.00
 
-    EXPECTED_SHORT_GAME_LENGTH:  int = 56
-    EXPECTED_LONG_GAME_LENGTH:   int = 224
-    EXPECTED_MEDIUM_GAME_LENGTH: int = 112
+    EXPECTED_SHORT_GAME_LENGTH:  int = 168
+    EXPECTED_LONG_GAME_LENGTH:   int = 672
+    EXPECTED_MEDIUM_GAME_LENGTH: int = 336
 
     MAX_STAR_DATE_CALLS:          int = 7
     MAX_COORDINATES_COUNT:        int = 8
@@ -56,7 +56,7 @@ class TestIntelligence(TestBase):
     GENERATE_KLINGON_COUNT_LOOP_COUNT: int = 250
     POWER_LOOP_COUNT:                  int = 250
     RANGE_TESTS_LOOP_COUNT:            int = 50
-    MAX_STAR_BASE_CALLS:                int = 100
+    MAX_STAR_BASE_CALLS:               int = 100
 
     clsLogger: Logger = cast(Logger, None)
 

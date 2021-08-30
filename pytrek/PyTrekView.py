@@ -37,6 +37,7 @@ from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 
 from pytrek.model.Coordinates import Coordinates
@@ -44,6 +45,8 @@ from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
+from pytrek.model.Sector import Sector
+from pytrek.model.SectorType import SectorType
 
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
@@ -124,31 +127,18 @@ class PyTrekView(View):
         self._gameEngine   = GameEngine()
         self._gameState    = GameState()
         self._gameSettings = GameSettings()
-
         self._galaxy       = Galaxy()
-
-        self._quadrant: Quadrant = self._galaxy.currentQuadrant
-
-        self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
-        currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
-
-        playerList: SpriteList = SpriteList()
-        playerList.append(self._enterprise)
-
-        self._gameState.currentSectorCoordinates = currentSectorCoordinates
-        self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
-
-        self._quadrantMediator   = QuadrantMediator()
-        self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
 
         self._statusConsole    = StatusConsole(gameView=self)
         self._messageConsole   = MessageConsole()
 
-        self._quadrantMediator.playerList = playerList
+        self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
 
-        self._doDebugActions()
+        self._quadrant: Quadrant = self._galaxy.currentQuadrant
 
-        self._makeEnemySpriteLists()
+        self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
+
+        self._setupGame()
 
         self.logger.info(f'Setup Complete')
 
@@ -237,13 +227,48 @@ class PyTrekView(View):
         currentCoordinates: Coordinates = self._quadrant.coordinates
         travelDistance:     float       = self._computer.computeGalacticDistance(startQuadrantCoordinates=currentCoordinates,
                                                                                  endQuadrantCoordinates=destinationCoordinates)
-
         energyConsumed: float = self._gameEngine.computeEnergyForWarpTravel(travelDistance=travelDistance, warpFactor=warpSpeed)
+
         self._gameState.energy -= energyConsumed
         self._gameEngine.updateTimeAfterWarpTravel(travelDistance=travelDistance, warpFactor=warpSpeed)
 
-        self.logger.info(f'After warp travel: {energyConsumed=}')
+        self.logger.info(f'After warp travel consumed energy: {energyConsumed:.2f}')
+
+        #
+        # Cleanup old quadrant
+        #
+        sectorCoordinates: Coordinates = self._quadrant.enterpriseCoordinates
+        oldSector:         Sector      = self._quadrant.getSector(sectorCoordinates=sectorCoordinates)
+
+        oldSector.type   = SectorType.EMPTY
+        oldSector.sprite = cast(GamePiece, None)
+        #
+        # Set up new quadrant
+        #
+        self._quadrant                             = self._galaxy.getQuadrant(quadrantCoordinates=destinationCoordinates)
+        self._galaxy.currentQuadrant               = self._quadrant
+        self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
+
+        self._setupGame()
+
         self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
+
+    def _setupGame(self):
+
+        currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
+
+        playerList: SpriteList = SpriteList()
+        playerList.append(self._enterprise)
+
+        self._gameState.currentSectorCoordinates = currentSectorCoordinates
+        self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
+
+        self._quadrantMediator = QuadrantMediator()
+
+        self._quadrantMediator.playerList = playerList
+        # Don't do this until we have setup the current quadrant
+        self._makeEnemySpriteLists()
+        self._doDebugActions()
 
     def _switchViewBack(self):
         self.window.show_view(self)
@@ -261,6 +286,7 @@ class PyTrekView(View):
     def _makeEnemySpriteLists(self):
         """
         Place enemies in the appropriate sprite lists
+        Depends on the correct quadrant mediator is in place
         """
         self.__makeKlingonSpriteList()
         self.__makeCommanderSpriteList()

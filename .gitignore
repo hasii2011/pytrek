@@ -6,4 +6,5 @@ __pycache__/
 /build/
 /dist/
 /venv-pyenv-3.9.1/
+/venv-pyenv-3.9.1.alternate/
 /archive/

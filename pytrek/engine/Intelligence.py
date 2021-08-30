@@ -192,6 +192,12 @@ class Intelligence(Singleton):
         return nSCount
 
     def generateInitialStarDate(self) -> int:
+        # noinspection SpellCheckingInspection
+        """
+        d.date = indate = 100.0*(int)(31.0*Rand()+20.0);
+
+        Returns:  A start star date
+        """
 
         starDate: int = int(100.0 * (31.0 * random()) * 20.0)
         return starDate

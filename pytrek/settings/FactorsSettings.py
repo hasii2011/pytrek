@@ -34,7 +34,7 @@ class FactorsSettings(BaseSubSetting):
     PHASER_BURST_TO_TERMINATE:   str = 'phaser_burst_to_terminate'
 
     FACTORS_SETTINGS: SettingsNameValues = SettingsNameValues({
-        GAME_LENGTH_FACTOR:     '7.0',
+        GAME_LENGTH_FACTOR:     '21.0',
         STAR_BASE_EXTENDER:     '2.0',
         STAR_BASE_MULTIPLIER:   '3.0',
 

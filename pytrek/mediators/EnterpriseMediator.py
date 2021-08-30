@@ -48,7 +48,6 @@ class EnterpriseMediator(MissesMediator):
         self.logger: Logger = getLogger(__name__)
 
         self._soundImpulse:            Sound = cast(Sound, None)
-        # self._soundWarp:               Sound = cast(Sound, None)
         self._soundUnableToComply:     Sound = cast(Sound, None)
         self._soundRepeatRequest:      Sound = cast(Sound, None)
         self._soundEnterpriseBlocked:  Sound = cast(Sound, None)
@@ -129,8 +128,6 @@ class EnterpriseMediator(MissesMediator):
             schedule(function_pointer=self.doWarpWhenEffectComplete, interval=1.0)  # type: ignore
         else:
             self._view.window.show_view(self._view)
-
-        # self._soundWarp.play(volume=self._gameSettings.soundVolume.value)
 
         self._view.window.background_color = color.BLACK
 

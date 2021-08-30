@@ -11,10 +11,12 @@ from dataclasses import dataclass
 from logging import Logger
 from logging import getLogger
 
+from arcade import Shape
 from arcade import View
 from arcade import color
+
+from arcade import create_line
 from arcade import draw_lrwh_rectangle_textured
-# from arcade import key
 from arcade import load_texture
 from arcade import start_render
 
@@ -86,6 +88,17 @@ FONT_SIZE:              int = 12
 LABEL_WIDTH:            int = 125
 COORDINATE_INPUT_WIDTH: int = 50
 WARP_INPUT_WIDTH:       int = 50
+INPUT_HEIGHT:           int = 25
+BUTTON_WIDTH:           int = 75
+BUTTON_HEIGHT:          int = 25
+
+WARP_Y_SLOT:        int = 6
+QUADRANT_Y_SLOT:    int = 5
+SEPARATOR_Y_SLOT:   int = 4
+BUTTONS_Y_SLOT:     int = 3
+ERROR_LABEL_Y_SLOT: int = 1
+
+Y_SLOT_SIZE:        int = 7
 FONT_COLOR = color.BLACK
 BG_COLOR   = color.WHITE
 
@@ -115,6 +128,8 @@ class WarpTravelDialog(View):
         self._xCoordinateInput: UIInputBox = cast(UIInputBox, None)
         self._yCoordinateInput: UIInputBox = cast(UIInputBox, None)
         self._warpFactorInput:  UIInputBox = cast(UIInputBox, None)
+        self._separator:        Shape      = cast(Shape, None)
+
         self._errorLabel:       UILabel    = cast(UILabel, None)
 
         self._xCoordinate: str  = ''
@@ -123,6 +138,7 @@ class WarpTravelDialog(View):
 
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
                                                            bareFileName='QuadrantBackground.png')
+
         self._background = load_texture(fqFileName)
         self.window.background_color = color.WHITE
 
@@ -133,8 +149,8 @@ class WarpTravelDialog(View):
         self._uiManager.purge_ui_elements()
 
         labelX: int = 60
-        ySlot:  int = self.window.height // 20
-
+        # ySlot:  int = self.window.height // Y_SLOT_SIZE
+        ySlot: int = CONSOLE_HEIGHT // Y_SLOT_SIZE
         self._createWarpControls(labelX, ySlot)
         self._createQuadrantControls(labelX, ySlot)
 
@@ -155,6 +171,7 @@ class WarpTravelDialog(View):
         start_render()
         # Draw the background texture
         draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_HEIGHT, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self._background)
+        self._separator.draw()
 
     def _createQuadrantControls(self, labelX: int, ySlot: int):
         """
@@ -165,12 +182,12 @@ class WarpTravelDialog(View):
             ySlot:      The y slot position
         """
         inputX: float = labelX * 2 + (COORDINATE_INPUT_WIDTH // 2)    # This works
-        inputY: float = ySlot * 3
+        inputY: float = ySlot * QUADRANT_Y_SLOT
 
         quadrantLabel: UILabel     = self._createLabel(text='Quadrant:', centerX=labelX, centerY=inputY, width=LABEL_WIDTH)
 
-        xInput: UIInputBox = UIInputBox(center_x=inputX,                               center_y=inputY, width=COORDINATE_INPUT_WIDTH)
-        yInput: UIInputBox = UIInputBox(center_x=inputX + COORDINATE_INPUT_WIDTH + 20, center_y=inputY, width=COORDINATE_INPUT_WIDTH)
+        xInput: UIInputBox = UIInputBox(center_x=inputX,                               center_y=inputY, width=COORDINATE_INPUT_WIDTH, height=INPUT_HEIGHT)
+        yInput: UIInputBox = UIInputBox(center_x=inputX + COORDINATE_INPUT_WIDTH + 20, center_y=inputY, width=COORDINATE_INPUT_WIDTH, height=INPUT_HEIGHT)
 
         self._setInputStyle(xInput)
         self._setInputStyle(yInput)
@@ -191,10 +208,10 @@ class WarpTravelDialog(View):
         """
 
         inputX: float = labelX * 2 + (WARP_INPUT_WIDTH // 2)
-        inputY: float = ySlot * 4
+        inputY: float = ySlot * WARP_Y_SLOT
 
         warpFactorLabel: UILabel    = self._createLabel(text='Warp Factor:', centerX=labelX, centerY=inputY, width=LABEL_WIDTH)
-        warpFactorInput: UIInputBox = UIInputBox(center_x=inputX, center_y=inputY, width=WARP_INPUT_WIDTH)
+        warpFactorInput: UIInputBox = UIInputBox(center_x=inputX, center_y=inputY, width=WARP_INPUT_WIDTH, height=INPUT_HEIGHT)
         self._setInputStyle(warpFactorInput)
 
         self._uiManager.add_ui_element(warpFactorLabel)
@@ -206,13 +223,17 @@ class WarpTravelDialog(View):
 
         okColumnX:     int = 3 * self.window.width // 14
         cancelColumnX: int = 5 * self.window.width // 14
-        centerY:       int = ySlot * 2
+        centerY:       int = ySlot * BUTTONS_Y_SLOT
 
-        okButton: DialogButton = DialogButton('Ok', callback=self._onOk, buttonId=DialogButton.ID_OK, center_x=okColumnX, center_y=centerY, width=80)
+        yPoint: int = ySlot * SEPARATOR_Y_SLOT
+        self._separator = create_line(start_x=15, start_y=yPoint, end_x=350, end_y=yPoint, color=color.GLAUCOUS, line_width=3)
+
+        okButton: DialogButton = DialogButton('Ok', callback=self._onOk, buttonId=DialogButton.ID_OK,
+                                              center_x=okColumnX, center_y=centerY, width=BUTTON_WIDTH, height=BUTTON_HEIGHT)
         self._setButtonStyle(dlgButton=okButton)
 
         cancelButton: DialogButton = DialogButton('Cancel', callback=self._onCancel, buttonId=DialogButton.ID_CANCEL,
-                                                  center_x=cancelColumnX, center_y=centerY, width=80)
+                                                  center_x=cancelColumnX, center_y=centerY, width=BUTTON_WIDTH, height=BUTTON_HEIGHT)
 
         self._setButtonStyle(dlgButton=cancelButton)
 
@@ -246,7 +267,7 @@ class WarpTravelDialog(View):
             bg_color_hover=color.BLACK,
             bg_color_press=color.BLACK,
             bg_color_focus=color.BLACK,
-            border_color=color.GRAY,
+            border_color=color.GLAUCOUS,
             border_width=2
         )
 
@@ -262,7 +283,8 @@ class WarpTravelDialog(View):
 
         dlgButton.set_style_attrs(
             font_size=FONT_SIZE,
-            bg_color_press=color.GRAY
+            bg_color_press=color.GRAY,
+            border_color=color.GLAUCOUS,
         )
 
     def _onOk(self):
