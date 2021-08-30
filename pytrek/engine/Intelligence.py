@@ -1,4 +1,4 @@
-
+from math import log
 from typing import List
 
 from logging import Logger
@@ -333,8 +333,8 @@ class Intelligence(Singleton):
 
         return randint(minMoveInterval, maxMoveInterval)
 
-    # noinspection SpellCheckingInspection
     def computePlanetsInGalaxy(self) -> int:
+        # noinspection SpellCheckingInspection
         """
         Will some times generate 1 more than maximumPlanets;  Hence my patch
         ```C
@@ -396,3 +396,15 @@ class Intelligence(Singleton):
         Returns:  The input number squared
         """
         return num * num
+
+    def exponentialRandom(self, average: float) -> float:
+        # noinspection SpellCheckingInspection
+        """
+
+        1e-7 -- 1 × 10 (minus 5) or 0.0000001
+        double expran(double avrage) {
+            return -avrage * log(1e-7 + Rand());
+        }
+        Returns:
+        """
+        return -average * log(1e-7 + self.rand())

@@ -191,7 +191,7 @@ class Galaxy(Singleton):
             while quadrant.hasPlanet is True or quadrant.hasStarBase is True:
                 quadrantCoordinates = self._intelligence.generateQuadrantCoordinates()
                 quadrant            = self.getQuadrant(quadrantCoordinates)
-                self.logger.warning(f'Generated new quadrant for planet')
+                self.logger.debug(f'Generated new quadrant for planet')
 
             quadrant.addPlanet()
             self.logger.info(f'Quadrant: {quadrantCoordinates} has a planet')

@@ -34,7 +34,8 @@ ComputeCallBack = Callable[[], float]
 
 class TestIntelligence(TestBase):
 
-    DEFAULT_GAME_LENGTH: float         = 210.00
+    DEFAULT_GAME_LENGTH: float  = 210.00
+    DEFAULT_AVERAGE:     float  = 7.0
 
     EXPECTED_SHORT_GAME_LENGTH:  int = 168
     EXPECTED_LONG_GAME_LENGTH:   int = 672
@@ -57,6 +58,7 @@ class TestIntelligence(TestBase):
     POWER_LOOP_COUNT:                  int = 250
     RANGE_TESTS_LOOP_COUNT:            int = 50
     MAX_STAR_BASE_CALLS:               int = 100
+    EXPONENTIAL_RANDOM_MAX_CALLS:      int = 150
 
     clsLogger: Logger = cast(Logger, None)
 
@@ -398,7 +400,7 @@ class TestIntelligence(TestBase):
 
         for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
             medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
-            ans:             bool  = (medianStatistic >= 1358.0) and (medianStatistic <= 1445.0)
+            ans:             bool  = (medianStatistic >= 1349.0) and (medianStatistic <= 1445.0)
 
             self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
@@ -408,7 +410,7 @@ class TestIntelligence(TestBase):
 
         for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
             medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
-            ans:             bool = (medianStatistic >= 1248.0) and (medianStatistic <= 1347.0)
+            ans:             bool = (medianStatistic >= 1248.0) and (medianStatistic <= 1348.0)
 
             self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
@@ -512,6 +514,29 @@ class TestIntelligence(TestBase):
             f'median={medianStatistic:.2f} average={meanStatistic:.2f} mode={modeStatistic:.2f}'
         )
         self.logger.info(statsStr)
+
+    def testExponentialRandom(self):
+
+        self.logger.info(f"DEFAULT: {TestIntelligence.DEFAULT_AVERAGE}")
+
+        for x in range(0, TestIntelligence.EXPONENTIAL_RANDOM_MAX_CALLS):
+            ans: float = self.smarty.exponentialRandom(TestIntelligence.DEFAULT_AVERAGE)
+            self.assertGreater(66.00, ans, 'Average failed upper bound')
+
+    def testExponentialRandomFiftySix(self):
+        for x in range(0, TestIntelligence.EXPONENTIAL_RANDOM_MAX_CALLS):
+            ans2: float = self.smarty.exponentialRandom(56.0)
+            self.assertGreater(902.00, ans2, '56 failed upper bound')
+
+    def testExponentialRandomLongerGameTime(self):
+
+        self._gameSettings.gameType = GameType.Long
+        initGameTime: float = self.smarty.generateInitialGameTime()
+
+        for x in range(0, TestIntelligence.EXPONENTIAL_RANDOM_MAX_CALLS):
+            ans3:         float = self.smarty.exponentialRandom(initGameTime)
+
+            self.assertGreater(10832.00, ans3, 'Longer Game Time failed upper bound')
 
     def _runKlingonCountTest(self) -> float:
 
