@@ -10,6 +10,9 @@ from pytrek.model.Coordinates import Coordinates
 
 
 class FutureEvent:
+    """
+    An Event something that happens in a quadrant at a particular time.
+    """
 
     def __init__(self, futureEventType: FutureEventType, starDate: float = 0.0, quadrantCoordinates: Coordinates = cast(Coordinates, None)):
         """

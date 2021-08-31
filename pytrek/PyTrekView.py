@@ -138,7 +138,7 @@ class PyTrekView(View):
 
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
-        self._setupGame()
+        self._enterQuadrant()
 
         self.logger.info(f'Setup Complete')
 
@@ -249,11 +249,11 @@ class PyTrekView(View):
         self._galaxy.currentQuadrant               = self._quadrant
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
-        self._setupGame()
+        self._enterQuadrant()
 
         self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
 
-    def _setupGame(self):
+    def _enterQuadrant(self):
 
         currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
 

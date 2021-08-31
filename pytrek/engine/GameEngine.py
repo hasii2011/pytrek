@@ -19,6 +19,7 @@ from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShieldHitData import ShieldHitData
 from pytrek.engine.ShipCondition import ShipCondition
+from pytrek.engine.futures.EventEngine import EventEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
@@ -48,6 +49,7 @@ class GameEngine(Singleton):
         self._intelligence: Intelligence = Intelligence()
         self._computer:     Computer     = Computer()
         self._devices:      Devices      = Devices()
+        self._eventEngine:  EventEngine  = EventEngine()
 
         self._gameState.playerType      = self._gameSettings.playerType
         self._gameState.gameType        = self._gameSettings.gameType
@@ -120,7 +122,7 @@ class GameEngine(Singleton):
         """
         elapsedTime = travelDistance / 0.095
         self._gameState.opTime = elapsedTime
-        # self._eventEngine.fixDevices()
+        self._eventEngine.fixDevices()
         self.updateTime(elapsedTime=elapsedTime)
 
     def updateTimeAfterWarpTravel(self, travelDistance: float, warpFactor: float):
