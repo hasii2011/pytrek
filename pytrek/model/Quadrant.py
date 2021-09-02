@@ -367,7 +367,7 @@ class Quadrant:
 
         moveInterval: int       = self._intelligence.computeCommanderMoveInterval()
         commander:    Commander = Commander(coordinates=sector.coordinates, moveInterval=moveInterval)
-        cPower:       float     = self._intelligence.computeCommanderPower()
+        cPower:       float     = self._intelligence.computeCommanderPower(playerType=self._gameSettings.playerType)
 
         commander.power = cPower
         commander.firingInterval    = self._intelligence.computeCommanderFiringInterval()
@@ -387,7 +387,7 @@ class Quadrant:
 
         superCommander: SuperCommander = SuperCommander(coordinates=sector.coordinates, moveInterval=moveInterval)
 
-        superCommander.power             = self._intelligence.computeSuperCommanderPower()
+        superCommander.power             = self._intelligence.computeSuperCommanderPower(playerType=self._gameSettings.playerType)
         superCommander.firingInterval    = self._intelligence.computeSuperCommanderFiringInterval()
         superCommander.timeSinceMovement = self._gameEngine.gameClock
 

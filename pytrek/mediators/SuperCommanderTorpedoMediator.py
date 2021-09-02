@@ -88,7 +88,7 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
         sCommanderPoint: ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
         enterprisePoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
 
-        speeds: TorpedoSpeeds = self._intelligence.getTorpedoSpeeds()
+        speeds: TorpedoSpeeds = self._intelligence.getTorpedoSpeeds(playerType=self._gameState.playerType)
 
         sCommanderTorpedo: SuperCommanderTorpedo = SuperCommanderTorpedo(speed=speeds.superCommander)
 

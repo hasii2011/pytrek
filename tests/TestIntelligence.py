@@ -29,7 +29,7 @@ from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 from tests.TestBase import TestBase
 
-ComputeCallBack = Callable[[], float]
+ComputeCallBack = Callable[[PlayerType], float]
 
 
 class TestIntelligence(TestBase):
@@ -79,6 +79,8 @@ class TestIntelligence(TestBase):
         self._savePlayerType: PlayerType = self._gameSettings.playerType
         self._saveGameType:   GameType   = self._gameSettings.gameType
 
+        self._powerTestPlayerType: PlayerType = cast(PlayerType, None)
+
     def tearDown(self):
 
         self._gameSettings.playerType = self._savePlayerType
@@ -96,11 +98,11 @@ class TestIntelligence(TestBase):
 
     def testInitialKlingonCountPlayerTypeNoviceGameTypeShort(self):
 
-        gameState: GameState  = self._gameState
-        gameState.playerType  = PlayerType.Novice
-        gameState.gameType    = GameType.Short
+        # gameState: GameState  = self._gameState
+        # gameState.playerType  = PlayerType.Novice
+        # gameState.gameType    = GameType.Short
 
-        medianCount: float = self._runKlingonCountTest()
+        medianCount: float = self._runKlingonCountTest(gameType=GameType.Short, playerType=PlayerType.Novice)
 
         ans: bool = (medianCount >= 9.0) and (medianCount < 20.0)
 
@@ -108,11 +110,11 @@ class TestIntelligence(TestBase):
 
     def testInitialKlingonCountPlayerTypeEmeritusGameTypeLong(self):
 
-        gameState: GameState  = self._gameState
-        gameState.playerType  = PlayerType.Emeritus
-        gameState.gameType = GameType.Long
+        # gameState: GameState  = self._gameState
+        # gameState.playerType  = PlayerType.Emeritus
+        # gameState.gameType = GameType.Long
 
-        medianCount: float = self._runKlingonCountTest()
+        medianCount: float = self._runKlingonCountTest(gameType=GameType.Long, playerType=PlayerType.Emeritus)
 
         ans: bool = (medianCount > 1050.0) and (medianCount < 1300.0)
 
@@ -120,11 +122,11 @@ class TestIntelligence(TestBase):
 
     def testInitialKlingonCountPlayerTypeGoodGameTypeMedium(self):
 
-        gameState: GameState  = self._gameState
-        gameState.playerType  = PlayerType.Good
-        gameState.gameType = GameType.Medium
+        # gameState: GameState  = self._gameState
+        # gameState.playerType  = PlayerType.Good
+        # gameState.gameType = GameType.Medium
 
-        medianCount: float = self._runKlingonCountTest()
+        medianCount: float = self._runKlingonCountTest(gameType=GameType.Medium, playerType=PlayerType.Good)
 
         ans: bool = (medianCount > 150.0) and (medianCount < 250.0)
 
@@ -386,8 +388,8 @@ class TestIntelligence(TestBase):
 
     def testComputeCommanderPowerNovicePlayer(self):
 
-        self._gameState.playerType  = PlayerType.Novice
-
+        # self._gameState.playerType  = PlayerType.Novice
+        self._powerTestPlayerType = PlayerType.Novice
         for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
             medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
             ans:              bool = (medianStatistic > 1150.0) and (medianStatistic < 1252.0)
@@ -396,7 +398,8 @@ class TestIntelligence(TestBase):
 
     def testComputeCommanderPowerEmeritusPlayer(self):
 
-        self._gameState.playerType  = PlayerType.Emeritus
+        # self._gameState.playerType  = PlayerType.Emeritus
+        self._powerTestPlayerType = PlayerType.Emeritus
 
         for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
             medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
@@ -406,7 +409,8 @@ class TestIntelligence(TestBase):
 
     def testComputeCommanderPowerGoodPlayer(self):
 
-        self._gameState.playerType  = PlayerType.Good
+        # self._gameState.playerType  = PlayerType.Good
+        self._powerTestPlayerType = PlayerType.Good
 
         for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
             medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
@@ -416,7 +420,8 @@ class TestIntelligence(TestBase):
 
     def testComputeSuperCommanderPowerEmeritusPlayer(self):
 
-        self._gameState.playerType  = PlayerType.Emeritus
+        # self._gameState.playerType  = PlayerType.Emeritus
+        self._powerTestPlayerType = PlayerType.Emeritus
 
         for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
             medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
@@ -425,7 +430,8 @@ class TestIntelligence(TestBase):
 
     def testComputeSuperCommanderPowerExpertPlayer(self):
 
-        self._gameState.playerType  = PlayerType.Expert
+        # self._gameState.playerType  = PlayerType.Expert
+        self._powerTestPlayerType = PlayerType.Expert
 
         for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
             medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
@@ -483,14 +489,13 @@ class TestIntelligence(TestBase):
 
     def testGetEmeritusTorpedoSpeeds(self):
 
-        savePlayerType: PlayerType = self._gameState.playerType
+        # savePlayerType: PlayerType = self._gameState.playerType
+        # self._gameState.playerType = PlayerType.Emeritus
 
-        self._gameState.playerType = PlayerType.Emeritus
-
-        tp: TorpedoSpeeds = self.smarty.getTorpedoSpeeds()
+        tp: TorpedoSpeeds = self.smarty.getTorpedoSpeeds(playerType=PlayerType.Emeritus)
 
         self.assertEqual(PlayerType.Emeritus, tp.playerType, 'Looks like we got the wrong settings')
-        self._gameState.playerType = savePlayerType
+        # self._gameState.playerType = savePlayerType
 
     def testGenerateInitialStarBaseCount(self):
 
@@ -538,7 +543,7 @@ class TestIntelligence(TestBase):
 
             self.assertGreater(10832.00, ans3, 'Longer Game Time failed upper bound')
 
-    def _runKlingonCountTest(self) -> float:
+    def _runKlingonCountTest(self, gameType: GameType, playerType: PlayerType) -> float:
 
         gameState:    GameState    = self._gameState
         intelligence: Intelligence = self.smarty
@@ -546,7 +551,7 @@ class TestIntelligence(TestBase):
         generatedCount: List[int] = []
         for x in range(TestIntelligence.GENERATE_KLINGON_COUNT_LOOP_COUNT):
 
-            klingonCount = intelligence.generateInitialKlingonCount()
+            klingonCount = intelligence.generateInitialKlingonCount(gameType=gameType, playerType=playerType)
             generatedCount.append(klingonCount)
 
         medianCount: float = median(generatedCount)
@@ -568,7 +573,7 @@ class TestIntelligence(TestBase):
         for x in range(TestIntelligence.POWER_LOOP_COUNT):
 
             # commanderPower: float = intelligence.computeCommanderPower()
-            commanderPower: float = computeCallback()
+            commanderPower: float = computeCallback(self._powerTestPlayerType)
 
             generatedPower.append(commanderPower)
 
@@ -586,9 +591,9 @@ class TestIntelligence(TestBase):
 
     def _runSuperCommanderCountTest(self, playerType: PlayerType, klingonCount: int, expectedSuperCommanderCount: int, assertionMsg: str):
 
-        self._gameState.playerType = playerType
+        # self._gameState.playerType = playerType
 
-        actualSuperCommanderCount: int = self.smarty.generateInitialSuperCommanderCount(numberOfKlingons=klingonCount)
+        actualSuperCommanderCount: int = self.smarty.generateInitialSuperCommanderCount(playerType=playerType, numberOfKlingons=klingonCount)
 
         self.assertEqual(expectedSuperCommanderCount, actualSuperCommanderCount, assertionMsg)
 

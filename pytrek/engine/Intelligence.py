@@ -14,12 +14,12 @@ from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
-from pytrek.GameState import GameState
 
-from pytrek.Singleton import Singleton
 from pytrek.engine.Direction import Direction
+from pytrek.engine.GameType import GameType
 from pytrek.engine.LRScanCoordinates import LRScanCoordinates
 from pytrek.engine.PlayerType import PlayerType
+
 from pytrek.gui.gamepieces.PlanetType import PlanetType
 
 from pytrek.model.Coordinates import Coordinates
@@ -27,6 +27,8 @@ from pytrek.model.DataTypes import LRScanCoordinatesList
 
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+
+from pytrek.Singleton import Singleton
 
 
 class Intelligence(Singleton):
@@ -43,19 +45,17 @@ class Intelligence(Singleton):
     def init(self):
         """
         """
-        self.logger:  Logger = getLogger(__name__)
-
+        self.logger:        Logger       = getLogger(__name__)
         self._gameSettings: GameSettings = GameSettings()
-        self._gameState:    GameState    = GameState()
 
-    def getTorpedoSpeeds(self) -> TorpedoSpeeds:
+    def getTorpedoSpeeds(self, playerType: PlayerType) -> TorpedoSpeeds:
         """
         Get the TorpedoSpeeds based on the player type
+        Args:
+            playerType:  What is the player's professed skill level?
 
         Returns:  The appropriate torpedo speed object
         """
-        playerType:  PlayerType   = self._gameState.playerType
-
         if playerType == PlayerType.Novice:
             retSpeed: TorpedoSpeeds = self._gameSettings.noviceTorpedoSpeeds
         elif playerType == PlayerType.Fair:
@@ -102,7 +102,7 @@ class Intelligence(Singleton):
         return remainingGameTime
 
     # noinspection SpellCheckingInspection
-    def generateInitialKlingonCount(self) -> int:
+    def generateInitialKlingonCount(self, gameType: GameType, playerType: PlayerType) -> int:
         """
         ```
         private double dremkl = 2.0*intime*((skill+1 - 2*Intelligence.Rand())*skill*0.1+0.15);
@@ -131,8 +131,8 @@ class Intelligence(Singleton):
 
         rFactor: int   = 2
         mOffset: float = 0.20
-        skill:   int   = self._gameState.playerType.value
-        remTime: float = 7.0 * self._gameState.gameType.value
+        skill:   int   = playerType.value
+        remTime: float = 7.0 * gameType.value
 
         remainingKlingons: float = 2.0 * remTime * (skill + 1 - rFactor * self.rand()) * skill * 0.1 + mOffset
 
@@ -140,8 +140,8 @@ class Intelligence(Singleton):
 
         if self.logger.level == INFO:
             message = (
-                f"PlayerType: '{self._gameState.playerType} "
-                f"GameType '{self._gameState.gameType}' "
+                f"PlayerType: '{playerType} "
+                f"GameType '{gameType}' "
                 f"klingonCount: '{str(remainingKlingons)}'"
             )
             self.logger.info(message)
@@ -149,22 +149,18 @@ class Intelligence(Singleton):
         return int(remainingKlingons)
 
     # noinspection SpellCheckingInspection
-    def generateInitialCommanderCount(self, generatedKlingons: int) -> int:
+    def generateInitialCommanderCount(self, playerType: PlayerType, generatedKlingons: int) -> int:
         """
         incom = skill + 0.0625*inkling*Rand();
 
         Returns:  Klingon Commander Count
         """
-
-        commanderCount = self._gameState.playerType.value * 0.0625 * generatedKlingons * self.rand()
+        commanderCount = playerType.value * 0.0625 * generatedKlingons * self.rand()
         commanderCount = round(commanderCount)
-        #
-        # Adjust total Klingon count by # of commanders -- Game Engine should do this
-        #
-        # self.remainingKlingons = self.remainingKlingons - self.commanderCount
+
         return commanderCount
 
-    def generateInitialSuperCommanderCount(self, numberOfKlingons: int):
+    def generateInitialSuperCommanderCount(self, playerType: PlayerType, numberOfKlingons: int):
         """
         We will generate no more than
         * 1 super commander per 10 Klingons (Novice, Fair, Good)
@@ -172,14 +168,12 @@ class Intelligence(Singleton):
         * 1 super commander per 3 Klingons (Emeritus)
 
         Args:
+            playerType:         We need the skill level
             numberOfKlingons:  The current number of Klingons
+
 
         Returns An appropriate number for generating Super Commanders:
         """
-        #
-        # Adjust total Klingon count by # of commanders -- Game Engine should do this
-        #
-        playerType: PlayerType = self._gameState.playerType
         if playerType == PlayerType.Novice or playerType == PlayerType.Fair or playerType == PlayerType.Good:
             nSCount: int = numberOfKlingons // 10
         elif playerType == PlayerType.Expert:
@@ -267,7 +261,7 @@ class Intelligence(Singleton):
         return kPower
 
     # noinspection SpellCheckingInspection
-    def computeCommanderPower(self) -> float:
+    def computeCommanderPower(self, playerType: PlayerType) -> float:
         """
 
         Commander
@@ -276,11 +270,11 @@ class Intelligence(Singleton):
         Returns:
 
         """
-        cPower: float = 950.0 + (400.0 * self.rand()) + (50.0 * self._gameState.playerType.value)
+        cPower: float = 950.0 + (400.0 * self.rand()) + (50.0 * playerType.value)
         return cPower
 
     # noinspection SpellCheckingInspection
-    def computeSuperCommanderPower(self) -> float:
+    def computeSuperCommanderPower(self, playerType: PlayerType) -> float:
         """
 
         Super Commander
@@ -288,7 +282,7 @@ class Intelligence(Singleton):
 
         Returns:
         """
-        scPower: float = 1175.0 + (400.0 * self.rand()) + (50.0 * self._gameState.playerType.value)
+        scPower: float = 1175.0 + (400.0 * self.rand()) + (50.0 * playerType.value)
         return scPower
 
     def computeKlingonFiringInterval(self) -> int:
