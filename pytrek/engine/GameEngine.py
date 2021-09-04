@@ -12,14 +12,11 @@ from random import choice
 from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction
 from pytrek.engine.DirectionData import DirectionData
-from pytrek.engine.GameType import GameType
-from pytrek.engine.PlayerType import PlayerType
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShieldHitData import ShieldHitData
-from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.engine.futures.EventEngine import EventEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
@@ -45,44 +42,13 @@ class GameEngine(Singleton):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._gameState:    GameState    = GameState()
         self._gameSettings: GameSettings = GameSettings()
+        self._gameState:    GameState    = GameState()
         self._intelligence: Intelligence = Intelligence()
         self._computer:     Computer     = Computer()
         self._devices:      Devices      = Devices()
         self._eventEngine:  EventEngine  = EventEngine()
 
-        playerType: PlayerType = self._gameSettings.playerType
-        gameType:   GameType   = self._gameSettings.gameType
-
-        self._gameState.playerType      = self._gameSettings.playerType
-        self._gameState.gameType        = self._gameSettings.gameType
-        self._gameState.energy          = self._gameSettings.initialEnergyLevel
-        self._gameState.shieldEnergy    = self._gameSettings.initialShieldEnergy
-        self._gameState.torpedoCount    = self._gameSettings.initialTorpedoCount
-        self._gameState.inTime          = self._intelligence.generateInitialGameTime()
-        self._gameState.shipCondition   = ShipCondition.Green
-        self._gameState.opTime          = 0.0
-
-        self._gameState.starDate            = self._intelligence.generateInitialStarDate()
-        self._gameState.remainingGameTime   = self._intelligence.generateInitialGameTime()
-        self._gameState.remainingKlingons   = self._intelligence.generateInitialKlingonCount(gameType=gameType, playerType=playerType)
-        self._gameState.remainingCommanders = self._intelligence.generateInitialCommanderCount(playerType=playerType,
-                                                                                               generatedKlingons=self._gameState.remainingKlingons)
-
-        # Adjust total Klingon count by # of commanders
-        self._gameState.remainingKlingons        = self._gameState.remainingKlingons - self._gameState.remainingCommanders
-
-        playerType: PlayerType = self._gameState.playerType
-        # Novice and Fair players do not get Super Commanders
-        if playerType != PlayerType.Novice and playerType != PlayerType.Fair:
-            self._gameState.remainingSuperCommanders = self._intelligence.generateInitialSuperCommanderCount(playerType=playerType,
-                                                                                                             numberOfKlingons=self._gameState.remainingKlingons)
-
-            # Adjust total Klingons by # of super commanders
-            self._gameState.remainingKlingons = self._gameState.remainingKlingons - self._gameState.remainingSuperCommanders
-        else:
-            self._gameState.remainingSuperCommanders = 0
         self._accumulatedDelta: float = 0.0
         self._gameClock:        float = 0.0
 

@@ -122,22 +122,25 @@ class PyTrekView(View):
 
         self._enterprise: Enterprise = Enterprise()
 
+        # These singletons are initialized for the first time
+        self._gameSettings = GameSettings()     # Be able to read the preferences file
+        self._gameState    = GameState()        # Set up the game parameters which uses the above
+        self._gameEngine   = GameEngine()       # Then the engine needs to be initialized
         self._intelligence = Intelligence()
         self._computer     = Computer()
-        self._gameEngine   = GameEngine()
-        self._gameState    = GameState()
-        self._gameSettings = GameSettings()
-        self._galaxy       = Galaxy()
+        self._galaxy       = Galaxy()           # This essentially finishes initializing most of he game
 
-        self._statusConsole    = StatusConsole(gameView=self)
+        self._statusConsole    = StatusConsole(gameView=self)       # UI elements
         self._messageConsole   = MessageConsole()
 
+        # An important mediator
         self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
 
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
+        # And finally the rest of the UI elements
         self._enterQuadrant()
 
         self.logger.info(f'Setup Complete')

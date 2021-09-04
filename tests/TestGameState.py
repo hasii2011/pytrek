@@ -17,6 +17,8 @@ from pytrek.engine.PlayerType import PlayerType
 
 from pytrek.model.Coordinates import Coordinates
 
+from pytrek.settings.SettingsCommon import SettingsCommon
+
 from tests.TestBase import TestBase
 
 from pytrek.GameState import GameState
@@ -32,6 +34,7 @@ class TestGameState(TestBase):
     def setUpClass(cls):
         TestBase.setUpLogging()
         TestGameState.clsLogger = getLogger(__name__)
+        SettingsCommon.determineSettingsLocation()
 
     def setUp(self):
         self.logger: Logger = TestGameState.clsLogger
@@ -57,7 +60,7 @@ class TestGameState(TestBase):
 
         self.logger.info(f'json game stats: {jsonGState}')
 
-        file: TextIO = open('GameStats.json', 'w')
+        file: TextIO = open(TestGameState.TEST_PICKLE_FILENAME, 'w')
         file.write(jsonGState)
         file.close()
 

@@ -1,37 +1,55 @@
 
 from typing import cast
 
-from pytrek.Singleton import Singleton
+from pytrek.engine.Intelligence import Intelligence
 from pytrek.model.Coordinates import Coordinates
+
 from pytrek.engine.PlayerType import PlayerType
 from pytrek.engine.GameType import GameType
 from pytrek.engine.ShipCondition import ShipCondition
 
+from pytrek.Singleton import Singleton
+from pytrek.settings.GameSettings import GameSettings
+
 
 class GameState(Singleton):
     """
-    Keeps track of the game state;  Is initialized by the Game Engine via game type, player type, and external
-    settings data
+    Keeps track of the game state
     """
     def init(self):
 
-        self._energy:              float = 0.0
-        self._shieldEnergy:        float = 0.0
-        self._starDate:            float = 0.0
-        self._inTime:              float = 0.0
-        self._opTime:              float = 0.0  # #define Time a.Time time taken by current operation
-        self._remainingGameTime:   float = 0.0
-        self._remainingKlingons:   int   = 0
-        self._remainingCommanders: int   = 0
-        self._remainingSuperCommanders: int = 0
-        self._torpedoCount:        int   = 0
-        self._shipCondition:       ShipCondition = ShipCondition.Green
+        gameSettings: GameSettings = GameSettings()
+        intelligence: Intelligence = Intelligence()
+        playerType:   PlayerType   = gameSettings.playerType
+        gameType:     GameType     = gameSettings.gameType
 
-        self._playerType: PlayerType = cast(PlayerType, None)
-        self._gameType:   GameType   = cast(GameType, None)
+        self._playerType: PlayerType  = playerType
+        self._gameType:     GameType  = gameType
+        self._energy:       float     = gameSettings.initialEnergyLevel
+        self._shieldEnergy: float     = gameSettings.initialShieldEnergy
+        self.torpedoCount:  int       = gameSettings.initialTorpedoCount
+        self._starDate:     float     = intelligence.generateInitialStarDate()
+        self._inTime:       float     = intelligence.generateInitialGameTime()
+        self._opTime:       float     = 0.0
 
-        self.currentQuadrantCoordinates: Coordinates = cast(Coordinates, None)
-        self.currentSectorCoordinates:   Coordinates = cast(Coordinates, None)
+        self._remainingGameTime:   float = intelligence.generateInitialGameTime()
+        self._remainingKlingons:   int   = intelligence.generateInitialKlingonCount(gameType=gameType, playerType=playerType)
+        self._remainingCommanders: int   = intelligence.generateInitialCommanderCount(playerType=playerType, generatedKlingons=self._remainingKlingons)
+
+        # Adjust total Klingon count by # of commanders
+        self._remainingKlingons = self._remainingKlingons - self._remainingCommanders
+
+        # Novice and Fair players do not get Super Commanders
+        if playerType != PlayerType.Novice and playerType != PlayerType.Fair:
+            self._remainingSuperCommanders = intelligence.generateInitialSuperCommanderCount(playerType=playerType, numberOfKlingons=self._remainingKlingons)
+            # Adjust total Klingons by # of super commanders
+            self._remainingKlingons = self._remainingKlingons - self._remainingSuperCommanders
+        else:
+            self._remainingSuperCommanders = 0
+
+        self._shipCondition:             ShipCondition  = ShipCondition.Green
+        self.currentQuadrantCoordinates: Coordinates    = cast(Coordinates, None)
+        self.currentSectorCoordinates:   Coordinates    = cast(Coordinates, None)
 
         self.gameActive:    bool = True
 
