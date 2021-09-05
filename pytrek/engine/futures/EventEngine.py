@@ -3,6 +3,7 @@ from typing import Dict
 
 from logging import getLogger
 from logging import Logger
+from typing import NewType
 
 from pytrek.GameState import GameState
 from pytrek.Singleton import Singleton
@@ -13,6 +14,8 @@ from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
+
+EventMap = NewType('EventMap', Dict[FutureEventType, FutureEvent])
 
 
 class EventEngine(Singleton):
@@ -30,23 +33,36 @@ class EventEngine(Singleton):
         self._gameState:    GameState    = GameState()
         self._devices:      Devices      = Devices()
 
-        self.eventMap: Dict[FutureEventType, FutureEvent] = {}
+        self._eventMap: EventMap = EventMap({})
         for fsEventType in FutureEventType:
             if fsEventType != FutureEventType.SPY:
-                self.eventMap[fsEventType] = FutureEvent(fsEventType)
+                self._eventMap[fsEventType] = FutureEvent(fsEventType)
 
-        self.eventMap[FutureEventType.SUPER_NOVA]  = self.schedule(FutureEventType.SUPER_NOVA,
-                                                                   self._intelligence.exponentialRandom(0.5 * self._gameState.inTime))
-        self.eventMap[FutureEventType.COMMANDER_ATTACKS_BASE] = self.schedule(FutureEventType.COMMANDER_ATTACKS_BASE,
-                                                                              self._intelligence.exponentialRandom(0.3 * self._gameState.inTime))
+        self._eventMap[FutureEventType.SUPER_NOVA]  = self.schedule(FutureEventType.SUPER_NOVA,
+                                                                    self._intelligence.exponentialRandom(0.5 * self._gameState.inTime))
+        self._eventMap[FutureEventType.COMMANDER_ATTACKS_BASE] = self.schedule(FutureEventType.COMMANDER_ATTACKS_BASE,
+                                                                               self._intelligence.exponentialRandom(0.3 * self._gameState.inTime))
 
         self.logger.info(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
 
     def schedule(self, fEventType: FutureEventType, finTime: float) -> FutureEvent:
 
-        retEvent: FutureEvent = FutureEvent(futureEventType=fEventType, starDate=finTime)
+        retEvent: FutureEvent = FutureEvent(type=fEventType, starDate=finTime)
 
         return retEvent
+
+    def checkEvents(self, currentStarDate: float):
+        """
+        Check to see if any events need to fire off
+        Args:
+            currentStarDate:  The current star date;
+
+        """
+
+        for fsEventType in FutureEventType:
+            futureEvent: FutureEvent = self._eventMap[fsEventType]
+            if futureEvent.starDate <= currentStarDate:
+                self._fireEvent(eventToFire=futureEvent)
 
     def fixDevices(self):
         # noinspection SpellCheckingInspection
@@ -89,10 +105,14 @@ class EventEngine(Singleton):
                         device.deviceStatus = DeviceStatus.Up
                         self.logger.info(f"Device: {device.deviceType.name} repaired")
 
+    def _fireEvent(self, eventToFire: FutureEvent):
+
+        self.logger.info(f'{eventToFire=}')
+
     def __repr__(self):
 
         myRep = "\n"
-        for dictKey, fsEvent in self.eventMap.items():
+        for dictKey, fsEvent in self._eventMap.items():
             devRep = (
                 f"fsEvent: {fsEvent}\n"
             )

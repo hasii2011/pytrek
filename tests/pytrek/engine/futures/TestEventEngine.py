@@ -43,6 +43,9 @@ class TestEventEngine(TestBase):
         self._eventEngine: EventEngine = EventEngine()
         self._devices:     Devices     = Devices()
 
+    def testCheckEvents(self):
+        pass
+
     def testFixDevices(self):
 
         self._devices.getDevice(DeviceType.Phasers).damage       = BASIC_DAMAGE

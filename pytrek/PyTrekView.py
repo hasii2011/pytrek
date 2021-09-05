@@ -9,7 +9,6 @@ import arcade
 from PIL import ImageFont
 
 # from arcade import PhysicsEngineSimple
-from arcade import Sound
 from arcade import SpriteList
 from arcade import Texture
 from arcade import View
@@ -31,6 +30,7 @@ from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.futures.EventEngine import EventEngine
 
 from pytrek.gui.GalaxyView import GalaxyView
 from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
@@ -99,7 +99,7 @@ class PyTrekView(View):
         self._statusConsole:    StatusConsole    = cast(StatusConsole, None)
         self._messageConsole:   MessageConsole   = cast(MessageConsole, None)
 
-        self._soundImpulse:        Sound = cast(Sound, None)
+        self._eventEngine: EventEngine = cast(EventEngine, None)
 
         #
         # I am cheating here because I know arcade use PIL under the covers
@@ -129,6 +129,8 @@ class PyTrekView(View):
         self._intelligence = Intelligence()
         self._computer     = Computer()
         self._galaxy       = Galaxy()           # This essentially finishes initializing most of he game
+
+        self._eventEngine: EventEngine = EventEngine()
 
         self._statusConsole    = StatusConsole(gameView=self)       # UI elements
         self._messageConsole   = MessageConsole()
