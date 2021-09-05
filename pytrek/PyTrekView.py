@@ -36,17 +36,21 @@ from pytrek.gui.GalaxyView import GalaxyView
 from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
+
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
+from pytrek.gui.gamepieces.commander.Commander import Commander
+from pytrek.gui.gamepieces.klingon.Klingon import Klingon
+from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
-
-from pytrek.mediators.QuadrantMediator import QuadrantMediator
 from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
+
+from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
@@ -335,21 +339,25 @@ class PyTrekView(View):
         if self._gameSettings.debugAddKlingons is True:
             numKlingons: int = self._gameSettings.debugKlingonCount
             for x in range(numKlingons):
-                self._quadrant.addKlingon()
+                klingon: Klingon = self._quadrant.addKlingon()
+                self._quadrantMediator.klingonList.append(klingon)
 
             self._gameState.remainingKlingons += numKlingons
 
         if self._gameSettings.debugAddCommanders is True:
             nCommanders: int = self._gameSettings.debugCommanderCount
             for x in range(nCommanders):
-                self._quadrant.addCommander()
+                commander: Commander = self._quadrant.addCommander()
+                self._quadrantMediator.commanderList.append(commander)
 
             self._gameState.remainingCommanders += nCommanders
 
         if self._gameSettings.debugAddSuperCommanders:
             nSuperCommanders: int = self._gameSettings.debugSuperCommanderCount
             for x in range(nSuperCommanders):
-                self._quadrant.addSuperCommander()
+                superCommander: SuperCommander = self._quadrant.addSuperCommander()
+                self._quadrantMediator.superCommanderList.append(superCommander)
+
             self._gameState.remainingSuperCommanders += nSuperCommanders
 
 
