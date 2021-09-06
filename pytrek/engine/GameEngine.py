@@ -12,6 +12,7 @@ from random import choice
 from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction
 from pytrek.engine.DirectionData import DirectionData
+from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
@@ -183,27 +184,19 @@ class GameEngine(Singleton):
     # noinspection SpellCheckingInspection
     def computeShieldHit(self, torpedoHit: float) -> ShieldHitData:
         """
-        ```
-            pfac = 1.0/inshld;
+        Your deflector shields are a defensive device to protect you from Klingon attacks
+        (and nearby novas). As the shields protect you, they gradually weaken.
+        A shield strength of 75%, for example, means that the next time a Klingon hits you,
+        your shields will deflect 75% of the hit, and let 25% get through to hurt you.
 
-            # shields will take hits
-            double absorb, hitsh, propor = pfac*shield;
-
-            if(propor < 0.1)
-                propor = 0.1;
-            hitsh = propor*chgfac*hit+1.0;
-            atackd=1;
-            absorb = 0.8*hitsh;
-            if (absorb > shield)
-                absorb = shield;
-            shield -= absorb;
-            hit -= hitsh;
-        ```
         Returns: Computed shield hit data
         """
         changeFactor:       float = 0.25 + (0.5 * self._intelligence.rand())
         proportionalFactor: float = 1.0 / DEFAULT_FULL_SHIELDS
-        proportion:         float = proportionalFactor * self._gameState.shieldEnergy
+        dockedFactor:       float = 1.0
+        if self._gameState.shipCondition == ShipCondition.Docked:
+            dockedFactor = 2.1
+        proportion:         float = proportionalFactor * (self._gameState.shieldEnergy * dockedFactor)
 
         if proportion < 0.1:
             proportion = 0.1

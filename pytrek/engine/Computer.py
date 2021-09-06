@@ -143,23 +143,31 @@ class Computer(Singleton):
 
         return strValue
 
-    def computeHitValueOnEnterprise(self, enemyPosition: Coordinates, enterprisePosition: Coordinates, enemyPower: float) -> float:
-        """
-        TODO: Move this to GameEngine
-        Based on the Klingon power value and the distance between the two
-
-        Args:
-            enemyPosition:
-            enterprisePosition:
-            enemyPower:
-
-        Returns:  The effective energy drainage on the Enterprise
-        """
-
-        distance:  float = self.computeQuadrantDistance(startSector=enemyPosition, endSector=enterprisePosition)
-        hitFactor: float = 1.3 - distance
-        hit:       float = enemyPower * hitFactor
-        return hit
+    # def computeHitValueOnEnterprise(self, enemyPosition: Coordinates, enterprisePosition: Coordinates, enemyPower: float) -> float:
+    #     # noinspection SpellCheckingInspection
+    #     """
+    #     double ac=course + 0.25*r;
+    #     double angle = (15.0-ac)*0.5235988;
+    #     double bullseye = (15.0 - course)*0.5235988;
+    #
+    #     *hit = 700.0 + 100.0*Rand() - 1000.0*sqrt(square(ix-inx)+square(iy-iny))*fabs(sin(bullseye-angle));
+    #     *hit = fabs(*hit);
+    #
+    #     TODO: Move this to GameEngine
+    #     Based on the Klingon power value and the distance between the two
+    #
+    #     Args:
+    #         enemyPosition:
+    #         enterprisePosition:
+    #         enemyPower:
+    #
+    #     Returns:  The effective energy drainage on the Enterprise
+    #     """
+    #
+    #     distance:  float = self.computeQuadrantDistance(startSector=enemyPosition, endSector=enterprisePosition)
+    #     hitFactor: float = 1.3 - distance
+    #     hit:       float = enemyPower * hitFactor
+    #     return hit
 
     def computeHitValueOnKlingon(self, enterprisePosition: Coordinates, klingonPosition: Coordinates, klingonPower: float) -> float:
         # noinspection SpellCheckingInspection
