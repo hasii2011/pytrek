@@ -6,25 +6,25 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from unittest import TestSuite
-from unittest import main as unitTestMain
+from math import degrees
 
 from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction
 from pytrek.engine.DirectionData import DirectionData
 from pytrek.engine.PlayerType import PlayerType
 from pytrek.engine.ShieldHitData import ShieldHitData
+from pytrek.engine.GameEngine import GameEngine
 
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.settings.SettingsCommon import SettingsCommon
 
-from tests.TestBase import TestBase
-
-from pytrek.engine.GameEngine import GameEngine
-
 from pytrek.GameState import GameState
 
+from unittest import TestSuite
+from unittest import main as unitTestMain
+
+from tests.TestBase import TestBase
 
 TestedDirections = NewType('TestedDirections', Dict[Direction, bool])
 
@@ -48,6 +48,87 @@ class TestGameEngine(TestBase):
 
     def tearDown(self):
         pass
+
+    def testComputeHitValueOnKlingon(self):
+
+        testKlingonPower: float = 480.0
+
+        enterprisePosition: Coordinates = Coordinates(x=0, y=0)
+        klingonPosition:   Coordinates = Coordinates(x=0, y=9)
+
+        for x in range(10):
+            kHit: float = self._gameEngine.computeHitValueOnKlingon(enterprisePosition=enterprisePosition,
+                                                                    klingonPosition=klingonPosition,
+                                                                    klingonPower=testKlingonPower)
+
+            self.logger.info(f'Iteration: {x} - kHit={kHit:.2f}')
+
+            if kHit <= testKlingonPower:
+                self.assertLess(kHit, testKlingonPower, 'Single torpedo can almost never kill a Klingon')
+            else:
+                self.logger.info(f'Iteration: {x} killed a Klingon')
+
+    def testComputeCourseStraightWest(self):
+
+        end:   Coordinates = Coordinates(x=0, y=5)
+        start: Coordinates = Coordinates(x=9, y=5)
+
+        course: float = self._gameEngine._computeCourse(start=start, end=end)
+        angle:  float = degrees(course)
+        self.assertEqual(180, angle, 'Did calculation chang')
+        self.logger.info(f'{course=} {angle=}')
+
+    def testComputeCourseDown(self):
+
+        start: Coordinates = Coordinates(x=0, y=0)
+        end:   Coordinates = Coordinates(x=0, y=9)
+
+        course:    float = self._gameEngine._computeCourse(start=start, end=end)
+        downAngle: float = degrees(course)
+
+        self.assertEqual(90, downAngle, 'Hmm, messed up code')
+        self.logger.info(f'{course=} {downAngle=}')
+
+    def testComputeCourseUp(self):
+
+        start: Coordinates = Coordinates(x=0, y=0)
+        end:   Coordinates = Coordinates(x=0, y=9)
+
+        backwardCourse: float = self._gameEngine._computeCourse(start=end, end=start)
+        backAngle:      float = degrees(backwardCourse)
+        self.assertEqual(-90, backAngle, 'Who changed my code')
+        self.logger.info(f'{backwardCourse=} {backAngle=}')
+
+    def testComputeCourseDiagonal(self):
+
+        start: Coordinates = Coordinates(x=0, y=0)
+        end:   Coordinates = Coordinates(x=9, y=9)
+
+        course: float = self._gameEngine._computeCourse(start=start, end=end)
+        angle:  float = degrees(course)
+        self.assertEqual(45, angle, 'Busted code')
+        self.logger.info(f'{course=} {angle=}')
+
+    def testComputeCourseBackDiagonal(self):
+
+        start: Coordinates = Coordinates(x=0, y=0)
+        end:   Coordinates = Coordinates(x=9, y=9)
+
+        backwardCourse: float = self._gameEngine._computeCourse(start=end, end=start)
+        backAngle:      float = degrees(backwardCourse)
+        self.assertEqual(-135, backAngle, 'Who changed my code')
+
+        self.logger.info(f'{backwardCourse=}, {backAngle=}')
+
+    def testComputeCourseStraightEast(self):
+
+        start: Coordinates = Coordinates(x=0, y=5)
+        end:   Coordinates = Coordinates(x=9, y=5)
+
+        course: float = self._gameEngine._computeCourse(start=start, end=end)
+        angle:  float = degrees(course)
+        self.assertEqual(0, angle, 'Did calculation chang')
+        self.logger.info(f'{course=} {angle=}')
 
     def testUpdateTimeAfterWarpTravelShortWarpSpeedLow(self):
 

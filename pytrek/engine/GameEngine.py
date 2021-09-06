@@ -270,6 +270,48 @@ class GameEngine(Singleton):
 
         return hit
 
+    def computeHitValueOnKlingon(self, enterprisePosition: Coordinates, klingonPosition: Coordinates, klingonPower: float) -> float:
+        # noinspection SpellCheckingInspection
+        """
+            bullseye = (15.0 - course)*0.5235988;
+            r = (rand() + rand()) * 0.5 - 0.5;
+            r += 0.002*game.kpower[loop]*r;
+
+            ac=course + 0.25*r;
+            angle = (15.0-ac)*0.5235988;
+            inx, iny are game coordinates of the Enterprise
+
+            h1 = 700.0 + 100.0*Rand() - 1000.0 * sqrt(square(ix-inx)+square(iy-iny)) * fabs(sin(bullseye-angle));
+            h1 = fabs(h1);
+
+        Args:
+            enterprisePosition:
+            klingonPosition:
+            klingonPower:
+
+        Returns  A computed answer based on the old SST `C` code
+        """
+        inx: int = enterprisePosition.x
+        iny: int = enterprisePosition.y
+        ix: int  = klingonPosition.x
+        iy: int  = klingonPosition.y
+
+        squaredX: float = self._intelligence.square(ix-inx)
+        squaredY: float = self._intelligence.square(iy-iny)
+        distance: float = sqrt(squaredX + squaredY)
+
+        course:   float = self._computeCourse(start=enterprisePosition, end=klingonPosition)
+        bullsEye: float = (15.0 - course) * 0.5235988
+        r:        float = self._intelligence.rand() * self._intelligence.rand() * 0.5 - 0.5
+        r = r + 0.002 * klingonPower * r
+
+        ac:    float = course + 0.25 * r
+        angle: float = (15.0 - ac) * 0.5235988
+
+        h1: float = 700.0 + 100.0 * self._intelligence.rand() - 1000.0 * distance * fabs(sin(bullsEye - angle))
+
+        return fabs(h1)
+
     def degradeEnergyLevel(self, degradedTorpedoValue: float):
         """
         printf("Hit %g energy %g\n", hit, energy);
@@ -477,3 +519,25 @@ class GameEngine(Singleton):
 
         # TODO
         # self._gameState.lifeSupportReserves = self._gameSettings.initialLifeSupportReserves
+
+    def _computeCourse(self, start: Coordinates, end: Coordinates) -> float:
+        # noinspection SpellCheckingInspection
+        """
+        These were original calculations;   Mine seem more correct.
+
+        course = 1.90985932*atan2(deltaX, deltaY);
+
+        double course = 1.90985 * atan2((double)secty-jy, (double)jx-sectx);
+
+        Args:
+            start: Start coordinates
+            end:   Target coordinates
+
+        Returns:  A game course in radians
+        """
+
+        deltaX: int = end.x - start.x
+        deltaY: int = end.y - start.y
+        course: float = atan2(deltaY, deltaX)
+
+        return course

@@ -4,7 +4,6 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from math import degrees
 from math import floor
 
 from unittest import TestSuite
@@ -21,7 +20,6 @@ from pytrek.Constants import QUADRANT_GRID_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
 
 from pytrek.engine.ArcadePoint import ArcadePoint
-# from pytrek.engine.KlingonPower import KlingonPower
 from pytrek.engine.Computer import Computer
 
 from pytrek.model.Coordinates import Coordinates
@@ -234,50 +232,6 @@ class TestComputer(TestBase):
 
         self.assertEqual(expectedArcade, actualArcade, 'Computer is broken')
 
-    # def testComputeHitValueOnEnterpriseFarAwayEmeritus(self):
-    #     """
-    #     Normally klingon power is computed by the Intelligence engine;  We just need a known value to work against
-    #     """
-    #
-    #     klingonCoordinates:    Coordinates = Coordinates(0, 0)
-    #     enterpriseCoordinates: Coordinates = Coordinates(9, 9)
-    #     klingonPower:          float       = KlingonPower.Emeritus.value
-    #
-    #     hitValue: float = self.smarty.computeHitValueOnEnterprise(klingonCoordinates, enterpriseCoordinates, klingonPower)
-    #     self.logger.info(f"Emeritus Far away.  Klingon hit value: {hitValue:.3f}")
-    #     self.assertAlmostEqual(13.604, hitValue, 3)
-    #
-    # def testComputeHitValueOnEnterpriseUpCloseEmeritus(self):
-    #
-    #     klingonCoordinates:    Coordinates = Coordinates(4, 4)
-    #     enterpriseCoordinates: Coordinates = Coordinates(4, 5)
-    #     klingonPower:          float       = KlingonPower.Emeritus.value
-    #
-    #     hitValue: float = self.smarty.computeHitValueOnEnterprise(klingonCoordinates, enterpriseCoordinates, klingonPower)
-    #     self.logger.info(f"Emeritus Up Close.  Klingon hit value: {hitValue}")
-    #
-    #     self.assertAlmostEqual(600.0, hitValue, 3)
-    #
-    # def testComputeHitValueOnEnterpriseFarAwayNovice(self):
-    #
-    #     klingonCoordinates:    Coordinates = Coordinates(0, 0)
-    #     enterpriseCoordinates: Coordinates = Coordinates(9, 9)
-    #     klingonPower:          float       = KlingonPower.Novice.value
-    #
-    #     hitValue: float = self.smarty.computeHitValueOnEnterprise(klingonCoordinates, enterpriseCoordinates, klingonPower)
-    #     self.logger.info(f"Novice Far away.  Klingon hit value: {hitValue}")
-    #     self.assertAlmostEqual(10.88, hitValue, 2)
-    #
-    # def testComputeHitValueOnEnterpriseUpCloseNovice(self):
-    #
-    #     klingonCoordinates:    Coordinates = Coordinates(4, 5)
-    #     enterpriseCoordinates: Coordinates = Coordinates(4, 4)
-    #     klingonPower:          float       = KlingonPower.Novice.value
-    #
-    #     hitValue: float = self.smarty.computeHitValueOnEnterprise(klingonCoordinates, enterpriseCoordinates, klingonPower)
-    #     self.logger.info(f"Novice Up Close.  Klingon hit value: {hitValue}")
-    #     self.assertAlmostEqual(480.0, hitValue, 3)
-
     def testComputeAngleToTargetDirectNorth(self):
         """
         North is up
@@ -329,87 +283,6 @@ class TestComputer(TestBase):
         expectedAngle: float = 180.0
 
         self.assertEqual(expectedAngle, actualAngle, 'Bad computation')
-
-    def testComputeCourseDiagonal(self):
-
-        start: Coordinates = Coordinates(x=0, y=0)
-        end:   Coordinates = Coordinates(x=9, y=9)
-
-        course: float = self.smarty._computeCourse(start=start, end=end)
-        angle:  float = degrees(course)
-        self.assertEqual(45, angle, 'Busted code')
-        self.logger.info(f'{course=} {angle=}')
-
-    def testComputeCourseBackDiagonal(self):
-
-        start: Coordinates = Coordinates(x=0, y=0)
-        end:   Coordinates = Coordinates(x=9, y=9)
-
-        backwardCourse: float = self.smarty._computeCourse(start=end, end=start)
-        backAngle:      float = degrees(backwardCourse)
-        self.assertEqual(-135, backAngle, 'Who changed my code')
-
-        self.logger.info(f'{backwardCourse=}, {backAngle=}')
-
-    def testComputeCourseStraightEast(self):
-
-        start: Coordinates = Coordinates(x=0, y=5)
-        end:   Coordinates = Coordinates(x=9, y=5)
-
-        course: float = self.smarty._computeCourse(start=start, end=end)
-        angle:  float = degrees(course)
-        self.assertEqual(0, angle, 'Did calculation chang')
-        self.logger.info(f'{course=} {angle=}')
-
-    def testComputeCourseStraightWest(self):
-
-        end:   Coordinates = Coordinates(x=0, y=5)
-        start: Coordinates = Coordinates(x=9, y=5)
-
-        course: float = self.smarty._computeCourse(start=start, end=end)
-        angle:  float = degrees(course)
-        self.assertEqual(180, angle, 'Did calculation chang')
-        self.logger.info(f'{course=} {angle=}')
-
-    def testComputeCourseDown(self):
-
-        start: Coordinates = Coordinates(x=0, y=0)
-        end:   Coordinates = Coordinates(x=0, y=9)
-
-        course:    float = self.smarty._computeCourse(start=start, end=end)
-        downAngle: float = degrees(course)
-
-        self.assertEqual(90, downAngle, 'Hmm, messed up code')
-        self.logger.info(f'{course=} {downAngle=}')
-
-    def testComputeCourseUp(self):
-
-        start: Coordinates = Coordinates(x=0, y=0)
-        end:   Coordinates = Coordinates(x=0, y=9)
-
-        backwardCourse: float = self.smarty._computeCourse(start=end, end=start)
-        backAngle:      float = degrees(backwardCourse)
-        self.assertEqual(-90, backAngle, 'Who changed my code')
-        self.logger.info(f'{backwardCourse=} {backAngle=}')
-
-    def testComputeHitValueOnKlingon(self):
-
-        testKlingonPower: float = 480.0
-
-        enterprisePosition: Coordinates = Coordinates(x=0, y=0)
-        klingonPosition:   Coordinates = Coordinates(x=0, y=9)
-
-        for x in range(10):
-            kHit: float = self.smarty.computeHitValueOnKlingon(enterprisePosition=enterprisePosition,
-                                                               klingonPosition=klingonPosition,
-                                                               klingonPower=testKlingonPower)
-
-            self.logger.info(f'Iteration: {x} - kHit={kHit:.2f}')
-
-            if kHit <= testKlingonPower:
-                self.assertLess(kHit, testKlingonPower, 'Single torpedo can almost never kill a Klingon')
-            else:
-                self.logger.info(f'Iteration: {x} killed a Klingon')
 
     def testComputeCenterPointLong(self):
 

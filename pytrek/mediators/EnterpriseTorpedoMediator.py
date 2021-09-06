@@ -245,9 +245,9 @@ class EnterpriseTorpedoMediator(MissesMediator):
 
     def __damageOrKillEnemy(self, enterprise: Enterprise, enemy: Enemy):
 
-        kHit: float = self._computer.computeHitValueOnKlingon(enterprisePosition=enterprise.gameCoordinates,
-                                                              klingonPosition=enemy.gameCoordinates,
-                                                              klingonPower=enemy.power)
+        kHit: float = self._gameEngine.computeHitValueOnKlingon(enterprisePosition=enterprise.gameCoordinates,
+                                                                klingonPosition=enemy.gameCoordinates,
+                                                                klingonPower=enemy.power)
         enemy.power -= kHit
         self._messageConsole.displayMessage(f'{enemy.id} took hit: {kHit:.2f}  remaining: {enemy.power:.2f}')
         if enemy.power <= 0:

@@ -5,9 +5,7 @@ from logging import getLogger
 
 from math import atan2
 from math import degrees
-from math import fabs
 from math import floor
-from math import sin
 from math import sqrt
 
 
@@ -143,76 +141,6 @@ class Computer(Singleton):
 
         return strValue
 
-    # def computeHitValueOnEnterprise(self, enemyPosition: Coordinates, enterprisePosition: Coordinates, enemyPower: float) -> float:
-    #     # noinspection SpellCheckingInspection
-    #     """
-    #     double ac=course + 0.25*r;
-    #     double angle = (15.0-ac)*0.5235988;
-    #     double bullseye = (15.0 - course)*0.5235988;
-    #
-    #     *hit = 700.0 + 100.0*Rand() - 1000.0*sqrt(square(ix-inx)+square(iy-iny))*fabs(sin(bullseye-angle));
-    #     *hit = fabs(*hit);
-    #
-    #     TODO: Move this to GameEngine
-    #     Based on the Klingon power value and the distance between the two
-    #
-    #     Args:
-    #         enemyPosition:
-    #         enterprisePosition:
-    #         enemyPower:
-    #
-    #     Returns:  The effective energy drainage on the Enterprise
-    #     """
-    #
-    #     distance:  float = self.computeQuadrantDistance(startSector=enemyPosition, endSector=enterprisePosition)
-    #     hitFactor: float = 1.3 - distance
-    #     hit:       float = enemyPower * hitFactor
-    #     return hit
-
-    def computeHitValueOnKlingon(self, enterprisePosition: Coordinates, klingonPosition: Coordinates, klingonPower: float) -> float:
-        # noinspection SpellCheckingInspection
-        """
-        TODO: Move this to GameEngine
-
-            bullseye = (15.0 - course)*0.5235988;
-            r = (rand() + rand()) * 0.5 - 0.5;
-            r += 0.002*game.kpower[loop]*r;
-
-            ac=course + 0.25*r;
-            angle = (15.0-ac)*0.5235988;
-            inx, iny are game coordinates of the Enterprise
-
-            h1 = 700.0 + 100.0*Rand() - 1000.0 * sqrt(square(ix-inx)+square(iy-iny)) * fabs(sin(bullseye-angle));
-            h1 = fabs(h1);
-
-        Args:
-            enterprisePosition:
-            klingonPosition:
-            klingonPower:
-
-        Returns  A computed answer based on the old SST `C` code
-        """
-        inx: int = enterprisePosition.x
-        iny: int = enterprisePosition.y
-        ix: int  = klingonPosition.x
-        iy: int  = klingonPosition.y
-
-        squaredX: float = self._intelligence.square(ix-inx)
-        squaredY: float = self._intelligence.square(iy-iny)
-        distance: float = sqrt(squaredX + squaredY)
-
-        course:   float = self._computeCourse(start=enterprisePosition, end=klingonPosition)
-        bullsEye: float = (15.0 - course) * 0.5235988
-        r:        float = self._intelligence.rand() * self._intelligence.rand() * 0.5 - 0.5
-        r = r + 0.002 * klingonPower * r
-
-        ac:    float = course + 0.25 * r
-        angle: float = (15.0 - ac) * 0.5235988
-
-        h1: float = 700.0 + 100.0 * self._intelligence.rand() - 1000.0 * distance * fabs(sin(bullsEye - angle))
-
-        return fabs(h1)
-
     def computeAngleToTarget(self, shooter: ArcadePoint, deadMeat: ArcadePoint) -> float:
         """
         x goes right (as expected)
@@ -273,25 +201,3 @@ class Computer(Singleton):
         self.logger.debug(f"{distance=}")
 
         return distance
-
-    def _computeCourse(self, start: Coordinates, end: Coordinates) -> float:
-        # noinspection SpellCheckingInspection
-        """
-        These were original calculations;   Mine seem more correct.
-
-        course = 1.90985932*atan2(deltaX, deltaY);
-
-        double course = 1.90985 * atan2((double)secty-jy, (double)jx-sectx);
-
-        Args:
-            start: Start coordinates
-            end:   Target coordinates
-
-        Returns:  A game course in radians
-        """
-
-        deltaX: int = end.x - start.x
-        deltaY: int = end.y - start.y
-        course: float = atan2(deltaY, deltaX)
-
-        return course
