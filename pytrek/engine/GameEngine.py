@@ -12,7 +12,6 @@ from random import choice
 from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction
 from pytrek.engine.DirectionData import DirectionData
-from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
@@ -181,29 +180,29 @@ class GameEngine(Singleton):
 
         return stopEnergy
 
-    # noinspection SpellCheckingInspection
-    def computeShieldHit(self, torpedoHit: float) -> ShieldHitData:
+    def computeShieldHit(self, torpedoHit: float, currentShieldPower: float):
         """
         Your deflector shields are a defensive device to protect you from Klingon attacks
         (and nearby novas). As the shields protect you, they gradually weaken.
         A shield strength of 75%, for example, means that the next time a Klingon hits you,
         your shields will deflect 75% of the hit, and let 25% get through to hurt you.
 
+        Args:
+            torpedoHit:  The full torpedo hit value
+            currentShieldPower:  How much we have left in the shields
+
         Returns: Computed shield hit data
+
         """
-        changeFactor:       float = 0.25 + (0.5 * self._intelligence.rand())
-        proportionalFactor: float = 1.0 / DEFAULT_FULL_SHIELDS
-        dockedFactor:       float = 1.0
-        if self._gameState.shipCondition == ShipCondition.Docked:
-            dockedFactor = 2.1
-        proportion:         float = proportionalFactor * (self._gameState.shieldEnergy * dockedFactor)
+        if self._devices.getDeviceStatus(DeviceType.Shields) == DeviceStatus.Up:
 
-        if proportion < 0.1:
-            proportion = 0.1
-        shieldHit: float = proportion * changeFactor * torpedoHit + 1.0
+            shieldAbsorptionPercentage: float = currentShieldPower / DEFAULT_FULL_SHIELDS
 
-        shieldAbsorptionValue:   float = 0.8 * shieldHit
-        degradedTorpedoHitValue: float = torpedoHit - shieldHit
+            shieldAbsorptionValue:   float = shieldAbsorptionPercentage * torpedoHit
+            degradedTorpedoHitValue: float = torpedoHit - shieldAbsorptionValue
+        else:
+            shieldAbsorptionValue   = 0
+            degradedTorpedoHitValue = torpedoHit
 
         shieldHitData: ShieldHitData = ShieldHitData(shieldAbsorptionValue=shieldAbsorptionValue, degradedTorpedoHitValue=degradedTorpedoHitValue)
 

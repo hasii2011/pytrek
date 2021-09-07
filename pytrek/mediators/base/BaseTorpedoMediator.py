@@ -324,19 +324,14 @@ class BaseTorpedoMediator(MissesMediator):
 
     def _computeDamage(self, quadrant: Quadrant, shooter: BaseEnemy):
 
-        # hitValue: float = self._computer.computeHitValueOnEnterprise(enemyPosition=shooter.gameCoordinates,
-        #                                                              enterprisePosition=quadrant.enterpriseCoordinates,
-        #                                                              enemyPower=shooter.power)
         hitValue: float = self._gameEngine.computeHit(shooterPosition=shooter.gameCoordinates,
                                                       targetPosition=quadrant.enterpriseCoordinates,
                                                       klingonPower=shooter.power)
 
-        self.logger.debug(f"Original Hit Value: {hitValue:.4f} {shooter=}")
-        if self._devices.getDeviceStatus(DeviceType.Shields) == DeviceStatus.Up:
-            shieldHitData: ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=hitValue)
-        else:
-            shieldHitData = ShieldHitData(degradedTorpedoHitValue=hitValue, shieldAbsorptionValue=0.0)
+        self.logger.info(f"Original Hit Value: {hitValue:.4f} {shooter=}")
+        shieldHitData: ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=hitValue, currentShieldPower=self._gameState.shieldEnergy)
 
+        self.logger.info(f'{shieldHitData=}')
         shieldAbsorptionValue   = shieldHitData.shieldAbsorptionValue
         degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
 
