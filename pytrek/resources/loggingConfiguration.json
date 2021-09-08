@@ -63,16 +63,12 @@
             "level":     "WARNING",
             "propagate": "False"
         },
-        "pytrek.gui.CourseDistanceDialog": {
-            "level":     "INFO",
-            "propagate": "False"
-        },
         "pytrek.gui.gamepieces.KlingonTorpedoFollower": {
             "level":     "WARNING",
             "propagate": "False"
         },
         "pytrek.gui.gamepieces.Commander": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         }
 
