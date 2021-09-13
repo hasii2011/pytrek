@@ -1,12 +1,15 @@
 
 from typing import Dict
+from typing import NewType
 
 from logging import getLogger
 from logging import Logger
-from typing import NewType
+
+from arcade import schedule
 
 from pytrek.GameState import GameState
 from pytrek.Singleton import Singleton
+
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
@@ -19,6 +22,9 @@ EventMap = NewType('EventMap', Dict[FutureEventType, FutureEvent])
 
 
 class EventEngine(Singleton):
+    """
+    This event engine is tied to the arcade schedule and unschedule methods
+    """
 
     NONZERO_OPERATION_TIME_THRESHOLD: float = 0.0001
     """
@@ -38,31 +44,19 @@ class EventEngine(Singleton):
             if fsEventType != FutureEventType.SPY:
                 self._eventMap[fsEventType] = FutureEvent(fsEventType)
 
-        self._eventMap[FutureEventType.SUPER_NOVA]  = self.schedule(FutureEventType.SUPER_NOVA,
-                                                                    self._intelligence.exponentialRandom(0.5 * self._gameState.inTime))
-        self._eventMap[FutureEventType.COMMANDER_ATTACKS_BASE] = self.schedule(FutureEventType.COMMANDER_ATTACKS_BASE,
-                                                                               self._intelligence.exponentialRandom(0.3 * self._gameState.inTime))
+        elapsedStarDates: float = self._intelligence.exponentialRandom(0.5 * self._gameState.inTime)
+        eventStarDate:    float = self._gameState.starDate + elapsedStarDates
+        self._eventMap[FutureEventType.SUPER_NOVA]  = self._createFutureEvent(FutureEventType.SUPER_NOVA, eventStarDate=eventStarDate)
+
+        elapsedStarDates = self._intelligence.exponentialRandom(0.3 * self._gameState.inTime)
+        eventStarDate    = self._gameState.starDate + elapsedStarDates
+
+        self._eventMap[FutureEventType.COMMANDER_ATTACKS_BASE] = self._createFutureEvent(FutureEventType.COMMANDER_ATTACKS_BASE, eventStarDate=eventStarDate)
 
         self.logger.info(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
 
-    def schedule(self, fEventType: FutureEventType, finTime: float) -> FutureEvent:
-
-        retEvent: FutureEvent = FutureEvent(type=fEventType, starDate=finTime)
-
-        return retEvent
-
-    def checkEvents(self, currentStarDate: float):
-        """
-        Check to see if any events need to fire off
-        Args:
-            currentStarDate:  The current star date;
-
-        """
-
-        for fsEventType in FutureEventType:
-            futureEvent: FutureEvent = self._eventMap[fsEventType]
-            if futureEvent.starDate <= currentStarDate:
-                self._fireEvent(eventToFire=futureEvent)
+        # I do not know what a Number is  tell mypy so
+        schedule(function_pointer=self._doEventChecking, interval=5.0)  # type: ignore
 
     def fixDevices(self):
         # noinspection SpellCheckingInspection
@@ -105,9 +99,37 @@ class EventEngine(Singleton):
                         device.deviceStatus = DeviceStatus.Up
                         self.logger.info(f"Device: {device.deviceType.name} repaired")
 
+    def _doEventChecking(self, deltaTime: float):
+        self.logger.info(f'Asynchronous event engine running - {deltaTime:0.3f}')
+
+        currentStarDate: float = self._gameState.starDate
+        self._checkEvents(currentStarDate=currentStarDate)
+
+    def _checkEvents(self, currentStarDate: float):
+        """
+        Check to see if any events need to fire off
+        Args:
+            currentStarDate:  The current star date;
+
+        """
+
+        for fsEventType in FutureEventType:
+            if fsEventType != FutureEventType.SPY:
+
+                futureEvent: FutureEvent = self._eventMap[fsEventType]
+                eventStarDate: float = futureEvent.starDate
+                if eventStarDate != 0 and eventStarDate >= currentStarDate:
+                    self._fireEvent(eventToFire=futureEvent)
+
     def _fireEvent(self, eventToFire: FutureEvent):
 
         self.logger.info(f'{eventToFire=}')
+
+    def _createFutureEvent(self, fEventType: FutureEventType, eventStarDate: float) -> FutureEvent:
+
+        retEvent: FutureEvent = FutureEvent(type=fEventType, starDate=eventStarDate)
+
+        return retEvent
 
     def __repr__(self):
 

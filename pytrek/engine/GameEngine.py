@@ -38,6 +38,12 @@ from pytrek.Singleton import Singleton
 
 class GameEngine(Singleton):
 
+    REAL_TIME_CLOCK_TICK: float = 1.0
+
+    """
+    Initializes the game singletons in correct order to allow testability.  In
+    general the PyTrekView class will initialize them in this order.
+    """
     def init(self, *args, **kwds):
 
         self.logger: Logger = getLogger(__name__)
@@ -336,13 +342,13 @@ class GameEngine(Singleton):
 
     def updateRealTimeClock(self, deltaTime: float):
         """
-
+        Essentially our real time clock ticks every REAL_TIME_CLOCK_TICK second(s).  The
         Args:
             deltaTime:  Diff in time since last time this method was called
         """
         self._accumulatedDelta += deltaTime
 
-        if self._accumulatedDelta > 1.0:
+        if self._accumulatedDelta > GameEngine.REAL_TIME_CLOCK_TICK:
             self._gameClock += self._accumulatedDelta
             self._accumulatedDelta = 0.0
             self.logger.debug(f'Game Clock: {self._gameClock:.3f}')
