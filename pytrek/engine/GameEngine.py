@@ -17,7 +17,7 @@ from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShieldHitData import ShieldHitData
-from pytrek.engine.futures.EventEngine import EventEngine
+# from pytrek.engine.futures.EventEngine import EventEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
@@ -53,7 +53,7 @@ class GameEngine(Singleton):
         self._intelligence: Intelligence = Intelligence()
         self._computer:     Computer     = Computer()
         self._devices:      Devices      = Devices()
-        self._eventEngine:  EventEngine  = EventEngine()
+        # self._eventEngine:  EventEngine  = EventEngine()
 
         self._accumulatedDelta: float = 0.0
         self._gameClock:        float = 0.0
@@ -100,7 +100,7 @@ class GameEngine(Singleton):
         """
         elapsedTime = travelDistance / 0.095
         self._gameState.opTime = elapsedTime
-        self._eventEngine.fixDevices()
+        # self._eventEngine.fixDevices()        TODO  This moves to async event engine who check to make sure star date has advance
         self.updateTime(elapsedTime=elapsedTime)
 
     def updateTimeAfterWarpTravel(self, travelDistance: float, warpFactor: float):

@@ -29,6 +29,8 @@ class Galaxy(Singleton):
     Galaxy management
     """
 
+    MAX_STARBASE_SEARCHES: int = 128
+
     def init(self, *args, **kwds):
         """"""
         self._gameEngine:   GameEngine    = GameEngine()
@@ -92,6 +94,20 @@ class Galaxy(Singleton):
     @currentQuadrant.setter
     def currentQuadrant(self, quadrant: Quadrant):
         self._currentQuadrant = quadrant
+
+    def getStarBaseCoordinates(self) -> Coordinates:
+        """
+        Randomly search the galaxy for a quadrant that has a star base.
+        Loop trough MAX_STARBASE_SEARCHES;  If cannot fine one, perhaps
+        there are no star bases;  Return None
+
+        Returns:  The randomly located quadrant with a star base;  If no getStarBases
+        left return none
+        """
+        for x in range(Galaxy.MAX_STARBASE_SEARCHES):
+            pass
+
+        return Coordinates(0, 0)
 
     def placeKlingonsInGalaxy(self):
         """

@@ -13,17 +13,22 @@ from arcade import key as arcadeKey
 from arcade import start_render
 
 from pytrek.GameState import GameState
+from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.futures.EventEngine import EventEngine
+from pytrek.engine.futures.FutureEvent import FutureEvent
+from pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase
 
-SCREEN_WIDTH:  int = 800
+SCREEN_WIDTH:  int = 960
 SCREEN_HEIGHT: int = 600
 
 SCREEN_TITLE: str = 'Test Event Scheduler'
@@ -40,6 +45,17 @@ DEVICE_STATUS_X: float = DEVICE_DAMAGE_X + 100
 DEVICE_DETAIL_COLOR:     tuple[int, int, int] = color.WHITE
 DEVICE_DETAIL_FONT_SIZE: int = 12
 
+EVENT_TYPE_X:           float = DEVICE_STATUS_X + 120
+EVENT_DATE_X:           float = EVENT_TYPE_X    + 210
+EVENT_COORDINATES_X:    float = EVENT_DATE_X + 100
+EVENT_TYPE_Y:           float = DEVICE_Y
+
+EVENT_HEADER_COLOR:     tuple[int, int, int] = color.WHITE
+EVENT_HEADER_FONT_SIZE: int = 14
+
+EVENT_DETAIL_COLOR:     tuple[int, int, int] = color.WHITE
+EVENT_DETAIL_FONT_SIZE: int = 12
+
 
 class TestEventScheduler(View):
 
@@ -48,38 +64,65 @@ class TestEventScheduler(View):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
-        self._gameEngine:  GameEngine  = GameEngine()
-        self._eventEngine: EventEngine = EventEngine()
-        self._gameState:   GameState   = GameState()
-        self._devices:     Devices     = Devices()
+        self._intelligence: Intelligence = Intelligence()
+        self._computer:     Computer     = Computer()
+        self._gameEngine:   GameEngine   = GameEngine()
+        self._gameState:    GameState    = GameState()
+        self._gameSettings: GameSettings = GameSettings()
+        self._devices:      Devices     = Devices()
+        self._eventEngine:  EventEngine = EventEngine()
 
     def setup(self):
         pass
 
     def on_draw(self):
         start_render()
-
         # def draw_line(start_x: float, start_y: float, end_x: float, end_y: float, color: Color, line_width: float = 1)
-
-        draw_text(f'Device type', DEVICE_TYPE_X,   DEVICE_Y, DEVICE_HEADER_COLOR, DEVICE_HEADER_FONT_SIZE)
-        draw_text(f'Damage',      DEVICE_DAMAGE_X, DEVICE_Y, DEVICE_HEADER_COLOR, DEVICE_HEADER_FONT_SIZE)
-        draw_text(f'Status',      DEVICE_STATUS_X, DEVICE_Y, DEVICE_HEADER_COLOR, DEVICE_HEADER_FONT_SIZE)
-        draw_line(start_x=DEVICE_TYPE_X, end_x=(SCREEN_WIDTH/ 2) - (2 * X_MARGIN),
-                  start_y=DEVICE_Y, end_y=DEVICE_Y,
+        self._drawDevicesStatus()
+        # Header
+        draw_text(f'Event Type', EVENT_TYPE_X, EVENT_TYPE_Y, EVENT_HEADER_COLOR, EVENT_HEADER_FONT_SIZE)
+        draw_text(f'Event Date', EVENT_DATE_X, EVENT_TYPE_Y, EVENT_HEADER_COLOR, EVENT_HEADER_FONT_SIZE)
+        # Separator line
+        draw_line(start_x=EVENT_TYPE_X, end_x=SCREEN_WIDTH - (2 * X_MARGIN),
+                  start_y=EVENT_TYPE_Y, end_y=EVENT_TYPE_Y,
                   color=color.WHITE, line_width=2)
 
-        y: float = DEVICE_Y - 20
-        for deviceType in DeviceType:
-            y -= 20
-            device:       Device       = self._devices.getDevice(deviceType=deviceType)
-            damage:       float        = device.damage
-            deviceStatus: DeviceStatus = device.deviceStatus
-            draw_text(f' {deviceType}',   DEVICE_TYPE_X,   y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
-            draw_text(f' {damage:.2f}',   DEVICE_DAMAGE_X, y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
-            draw_text(f' {deviceStatus}', DEVICE_STATUS_X, y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
+        # The events
+        y: float = EVENT_TYPE_Y - 20
+        for eventType in FutureEventType:
+            if eventType != FutureEventType.SPY:
+                y -= 20
+                event: FutureEvent = self._eventEngine.getEvent(eventType=eventType)
+                draw_text(f'{event.type.value}', EVENT_TYPE_X, y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
+                draw_text(f'{event.starDate:.2f}',        EVENT_DATE_X,        y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
+                draw_text(f'{event.quadrantCoordinates}', EVENT_COORDINATES_X, y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
 
         starDate: float = self._gameState.starDate
         draw_text(f'Current Star Date: {starDate}', 10, 100, color.GLAUCOUS, 12)
+
+    def _drawDevicesStatus(self):
+
+        # Header
+        draw_text(f'Device type', DEVICE_TYPE_X, DEVICE_Y, DEVICE_HEADER_COLOR, DEVICE_HEADER_FONT_SIZE)
+        draw_text(f'Damage',      DEVICE_DAMAGE_X, DEVICE_Y, DEVICE_HEADER_COLOR, DEVICE_HEADER_FONT_SIZE)
+        draw_text(f'Status',      DEVICE_STATUS_X, DEVICE_Y, DEVICE_HEADER_COLOR, DEVICE_HEADER_FONT_SIZE)
+
+        # Separator line
+        draw_line(start_x=DEVICE_TYPE_X, end_x=(SCREEN_WIDTH / 2) - (2 * X_MARGIN),
+                  start_y=DEVICE_Y, end_y=DEVICE_Y,
+                  color=color.WHITE, line_width=2)
+
+        # Devices themselves
+        y: float = DEVICE_Y - 20
+
+        for deviceType in DeviceType:
+            y -= 20
+            device: Device = self._devices.getDevice(deviceType=deviceType)
+            damage: float = device.damage
+            deviceStatus: DeviceStatus = device.deviceStatus
+            draw_text(f' {deviceType}', DEVICE_TYPE_X, y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
+            draw_text(f' {damage:.2f}', DEVICE_DAMAGE_X, y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
+            draw_text(f' {deviceStatus}', DEVICE_STATUS_X, y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
 
     def on_update(self, deltaTime: float):
         """

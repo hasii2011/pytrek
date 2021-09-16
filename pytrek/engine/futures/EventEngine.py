@@ -4,11 +4,9 @@ from typing import NewType
 
 from logging import getLogger
 from logging import Logger
+from typing import cast
 
 from arcade import schedule
-
-from pytrek.GameState import GameState
-from pytrek.Singleton import Singleton
 
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.devices.Device import Device
@@ -17,6 +15,12 @@ from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
+
+from pytrek.model.Coordinates import Coordinates
+
+from pytrek.GameState import GameState
+
+from pytrek.Singleton import Singleton
 
 EventMap = NewType('EventMap', Dict[FutureEventType, FutureEvent])
 
@@ -30,6 +34,7 @@ class EventEngine(Singleton):
     """
     This constant is the amount of time that a game operation (e.g. firing, movement) must take to trigger
     a check for events. It exists so the check for zero does not have to be exact.
+    
     """
     def init(self, *args, **kwargs):
 
@@ -39,24 +44,16 @@ class EventEngine(Singleton):
         self._gameState:    GameState    = GameState()
         self._devices:      Devices      = Devices()
 
-        self._eventMap: EventMap = EventMap({})
-        for fsEventType in FutureEventType:
-            if fsEventType != FutureEventType.SPY:
-                self._eventMap[fsEventType] = FutureEvent(fsEventType)
-
-        elapsedStarDates: float = self._intelligence.exponentialRandom(0.5 * self._gameState.inTime)
-        eventStarDate:    float = self._gameState.starDate + elapsedStarDates
-        self._eventMap[FutureEventType.SUPER_NOVA]  = self._createFutureEvent(FutureEventType.SUPER_NOVA, eventStarDate=eventStarDate)
-
-        elapsedStarDates = self._intelligence.exponentialRandom(0.3 * self._gameState.inTime)
-        eventStarDate    = self._gameState.starDate + elapsedStarDates
-
-        self._eventMap[FutureEventType.COMMANDER_ATTACKS_BASE] = self._createFutureEvent(FutureEventType.COMMANDER_ATTACKS_BASE, eventStarDate=eventStarDate)
+        self._eventMap: EventMap = cast(EventMap, None)
+        self._setupInitialEvents()
 
         self.logger.info(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
 
-        # I do not know what a Number is  tell mypy so
+        # I do not know what a Number is tell mypy so
         schedule(function_pointer=self._doEventChecking, interval=5.0)  # type: ignore
+
+    def getEvent(self, eventType: FutureEventType) -> FutureEvent:
+        return self._eventMap[eventType]
 
     def fixDevices(self):
         # noinspection SpellCheckingInspection
@@ -100,9 +97,11 @@ class EventEngine(Singleton):
                         self.logger.info(f"Device: {device.deviceType.name} repaired")
 
     def _doEventChecking(self, deltaTime: float):
-        self.logger.info(f'Asynchronous event engine running - {deltaTime:0.3f}')
+
+        self.logger.debug(f'{deltaTime:0.3f}')
 
         currentStarDate: float = self._gameState.starDate
+        self.logger.info(f'Event engine running - currentStarDate: {currentStarDate:0.3f}')
         self._checkEvents(currentStarDate=currentStarDate)
 
     def _checkEvents(self, currentStarDate: float):
@@ -112,24 +111,58 @@ class EventEngine(Singleton):
             currentStarDate:  The current star date;
 
         """
-
         for fsEventType in FutureEventType:
             if fsEventType != FutureEventType.SPY:
 
                 futureEvent: FutureEvent = self._eventMap[fsEventType]
                 eventStarDate: float = futureEvent.starDate
-                if eventStarDate != 0 and eventStarDate >= currentStarDate:
+                if eventStarDate != 0 and currentStarDate >= eventStarDate:
                     self._fireEvent(eventToFire=futureEvent)
 
     def _fireEvent(self, eventToFire: FutureEvent):
 
         self.logger.info(f'{eventToFire=}')
 
-    def _createFutureEvent(self, fEventType: FutureEventType, eventStarDate: float) -> FutureEvent:
+    def _setupInitialEvents(self):
 
-        retEvent: FutureEvent = FutureEvent(type=fEventType, starDate=eventStarDate)
+        eventMap: EventMap = EventMap({})
 
-        return retEvent
+        for fsEventType in FutureEventType:
+            if fsEventType != FutureEventType.SPY:
+                eventMap[fsEventType] = FutureEvent(fsEventType)
+
+        self._eventMap = eventMap
+
+        self.__createSuperNovaEvent()
+        self.__createCommanderAttacksBaseEvent()
+
+    def __createSuperNovaEvent(self):
+
+        eventMap: EventMap = self._eventMap
+
+        elapsedStarDates:    float       = self._intelligence.exponentialRandom(0.5 * self._gameState.inTime)
+        eventStarDate:       float       = self._gameState.starDate + elapsedStarDates
+        quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
+
+        eventMap[FutureEventType.SUPER_NOVA] = FutureEvent(type=FutureEventType.SUPER_NOVA, starDate=eventStarDate, quadrantCoordinates=quadrantCoordinates)
+
+    def __createCommanderAttacksBaseEvent(self):
+
+        eventMap:         EventMap    = self._eventMap
+        elapsedStarDates: float       = self._intelligence.exponentialRandom(0.3 * self._gameState.inTime)
+        eventStarDate:    float       = self._gameState.starDate + elapsedStarDates
+        coordinates:      Coordinates = self.__getStarBaseCoordinates()
+        eventMap[FutureEventType.COMMANDER_ATTACKS_BASE] = FutureEvent(type=FutureEventType.COMMANDER_ATTACKS_BASE,
+                                                                       starDate=eventStarDate,
+                                                                       quadrantCoordinates=coordinates)
+
+    def __getStarBaseCoordinates(self) -> Coordinates:
+        # avoid circular import
+        from pytrek.model.Galaxy import Galaxy
+
+        galaxy: Galaxy      = Galaxy()
+
+        return galaxy.getStarBaseCoordinates()
 
     def __repr__(self):
 
