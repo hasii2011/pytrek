@@ -16,8 +16,6 @@ from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
 
-from pytrek.model.Coordinates import Coordinates
-
 from pytrek.GameState import GameState
 
 from pytrek.Singleton import Singleton
@@ -45,7 +43,7 @@ class EventEngine(Singleton):
         self._devices:      Devices      = Devices()
 
         self._eventMap: EventMap = cast(EventMap, None)
-        self._setupInitialEvents()
+        self._setupEventMap()
 
         self.logger.info(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
 
@@ -54,6 +52,12 @@ class EventEngine(Singleton):
 
     def getEvent(self, eventType: FutureEventType) -> FutureEvent:
         return self._eventMap[eventType]
+
+    def scheduleEvent(self, futureEvent: FutureEvent):
+
+        eventType: FutureEventType = futureEvent.type
+
+        self._eventMap[eventType] = futureEvent
 
     def fixDevices(self):
         # noinspection SpellCheckingInspection
@@ -123,7 +127,7 @@ class EventEngine(Singleton):
 
         self.logger.info(f'{eventToFire=}')
 
-    def _setupInitialEvents(self):
+    def _setupEventMap(self):
 
         eventMap: EventMap = EventMap({})
 
@@ -132,37 +136,6 @@ class EventEngine(Singleton):
                 eventMap[fsEventType] = FutureEvent(fsEventType)
 
         self._eventMap = eventMap
-
-        self.__createSuperNovaEvent()
-        self.__createCommanderAttacksBaseEvent()
-
-    def __createSuperNovaEvent(self):
-
-        eventMap: EventMap = self._eventMap
-
-        elapsedStarDates:    float       = self._intelligence.exponentialRandom(0.5 * self._gameState.inTime)
-        eventStarDate:       float       = self._gameState.starDate + elapsedStarDates
-        quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
-
-        eventMap[FutureEventType.SUPER_NOVA] = FutureEvent(type=FutureEventType.SUPER_NOVA, starDate=eventStarDate, quadrantCoordinates=quadrantCoordinates)
-
-    def __createCommanderAttacksBaseEvent(self):
-
-        eventMap:         EventMap    = self._eventMap
-        elapsedStarDates: float       = self._intelligence.exponentialRandom(0.3 * self._gameState.inTime)
-        eventStarDate:    float       = self._gameState.starDate + elapsedStarDates
-        coordinates:      Coordinates = self.__getStarBaseCoordinates()
-        eventMap[FutureEventType.COMMANDER_ATTACKS_BASE] = FutureEvent(type=FutureEventType.COMMANDER_ATTACKS_BASE,
-                                                                       starDate=eventStarDate,
-                                                                       quadrantCoordinates=coordinates)
-
-    def __getStarBaseCoordinates(self) -> Coordinates:
-        # avoid circular import
-        from pytrek.model.Galaxy import Galaxy
-
-        galaxy: Galaxy      = Galaxy()
-
-        return galaxy.getStarBaseCoordinates()
 
     def __repr__(self):
 

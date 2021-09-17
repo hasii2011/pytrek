@@ -20,6 +20,7 @@ from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
@@ -71,6 +72,9 @@ class TestEventScheduler(View):
         self._gameSettings: GameSettings = GameSettings()
         self._devices:      Devices     = Devices()
         self._eventEngine:  EventEngine = EventEngine()
+
+        eventCreator: EventCreator = EventCreator()
+        eventCreator.createInitialEvents()
 
     def setup(self):
         pass

@@ -68,6 +68,16 @@ class TestGalaxy(TestBase):
             self.assertNotEqual(0, quadrant.klingonCount, 'We should have some Klingons in this quadrant')
             self.logger.debug(f'{kCoordinates=} {quadrant.klingonCount=}')
 
+    def testGetStarBaseCoordinates(self):
+
+        self.assertNotEqual(0, self._galaxy.starBaseCount, 'Should always have some StarBases')
+
+        randomCoordinates: Coordinates = self._galaxy.getStarBaseCoordinates()
+
+        self.assertIsNotNone(randomCoordinates, "We should get somebody")
+
+        self.logger.debug(f'{randomCoordinates=}')
+
 
 def suite() -> TestSuite:
     """You need to change the name of the test class here also."""

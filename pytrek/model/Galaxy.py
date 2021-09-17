@@ -99,13 +99,16 @@ class Galaxy(Singleton):
         Loop trough MAX_STARBASE_SEARCHES;  If cannot fine one, perhaps
         there are no star bases;  Return None
 
-        Returns:  The randomly located quadrant with a star base;  If no getStarBases
-        left return none
+        Returns:  The randomly located quadrant with a star base;  If no StarBases
+        left return None
         """
         for x in range(Galaxy.MAX_STARBASE_SEARCHES):
-            pass
+            potentialCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
+            quadrant: Quadrant = self.getQuadrant(quadrantCoordinates=potentialCoordinates)
+            if quadrant.hasStarBase is True:
+                return potentialCoordinates
 
-        return Coordinates(0, 0)
+        return cast(Coordinates, None)
 
     def getQuadrant(self, quadrantCoordinates: Coordinates) -> Quadrant:
 
@@ -167,7 +170,8 @@ class Galaxy(Singleton):
 
         Returns:  The number we actually placed
         """
-        starBaseCount = self._intelligence.generateInitialStarBaseCount()
+        retCount:      int = self._intelligence.generateInitialStarBaseCount()
+        starBaseCount: int = retCount
         while starBaseCount != 0:
             quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
             quadrant:            Quadrant  = self.getQuadrant(quadrantCoordinates)
@@ -179,7 +183,7 @@ class Galaxy(Singleton):
                 quadrant.addStarBase()
             starBaseCount -= 1
 
-        return starBaseCount
+        return retCount
 
     def _setInitialQuadrant(self):
         """"""

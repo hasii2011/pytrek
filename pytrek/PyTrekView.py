@@ -30,6 +30,7 @@ from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.EventEngine import EventEngine
 
 from pytrek.gui.GalaxyView import GalaxyView
@@ -145,6 +146,9 @@ class PyTrekView(View):
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
 
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
+
+        eventCreator: EventCreator = EventCreator()
+        eventCreator.createInitialEvents()
 
         # And finally the rest of the UI elements
         self._enterQuadrant()
