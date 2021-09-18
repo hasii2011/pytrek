@@ -148,7 +148,7 @@ class PyTrekView(View):
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
         eventCreator: EventCreator = EventCreator()
-        eventCreator.createInitialEvents()
+        eventCreator.scheduleInitialEvents()
 
         # And finally the rest of the UI elements
         self._enterQuadrant()

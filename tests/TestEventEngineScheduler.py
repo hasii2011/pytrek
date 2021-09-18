@@ -13,6 +13,7 @@ from arcade import key as arcadeKey
 from arcade import start_render
 
 from pytrek.GameState import GameState
+
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
@@ -24,6 +25,10 @@ from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
+
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
+
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
 
@@ -65,16 +70,21 @@ class TestEventScheduler(View):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
+        self._gameSettings: GameSettings = GameSettings()
+        self._gameState:    GameState    = GameState()
+        self._gameEngine:   GameEngine   = GameEngine()
         self._intelligence: Intelligence = Intelligence()
         self._computer:     Computer     = Computer()
-        self._gameEngine:   GameEngine   = GameEngine()
-        self._gameState:    GameState    = GameState()
-        self._gameSettings: GameSettings = GameSettings()
-        self._devices:      Devices     = Devices()
-        self._eventEngine:  EventEngine = EventEngine()
+        self._galaxy:       Galaxy       = Galaxy()
+        self._devices:      Devices      = Devices()
+        self._eventEngine:  EventEngine  = EventEngine()
+
+        self._quadrant: Quadrant = self._galaxy.currentQuadrant
+
+        self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
         eventCreator: EventCreator = EventCreator()
-        eventCreator.createInitialEvents()
+        eventCreator.scheduleInitialEvents()
 
     def setup(self):
         pass
