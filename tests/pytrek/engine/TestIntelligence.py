@@ -505,7 +505,7 @@ class TestIntelligence(TestBase):
 
         for x in range(0, TestIntelligence.EXPONENTIAL_RANDOM_MAX_CALLS):
             ans: float = self.smarty.exponentialRandom(TestIntelligence.DEFAULT_AVERAGE)
-            self.assertGreater(68.00, ans, 'Average failed upper bound')
+            self.assertGreater(73.00, ans, 'Average failed upper bound')
 
     def testExponentialRandomFiftySix(self):
         for x in range(0, TestIntelligence.EXPONENTIAL_RANDOM_MAX_CALLS):

@@ -86,6 +86,7 @@ class GameEngine(Singleton):
             neededEnergyForImpulseMove = self.computeEnergyForQuadrantTravel(travelDistance=travelDistance)
 
         self._gameState.energy = self._gameState.energy - neededEnergyForImpulseMove
+        self._gameState.opTime = travelDistance / 0.095
 
     def updateTimeAfterImpulseTravel(self, travelDistance: float):
         """
@@ -103,6 +104,7 @@ class GameEngine(Singleton):
     def updateTimeAfterWarpTravel(self, travelDistance: float, warpFactor: float):
         # noinspection SpellCheckingInspection
         """
+        Updates both the operation time but the game clock
         Time = 10.0*dist/wfacsq;
 
         Args:
