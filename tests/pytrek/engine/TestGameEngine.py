@@ -8,7 +8,6 @@ from logging import getLogger
 
 from math import degrees
 
-from pytrek.Constants import DEFAULT_FULL_SHIELDS
 from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction
 from pytrek.engine.DirectionData import DirectionData
@@ -20,8 +19,8 @@ from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 
 from pytrek.model.Coordinates import Coordinates
-from pytrek.settings.GameSettings import GameSettings
 
+from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
 
 from pytrek.GameState import GameState
@@ -313,21 +312,24 @@ class TestGameEngine(TestBase):
 
     def testComputeShieldHitShieldsFull(self):
 
-        shieldHitData:  ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=1000, currentShieldPower=DEFAULT_FULL_SHIELDS)
+        shieldHitData:  ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=1000,
+                                                                          currentShieldPower=self._gameSettings.defaultFullShields)
 
         self.assertEqual(shieldHitData.shieldAbsorptionValue,   1000, 'Shields should absorb all')
         self.assertEqual(shieldHitData.degradedTorpedoHitValue, 0,    'Nothing should pass through')
 
     def testComputeShieldHitShieldsHalf(self):
 
-        shieldHitData:  ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=1000, currentShieldPower=DEFAULT_FULL_SHIELDS // 2)
+        shieldHitData:  ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=1000,
+                                                                          currentShieldPower=self._gameSettings.defaultFullShields // 2)
 
         self.assertEqual(shieldHitData.shieldAbsorptionValue,   500, 'Shields should absorb half')
         self.assertEqual(shieldHitData.degradedTorpedoHitValue, 500, 'Half should pass through')
 
     def testComputeShieldHitShieldsQuarter(self):
 
-        shieldHitData:  ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=1000, currentShieldPower=DEFAULT_FULL_SHIELDS // 4)
+        shieldHitData:  ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=1000,
+                                                                          currentShieldPower=self._gameSettings.defaultFullShields // 4)
 
         self.assertEqual(shieldHitData.shieldAbsorptionValue,   250, 'Shields should absorb 1/4')
         self.assertEqual(shieldHitData.degradedTorpedoHitValue, 750, '3/4 should pass through')
@@ -338,7 +340,8 @@ class TestGameEngine(TestBase):
 
         self._devices.setDeviceStatus(DeviceType.Shields, DeviceStatus.Down)
 
-        shieldHitData:  ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=1000, currentShieldPower=DEFAULT_FULL_SHIELDS)
+        shieldHitData:  ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=1000,
+                                                                          currentShieldPower=self._gameSettings.defaultFullShields)
 
         self.assertEqual(shieldHitData.shieldAbsorptionValue,   0,   'Shields are down everything passes through')
         self.assertEqual(shieldHitData.degradedTorpedoHitValue, 1000, 'We should get whacked')

@@ -11,16 +11,18 @@ class LimitsSettings(BaseSubSetting):
 
     LIMITS_SECTION: str = 'Limits'
 
-    MAXIMUM_STARS:       str = 'maximum_stars'
-    MINIMUM_STAR_BASES:  str = 'minimum_star_bases'
-    MAXIMUM_STAR_BASES:  str = 'maximum_star_bases'
-    MAXIMUM_PLANETS:     str = 'maximum_planets'
+    MAXIMUM_STARS:        str = 'maximum_stars'
+    MINIMUM_STAR_BASES:   str = 'minimum_star_bases'
+    MAXIMUM_STAR_BASES:   str = 'maximum_star_bases'
+    MAXIMUM_PLANETS:      str = 'maximum_planets'
+    DEFAULT_FULL_SHIELDS: str = 'default_full_shields'
 
     LIMITS_SETTINGS:  SettingsNameValues = SettingsNameValues({
-        MAXIMUM_STARS:      '4',
-        MINIMUM_STAR_BASES: '2',
-        MAXIMUM_STAR_BASES: '5',
-        MAXIMUM_PLANETS:    '10'
+        MAXIMUM_STARS:        '4',
+        MINIMUM_STAR_BASES:   '2',
+        MAXIMUM_STAR_BASES:   '5',
+        MAXIMUM_PLANETS:      '10',
+        DEFAULT_FULL_SHIELDS: '2500'
     })
 
     """
@@ -52,3 +54,7 @@ class LimitsSettings(BaseSubSetting):
     @property
     def maximumPlanets(self) -> int:
         return self._config.getint(LimitsSettings.LIMITS_SECTION, LimitsSettings.MAXIMUM_PLANETS)
+
+    @property
+    def defaultFullShields(self) -> int:
+        return self._config.getint(LimitsSettings.LIMITS_SECTION, LimitsSettings.DEFAULT_FULL_SHIELDS)

@@ -58,6 +58,10 @@ class GameSettings(Singleton):
         return self._limits.maximumPlanets
 
     @property
+    def defaultFullShields(self) -> int:
+        return self._limits.defaultFullShields
+
+    @property
     def initialEnergyLevel(self) -> int:
         return self._power.initialEnergyLevel
 

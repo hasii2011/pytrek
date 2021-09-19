@@ -17,7 +17,6 @@ from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShieldHitData import ShieldHitData
-# from pytrek.engine.futures.EventEngine import EventEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
@@ -29,8 +28,6 @@ from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.settings.GameSettings import GameSettings
-
-from pytrek.Constants import DEFAULT_FULL_SHIELDS
 
 from pytrek.GameState import GameState
 from pytrek.Singleton import Singleton
@@ -202,7 +199,7 @@ class GameEngine(Singleton):
         """
         if self._devices.getDeviceStatus(DeviceType.Shields) == DeviceStatus.Up:
 
-            shieldAbsorptionPercentage: float = currentShieldPower / DEFAULT_FULL_SHIELDS
+            shieldAbsorptionPercentage: float = currentShieldPower / self._gameSettings.defaultFullShields
 
             shieldAbsorptionValue:   float = shieldAbsorptionPercentage * torpedoHit
             degradedTorpedoHitValue: float = torpedoHit - shieldAbsorptionValue

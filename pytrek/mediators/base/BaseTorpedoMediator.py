@@ -12,8 +12,6 @@ from arcade import check_for_collision_with_list
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.ShieldHitData import ShieldHitData
-from pytrek.engine.devices.DeviceStatus import DeviceStatus
-from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 
 from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
@@ -23,6 +21,7 @@ from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 from pytrek.gui.gamepieces.base.BaseTorpedoFollower import BaseTorpedoFollower
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
+
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
@@ -33,8 +32,6 @@ from pytrek.mediators.base.MissesMediator import MissesMediator
 from pytrek.mediators.base.MissesMediator import Torpedoes
 
 from pytrek.model.Quadrant import Quadrant
-
-from pytrek.Constants import DEFAULT_FULL_SHIELDS
 
 
 class BaseTorpedoMediator(MissesMediator):
@@ -338,7 +335,7 @@ class BaseTorpedoMediator(MissesMediator):
         self._soundShieldHit.play()
         self._gameEngine.degradeShields(shieldAbsorptionValue)
 
-        shieldPercentage: int = round((self._gameState.shieldEnergy / DEFAULT_FULL_SHIELDS) * 100)
+        shieldPercentage: int = round((self._gameState.shieldEnergy / self._gameSettings.defaultFullShields) * 100)
         shieldMsg:        str = f"Shields at {shieldPercentage} percent.  Enterprise energy degraded by: {degradedTorpedoHitValue:.2f}"
 
         self._messageConsole.displayMessage(shieldMsg)
