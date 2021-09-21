@@ -27,7 +27,7 @@ class GameState(Singleton):
         self._gameType:     GameType  = gameType
         self._energy:       float     = gameSettings.initialEnergyLevel
         self._shieldEnergy: float     = gameSettings.initialShieldEnergy
-        self.torpedoCount:  int       = gameSettings.initialTorpedoCount
+        self._torpedoCount: int       = gameSettings.initialTorpedoCount
         self._starDate:     float     = intelligence.generateInitialStarDate()
         self._inTime:       float     = intelligence.generateInitialGameTime()
         self._opTime:       float     = 0.0

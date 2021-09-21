@@ -64,6 +64,9 @@ class GameEngine(Singleton):
         """
         return self._gameClock
 
+    def resetOperationTime(self):
+        self._gameState.opTime = 0.0
+
     def impulse(self, newCoordinates: Coordinates, quadrant: Quadrant, enterprise: Enterprise):
         """
 

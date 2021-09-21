@@ -30,7 +30,7 @@ class Computer(Singleton):
     Make a computer a singleton so we don't have to pass it around
     """
     QUADRANT_TRAVEL_FACTOR: float = 0.1
-    GALACTIC_TRAVEL_FACTOR: float = 1.0
+    GALACTIC_TRAVEL_FACTOR: float = 10.0
 
     def init(self):
         self.logger:        Logger       = getLogger(__name__)

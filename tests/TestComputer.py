@@ -40,7 +40,7 @@ class TestComputer(TestBase):
     SMALL_QUADRANT_DISTANCE: float = 0.60
 
     MIN_GALACTIC_DISTANCE: float = 0.0
-    MAX_GALACTIC_DISTANCE: float = 9.0
+    MAX_GALACTIC_DISTANCE: float = 90.0
 
     clsLogger: Logger = cast(Logger, None)
 

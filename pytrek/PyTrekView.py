@@ -202,15 +202,20 @@ class PyTrekView(View):
         elif pressedKey == key.G:
             galaxyView: GalaxyView = GalaxyView(viewCompleteCallback=self._switchViewBack)
             self.window.show_view(galaxyView)
+            self._gameEngine.resetOperationTime()
         elif pressedKey == key.L:
             longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(viewCompleteCallback=self._switchViewBack)
             self.window.show_view(longRangeSensorView)
+            self._gameEngine.resetOperationTime()
         elif pressedKey == key.T:
             self._quadrantMediator.fireEnterpriseTorpedoes(self._quadrant)
+            self._gameEngine.resetOperationTime()
         elif pressedKey == key.P:
             self._quadrantMediator.firePhasers(self._quadrant)
+            self._gameEngine.resetOperationTime()
         elif pressedKey == key.D:
             self._quadrantMediator.dock(self._quadrant)
+            self._gameEngine.resetOperationTime()
         elif pressedKey == key.W:
             self._enterpriseMediator.warp()
 
