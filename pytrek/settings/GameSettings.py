@@ -297,6 +297,14 @@ class GameSettings(Singleton):
     def debugNoSuperCommanders(self, newValue: bool):
         self._debug.noSuperCommanders = newValue
 
+    @property
+    def consoleShowInternals(self) -> bool:
+        return self._debug.consoleShowInternals
+
+    @consoleShowInternals.setter
+    def consoleShowInternals(self, newValue: bool):
+        self._debug.consoleShowInternals = newValue
+
     def _createEmptySettings(self):
 
         self._config: ConfigParser = ConfigParser()

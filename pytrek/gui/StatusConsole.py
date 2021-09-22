@@ -27,6 +27,7 @@ from pytrek.GameState import GameState
 from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.model.Coordinates import Coordinates
+from pytrek.settings.GameSettings import GameSettings
 
 SECTION_LABEL_FONT_SIZE: int = 16
 STATUS_LABEL_FONT_SIZE: int = 11
@@ -51,8 +52,6 @@ class StatusConsole:
     has a reserved portion of the UI set aside for it
     """
 
-    SHOW_INTERNALS: bool = True         # TODO Make this a debug setting
-
     statusLabel: List[str] = [
         'Condition:',
         'StarDate: ',
@@ -73,7 +72,8 @@ class StatusConsole:
 
         self._gameView: View = gameView
 
-        self._gameState: GameState = GameState()
+        self._gameSettings: GameSettings = GameSettings()
+        self._gameState:    GameState    = GameState()
 
         self._statusProperties: PropertyNames = PropertyNames([])
 
@@ -119,7 +119,7 @@ class StatusConsole:
             runningY = runningY + INLINE_STATUS_OFFSET
 
         runningY = runningY + INLINE_STATUS_OFFSET
-        if StatusConsole.SHOW_INTERNALS is True:
+        if self._gameSettings.consoleShowInternals is True:
             draw_text('OpTime', labelX, runningY, color=RED,
                       font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
 
@@ -149,7 +149,7 @@ class StatusConsole:
             runningY = runningY + INLINE_STATUS_OFFSET
 
         runningY = runningY + INLINE_STATUS_OFFSET
-        if StatusConsole.SHOW_INTERNALS is True:
+        if self._gameSettings.consoleShowInternals is True:
             opTimeStr: str = f'{self._gameState.opTime:.2f}'
             draw_text(opTimeStr, statusX, runningY, color=RED,
                       font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)

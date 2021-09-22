@@ -28,23 +28,26 @@ class DebugSettings(BaseSubSetting):
     COLLECT_SUPER_COMMANDER_QUADRANT_COORDINATES: str = 'collect_super_commander_quadrant_coordinates'
     ANNOUNCE_QUADRANT_CREATION:                   str = 'announce_quadrant_creation'
 
+    CONSOLE_SHOW_INTERNALS: str = 'console_show_internals'
+
     DEBUG_SETTINGS: SettingsNameValues = SettingsNameValues({
-        ADD_KLINGONS: 'False',
+        ADD_KLINGONS:  'False',
         KLINGON_COUNT: '2',
         ADD_COMMANDERS: 'False',
         COMMANDER_COUNT: '2',
         ADD_SUPER_COMMANDERS: 'False',
         SUPER_COMMANDER_COUNT: '1',
         PRINT_KLINGON_PLACEMENT: 'False',
-        COLLECT_KLINGON_QUADRANT_COORDINATES: 'False',
-        COLLECT_COMMANDER_QUADRANT_COORDINATES: 'False',
+        COLLECT_KLINGON_QUADRANT_COORDINATES:         'False',
+        COLLECT_COMMANDER_QUADRANT_COORDINATES:       'False',
         COLLECT_SUPER_COMMANDER_QUADRANT_COORDINATES: 'False',
         ANNOUNCE_QUADRANT_CREATION: 'False',
-        ADD_PLANET: 'False',
-        ADD_STAR_BASE: 'False',
-        NO_KLINGONS: 'False',
-        NO_COMMANDERS: 'False',
-        NO_SUPER_COMMANDERS: 'False',
+        ADD_PLANET:             'False',
+        ADD_STAR_BASE:          'False',
+        NO_KLINGONS:            'False',
+        NO_COMMANDERS:          'False',
+        NO_SUPER_COMMANDERS:    'False',
+        CONSOLE_SHOW_INTERNALS: 'False',
     })
 
     def init(self, *args, **kwds):
@@ -172,4 +175,13 @@ class DebugSettings(BaseSubSetting):
     @noSuperCommanders.setter
     def noSuperCommanders(self, newValue: bool):
         self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.NO_SUPER_COMMANDERS, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def consoleShowInternals(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.CONSOLE_SHOW_INTERNALS)
+
+    @consoleShowInternals.setter
+    def consoleShowInternals(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.CONSOLE_SHOW_INTERNALS, str(newValue))
         self._settingsCommon.saveSettings()
