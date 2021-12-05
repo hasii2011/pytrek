@@ -4,9 +4,10 @@ from logging import getLogger
 from pytrek.GameState import GameState
 
 from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.futures.FutureEvent import EventCallback
 
-from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
+from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
 from pytrek.engine.futures.FutureEventType import FutureEventType
 
 from pytrek.model.Coordinates import Coordinates
@@ -21,15 +22,9 @@ class EventCreator:
 
         self._intelligence: Intelligence = Intelligence()
         self._gameState:    GameState    = GameState()
-        self._eventEngine:  EventEngine  = EventEngine()
         self._galaxy:       Galaxy       = Galaxy()
 
-    def scheduleInitialEvents(self):
-        self.scheduleSuperNovaEvent()
-        self.scheduleCommanderAttacksBaseEvent()
-        self.scheduleTractorBeamEvent()
-
-    def scheduleSuperNovaEvent(self):
+    def createSuperNovaEvent(self) -> FutureEvent:
         # noinspection SpellCheckingInspection
         """
         ```java
@@ -42,9 +37,10 @@ class EventCreator:
         quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
 
         futureEvent: FutureEvent = FutureEvent(type=FutureEventType.SUPER_NOVA, starDate=eventStarDate, quadrantCoordinates=quadrantCoordinates)
-        self._eventEngine.scheduleEvent(futureEvent=futureEvent)
+        futureEvent.callback = EventCallback(FutureEventHandlers().superNovaEventHandler)
+        return futureEvent
 
-    def scheduleCommanderAttacksBaseEvent(self):
+    def createCommanderAttacksBaseEvent(self) -> FutureEvent:
         # noinspection SpellCheckingInspection
         """
         ```java
@@ -57,9 +53,12 @@ class EventCreator:
         coordinates:      Coordinates = self._galaxy.getStarBaseCoordinates()
 
         futureEvent: FutureEvent = FutureEvent(type=FutureEventType.COMMANDER_ATTACKS_BASE, starDate=eventStarDate, quadrantCoordinates=coordinates)
-        self._eventEngine.scheduleEvent(futureEvent=futureEvent)
 
-    def scheduleTractorBeamEvent(self):
+        futureEvent.callback = EventCallback(FutureEventHandlers().commanderAttacksBaseEventHandler)
+
+        return futureEvent
+
+    def createTractorBeamEvent(self) -> FutureEvent:
         # noinspection SpellCheckingInspection
         """
         ```java
@@ -73,4 +72,7 @@ class EventCreator:
         coordinates:      Coordinates = self._gameState.currentQuadrantCoordinates
 
         futureEvent: FutureEvent = FutureEvent(type=FutureEventType.TRACTOR_BEAM, starDate=eventStarDate, quadrantCoordinates=coordinates)
-        self._eventEngine.scheduleEvent(futureEvent=futureEvent)
+
+        futureEvent.callback = EventCallback(FutureEventHandlers().tractorBeamEventHandler)
+
+        return futureEvent

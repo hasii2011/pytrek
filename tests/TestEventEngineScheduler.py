@@ -83,8 +83,7 @@ class TestEventScheduler(View):
 
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
-        eventCreator: EventCreator = EventCreator()
-        eventCreator.scheduleInitialEvents()
+        self._createInitialEvents()
 
     def setup(self):
         pass
@@ -163,6 +162,17 @@ class TestEventScheduler(View):
             self._gameEngine.updateTime(elapsedTime=1.0)
         elif releasedKey == arcadeKey.A:
             self.setup()
+
+    def _createInitialEvents(self):
+
+        eventCreator: EventCreator = EventCreator()
+        superNovaEvent:           FutureEvent = eventCreator.createSuperNovaEvent()
+        commanderAttackBaseEvent: FutureEvent = eventCreator.createCommanderAttacksBaseEvent()
+        tractorBeamEvent:         FutureEvent = eventCreator.createTractorBeamEvent()
+
+        self._eventEngine.scheduleEvent(futureEvent=superNovaEvent)
+        self._eventEngine.scheduleEvent(futureEvent=commanderAttackBaseEvent)
+        self._eventEngine.scheduleEvent(futureEvent=tractorBeamEvent)
 
 
 def main():

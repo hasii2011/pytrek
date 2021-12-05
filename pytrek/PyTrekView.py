@@ -32,6 +32,7 @@ from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.EventEngine import EventEngine
+from pytrek.engine.futures.FutureEvent import FutureEvent
 
 from pytrek.gui.GalaxyView import GalaxyView
 from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
@@ -147,8 +148,7 @@ class PyTrekView(View):
 
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
-        eventCreator: EventCreator = EventCreator()
-        eventCreator.scheduleInitialEvents()
+        self._createInitialEvents()
 
         # And finally the rest of the UI elements
         self._enterQuadrant()
@@ -270,6 +270,17 @@ class PyTrekView(View):
         self._enterQuadrant()
 
         self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
+
+    def _createInitialEvents(self):
+
+        eventCreator: EventCreator = EventCreator()
+        superNovaEvent:           FutureEvent = eventCreator.createSuperNovaEvent()
+        commanderAttackBaseEvent: FutureEvent = eventCreator.createCommanderAttacksBaseEvent()
+        tractorBeamEvent:         FutureEvent = eventCreator.createTractorBeamEvent()
+
+        self._eventEngine.scheduleEvent(futureEvent=superNovaEvent)
+        self._eventEngine.scheduleEvent(futureEvent=commanderAttackBaseEvent)
+        self._eventEngine.scheduleEvent(futureEvent=tractorBeamEvent)
 
     def _enterQuadrant(self):
 

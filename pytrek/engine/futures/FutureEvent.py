@@ -22,7 +22,7 @@ class FutureEvent:
     type:                FutureEventType = cast(FutureEventType, None)
     quadrantCoordinates: Coordinates     = cast(Coordinates, None)
     starDate:            float           = 0.0
-    callback:           EventCallback    = cast(EventCallback, None)
+    callback:            EventCallback   = cast(EventCallback, None)
 
     def __repr__(self):
 

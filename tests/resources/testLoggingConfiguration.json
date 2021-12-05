@@ -31,19 +31,23 @@
             "level": "WARNING",
             "propagate": "False"
         },
-        "tests.TestIntelligence": {
-            "level": "WARNING",
-            "propagate": "False"
-        },
         "Test Shooter": {
             "level": "INFO",
             "propagate": "False"
         },
-        "tests.TestComputer": {
+        "TestSmoothMotion": {
             "level": "WARNING",
             "propagate": "False"
         },
-        "TestQuadrant": {
+        "TestEventEngineScheduler": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+        "tests.pytrek.model.TestQuadrant": {
+            "level": "WARNING",
+            "propagate": "False"
+        },
+        "tests.pytrek.engine.TestIntelligence": {
             "level": "WARNING",
             "propagate": "False"
         },
@@ -51,16 +55,15 @@
             "level": "WARNING",
             "propagate": "False"
         },
-        "tests.pytrek.gui.TestGamePiece": {
+        "tests.pytrek.engine.TestDevices": {
             "level": "WARNING",
             "propagate": "False"
         },
-        "pytrek.gui.CourseDistanceDialog": {
-            "level":     "INFO",
+        "tests.pytrek.engine.TestComputer": {
+            "level": "WARNING",
             "propagate": "False"
         },
-
-        "TestSmoothMotion": {
+        "tests.pytrek.gui.TestGamePiece": {
             "level": "WARNING",
             "propagate": "False"
         },
@@ -72,6 +75,15 @@
             "level": "WARNING",
             "propagate": "False"
         },
+        "pytrek.engine.futures.EventEngine": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+        "pytrek.engine.futures.FutureEventHandlers": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+
         "pytrek.model.Quadrant": {
             "level": "WARNING",
             "propagate": "False"
@@ -80,16 +92,16 @@
             "level": "WARNING",
             "propagate": "False"
         },
-        "tests.pytrek.engine.TestDevices": {
-            "level": "WARNING",
-            "propagate": "False"
-        },
         "pytrek.gui.gamepieces.SmoothMotion": {
             "level": "WARNING",
             "propagate": "False"
         },
-        "pytrek.mediators.EnterprisePhaserMediator": {
+        "pytrek.gui.CourseDistanceDialog": {
             "level":     "INFO",
+            "propagate": "False"
+        },
+        "pytrek.mediators.EnterprisePhaserMediator": {
+            "level":     "WARNING",
             "propagate": "False"
         }
     }

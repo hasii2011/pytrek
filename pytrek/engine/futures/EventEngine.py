@@ -13,6 +13,7 @@ from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
 
@@ -42,8 +43,9 @@ class EventEngine(Singleton):
         self._gameState:    GameState    = GameState()
         self._devices:      Devices      = Devices()
 
-        self._eventMap: EventMap = cast(EventMap, None)
+        self._eventMap:     EventMap = cast(EventMap, None)
         self._setupEventMap()
+        self._eventCreator: EventCreator = EventCreator()
 
         self.logger.info(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
 
@@ -122,10 +124,29 @@ class EventEngine(Singleton):
                 eventStarDate: float = futureEvent.starDate
                 if eventStarDate != 0 and currentStarDate >= eventStarDate:
                     self._fireEvent(eventToFire=futureEvent)
+                    self._reScheduleRecurringEvents(eventType=futureEvent.type)
 
     def _fireEvent(self, eventToFire: FutureEvent):
 
         self.logger.info(f'{eventToFire=}')
+        if eventToFire.callback is not None:
+            eventToFire.callback()
+
+    def _reScheduleRecurringEvents(self, eventType: FutureEventType):
+        """
+
+        Args:
+            eventType:
+        """
+        if eventType == FutureEventType.COMMANDER_ATTACKS_BASE:
+            newEvent: FutureEvent = self._eventCreator.createCommanderAttacksBaseEvent()
+            self.scheduleEvent(newEvent)
+        if eventType == FutureEventType.SUPER_NOVA:
+            superNovaEvent: FutureEvent = self._eventCreator.createSuperNovaEvent()
+            self.scheduleEvent(superNovaEvent)
+        if eventType == FutureEventType.TRACTOR_BEAM:
+            tractorBeamEvent: FutureEvent = self._eventCreator.createTractorBeamEvent()
+            self.scheduleEvent(tractorBeamEvent)
 
     def _setupEventMap(self):
 
