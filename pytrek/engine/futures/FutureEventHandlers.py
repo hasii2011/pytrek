@@ -29,15 +29,9 @@ class FutureEventHandlers:
         self.logger.info(f'SuperNova handler fired but am doing partial updates')
         quadrant: Quadrant = self._unPackSuperNovaArgs(**kwargs)
 
-        klingons: Enemies = quadrant.klingons
-        for klingon in klingons:
-            quadrant.decrementEnemyCount(klingon)
-            self._gameState.remainingKlingons -= 1
-
-        commanders: Enemies = quadrant.commanders
-        for commander in commanders:
-            quadrant.decrementEnemyCount(commander)
-            self._gameState.remainingCommanders -= 1
+        self._decrementEnemyCount(quadrant=quadrant, enemyName='Klingon')
+        self._decrementEnemyCount(quadrant=quadrant, enemyName='Commander')
+        self._decrementEnemyCount(quadrant=quadrant, enemyName='SuperCommander')
 
     def tractorBeamEventHandler(self, **kwargs):
         self.logger.warning(f'TractorBeam fired but am doing Nada')
@@ -54,3 +48,26 @@ class FutureEventHandlers:
             return quadrant
 
         return cast(Quadrant, None)
+
+    def _decrementEnemyCount(self, quadrant: Quadrant, enemyName: str):
+        """
+        Decrement the appropriate enemy count
+
+        Args:
+            quadrant:   A randomly generated quadrant
+            enemyName:  The enemy name, 'Klingon', 'Commander', 'SuperCommander'
+
+        I normally don't like to write dynamically generated codes like this.  However,
+        I could not in good conscience duplicate this code three times;  I know it is
+        very 'Pythonic', but very high maintenance
+        """
+
+        gsPropertyName: str = f'remaining{enemyName}s'
+        qPropertyName:  str = f'{enemyName[0].lower()}{enemyName[1:]}s'
+
+        enemies: Enemies = getattr(quadrant, qPropertyName)
+        for enemy in enemies:
+            quadrant.decrementEnemyCount(enemy)
+            remainingEnemyCount: int = getattr(self._gameState, gsPropertyName)
+            remainingEnemyCount -= 1
+            setattr(self._gameState, gsPropertyName, remainingEnemyCount)

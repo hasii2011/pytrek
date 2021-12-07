@@ -66,32 +66,17 @@ class TestFutureEventHandlers(TestBase):
     def testSuperNovaEventHandlerKlingonsAreDead(self):
 
         quadrant: Quadrant = self._getANovaEventQuadrant()
-
-        beforeSuperNovaKlingonsCount: int = self._gameState.remainingKlingons
-        quadrantKlingons:             int = quadrant.klingonCount
-
-        self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
-
-        self.assertEqual(0, quadrant.klingonCount, 'Not all klingons are dead')
-
-        expectedRemainingKlingons: int = beforeSuperNovaKlingonsCount - quadrantKlingons
-        actualKlingonCount:        int = self._gameState.remainingKlingons
-        self.assertEqual(expectedRemainingKlingons, actualKlingonCount, 'Game State was not updated for klingons')
+        self._testEnemyDeadHandler(quadrant=quadrant, enemyName='Klingon')
 
     def testSuperNovaEventHandlerCommandersAreDead(self):
 
         quadrant: Quadrant = self._getANovaEventQuadrant()
+        self._testEnemyDeadHandler(quadrant=quadrant, enemyName='Commander')
 
-        beforeSuperNovaCommandersCount: int = self._gameState.remainingCommanders
-        quadrantCommanders:             int = quadrant.klingonCount
+    def testSuperNovaEventHandlerSuperCommandersAreDead(self):
 
-        self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
-
-        self.assertEqual(0, quadrant.klingonCount, 'Not all klingons are dead')
-
-        expectedRemainingCommanders: int = beforeSuperNovaCommandersCount - quadrantCommanders
-        actualCommanderCount:        int = self._gameState.remainingCommanders
-        self.assertEqual(expectedRemainingCommanders, actualCommanderCount, 'Game State was not updated for commanders')
+        quadrant: Quadrant = self._getANovaEventQuadrant()
+        self._testEnemyDeadHandler(quadrant=quadrant, enemyName='SuperCommander')
 
     def testTractorBeamEventHandler(self):
         """Another test"""
@@ -118,6 +103,34 @@ class TestFutureEventHandlers(TestBase):
         # self._gameState.remainingStarBase += 1    # TODO we need to maintain this statistic
 
         return quadrant
+
+    def _testEnemyDeadHandler(self, quadrant: Quadrant, enemyName: str):
+        """
+        Runs the appropriate count test
+
+        Args:
+            quadrant:   A randomly generated quadrant
+            enemyName:  The enemy name, 'Klingon', 'Commander', 'SuperCommander'
+
+        I normally don't like to write dynamically generated codes like this.  However,
+        I could not in good conscience duplicate this code three times;  I know it is
+        very 'Pythonic', but very high maintenance
+        """
+
+        gsPropertyName: str = f'remaining{enemyName}s'
+        qPropertyName:  str = f'{enemyName[0].lower()}{enemyName[1:]}Count'
+
+        beforeEnemyCount:   int = getattr(self._gameState, gsPropertyName)
+        quadrantEnemyCount: int = getattr(quadrant, qPropertyName)
+
+        self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
+        actualEnemyCount: int = getattr(quadrant, qPropertyName)
+        self.assertEqual(0, actualEnemyCount, f'Not all {enemyName}s are dead')
+
+        expectedRemainingEnemies: int = beforeEnemyCount - quadrantEnemyCount
+        actualRemainingEnemies:   int = getattr(self._gameState, gsPropertyName)
+
+        self.assertEqual(expectedRemainingEnemies, actualRemainingEnemies, f'Game State was not updated for {enemyName}s')
 
     @classmethod
     def _setupGame(cls):
