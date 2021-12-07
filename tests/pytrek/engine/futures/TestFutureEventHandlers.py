@@ -78,6 +78,41 @@ class TestFutureEventHandlers(TestBase):
         quadrant: Quadrant = self._getANovaEventQuadrant()
         self._testEnemyDeadHandler(quadrant=quadrant, enemyName='SuperCommander')
 
+    def testSuperNovaEventStarBaseDestroyed(self):
+
+        quadrant:              Quadrant = self._getANovaEventQuadrant()
+        previousStarBaseCount: int      = self._gameState.starBaseCount
+
+        self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
+
+        if previousStarBaseCount != 0:
+            expectedStarBaseCount: int = previousStarBaseCount - 1
+        else:
+            expectedStarBaseCount = 0
+        actualStarBaseCount:   int = self._gameState.starBaseCount
+
+        self.assertEqual(expectedStarBaseCount, actualStarBaseCount, 'StarBase not properly destroyed')
+
+    def testSuperNovaEventStarBaseDestroyedNeverNegative(self):
+        """
+        Destroy all the StarBases and then try one more time
+        """
+
+        coordinates: Coordinates = self._galaxy.getStarBaseCoordinates()
+        while coordinates is not None:
+            quadrant: Quadrant = self._galaxy.getQuadrant(quadrantCoordinates=coordinates)
+
+            self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
+
+            coordinates = self._galaxy.getStarBaseCoordinates()
+
+        self.assertEqual(0, self._gameState.starBaseCount, 'Did not destroy all StarBases')
+        coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
+        quadrant: Quadrant = Quadrant(coordinates=coordinates)
+
+        self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
+        self.assertEqual(0, self._gameState.starBaseCount, 'Should be zero all StarBases destroyed')
+
     def testTractorBeamEventHandler(self):
         """Another test"""
         pass

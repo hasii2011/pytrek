@@ -20,18 +20,27 @@ class FutureEventHandlers:
     def superNovaEventHandler(self, **kwargs):
         """
         Destroy
-            * Klingons
+            * Klingons, Commanders, SuperCommanders
             * Planets
             * Bases
             * Mark quadrant as having been destroyed
             * Check all enemies dead
         """
-        self.logger.info(f'SuperNova handler fired but am doing partial updates')
         quadrant: Quadrant = self._unPackSuperNovaArgs(**kwargs)
+
+        assert quadrant is not None, 'Incorrect call;  Require a quadrant'
 
         self._decrementEnemyCount(quadrant=quadrant, enemyName='Klingon')
         self._decrementEnemyCount(quadrant=quadrant, enemyName='Commander')
         self._decrementEnemyCount(quadrant=quadrant, enemyName='SuperCommander')
+        if quadrant.hasStarBase is True:
+            self._gameState.starBaseCount -= 1
+            if self._gameState.starBaseCount < 0:
+                self._gameState.starBaseCount = 0
+            pass
+        if quadrant.hasPlanet is True:
+            pass
+        quadrant.hasSuperNova = True
 
     def tractorBeamEventHandler(self, **kwargs):
         self.logger.warning(f'TractorBeam fired but am doing Nada')
@@ -43,7 +52,7 @@ class FutureEventHandlers:
 
         if 'quadrant' in kwargs:
             quadrant: Quadrant = kwargs['quadrant']
-            self.logger.info(f'{quadrant}')
+            self.logger.debug(f'{quadrant}')
 
             return quadrant
 
@@ -61,11 +70,13 @@ class FutureEventHandlers:
         I could not in good conscience duplicate this code three times;  I know it is
         very 'Pythonic', but very high maintenance
         """
-
         gsPropertyName: str = f'remaining{enemyName}s'
         qPropertyName:  str = f'{enemyName[0].lower()}{enemyName[1:]}s'
 
         enemies: Enemies = getattr(quadrant, qPropertyName)
+        message: str     = f'{len(enemies)} {enemyName}s destroyed'
+        self.logger.debug(f'{message}')      # TODO post a message to status console
+
         for enemy in enemies:
             quadrant.decrementEnemyCount(enemy)
             remainingEnemyCount: int = getattr(self._gameState, gsPropertyName)

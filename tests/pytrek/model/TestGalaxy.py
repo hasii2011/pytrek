@@ -37,7 +37,8 @@ class TestGalaxy(TestBase):
         self._gameSettings: GameSettings = GameSettings()
         self._gameSettings.debugCollectKlingonQuadrantCoordinates = True
 
-        self._galaxy:       Galaxy = Galaxy()
+        self._gameState: GameState = GameState()
+        self._galaxy:    Galaxy     = Galaxy()
 
     def tearDown(self):
         self._gameSettings.debugCollectKlingonQuadrantCoordinates = False
@@ -70,7 +71,7 @@ class TestGalaxy(TestBase):
 
     def testGetStarBaseCoordinates(self):
 
-        self.assertNotEqual(0, self._galaxy.starBaseCount, 'Should always have some StarBases')
+        self.assertNotEqual(0, self._gameState.starBaseCount, 'Should always have some StarBases')
 
         randomCoordinates: Coordinates = self._galaxy.getStarBaseCoordinates()
 

@@ -202,7 +202,7 @@ class Quadrant:
         Args:
             newValue: Should always be true;  No way to "un-SuperNova"
         """
-        assert newValue is False, "Sorry, you cannot undo a Super Nova event"
+        assert newValue is True, "Sorry, you cannot undo a Super Nova event"
         self._hasSuperNova = True
 
     @property

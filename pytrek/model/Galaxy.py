@@ -47,8 +47,8 @@ class Galaxy(Singleton):
 
         self._addEnemies()
 
-        self._starBaseCount: int = self._placeStarBasesInGalaxy()
-        self._planetCount:   int = self._placePlanets()
+        self._placeStarBasesInGalaxy()
+        self._placePlanets()
         self._setInitialQuadrant()
 
     def _addEnemies(self):
@@ -78,14 +78,6 @@ class Galaxy(Singleton):
         """"""
 
     @property
-    def starBaseCount(self) -> int:
-        return self._starBaseCount
-
-    @property
-    def planetCount(self) -> int:
-        return self._planetCount
-
-    @property
     def currentQuadrant(self) -> Quadrant:
         return self._currentQuadrant
 
@@ -96,7 +88,7 @@ class Galaxy(Singleton):
     def getStarBaseCoordinates(self) -> Coordinates:
         """
         Randomly search the galaxy for a quadrant that has a star base.
-        Loop trough MAX_STARBASE_SEARCHES;  If cannot fine one, perhaps
+        Loop trough MAX_STARBASE_SEARCHES;  If we cannot find one, perhaps
         there are no star bases;  Return None
 
         Returns:  The randomly located quadrant with a star base;  If no StarBases
@@ -164,14 +156,12 @@ class Galaxy(Singleton):
 
         return planetCount
 
-    def _placeStarBasesInGalaxy(self) -> int:
+    def _placeStarBasesInGalaxy(self):
         """
         Place a random number of bases in the galaxy
 
-        Returns:  The number we actually placed
         """
-        retCount:      int = self._intelligence.generateInitialStarBaseCount()
-        starBaseCount: int = retCount
+        starBaseCount: int = self._gameState.starBaseCount
         while starBaseCount != 0:
             quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
             quadrant:            Quadrant  = self.getQuadrant(quadrantCoordinates)
@@ -182,8 +172,6 @@ class Galaxy(Singleton):
                 self.logger.debug(f"StarBase at quadrant {quadrantCoordinates}")
                 quadrant.addStarBase()
             starBaseCount -= 1
-
-        return retCount
 
     def _setInitialQuadrant(self):
         """"""

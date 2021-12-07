@@ -36,7 +36,9 @@ class GameState(Singleton):
         self._remainingKlingons:   int   = intelligence.generateInitialKlingonCount(gameType=gameType, playerType=playerType)
         self._remainingCommanders: int   = intelligence.generateInitialCommanderCount(playerType=playerType, generatedKlingons=self._remainingKlingons)
 
-        # Adjust total Klingon count by # of commanders
+        self._starBaseCount: int = intelligence.generateInitialStarBaseCount()
+
+        # Adjust total Klingon counts by # of commanders
         self._remainingKlingons = self._remainingKlingons - self._remainingCommanders
 
         # Novice and Fair players do not get Super Commanders
@@ -175,6 +177,14 @@ class GameState(Singleton):
     @currentSectorCoordinates.setter
     def currentSectorCoordinates(self, theNewValue: Coordinates):
         self._currentSectorCoordinates = theNewValue
+
+    @property
+    def starBaseCount(self) -> int:
+        return self._starBaseCount
+
+    @starBaseCount.setter
+    def starBaseCount(self, newValue: int):
+        self._starBaseCount = newValue
 
     def resetStatistics(self):
         self.gameActive = True
