@@ -134,7 +134,7 @@ class PyTrekView(View):
         self._gameEngine   = GameEngine()       # Then the engine needs to be initialized
         self._intelligence = Intelligence()
         self._computer     = Computer()
-        self._galaxy       = Galaxy()           # This essentially finishes initializing most of he game
+        self._galaxy       = Galaxy()           # This essentially finishes initializing most of the game
 
         self._eventEngine: EventEngine = EventEngine()
 

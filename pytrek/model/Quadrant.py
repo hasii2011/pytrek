@@ -57,6 +57,7 @@ class Quadrant:
         self._superCommanderCount: int = 0
         self._hasStarBase:    bool = False
         self._hasPlanet:      bool = False
+        self._hasSuperNova:   bool = False
         self._scanned:        bool = False
 
         self._klingons:        Enemies = Enemies([])
@@ -188,6 +189,21 @@ class Quadrant:
     @property
     def hasPlanet(self) -> bool:
         return self._hasPlanet
+
+    @property
+    def hasSuperNova(self) -> bool:
+        return self._hasSuperNova
+
+    @hasSuperNova.setter
+    def hasSuperNova(self, newValue: bool):
+        """
+        Should only be used by the Super Nova event handler
+
+        Args:
+            newValue: Should always be true;  No way to "un-SuperNova"
+        """
+        assert newValue is False, "Sorry, you cannot undo a Super Nova event"
+        self._hasSuperNova = True
 
     @property
     def planet(self) -> Planet:
@@ -427,6 +443,7 @@ class Quadrant:
             f'coordinates={self.coordinates} '
             f'klingonCount={self.klingonCount} '
             f'commanderCount={self.commanderCount} '
+            f'superCommanderCount={self._superCommanderCount} '
             f'hasStarBase={self.hasStarBase}'
         )
 

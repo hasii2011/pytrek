@@ -134,6 +134,7 @@ class EventEngine(Singleton):
 
     def _reScheduleRecurringEvents(self, eventType: FutureEventType):
         """
+        TODO:  Use switch statement when we upgrade to 3.10
 
         Args:
             eventType:

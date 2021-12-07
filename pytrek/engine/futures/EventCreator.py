@@ -65,11 +65,11 @@ class EventCreator:
         schedule(FTBEAM, tk.expran(1.5 * (game.intime / game.state.remcom)));
         ```
         """
-        inTime:              float = self._gameState.inTime
-        remainingCommanders: int   = self._gameState.remainingCommanders
-        elapsedStarDates: float       = self._intelligence.exponentialRandom(2.5 * (inTime / remainingCommanders))
-        eventStarDate:    float       = self._gameState.starDate + elapsedStarDates
-        coordinates:      Coordinates = self._gameState.currentQuadrantCoordinates
+        inTime:              float       = self._gameState.inTime
+        remainingCommanders: int         = self._gameState.remainingCommanders
+        elapsedStarDates:    float       = self._intelligence.exponentialRandom(2.5 * (inTime / remainingCommanders))
+        eventStarDate:       float       = self._gameState.starDate + elapsedStarDates
+        coordinates:         Coordinates = self._gameState.currentQuadrantCoordinates
 
         futureEvent: FutureEvent = FutureEvent(type=FutureEventType.TRACTOR_BEAM, starDate=eventStarDate, quadrantCoordinates=coordinates)
 
