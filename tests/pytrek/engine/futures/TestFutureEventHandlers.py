@@ -89,9 +89,26 @@ class TestFutureEventHandlers(TestBase):
             expectedStarBaseCount: int = previousStarBaseCount - 1
         else:
             expectedStarBaseCount = 0
-        actualStarBaseCount:   int = self._gameState.starBaseCount
+
+        actualStarBaseCount: int = self._gameState.starBaseCount
 
         self.assertEqual(expectedStarBaseCount, actualStarBaseCount, 'StarBase not properly destroyed')
+
+    def testSuperNovaEventPlanetDestroyed(self):
+
+        quadrant:            Quadrant = self._getANovaEventQuadrant()
+        previousPlanetCount: int      = self._gameState.planetCount
+
+        self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
+
+        if previousPlanetCount != 0:
+            expectedPlanetCount: int = previousPlanetCount - 1
+        else:
+            expectedPlanetCount = 0
+
+        actualPlanetCount: int = self._gameState.planetCount
+
+        self.assertEqual(expectedPlanetCount, actualPlanetCount, 'Planet not properly destroyed')
 
     def testSuperNovaEventStarBaseDestroyedNeverNegative(self):
         """
@@ -122,20 +139,30 @@ class TestFutureEventHandlers(TestBase):
         pass
 
     def _getANovaEventQuadrant(self) -> Quadrant:
+        """
+        Returns:
+        """
 
         coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
-        quadrant: Quadrant = Quadrant(coordinates=coordinates)
+        quadrant:    Quadrant    = Quadrant(coordinates=coordinates)
+
+        self.logger.info (f'{quadrant.hasSuperNova=}')
         quadrant.addKlingon()
         quadrant.addCommander()
         quadrant.addSuperCommander()
-        quadrant.addStarBase()
+
+        if quadrant.hasPlanet is False:
+            self._gameState.planetCount += 1
+            quadrant.addPlanet()
+        if quadrant.hasStarBase is False:
+            self._gameState.starBaseCount += 1
+            quadrant.addStarBase()
         #
         # Update the game state to reflect what I did here
         #
         self._gameState.remainingKlingons        += 1
         self._gameState.remainingCommanders      += 1
         self._gameState.remainingSuperCommanders += 1
-        # self._gameState.remainingStarBase += 1    # TODO we need to maintain this statistic
 
         return quadrant
 

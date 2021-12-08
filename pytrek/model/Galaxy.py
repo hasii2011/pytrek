@@ -48,7 +48,7 @@ class Galaxy(Singleton):
         self._addEnemies()
 
         self._placeStarBasesInGalaxy()
-        self._placePlanets()
+        self._placePlanetsInGalaxy()
         self._setInitialQuadrant()
 
     def _addEnemies(self):
@@ -95,9 +95,11 @@ class Galaxy(Singleton):
         left return None
         """
         for x in range(Galaxy.MAX_STARBASE_SEARCHES):
+
             potentialCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
-            quadrant: Quadrant = self.getQuadrant(quadrantCoordinates=potentialCoordinates)
+            quadrant:             Quadrant    = self.getQuadrant(quadrantCoordinates=potentialCoordinates)
             if quadrant.hasStarBase is True:
+                # print(f'Executed {x} iterations to find 1 of  {self._gameState.starBaseCount} StarBases')
                 return potentialCoordinates
 
         return cast(Coordinates, None)
@@ -122,7 +124,7 @@ class Galaxy(Singleton):
                     self.logger.info(f"Created quadrant: ({x},{y})")
             self.quadrants.append(quadrantRow)
 
-    def _placePlanets(self) -> int:
+    def _placePlanetsInGalaxy(self) -> int:
         # noinspection SpellCheckingInspection
         """
         ```java
@@ -135,10 +137,8 @@ class Galaxy(Singleton):
                 pQuad.addPlanet();
             }
         ```
-
-        Returns:  The number of planets we placed
         """
-        planetCount: int = self._intelligence.computePlanetsInGalaxy()
+        planetCount: int = self._gameState.planetCount
         for x in range(planetCount):
 
             quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
@@ -171,7 +171,7 @@ class Galaxy(Singleton):
 
                 self.logger.debug(f"StarBase at quadrant {quadrantCoordinates}")
                 quadrant.addStarBase()
-            starBaseCount -= 1
+                starBaseCount -= 1
 
     def _setInitialQuadrant(self):
         """"""

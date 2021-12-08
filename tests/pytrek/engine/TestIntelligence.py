@@ -294,7 +294,7 @@ class TestIntelligence(TestBase):
     def testComputePlanetsInGalaxy(self):
         maxPlanets: int = self._gameSettings.maximumPlanets
         for x in range(0, 10):
-            answer: int = self.smarty.computePlanetsInGalaxy()
+            answer: int = self.smarty.generateInitialPlanetCount()
             self.logger.debug(f'testComputePlanetsInGalaxy1 - Iteration {x}, {answer=}')
             self.assertLessEqual(answer, maxPlanets, 'We cannot have too many')
 

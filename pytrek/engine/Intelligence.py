@@ -327,10 +327,10 @@ class Intelligence(Singleton):
 
         return randint(minMoveInterval, maxMoveInterval)
 
-    def computePlanetsInGalaxy(self) -> int:
+    def generateInitialPlanetCount(self) -> int:
         # noinspection SpellCheckingInspection
         """
-        Will some times generate 1 more than maximumPlanets;  Hence my patch
+        Will sometimes generate 1 more than maximumPlanets;  Hence my patch
         ```C
             nplan = (PLNETMAX/2) + (PLNETMAX/2+1)*Rand();
         ```

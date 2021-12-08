@@ -1,10 +1,11 @@
 
 from logging import Logger
 from logging import getLogger
-from typing import cast
 
 from pytrek.GameState import GameState
+
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+
 from pytrek.model.Quadrant import Quadrant
 
 
@@ -17,7 +18,7 @@ class FutureEventHandlers:
         self.logger:     Logger = getLogger(__name__)
         self._gameState: GameState = GameState()
 
-    def superNovaEventHandler(self, **kwargs):
+    def superNovaEventHandler(self, quadrant: Quadrant):
         """
         Destroy
             * Klingons, Commanders, SuperCommanders
@@ -25,38 +26,44 @@ class FutureEventHandlers:
             * Bases
             * Mark quadrant as having been destroyed
             * Check all enemies dead
+
+        Args:
+            quadrant:
         """
-        quadrant: Quadrant = self._unPackSuperNovaArgs(**kwargs)
 
         assert quadrant is not None, 'Incorrect call;  Require a quadrant'
 
         self._decrementEnemyCount(quadrant=quadrant, enemyName='Klingon')
         self._decrementEnemyCount(quadrant=quadrant, enemyName='Commander')
         self._decrementEnemyCount(quadrant=quadrant, enemyName='SuperCommander')
+
         if quadrant.hasStarBase is True:
             self._gameState.starBaseCount -= 1
             if self._gameState.starBaseCount < 0:
                 self._gameState.starBaseCount = 0
-            pass
+
         if quadrant.hasPlanet is True:
-            pass
+            self._gameState.planetCount -= 1
+            if self._gameState.planetCount < 0:
+                self._gameState.planetCount = 0
+
         quadrant.hasSuperNova = True
 
     def tractorBeamEventHandler(self, **kwargs):
-        self.logger.warning(f'TractorBeam fired but am doing Nada')
+        pass
 
     def commanderAttacksBaseEventHandler(self, **kwargs):
-        self.logger.warning(f'CommanderAttacksBase fired but am doing Nada')
+        pass
 
-    def _unPackSuperNovaArgs(self, **kwargs) -> Quadrant:
-
-        if 'quadrant' in kwargs:
-            quadrant: Quadrant = kwargs['quadrant']
-            self.logger.debug(f'{quadrant}')
-
-            return quadrant
-
-        return cast(Quadrant, None)
+    # def _unPackSuperNovaArgs(self, **kwargs) -> Quadrant:
+    #
+    #     if 'quadrant' in kwargs:
+    #         quadrant: Quadrant = kwargs['quadrant']
+    #         self.logger.debug(f'{quadrant}')
+    #
+    #         return quadrant
+    #
+    #     return cast(Quadrant, None)
 
     def _decrementEnemyCount(self, quadrant: Quadrant, enemyName: str):
         """

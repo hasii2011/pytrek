@@ -37,6 +37,7 @@ class GameState(Singleton):
         self._remainingCommanders: int   = intelligence.generateInitialCommanderCount(playerType=playerType, generatedKlingons=self._remainingKlingons)
 
         self._starBaseCount: int = intelligence.generateInitialStarBaseCount()
+        self._planetCount:   int = intelligence.generateInitialPlanetCount()
 
         # Adjust total Klingon counts by # of commanders
         self._remainingKlingons = self._remainingKlingons - self._remainingCommanders
@@ -185,6 +186,14 @@ class GameState(Singleton):
     @starBaseCount.setter
     def starBaseCount(self, newValue: int):
         self._starBaseCount = newValue
+
+    @property
+    def planetCount(self) -> int:
+        return self._planetCount
+
+    @planetCount.setter
+    def planetCount(self, newValue: int):
+        self._planetCount = newValue
 
     def resetStatistics(self):
         self.gameActive = True
