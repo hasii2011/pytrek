@@ -51,6 +51,8 @@ class Galaxy(Singleton):
         self._placePlanetsInGalaxy()
         self._setInitialQuadrant()
 
+        print(f'Galaxy singleton initialized')
+
     def _addEnemies(self):
 
         gameSettings: GameSettings = self._gameSettings

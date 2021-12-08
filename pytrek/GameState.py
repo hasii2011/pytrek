@@ -1,6 +1,9 @@
 
 from typing import cast
 
+from logging import Logger
+from logging import getLogger
+
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.model.Coordinates import Coordinates
 
@@ -18,6 +21,7 @@ class GameState(Singleton):
     """
     def init(self):
 
+        self.logger:  Logger       = getLogger(__name__)
         gameSettings: GameSettings = GameSettings()
         intelligence: Intelligence = Intelligence()
         playerType:   PlayerType   = gameSettings.playerType
@@ -55,6 +59,8 @@ class GameState(Singleton):
         self.currentSectorCoordinates:   Coordinates    = cast(Coordinates, None)
 
         self.gameActive:    bool = True
+
+        print(f'Game State singleton initialized')
 
     @property
     def energy(self) -> float:

@@ -63,7 +63,7 @@
             "level": "WARNING",
             "propagate": "False"
         },
-        "tests.pytrek.gui.TestGamePiece": {
+        "pytrek.GameState": {
             "level": "WARNING",
             "propagate": "False"
         },
@@ -89,7 +89,7 @@
             "propagate": "False"
         },
         "pytrek.model.Galaxy": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "pytrek.gui.gamepieces.SmoothMotion": {
@@ -100,6 +100,11 @@
             "level":     "INFO",
             "propagate": "False"
         },
+                "tests.pytrek.gui.TestGamePiece": {
+            "level": "WARNING",
+            "propagate": "False"
+        },
+
         "pytrek.mediators.EnterprisePhaserMediator": {
             "level":     "WARNING",
             "propagate": "False"
