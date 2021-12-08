@@ -47,7 +47,7 @@ class EventEngine(Singleton):
         self._setupEventMap()
         self._eventCreator: EventCreator = EventCreator()
 
-        self.logger.info(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
+        self.logger.debug(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
 
         # I do not know what a Number is tell mypy so
         schedule(function_pointer=self._doEventChecking, interval=5.0)  # type: ignore

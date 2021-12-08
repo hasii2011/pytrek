@@ -8,21 +8,21 @@ from logging import getLogger
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from pytrek.settings.SettingsCommon import SettingsCommon
+from pytrek.settings.GameSettings import GameSettings
+from pytrek.GameState import GameState
+
 from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Quadrant import Quadrant
 from pytrek.model.Galaxy import Galaxy
 
-from pytrek.GameState import GameState
-from pytrek.model.Quadrant import Quadrant
-from pytrek.settings.GameSettings import GameSettings
-
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase
 
 
 class TestGalaxy(TestBase):
 
-    clsLogger:    Logger = cast(Logger, None)
+    clsLogger:       Logger       = cast(Logger, None)
     clsGameSettings: GameSettings = cast(GameSettings, None)
     clsGameState:    GameState    = cast(GameState, None)
     clsGalaxy:       Galaxy       = cast(Galaxy, None)
@@ -34,7 +34,6 @@ class TestGalaxy(TestBase):
         SettingsCommon.determineSettingsLocation()
 
         TestGalaxy.clsGameSettings = GameSettings()
-
         TestGalaxy.clsGameSettings.debugCollectKlingonQuadrantCoordinates = True
 
         TestGalaxy.clsGameState    = GameState()
@@ -57,8 +56,7 @@ class TestGalaxy(TestBase):
         Use the debug list created during initialization
         Assumes that the runtime debug flag 'debug_collect_klingon_quadrant_coordinates' is set to True
         """
-        gameState: GameState = GameState()
-        expectedKlingonCount: int = gameState.remainingKlingons
+        expectedKlingonCount: int = self._gameState.remainingKlingons
         #
         # The number of entries in the debug list is the number if klingons we placed
         placedKlingonCount: int = len(self._galaxy._debugKlingonQuadrants)
