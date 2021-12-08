@@ -84,7 +84,7 @@ class EventEngine(Singleton):
             damage[DDRAY] -= (damage[l] - xtime > 0.0 ? xtime : damage[DDRAY]);
 
         /* If radio repaired, update star chart and attack reports */
-    
+
         """
         self.logger.debug(f"Attempting to repair devices")
         finishTime:  float = self._gameState.starDate + self._gameState.opTime

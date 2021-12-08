@@ -367,7 +367,7 @@ class Quadrant:
         sector.sprite = klingon
 
         if sector.coordinates.x == 0 and sector.coordinates.y == 0:
-            self.logger.warning(f'{self.coordinates} {klingon.id=} is at sector: {sector.coordinates}')
+            self.logger.debug(f'{self.coordinates} {klingon.id=} is at sector: {sector.coordinates}')
 
         self.logger.debug(f"Placed enemy at quadrant: {self._coordinates} {klingon=}")
         return klingon
