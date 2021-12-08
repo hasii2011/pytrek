@@ -22,7 +22,10 @@ from tests.TestBase import TestBase
 
 class TestGalaxy(TestBase):
 
-    clsLogger: Logger = cast(Logger, None)
+    clsLogger:    Logger = cast(Logger, None)
+    clsGameSettings: GameSettings = cast(GameSettings, None)
+    clsGameState:    GameState    = cast(GameState, None)
+    clsGalaxy:       Galaxy       = cast(Galaxy, None)
 
     @classmethod
     def setUpClass(cls):
@@ -30,15 +33,21 @@ class TestGalaxy(TestBase):
         TestGalaxy.clsLogger = getLogger(__name__)
         SettingsCommon.determineSettingsLocation()
 
+        TestGalaxy.clsGameSettings = GameSettings()
+
+        TestGalaxy.clsGameSettings.debugCollectKlingonQuadrantCoordinates = True
+
+        TestGalaxy.clsGameState    = GameState()
+        TestGalaxy.clsGalaxy       = Galaxy()
+
     def setUp(self):
         self.logger: Logger = TestGalaxy.clsLogger
 
         # Set the flag prior to instantiating the Galaxy singleton
-        self._gameSettings: GameSettings = GameSettings()
-        self._gameSettings.debugCollectKlingonQuadrantCoordinates = True
+        self._gameSettings: GameSettings = TestGalaxy.clsGameSettings
 
-        self._gameState: GameState = GameState()
-        self._galaxy:    Galaxy     = Galaxy()
+        self._gameState: GameState = TestGalaxy.clsGameState
+        self._galaxy:    Galaxy    = TestGalaxy.clsGalaxy
 
     def tearDown(self):
         self._gameSettings.debugCollectKlingonQuadrantCoordinates = False

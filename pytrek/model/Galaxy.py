@@ -58,7 +58,7 @@ class Galaxy(Singleton):
             For debugging purposes, collect a list of the coordinates where we placed Klingons;  
             There may be duplicate coordinates if we randomly picked the same quadrant
             """
-        print(f'{gameSettings.debugCollectKlingonQuadrantCoordinates=}')
+        self.logger.info(f'{gameSettings.debugCollectKlingonQuadrantCoordinates=}')
         if gameSettings.debugCollectKlingonQuadrantCoordinates is True:
             self._debugKlingonQuadrants: List[Coordinates] = []
 

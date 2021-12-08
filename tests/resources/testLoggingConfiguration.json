@@ -89,7 +89,7 @@
             "propagate": "False"
         },
         "pytrek.model.Galaxy": {
-            "level": "WARNING",
+            "level": "INFO",
             "propagate": "False"
         },
         "pytrek.gui.gamepieces.SmoothMotion": {
