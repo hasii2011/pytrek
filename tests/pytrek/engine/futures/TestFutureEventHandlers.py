@@ -44,7 +44,7 @@ class TestFutureEventHandlers(TestBase):
         TestFutureEventHandlers.clsLogger = getLogger(__name__)
         SettingsCommon.determineSettingsLocation()
         TestFutureEventHandlers._setupGame()
-        print(f'Running TestFutureEventHandlers')
+        TestFutureEventHandlers.clsLogger.info(f'Running TestFutureEventHandlers')
 
     @classmethod
     def tearDownClass(cls):
@@ -149,7 +149,7 @@ class TestFutureEventHandlers(TestBase):
         coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
         quadrant:    Quadrant    = Quadrant(coordinates=coordinates)
 
-        self.logger.info (f'{quadrant.hasSuperNova=}')
+        self.logger.debug (f'{quadrant.hasSuperNova=}')
         quadrant.addKlingon()
         quadrant.addCommander()
         quadrant.addSuperCommander()

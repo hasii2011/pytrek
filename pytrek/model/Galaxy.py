@@ -51,7 +51,7 @@ class Galaxy(Singleton):
         self._placePlanetsInGalaxy()
         self._setInitialQuadrant()
 
-        print(f'Galaxy singleton initialized')
+        self.logger.info(f'Galaxy singleton initialized')
 
     def _addEnemies(self):
 
@@ -60,7 +60,7 @@ class Galaxy(Singleton):
             For debugging purposes, collect a list of the coordinates where we placed Klingons;  
             There may be duplicate coordinates if we randomly picked the same quadrant
             """
-        print(f'Galaxy: {gameSettings.debugCollectKlingonQuadrantCoordinates=}')
+        self.logger.info(f'Galaxy: {gameSettings.debugCollectKlingonQuadrantCoordinates=}')
         if gameSettings.debugCollectKlingonQuadrantCoordinates is True:
             self._debugKlingonQuadrants: List[Coordinates] = []
 
@@ -124,7 +124,7 @@ class Galaxy(Singleton):
                 quadrant = Quadrant(coordinates)
                 quadrantRow.append(quadrant)
                 if self._gameSettings.debugAnnounceQuadrantCreation is True:
-                    self.logger.info(f"Created quadrant: ({x},{y})")
+                    self.logger.debug(f"Created quadrant: ({x},{y})")
             self.quadrants.append(quadrantRow)
 
     def _placePlanetsInGalaxy(self) -> int:
@@ -155,7 +155,7 @@ class Galaxy(Singleton):
                 self.logger.debug(f'Generated new quadrant for planet')
 
             quadrant.addPlanet()
-            self.logger.info(f'Quadrant: {quadrantCoordinates} has a planet')
+            self.logger.debug(f'Quadrant: {quadrantCoordinates} has a planet')
 
         return planetCount
 
@@ -179,7 +179,7 @@ class Galaxy(Singleton):
     def _setInitialQuadrant(self):
         """"""
         coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
-        self.logger.info(f'Current Quadrant set to: {coordinates}')
+        self.logger.debug(f'Current Quadrant set to: {coordinates}')
 
         row: QuadrantRow = self.quadrants[coordinates.y]
         self._currentQuadrant = row[coordinates.x]
@@ -187,7 +187,7 @@ class Galaxy(Singleton):
     def __placeKlingonsInGalaxy(self):
         """
         """
-        self.logger.info(f'Placing {self._gameState.remainingKlingons} Klingons')
+        self.logger.debug(f'Placing {self._gameState.remainingKlingons} Klingons')
 
         for x in range(self._gameState.remainingKlingons):
 
@@ -229,4 +229,4 @@ class Galaxy(Singleton):
             for x in range(GALAXY_COLUMNS):
                 quadrant = quadRow[x]
                 quadrant: Quadrant = cast(Quadrant, quadrant)
-                self.logger.info(f'Quadrant({x},{y}) Klingon Count: {quadrant.klingonCount}')
+                self.logger.debug(f'Quadrant({x},{y}) Klingon Count: {quadrant.klingonCount}')

@@ -60,7 +60,7 @@ class GameState(Singleton):
 
         self.gameActive:    bool = True
 
-        print(f'Game State singleton initialized')
+        self.logger.info(f'Game State singleton initialized')
 
     @property
     def energy(self) -> float:

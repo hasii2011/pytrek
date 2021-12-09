@@ -63,12 +63,28 @@
             "level": "WARNING",
             "propagate": "False"
         },
-        "pytrek.GameState": {
+        "tests.pytrek.engine.futures.LogMessageConsole": {
             "level": "WARNING",
             "propagate": "False"
         },
-        "pytrek.engine.GameEngine": {
+        "tests.pytrek.engine.futures.TestFutureEventHandlers": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+        "tests.pytrek.gui.TestGamePiece": {
             "level": "WARNING",
+            "propagate": "False"
+        },
+        "pytrek.GameState": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+        "pytrek.settings.GameSettings": {
+            "level": "INFO",
+            "propagate": "False"
+        },
+        "pytrek.engine.GameEngine": {
+            "level": "INFO",
             "propagate": "False"
         },
         "pytrek.engine.Intelligence": {
@@ -89,7 +105,7 @@
             "propagate": "False"
         },
         "pytrek.model.Galaxy": {
-            "level": "WARNING",
+            "level": "INFO",
             "propagate": "False"
         },
         "pytrek.gui.gamepieces.SmoothMotion": {
@@ -98,10 +114,6 @@
         },
         "pytrek.gui.CourseDistanceDialog": {
             "level":     "INFO",
-            "propagate": "False"
-        },
-                "tests.pytrek.gui.TestGamePiece": {
-            "level": "WARNING",
             "propagate": "False"
         },
 

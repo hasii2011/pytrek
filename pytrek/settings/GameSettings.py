@@ -41,7 +41,7 @@ class GameSettings(Singleton):
         self._createEmptySettings()
         self._loadSettings()
 
-        print(f'Game Settings singleton initialized')
+        self.logger.info(f'Game Settings singleton initialized')
 
     @property
     def maximumStars(self) -> int:

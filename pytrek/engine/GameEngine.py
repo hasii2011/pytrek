@@ -55,6 +55,7 @@ class GameEngine(Singleton):
         self._accumulatedDelta: float = 0.0
         self._gameClock:        float = 0.0
 
+        self.logger.info(f'GameEngine initialized')
     @property
     def gameClock(self) -> float:
         """
@@ -180,7 +181,7 @@ class GameEngine(Singleton):
         travelDistance: float = self._computer.computeQuadrantDistance(startSector=startSector, endSector=endSector)
         elapsedTime:    float = travelDistance / 0.095
 
-        self.logger.info(f'{travelDistance=}  {elapsedTime=}')
+        self.logger.debug(f'{travelDistance=}  {elapsedTime=}')
         self._gameState.opTime = elapsedTime
 
         # stopEnergy: float = 50.0 * travelDistance / elapsedTime
@@ -329,7 +330,7 @@ class GameEngine(Singleton):
             the hit on the shield
         """
         self._gameState.energy -= degradedTorpedoValue
-        self.logger.info(f"Degraded energy level: {self._gameState.energy:.4f}")
+        self.logger.debug(f"Degraded energy level: {self._gameState.energy:.4f}")
         if self._gameState.energy < 0:
             self._gameState.energy = 0
 
