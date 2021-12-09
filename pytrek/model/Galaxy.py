@@ -61,8 +61,8 @@ class Galaxy(Singleton):
             There may be duplicate coordinates if we randomly picked the same quadrant
             """
         print(f'Galaxy: {gameSettings.debugCollectKlingonQuadrantCoordinates=}')
-        # if gameSettings.debugCollectKlingonQuadrantCoordinates is True:
-        self._debugKlingonQuadrants: List[Coordinates] = []
+        if gameSettings.debugCollectKlingonQuadrantCoordinates is True:
+            self._debugKlingonQuadrants: List[Coordinates] = []
 
         if gameSettings.debugNoKlingons is True:
             self._gameState.remainingKlingons = 0

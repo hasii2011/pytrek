@@ -43,6 +43,7 @@ class TestFutureEventHandlers(TestBase):
         TestFutureEventHandlers.clsLogger = getLogger(__name__)
         SettingsCommon.determineSettingsLocation()
         TestFutureEventHandlers._setupGame()
+        print(f'Running TestFutureEventHandlers')
 
     @classmethod
     def tearDownClass(cls):

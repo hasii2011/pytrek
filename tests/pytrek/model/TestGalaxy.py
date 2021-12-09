@@ -78,7 +78,6 @@ class TestGalaxy(TestBase):
 
     def testGetStarBaseCoordinates(self):
 
-        self._galaxy.__instance__ = None    # override singleton
         self.assertNotEqual(0, self._gameState.starBaseCount, 'Should always have some StarBases')
 
         randomCoordinates: Coordinates = self._galaxy.getStarBaseCoordinates()
