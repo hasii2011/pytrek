@@ -168,7 +168,7 @@ class Quadrant:
     @property
     def scanned(self) -> bool:
         """
-        Returns whether or not this quadrant was part of a long range sensor scan
+        Returns whether this quadrant was part of a long range sensor scan
 
         Returns:  `True` if this quadrant participated in a long range sensor scan, else `False`
         """
@@ -189,6 +189,10 @@ class Quadrant:
     @property
     def hasPlanet(self) -> bool:
         return self._hasPlanet
+
+    @hasPlanet.setter
+    def hasPlanet(self, newValue: bool):
+        self._hasPlanet = newValue
 
     @property
     def hasSuperNova(self) -> bool:
@@ -267,7 +271,7 @@ class Quadrant:
 
     def addPlanet(self):
 
-        self._hasPlanet = True
+        self.hasPlanet = True
 
         sector      = self.getRandomEmptySector()
         sector.type = SectorType.PLANET
@@ -278,7 +282,7 @@ class Quadrant:
     def addStarBase(self):
         """
         """
-        self._hasStarBase = True
+        self.hasStarBase = True
         self.placeAStarBase()
 
     def getRandomEmptySector(self) -> Sector:
@@ -351,7 +355,7 @@ class Quadrant:
 
     def _placeAKlingon(self) -> Klingon:
         """
-        Creates a enemy and places it at a random empty sector
+        Creates an enemy and places it at a random empty sector
         """
 
         sector        = self.getRandomEmptySector()
@@ -376,7 +380,7 @@ class Quadrant:
         """
         Create and place a Commander at a random empty sector
 
-        Returns:  The 'placed" commander
+        Returns:  The 'placed' commander
         """
         sector      = self.getRandomEmptySector()
         sector.type = SectorType.COMMANDER

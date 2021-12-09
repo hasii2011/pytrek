@@ -23,6 +23,7 @@ from pytrek.settings.SettingsCommon import SettingsCommon
 from tests.TestBase import TestBase
 
 from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
+from tests.pytrek.engine.futures.LogMessageConsole import LogMessageConsole
 
 
 class TestFutureEventHandlers(TestBase):
@@ -59,7 +60,7 @@ class TestFutureEventHandlers(TestBase):
         self._computer:     Computer     = TestFutureEventHandlers.clsComputer
         self._galaxy:       Galaxy       = TestFutureEventHandlers.clsGalaxy
 
-        self._eventHandlers: FutureEventHandlers = FutureEventHandlers()
+        self._eventHandlers: FutureEventHandlers = FutureEventHandlers(LogMessageConsole())
 
     def tearDown(self):
         pass
@@ -136,8 +137,9 @@ class TestFutureEventHandlers(TestBase):
         pass
 
     def testCommanderAttacksBaseEventHandler(self):
-        """Another test"""
-        pass
+        """
+        """
+        self._eventHandlers.commanderAttacksBaseEventHandler()
 
     def _getANovaEventQuadrant(self) -> Quadrant:
         """

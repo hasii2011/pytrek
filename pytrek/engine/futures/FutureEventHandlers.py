@@ -3,6 +3,7 @@ from logging import Logger
 from logging import getLogger
 
 from pytrek.GameState import GameState
+from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
 
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 
@@ -13,10 +14,11 @@ class FutureEventHandlers:
     """
 
     """
-    def __init__(self):
+    def __init__(self, messageConsole: AbstractMessageConsole):
 
-        self.logger:     Logger = getLogger(__name__)
-        self._gameState: GameState = GameState()
+        self.logger:          Logger                 = getLogger(__name__)
+        self._gameState:      GameState              = GameState()
+        self._messageConsole: AbstractMessageConsole = messageConsole
 
     def superNovaEventHandler(self, quadrant: Quadrant):
         """
@@ -33,6 +35,9 @@ class FutureEventHandlers:
 
         assert quadrant is not None, 'Incorrect call;  Require a quadrant'
 
+        self._messageConsole.displayMessage(f'Message from Starfleet Command    Stardate {self._gameState.starDate:.2f}')
+        self._messageConsole.displayMessage(f'Supernova in {quadrant.coordinates}; caution advised.')
+
         self._decrementEnemyCount(quadrant=quadrant, enemyName='Klingon')
         self._decrementEnemyCount(quadrant=quadrant, enemyName='Commander')
         self._decrementEnemyCount(quadrant=quadrant, enemyName='SuperCommander')
@@ -41,12 +46,13 @@ class FutureEventHandlers:
             self._gameState.starBaseCount -= 1
             if self._gameState.starBaseCount < 0:
                 self._gameState.starBaseCount = 0
+            self._messageConsole.displayMessage(f'Starbase in quadrant {quadrant.coordinates} destroyed')
 
         if quadrant.hasPlanet is True:
             self._gameState.planetCount -= 1
             if self._gameState.planetCount < 0:
                 self._gameState.planetCount = 0
-
+            self._messageConsole.displayMessage(f'Planet in quadrant {quadrant.coordinates} destroyed')
         quadrant.hasSuperNova = True
 
     def tractorBeamEventHandler(self, **kwargs):
@@ -81,8 +87,15 @@ class FutureEventHandlers:
         qPropertyName:  str = f'{enemyName[0].lower()}{enemyName[1:]}s'
 
         enemies: Enemies = getattr(quadrant, qPropertyName)
-        message: str     = f'{len(enemies)} {enemyName}s destroyed'
-        self.logger.debug(f'{message}')      # TODO post a message to status console
+        enemyCount: int = len(enemies)
+        if enemyCount > 1:
+            message: str = f'{len(enemies)} {enemyName}s destroyed'
+        else:
+            message = f'{len(enemies)} {enemyName} destroyed'
+
+        if enemyCount > 0:
+            self.logger.debug(f'{message}')
+            self._messageConsole.displayMessage(message)
 
         for enemy in enemies:
             quadrant.decrementEnemyCount(enemy)

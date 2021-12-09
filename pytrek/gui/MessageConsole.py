@@ -9,10 +9,11 @@ from arcade.color import WHITE
 
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
-from pytrek.Singleton import Singleton
+
+from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
 
 
-class MessageConsole(Singleton):
+class MessageConsole(AbstractMessageConsole):
 
     MAX_LINES:                 int = 13
 

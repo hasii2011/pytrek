@@ -48,9 +48,9 @@ class TestGameEngine(TestBase):
         self.logger:      Logger     = TestGameEngine.clsLogger
 
         self._gameSettings: GameSettings = GameSettings()
-        self._gameEngine:   GameEngine = GameEngine()
-        self._gameState:    GameState  = GameState()
-        self._computer:     Computer   = Computer()
+        self._gameEngine:   GameEngine   = GameEngine()
+        self._gameState:    GameState    = GameState()
+        self._computer:     Computer     = Computer()
 
         self._devices:      Devices    = Devices()
 
