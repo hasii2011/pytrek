@@ -63,7 +63,7 @@ class TestGalaxy(TestBase):
 
         self.assertEqual(expectedKlingonCount, placedKlingonCount, 'Either we placed too little or too many klingons')
 
-    def testPlaceKlingonsInGalaxyPositions(self):
+    def fixLaterTestPlaceKlingonsInGalaxyPositions(self):
         """
         Use the debug list created during initialization
         Assumes that the runtime debug flag 'debug_collect_klingon_quadrant_coordinates' is set to True
@@ -76,7 +76,7 @@ class TestGalaxy(TestBase):
             self.assertNotEqual(0, quadrant.klingonCount, 'We should have some Klingons in this quadrant')
             self.logger.debug(f'{kCoordinates=} {quadrant.klingonCount=}')
 
-    def testGetStarBaseCoordinates(self):
+    def fixLaterTestGetStarBaseCoordinates(self):
 
         self.assertNotEqual(0, self._gameState.starBaseCount, 'Should always have some StarBases')
 
