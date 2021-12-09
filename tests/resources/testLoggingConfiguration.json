@@ -47,6 +47,10 @@
             "level": "WARNING",
             "propagate": "False"
         },
+        "tests.pytrek.model.TestGalaxy": {
+            "level": "INFO",
+            "propagate": "False"
+        },
         "tests.pytrek.engine.TestIntelligence": {
             "level": "WARNING",
             "propagate": "False"

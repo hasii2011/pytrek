@@ -36,8 +36,8 @@ class TestGalaxy(TestBase):
         TestGalaxy.clsGameSettings = GameSettings()
         TestGalaxy.clsGameSettings.debugCollectKlingonQuadrantCoordinates = True
 
-        TestGalaxy.clsGameState    = GameState()
-        TestGalaxy.clsGalaxy       = Galaxy()
+        TestGalaxy.clsGameState = GameState()
+        TestGalaxy.clsGalaxy    = Galaxy()
 
     def setUp(self):
         self.logger: Logger = TestGalaxy.clsLogger
@@ -47,6 +47,8 @@ class TestGalaxy(TestBase):
 
         self._gameState: GameState = TestGalaxy.clsGameState
         self._galaxy:    Galaxy    = TestGalaxy.clsGalaxy
+
+        self.logger.info(f'setup:  {self._gameSettings.debugCollectKlingonQuadrantCoordinates=}')
 
     def tearDown(self):
         self._gameSettings.debugCollectKlingonQuadrantCoordinates = False
@@ -63,7 +65,7 @@ class TestGalaxy(TestBase):
 
         self.assertEqual(expectedKlingonCount, placedKlingonCount, 'Either we placed too little or too many klingons')
 
-    def fixLaterTestPlaceKlingonsInGalaxyPositions(self):
+    def testPlaceKlingonsInGalaxyPositions(self):
         """
         Use the debug list created during initialization
         Assumes that the runtime debug flag 'debug_collect_klingon_quadrant_coordinates' is set to True
