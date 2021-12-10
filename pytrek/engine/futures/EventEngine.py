@@ -20,6 +20,7 @@ from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.GameState import GameState
 
 from pytrek.Singleton import Singleton
+from pytrek.gui.MessageConsole import MessageConsole
 
 EventMap = NewType('EventMap', Dict[FutureEventType, FutureEvent])
 
@@ -30,6 +31,7 @@ class EventEngine(Singleton):
     """
 
     NONZERO_OPERATION_TIME_THRESHOLD: float = 0.0001
+    EVENT_CHECK_INTERVAL:             float = 5.0
     """
     This constant is the amount of time that a game operation (e.g. firing, movement) must take to trigger
     a check for events. It exists so the check for zero does not have to be exact.
@@ -47,10 +49,12 @@ class EventEngine(Singleton):
         self._setupEventMap()
         self._eventCreator: EventCreator = EventCreator()
 
+        self._messageConsole: MessageConsole = MessageConsole()
+
         self.logger.debug(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
 
         # I do not know what a Number is tell mypy so
-        schedule(function_pointer=self._doEventChecking, interval=5.0)  # type: ignore
+        schedule(function_pointer=self._doEventChecking, interval=EventEngine.EVENT_CHECK_INTERVAL)  # type: ignore
 
     def getEvent(self, eventType: FutureEventType) -> FutureEvent:
         return self._eventMap[eventType]
@@ -60,6 +64,9 @@ class EventEngine(Singleton):
         eventType: FutureEventType = futureEvent.type
 
         self._eventMap[eventType] = futureEvent
+
+    def unScheduleEvent(self, eventType: FutureEventType):
+        self._eventMap[eventType] = cast(FutureEvent, None)
 
     def fixDevices(self):
         # noinspection SpellCheckingInspection
@@ -103,6 +110,11 @@ class EventEngine(Singleton):
                         self.logger.info(f"Device: {device.deviceType.name} repaired")
 
     def _doEventChecking(self, deltaTime: float):
+        """
+        This is the periodic method that periodically fires
+        Args:
+            deltaTime:
+        """
 
         self.logger.debug(f'{deltaTime:0.3f}')
 
@@ -121,8 +133,15 @@ class EventEngine(Singleton):
             if fsEventType != FutureEventType.SPY:
 
                 futureEvent: FutureEvent = self._eventMap[fsEventType]
+                # Might be unscheduled
+                if futureEvent is None:
+                    break
                 eventStarDate: float = futureEvent.starDate
                 if eventStarDate != 0 and currentStarDate >= eventStarDate:
+                    if fsEventType == FutureEventType.COMMANDER_ATTACKS_BASE:
+                        if self._canCommanderAttackAStarBase() is False:
+                            self.unScheduleEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
+                            break
                     self._fireEvent(eventToFire=futureEvent)
                     self._reScheduleRecurringEvents(eventType=futureEvent.type)
 
@@ -130,7 +149,7 @@ class EventEngine(Singleton):
 
         self.logger.info(f'{eventToFire=}')
         if eventToFire.callback is not None:
-            eventToFire.callback()
+            eventToFire.callback(eventToFire)
 
     def _reScheduleRecurringEvents(self, eventType: FutureEventType):
         """
@@ -158,6 +177,18 @@ class EventEngine(Singleton):
                 eventMap[fsEventType] = FutureEvent(fsEventType)
 
         self._eventMap = eventMap
+
+    def _canCommanderAttackAStarBase(self) -> bool:
+        """
+        There should be a commander and a star base
+
+        Returns:  `True` if above is true, else `False`
+
+        """
+        if self._gameState.remainingCommanders == 0 or self._gameState.starBaseCount == 0:
+            return False
+        else:
+            return True
 
     def __repr__(self):
 

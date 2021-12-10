@@ -3,9 +3,11 @@ from logging import Logger
 from logging import getLogger
 
 from pytrek.GameState import GameState
+from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
 
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.model.Galaxy import Galaxy
 
 from pytrek.model.Quadrant import Quadrant
 
@@ -16,11 +18,12 @@ class FutureEventHandlers:
     """
     def __init__(self, messageConsole: AbstractMessageConsole):
 
-        self.logger:          Logger                 = getLogger(__name__)
-        self._gameState:      GameState              = GameState()
+        self.logger:          Logger    = getLogger(__name__)
+        self._gameState:      GameState = GameState()
+        self._galaxy:         Galaxy    = Galaxy()
         self._messageConsole: AbstractMessageConsole = messageConsole
 
-    def superNovaEventHandler(self, quadrant: Quadrant):
+    def superNovaEventHandler(self, futureEvent: FutureEvent):
         """
         Destroy
             * Klingons, Commanders, SuperCommanders
@@ -30,12 +33,11 @@ class FutureEventHandlers:
             * Check all enemies dead
 
         Args:
-            quadrant:
+            The event that caused this invocation:
         """
+        quadrant: Quadrant = self._galaxy.getQuadrant(quadrantCoordinates=futureEvent.quadrantCoordinates)
 
-        assert quadrant is not None, 'Incorrect call;  Require a quadrant'
-
-        self._messageConsole.displayMessage(f'Message from Starfleet Command    Stardate {self._gameState.starDate:.2f}')
+        self._messageConsole.displayMessage(f'Message from Starfleet Command    Stardate {futureEvent.starDate:.2f}')
         self._messageConsole.displayMessage(f'Supernova in {quadrant.coordinates}; caution advised.')
 
         self._decrementEnemyCount(quadrant=quadrant, enemyName='Klingon')
@@ -55,21 +57,11 @@ class FutureEventHandlers:
             self._messageConsole.displayMessage(f'Planet in quadrant {quadrant.coordinates} destroyed')
         quadrant.hasSuperNova = True
 
-    def tractorBeamEventHandler(self, **kwargs):
+    def tractorBeamEventHandler(self, futureEvent: FutureEvent):
         pass
 
-    def commanderAttacksBaseEventHandler(self, **kwargs):
+    def commanderAttacksBaseEventHandler(self, futureEvent: FutureEvent):
         pass
-
-    # def _unPackSuperNovaArgs(self, **kwargs) -> Quadrant:
-    #
-    #     if 'quadrant' in kwargs:
-    #         quadrant: Quadrant = kwargs['quadrant']
-    #         self.logger.debug(f'{quadrant}')
-    #
-    #         return quadrant
-    #
-    #     return cast(Quadrant, None)
 
     def _decrementEnemyCount(self, quadrant: Quadrant, enemyName: str):
         """

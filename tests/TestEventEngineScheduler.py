@@ -112,6 +112,7 @@ class TestEventScheduler(View):
 
         starDate: float = self._gameState.starDate
         draw_text(f'Current Star Date: {starDate}', 10, 100, color.GLAUCOUS, 12)
+        draw_text(f'Q: `Quit` U: `Update Time` C: `Kill Commanders` A: `Reset`', 10, 50, color.GLAUCOUS)
 
     def _drawDevicesStatus(self):
 
@@ -162,6 +163,8 @@ class TestEventScheduler(View):
             self._gameEngine.updateTime(elapsedTime=1.0)
         elif releasedKey == arcadeKey.A:
             self.setup()
+        elif releasedKey == arcadeKey.C:
+            self._gameState.remainingCommanders = 0
 
     def _createInitialEvents(self):
 

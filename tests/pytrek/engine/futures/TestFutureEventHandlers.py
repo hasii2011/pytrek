@@ -12,6 +12,8 @@ from pytrek.GameState import GameState
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.futures.FutureEvent import FutureEvent
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -29,6 +31,8 @@ from tests.pytrek.engine.futures.LogMessageConsole import LogMessageConsole
 class TestFutureEventHandlers(TestBase):
     """
     """
+    MAX_LOOPS = 128
+
     clsLogger: Logger = cast(Logger, None)
 
     clsGameSettings: GameSettings = cast(GameSettings, None)
@@ -67,25 +71,25 @@ class TestFutureEventHandlers(TestBase):
 
     def testSuperNovaEventHandlerKlingonsAreDead(self):
 
-        quadrant: Quadrant = self._getANovaEventQuadrant()
-        self._testEnemyDeadHandler(quadrant=quadrant, enemyName='Klingon')
+        fEvent: FutureEvent = self._generateArtificialEvent(FutureEventType.SUPER_NOVA)
+        self._testEnemyDeadHandler(fEvent=fEvent, enemyName='Klingon')
 
     def testSuperNovaEventHandlerCommandersAreDead(self):
 
-        quadrant: Quadrant = self._getANovaEventQuadrant()
-        self._testEnemyDeadHandler(quadrant=quadrant, enemyName='Commander')
+        fEvent: FutureEvent = self._generateArtificialEvent(FutureEventType.SUPER_NOVA)
+        self._testEnemyDeadHandler(fEvent=fEvent, enemyName='Commander')
 
     def testSuperNovaEventHandlerSuperCommandersAreDead(self):
 
-        quadrant: Quadrant = self._getANovaEventQuadrant()
-        self._testEnemyDeadHandler(quadrant=quadrant, enemyName='SuperCommander')
+        fEvent: FutureEvent = self._generateArtificialEvent(FutureEventType.SUPER_NOVA)
+        self._testEnemyDeadHandler(fEvent=fEvent, enemyName='SuperCommander')
 
     def testSuperNovaEventStarBaseDestroyed(self):
 
-        quadrant:              Quadrant = self._getANovaEventQuadrant()
-        previousStarBaseCount: int      = self._gameState.starBaseCount
+        fEvent:                FutureEvent = self._generateArtificialEvent(FutureEventType.SUPER_NOVA)
+        previousStarBaseCount: int         = self._gameState.starBaseCount
 
-        self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
+        self._eventHandlers.superNovaEventHandler(futureEvent=fEvent)
 
         if previousStarBaseCount != 0:
             expectedStarBaseCount: int = previousStarBaseCount - 1
@@ -98,10 +102,10 @@ class TestFutureEventHandlers(TestBase):
 
     def testSuperNovaEventPlanetDestroyed(self):
 
-        quadrant:            Quadrant = self._getANovaEventQuadrant()
-        previousPlanetCount: int      = self._gameState.planetCount
+        fEvent:              FutureEvent = self._generateArtificialEvent(FutureEventType.SUPER_NOVA)
+        previousPlanetCount: int         = self._gameState.planetCount
 
-        self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
+        self._eventHandlers.superNovaEventHandler(futureEvent=fEvent)
 
         if previousPlanetCount != 0:
             expectedPlanetCount: int = previousPlanetCount - 1
@@ -118,18 +122,28 @@ class TestFutureEventHandlers(TestBase):
         """
 
         coordinates: Coordinates = self._galaxy.getStarBaseCoordinates()
-        while coordinates is not None:
-            quadrant: Quadrant = self._galaxy.getQuadrant(quadrantCoordinates=coordinates)
+        fEvent: FutureEvent = FutureEvent()
 
-            self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
+        fEvent.type                = FutureEventType.SUPER_NOVA
+        fEvent.starDate            = self._gameState.starDate
+        fEvent.quadrantCoordinates = coordinates
 
+        maxSearches: int = 0
+        while coordinates is not None and maxSearches < TestFutureEventHandlers.MAX_LOOPS:
+            self._eventHandlers.superNovaEventHandler(futureEvent=fEvent)
             coordinates = self._galaxy.getStarBaseCoordinates()
+            fEvent.quadrantCoordinates = coordinates
+            self.logger.debug(f'{coordinates=}')
+            maxSearches += 1
 
         self.assertEqual(0, self._gameState.starBaseCount, 'Did not destroy all StarBases')
-        coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
-        quadrant: Quadrant = Quadrant(coordinates=coordinates)
 
-        self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
+        coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
+        fEvent.type                = FutureEventType.SUPER_NOVA
+        fEvent.starDate            = self._gameState.starDate
+        fEvent.quadrantCoordinates = coordinates
+
+        self._eventHandlers.superNovaEventHandler(futureEvent=fEvent)
         self.assertEqual(0, self._gameState.starBaseCount, 'Should be zero all StarBases destroyed')
 
     def testTractorBeamEventHandler(self):
@@ -139,7 +153,20 @@ class TestFutureEventHandlers(TestBase):
     def testCommanderAttacksBaseEventHandler(self):
         """
         """
-        self._eventHandlers.commanderAttacksBaseEventHandler()
+        fEvent: FutureEvent = self._generateArtificialEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
+
+        self._eventHandlers.commanderAttacksBaseEventHandler(futureEvent=fEvent)
+
+    def _generateArtificialEvent(self, eventType: FutureEventType) -> FutureEvent:
+
+        fEvent: FutureEvent = FutureEvent()
+        fEvent.type = eventType
+        fEvent.starDate = self._gameState.starDate
+
+        quadrant: Quadrant = self._getANovaEventQuadrant()
+        fEvent.quadrantCoordinates = quadrant.coordinates
+
+        return fEvent
 
     def _getANovaEventQuadrant(self) -> Quadrant:
         """
@@ -147,7 +174,7 @@ class TestFutureEventHandlers(TestBase):
         """
 
         coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
-        quadrant:    Quadrant    = Quadrant(coordinates=coordinates)
+        quadrant:    Quadrant    = self._galaxy.getQuadrant(quadrantCoordinates=coordinates)
 
         self.logger.debug (f'{quadrant.hasSuperNova=}')
         quadrant.addKlingon()
@@ -169,26 +196,26 @@ class TestFutureEventHandlers(TestBase):
 
         return quadrant
 
-    def _testEnemyDeadHandler(self, quadrant: Quadrant, enemyName: str):
+    def _testEnemyDeadHandler(self, fEvent: FutureEvent, enemyName: str):
         """
         Runs the appropriate count test
 
         Args:
-            quadrant:   A randomly generated quadrant
+            fEvent:     Artificial event
             enemyName:  The enemy name, 'Klingon', 'Commander', 'SuperCommander'
 
         I normally don't like to write dynamically generated codes like this.  However,
         I could not in good conscience duplicate this code three times;  I know it is
         very 'Pythonic', but very high maintenance
         """
-
+        quadrant: Quadrant = self._galaxy.getQuadrant(fEvent.quadrantCoordinates)
         gsPropertyName: str = f'remaining{enemyName}s'
         qPropertyName:  str = f'{enemyName[0].lower()}{enemyName[1:]}Count'
 
         beforeEnemyCount:   int = getattr(self._gameState, gsPropertyName)
         quadrantEnemyCount: int = getattr(quadrant, qPropertyName)
 
-        self._eventHandlers.superNovaEventHandler(quadrant=quadrant)
+        self._eventHandlers.superNovaEventHandler(futureEvent=fEvent)
         actualEnemyCount: int = getattr(quadrant, qPropertyName)
         self.assertEqual(0, actualEnemyCount, f'Not all {enemyName}s are dead')
 
