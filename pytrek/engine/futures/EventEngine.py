@@ -77,11 +77,25 @@ class EventEngine(Singleton):
         self._eventMap[eventType] = futureEvent
 
     def unScheduleEvent(self, eventType: FutureEventType):
-        futureEvent: FutureEvent = FutureEvent()
-        futureEvent.type = eventType
-        futureEvent.quadrantCoordinates = cast(Coordinates, None)
-        futureEvent.starDate            = 0
-        futureEvent.callback            = cast(EventCallback, None)
+        #
+        # Is it already unscheduled?
+        #
+        futureEvent: FutureEvent = self._eventMap[eventType]
+        if futureEvent.schedulable is True:
+
+            futureEvent.type                = eventType
+            futureEvent.quadrantCoordinates = cast(Coordinates, None)
+            futureEvent.starDate            = 0
+            futureEvent.callback            = cast(EventCallback, None)
+
+            self._eventMap[eventType] = futureEvent
+
+    def makeUnSchedulable(self, eventType: FutureEventType):
+
+        futureEvent: FutureEvent = self._eventMap[eventType]
+
+        futureEvent.schedulable = False
+
         self._eventMap[eventType] = futureEvent
 
     def fixDevices(self):
@@ -150,16 +164,13 @@ class EventEngine(Singleton):
 
                 futureEvent: FutureEvent = self._eventMap[fsEventType]
                 # Might be unscheduled
-                if futureEvent is None:
-                    break
-                eventStarDate: float = futureEvent.starDate
-                if eventStarDate != 0 and currentStarDate >= eventStarDate:
-                    if fsEventType == FutureEventType.COMMANDER_ATTACKS_BASE:
-                        if self._canCommanderAttackAStarBase() is False:
-                            self.unScheduleEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
-                            break
-                    self._fireEvent(eventToFire=futureEvent)
-                    self._reScheduleRecurringEvents(eventType=futureEvent.type)
+                if futureEvent.quadrantCoordinates is None:
+                    pass
+                else:
+                    eventStarDate: float = futureEvent.starDate
+                    if eventStarDate != 0 and currentStarDate >= eventStarDate:
+                        self._fireEvent(eventToFire=futureEvent)
+                        self._reScheduleRecurringEvents(eventType=futureEvent.type)
 
     def _fireEvent(self, eventToFire: FutureEvent):
 
@@ -174,15 +185,17 @@ class EventEngine(Singleton):
         Args:
             eventType:
         """
-        if eventType == FutureEventType.COMMANDER_ATTACKS_BASE:
-            newEvent: FutureEvent = self._eventCreator.createCommanderAttacksBaseEvent()
-            self.scheduleEvent(newEvent)
-        if eventType == FutureEventType.SUPER_NOVA:
-            superNovaEvent: FutureEvent = self._eventCreator.createSuperNovaEvent()
-            self.scheduleEvent(superNovaEvent)
-        if eventType == FutureEventType.TRACTOR_BEAM:
-            tractorBeamEvent: FutureEvent = self._eventCreator.createTractorBeamEvent()
-            self.scheduleEvent(tractorBeamEvent)
+        if self._isSchedulable(eventType):
+
+            if eventType == FutureEventType.COMMANDER_ATTACKS_BASE:
+                newEvent: FutureEvent = self._eventCreator.createCommanderAttacksBaseEvent()
+                self.scheduleEvent(newEvent)
+            if eventType == FutureEventType.SUPER_NOVA:
+                superNovaEvent: FutureEvent = self._eventCreator.createSuperNovaEvent()
+                self.scheduleEvent(superNovaEvent)
+            if eventType == FutureEventType.TRACTOR_BEAM:
+                tractorBeamEvent: FutureEvent = self._eventCreator.createTractorBeamEvent()
+                self.scheduleEvent(tractorBeamEvent)
 
     def _setupEventMap(self):
 
@@ -194,17 +207,10 @@ class EventEngine(Singleton):
 
         self._eventMap = eventMap
 
-    def _canCommanderAttackAStarBase(self) -> bool:
-        """
-        There should be a commander and a star base
+    def _isSchedulable(self, eventType: FutureEventType) -> bool:
 
-        Returns:  `True` if above is true, else `False`
-
-        """
-        if self._gameState.remainingCommanders == 0 or self._gameState.starBaseCount == 0:
-            return False
-        else:
-            return True
+        ans: bool = self._eventMap[eventType].schedulable
+        return ans
 
     def __repr__(self):
 

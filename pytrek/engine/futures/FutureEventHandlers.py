@@ -4,6 +4,7 @@ from logging import getLogger
 
 from pytrek.GameState import GameState
 from pytrek.engine.futures.FutureEvent import FutureEvent
+from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
 
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
@@ -37,7 +38,7 @@ class FutureEventHandlers:
         """
         quadrant: Quadrant = self._galaxy.getQuadrant(quadrantCoordinates=futureEvent.quadrantCoordinates)
 
-        self._messageConsole.displayMessage(f'Message from Starfleet Command    Stardate {futureEvent.starDate:.2f}')
+        self._standardAnnouncement(futureEvent.starDate)
         self._messageConsole.displayMessage(f'Supernova in {quadrant.coordinates}; caution advised.')
 
         self._decrementEnemyCount(quadrant=quadrant, enemyName='Klingon')
@@ -58,10 +59,30 @@ class FutureEventHandlers:
         quadrant.hasSuperNova = True
 
     def tractorBeamEventHandler(self, futureEvent: FutureEvent):
-        self._messageConsole.displayMessage(f'Tractor Beam Stardate {futureEvent.starDate:.2f}')
+        if self._gameState.remainingCommanders > 0:
+            self._standardAnnouncement(futureEvent.starDate)
+            self._messageConsole.displayMessage(f'Commander using tractor beam')
+
+        else:
+            from pytrek.engine.futures.EventEngine import EventEngine
+
+            self.logger.warning(f'All commanders are dead.')
+            eventEngine: EventEngine = EventEngine()
+            eventEngine.unScheduleEvent(FutureEventType.TRACTOR_BEAM)
+            eventEngine.makeUnSchedulable(FutureEventType.TRACTOR_BEAM)
 
     def commanderAttacksBaseEventHandler(self, futureEvent: FutureEvent):
-        self._messageConsole.displayMessage(f'Tractor Beam Stardate {futureEvent.starDate:.2f}')
+
+        if self._canCommanderAttackAStarBase() is True:
+            self._standardAnnouncement(futureEvent.starDate)
+            self._messageConsole.displayMessage(f'Commander attacking StarBase in {futureEvent.quadrantCoordinates}')
+        else:
+            from pytrek.engine.futures.EventEngine import EventEngine
+
+            self.logger.warning(f'Out of StarBases or all commanders are dead.  So no attacking StarBases')
+            eventEngine: EventEngine = EventEngine()
+            eventEngine.unScheduleEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
+            eventEngine.makeUnSchedulable(FutureEventType.COMMANDER_ATTACKS_BASE)
 
     def _decrementEnemyCount(self, quadrant: Quadrant, enemyName: str):
         """
@@ -94,3 +115,18 @@ class FutureEventHandlers:
             remainingEnemyCount: int = getattr(self._gameState, gsPropertyName)
             remainingEnemyCount -= 1
             setattr(self._gameState, gsPropertyName, remainingEnemyCount)
+
+    def _canCommanderAttackAStarBase(self) -> bool:
+        """
+        There should be a commander and a star base
+
+        Returns:  `True` if above is true, else `False`
+
+        """
+        if self._gameState.remainingCommanders == 0 or self._gameState.starBaseCount == 0:
+            return False
+        else:
+            return True
+
+    def _standardAnnouncement(self, starDate: float):
+        self._messageConsole.displayMessage(f'Message from Starfleet Command    Stardate {starDate:.2f}')

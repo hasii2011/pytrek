@@ -19,7 +19,7 @@ class SchedulerTestMessageConsole(AbstractMessageConsole):
 
     MAX_LINES:                 int = 8
 
-    CONSOLE_HEIGHT:            int = 75
+    CONSOLE_HEIGHT:            int = 85
     CONSOLE_FONT_SIZE:         int = 10
     BETWEEN_LINE_MARGIN:       int = 3
     EXTRA_FIRST_LINE_Y_OFFSET: int = 5
