@@ -10,7 +10,7 @@ from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
 from pytrek.engine.futures.FutureEventType import FutureEventType
 
-from pytrek.gui.MessageConsole import MessageConsole
+from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -18,7 +18,7 @@ from pytrek.model.Galaxy import Galaxy
 
 class EventCreator:
 
-    def __init__(self):
+    def __init__(self, messageConsole: AbstractMessageConsole):
 
         self.logger: Logger = getLogger(__name__)
 
@@ -26,8 +26,8 @@ class EventCreator:
         self._gameState:    GameState    = GameState()
         self._galaxy:       Galaxy       = Galaxy()
 
-        self._messageConsole:      MessageConsole = MessageConsole()
-        self._futureEventHandlers: FutureEventHandlers = FutureEventHandlers(self._messageConsole)
+        self._messageConsole:      AbstractMessageConsole = messageConsole
+        self._futureEventHandlers: FutureEventHandlers    = FutureEventHandlers(self._messageConsole)
 
     def createSuperNovaEvent(self) -> FutureEvent:
         # noinspection SpellCheckingInspection
@@ -72,6 +72,7 @@ class EventCreator:
         """
         inTime:              float       = self._gameState.inTime
         remainingCommanders: int         = self._gameState.remainingCommanders
+        assert remainingCommanders != 0, 'Do we have a bug?'
         elapsedStarDates:    float       = self._intelligence.exponentialRandom(2.5 * (inTime / remainingCommanders))
         eventStarDate:       float       = self._gameState.starDate + elapsedStarDates
         coordinates:         Coordinates = self._gameState.currentQuadrantCoordinates

@@ -20,6 +20,7 @@ from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.GameState import GameState
 
 from tests.TestBase import TestBase
+from tests.pytrek.engine.futures.LogMessageConsole import LogMessageConsole
 
 BASIC_DAMAGE = 4.0
 
@@ -40,7 +41,7 @@ class TestEventEngine(TestBase):
         #
         self._gameEngine:  GameEngine  = GameEngine()
         self._gameState:   GameState   = GameState()
-        self._eventEngine: EventEngine = EventEngine()
+        self._eventEngine: EventEngine = EventEngine(LogMessageConsole())
         self._devices:     Devices     = Devices()
 
     def testCheckEvents(self):

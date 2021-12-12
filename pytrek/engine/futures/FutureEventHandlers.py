@@ -58,10 +58,10 @@ class FutureEventHandlers:
         quadrant.hasSuperNova = True
 
     def tractorBeamEventHandler(self, futureEvent: FutureEvent):
-        pass
+        self._messageConsole.displayMessage(f'Tractor Beam Stardate {futureEvent.starDate:.2f}')
 
     def commanderAttacksBaseEventHandler(self, futureEvent: FutureEvent):
-        pass
+        self._messageConsole.displayMessage(f'Tractor Beam Stardate {futureEvent.starDate:.2f}')
 
     def _decrementEnemyCount(self, quadrant: Quadrant, enemyName: str):
         """

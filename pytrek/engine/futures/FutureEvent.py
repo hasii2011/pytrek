@@ -1,5 +1,4 @@
 
-from typing import Any
 from typing import Callable
 from typing import NewType
 from typing import cast
@@ -11,7 +10,7 @@ from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.model.Coordinates import Coordinates
 
 
-EventCallback = NewType('EventCallback', Callable[[Any], None])  # type: ignore
+EventCallback = NewType('EventCallback', Callable[['FutureEvent'], None])  # type: ignore
 
 
 @dataclass

@@ -31,6 +31,7 @@ from pytrek.model.Quadrant import Quadrant
 
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
+from tests.SchedulerTestMessageConsole import SchedulerTestMessageConsole
 
 from tests.TestBase import TestBase
 
@@ -62,6 +63,10 @@ EVENT_HEADER_FONT_SIZE: int = 14
 EVENT_DETAIL_COLOR:     tuple[int, int, int] = color.WHITE
 EVENT_DETAIL_FONT_SIZE: int = 12
 
+HELP_SEPARATOR_Y: int = 125
+HELP_Y:           int = HELP_SEPARATOR_Y - 25
+GAME_STATE_Y:     int = HELP_SEPARATOR_Y + 50
+
 
 class TestEventScheduler(View):
 
@@ -77,7 +82,9 @@ class TestEventScheduler(View):
         self._computer:     Computer     = Computer()
         self._galaxy:       Galaxy       = Galaxy()
         self._devices:      Devices      = Devices()
-        self._eventEngine:  EventEngine  = EventEngine()
+
+        self._messageConsole: SchedulerTestMessageConsole = SchedulerTestMessageConsole()
+        self._eventEngine:    EventEngine    = EventEngine(self._messageConsole)
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
 
@@ -91,28 +98,20 @@ class TestEventScheduler(View):
     def on_draw(self):
         start_render()
         # def draw_line(start_x: float, start_y: float, end_x: float, end_y: float, color: Color, line_width: float = 1)
+        self._drawHeader()
         self._drawDevicesStatus()
+        self._drawEventStatus()
+        self._drawGameState()
+        self._drawHelpText()
+        self._messageConsole.draw()
+
+    def _drawHeader(self):
         # Header
         draw_text(f'Event Type', EVENT_TYPE_X, EVENT_TYPE_Y, EVENT_HEADER_COLOR, EVENT_HEADER_FONT_SIZE)
-        draw_text(f'Event Date', EVENT_DATE_X, EVENT_TYPE_Y, EVENT_HEADER_COLOR, EVENT_HEADER_FONT_SIZE)
         # Separator line
         draw_line(start_x=EVENT_TYPE_X, end_x=SCREEN_WIDTH - (2 * X_MARGIN),
                   start_y=EVENT_TYPE_Y, end_y=EVENT_TYPE_Y,
                   color=color.WHITE, line_width=2)
-
-        # The events
-        y: float = EVENT_TYPE_Y - 20
-        for eventType in FutureEventType:
-            if eventType != FutureEventType.SPY:
-                y -= 20
-                event: FutureEvent = self._eventEngine.getEvent(eventType=eventType)
-                draw_text(f'{event.type.value}', EVENT_TYPE_X, y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
-                draw_text(f'{event.starDate:.2f}',        EVENT_DATE_X,        y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
-                draw_text(f'{event.quadrantCoordinates}', EVENT_COORDINATES_X, y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
-
-        starDate: float = self._gameState.starDate
-        draw_text(f'Current Star Date: {starDate}', 10, 100, color.GLAUCOUS, 12)
-        draw_text(f'Q: `Quit` U: `Update Time` C: `Kill Commanders` A: `Reset`', 10, 50, color.GLAUCOUS)
 
     def _drawDevicesStatus(self):
 
@@ -137,6 +136,33 @@ class TestEventScheduler(View):
             draw_text(f' {deviceType}', DEVICE_TYPE_X, y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
             draw_text(f' {damage:.2f}', DEVICE_DAMAGE_X, y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
             draw_text(f' {deviceStatus}', DEVICE_STATUS_X, y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
+
+        footerY: float = y - 5
+        endX:    float = SCREEN_WIDTH - (2 * X_MARGIN)
+        draw_line(start_x=DEVICE_TYPE_X, end_x=endX, start_y=footerY, end_y=footerY, color=color.WHITE, line_width=2)
+
+    def _drawEventStatus(self):
+        # The events
+        y: float = EVENT_TYPE_Y - 20
+        for eventType in FutureEventType:
+            if eventType != FutureEventType.SPY:
+                y -= 20
+                event: FutureEvent = self._eventEngine.getEvent(eventType=eventType)
+
+                draw_text(f'{event.type.value}', EVENT_TYPE_X, y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
+                draw_text(f'{event.starDate:.2f}', EVENT_DATE_X, y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
+                draw_text(f'{event.quadrantCoordinates}', EVENT_COORDINATES_X, y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
+
+    def _drawGameState(self):
+        starDate: float = self._gameState.starDate
+        draw_text(f'Current Star Date: {starDate}', 10, GAME_STATE_Y, color.YELLOW, 12)
+        draw_text(f'Klingon Count: {self._gameState.remainingKlingons}',     200, GAME_STATE_Y, color.YELLOW, 12)
+        draw_text(f'Commander Count: {self._gameState.remainingCommanders}', 330, GAME_STATE_Y, color.YELLOW, 12)
+        draw_text(f'StarBase Count: {self._gameState.starBaseCount}',        485, GAME_STATE_Y, color.YELLOW, 12)
+
+    def _drawHelpText(self):
+        draw_line(start_x=10, end_x=SCREEN_WIDTH - (2 * X_MARGIN), start_y=HELP_SEPARATOR_Y, end_y=HELP_SEPARATOR_Y, color=color.YELLOW, line_width=1)
+        draw_text(f'Q: `Quit` U: `Update Time` C: `Kill Commanders` A: `Reset`', 10, HELP_Y, color.YELLOW)
 
     def on_update(self, deltaTime: float):
         """
@@ -165,10 +191,12 @@ class TestEventScheduler(View):
             self.setup()
         elif releasedKey == arcadeKey.C:
             self._gameState.remainingCommanders = 0
+        elif self._wasNumberPressed(releasedKey=releasedKey) is True:
+            self._gameEngine.updateTime(elapsedTime=self._keyToValue(releasedKey))
 
     def _createInitialEvents(self):
 
-        eventCreator: EventCreator = EventCreator()
+        eventCreator: EventCreator = EventCreator(self._messageConsole)
         superNovaEvent:           FutureEvent = eventCreator.createSuperNovaEvent()
         commanderAttackBaseEvent: FutureEvent = eventCreator.createCommanderAttacksBaseEvent()
         tractorBeamEvent:         FutureEvent = eventCreator.createTractorBeamEvent()
@@ -176,6 +204,30 @@ class TestEventScheduler(View):
         self._eventEngine.scheduleEvent(futureEvent=superNovaEvent)
         self._eventEngine.scheduleEvent(futureEvent=commanderAttackBaseEvent)
         self._eventEngine.scheduleEvent(futureEvent=tractorBeamEvent)
+
+    def _wasNumberPressed(self, releasedKey: int) -> bool:
+        """
+        Recognizes 1-9;  incrementing the star date by 0 makes no sense
+        Args:
+            releasedKey:  The arcade key that was pressed
+
+        Returns:  `True` if between 1 and 9 inclusive, else `False`
+        """
+
+        ans: bool = False
+        if arcadeKey.KEY_1 <= releasedKey <= arcadeKey.KEY_9:
+            ans = True
+        return ans
+
+    def _keyToValue(self, releasedKey: int):
+        """
+        Assumes the arcade key values are numerically ascending
+        Args:
+            releasedKey:  The arcade key that was pressed
+
+        Returns: A value between 1-9
+        """
+        return releasedKey - arcadeKey.KEY_0
 
 
 def main():

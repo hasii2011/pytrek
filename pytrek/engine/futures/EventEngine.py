@@ -14,6 +14,7 @@ from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.futures.EventCreator import EventCreator
+from pytrek.engine.futures.FutureEvent import EventCallback
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
 
@@ -21,6 +22,7 @@ from pytrek.GameState import GameState
 
 from pytrek.Singleton import Singleton
 from pytrek.gui.MessageConsole import MessageConsole
+from pytrek.model.Coordinates import Coordinates
 
 EventMap = NewType('EventMap', Dict[FutureEventType, FutureEvent])
 
@@ -38,6 +40,15 @@ class EventEngine(Singleton):
     
     """
     def init(self, *args, **kwargs):
+        """
+
+        Args:
+            *args:  Arg 0 is the message console
+            **kwargs:
+
+        Returns:
+
+        """
 
         self.logger: Logger = getLogger(__name__)
 
@@ -47,9 +58,9 @@ class EventEngine(Singleton):
 
         self._eventMap:     EventMap = cast(EventMap, None)
         self._setupEventMap()
-        self._eventCreator: EventCreator = EventCreator()
 
-        self._messageConsole: MessageConsole = MessageConsole()
+        self._messageConsole: MessageConsole = args[0]
+        self._eventCreator: EventCreator = EventCreator(self._messageConsole)
 
         self.logger.debug(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
 
@@ -66,7 +77,12 @@ class EventEngine(Singleton):
         self._eventMap[eventType] = futureEvent
 
     def unScheduleEvent(self, eventType: FutureEventType):
-        self._eventMap[eventType] = cast(FutureEvent, None)
+        futureEvent: FutureEvent = FutureEvent()
+        futureEvent.type = eventType
+        futureEvent.quadrantCoordinates = cast(Coordinates, None)
+        futureEvent.starDate            = 0
+        futureEvent.callback            = cast(EventCallback, None)
+        self._eventMap[eventType] = futureEvent
 
     def fixDevices(self):
         # noinspection SpellCheckingInspection
