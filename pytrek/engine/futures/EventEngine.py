@@ -64,6 +64,10 @@ class EventEngine(Singleton):
 
         self.logger.debug(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
 
+        self._scheduleRecurringEvents(eventType=FutureEventType.COMMANDER_ATTACKS_BASE)
+        self._scheduleRecurringEvents(eventType=FutureEventType.TRACTOR_BEAM)
+        self._scheduleRecurringEvents(eventType=FutureEventType.SUPER_NOVA)
+
         # I do not know what a Number is tell mypy so
         schedule(function_pointer=self._doEventChecking, interval=EventEngine.EVENT_CHECK_INTERVAL)  # type: ignore
 
@@ -170,7 +174,7 @@ class EventEngine(Singleton):
                     eventStarDate: float = futureEvent.starDate
                     if eventStarDate != 0 and currentStarDate >= eventStarDate:
                         self._fireEvent(eventToFire=futureEvent)
-                        self._reScheduleRecurringEvents(eventType=futureEvent.type)
+                        self._scheduleRecurringEvents(eventType=futureEvent.type)
 
     def _fireEvent(self, eventToFire: FutureEvent):
 
@@ -178,7 +182,7 @@ class EventEngine(Singleton):
         if eventToFire.callback is not None:
             eventToFire.callback(eventToFire)
 
-    def _reScheduleRecurringEvents(self, eventType: FutureEventType):
+    def _scheduleRecurringEvents(self, eventType: FutureEventType):
         """
         TODO:  Use switch statement when we upgrade to 3.10
 
