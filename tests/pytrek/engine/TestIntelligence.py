@@ -544,7 +544,7 @@ class TestIntelligence(TestBase):
             f'Base Attack Interval: '
             f'median={medianStatistic:.2f} average={meanStatistic:.2f} mode={modeStatistic:.2f}'
         )
-        self.logger.warning(statsStr)
+        self.logger.info(statsStr)
 
         ans: bool = (medianStatistic > 27.0) and (medianStatistic < 91.0)
         self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
@@ -565,7 +565,7 @@ class TestIntelligence(TestBase):
             f'BaseDestroyedInterval: '
             f'median={medianStatistic:.2f} average={meanStatistic:.2f} mode={modeStatistic:.2f}'
         )
-        self.logger.warning(statsStr)
+        self.logger.info(statsStr)
 
         ans: bool = (medianStatistic > 2.0) and (medianStatistic < 4.0)
         self.assertTrue(ans, f'We are not in range: {medianStatistic=}')

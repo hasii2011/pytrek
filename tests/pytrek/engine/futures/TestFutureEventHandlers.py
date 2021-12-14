@@ -48,7 +48,7 @@ class TestFutureEventHandlers(TestBase):
         TestFutureEventHandlers.clsLogger = getLogger(__name__)
         SettingsCommon.determineSettingsLocation()
         TestFutureEventHandlers._setupGame()
-        TestFutureEventHandlers.clsLogger.info(f'Running TestFutureEventHandlers')
+        TestFutureEventHandlers.clsLogger.debug(f'Running TestFutureEventHandlers')
 
     @classmethod
     def tearDownClass(cls):
@@ -120,31 +120,54 @@ class TestFutureEventHandlers(TestBase):
         """
         Destroy all the StarBases and then try one more time
         """
+        self.logger.debug(f'Before starbase count: {self._gameState.starBaseCount}')
+        quadrant:    Quadrant    = self._getATestEventQuadrant()
+        coordinates: Coordinates = quadrant.coordinates
+        self.logger.debug(f'After starbase count: {self._gameState.starBaseCount}')
 
-        coordinates: Coordinates = self._galaxy.getStarBaseCoordinates()
-        fEvent: FutureEvent = FutureEvent()
+        fEvent:   FutureEvent = FutureEvent()
 
         fEvent.type                = FutureEventType.SUPER_NOVA
         fEvent.starDate            = self._gameState.starDate
         fEvent.quadrantCoordinates = coordinates
 
-        maxSearches: int = 0
-        while coordinates is not None and maxSearches < TestFutureEventHandlers.MAX_LOOPS:
-            self._eventHandlers.superNovaEventHandler(futureEvent=fEvent)
-            coordinates = self._galaxy.getStarBaseCoordinates()
+        gameState: GameState = self._gameState
+        maxSearches: int     = 0
+        while self._gameState.starBaseCount > 0:
+            if maxSearches > TestFutureEventHandlers.MAX_LOOPS:
+                break
+            if coordinates is None:
+                self.logger.warning(f'Random starbase search failed try again')
+                coordinates = self._galaxy.getStarBaseCoordinates()
+                maxSearches += 1
+                continue
+            else:
+                fEvent.quadrantCoordinates = coordinates
+                self._eventHandlers.superNovaEventHandler(futureEvent=fEvent)
+
+                counts: str = (
+                    f'{coordinates=} '
+                    f'remainingKlingons={gameState.remainingKlingons} '
+                    f'remainingCommanders={gameState.remainingCommanders} '
+                    f'remainingSuperCommanders={gameState.remainingSuperCommanders} '
+                    f'starBaseCount={gameState.starBaseCount}'
+                )
+                self.logger.info(counts)
+                coordinates = self._galaxy.getStarBaseCoordinates()
+                maxSearches +=1
+
+        if maxSearches < TestFutureEventHandlers.MAX_LOOPS:
+            self.assertEqual(0, self._gameState.starBaseCount, 'Did not destroy all StarBases')
+
+            coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
+            fEvent.type                = FutureEventType.SUPER_NOVA
+            fEvent.starDate            = self._gameState.starDate
             fEvent.quadrantCoordinates = coordinates
-            self.logger.debug(f'{coordinates=}')
-            maxSearches += 1
 
-        self.assertEqual(0, self._gameState.starBaseCount, 'Did not destroy all StarBases')
-
-        coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
-        fEvent.type                = FutureEventType.SUPER_NOVA
-        fEvent.starDate            = self._gameState.starDate
-        fEvent.quadrantCoordinates = coordinates
-
-        self._eventHandlers.superNovaEventHandler(futureEvent=fEvent)
-        self.assertEqual(0, self._gameState.starBaseCount, 'Should be zero all StarBases destroyed')
+            self._eventHandlers.superNovaEventHandler(futureEvent=fEvent)
+            self.assertEqual(0, self._gameState.starBaseCount, 'Should be zero all StarBases destroyed')
+        else:
+            self.logger.waring(f'To many starbase searches;  testSuperNovaEventStarBaseDestroyedNeverNegative did not run')
 
     def testTractorBeamEventHandler(self):
         """Another test"""
@@ -163,13 +186,14 @@ class TestFutureEventHandlers(TestBase):
         fEvent.type = eventType
         fEvent.starDate = self._gameState.starDate
 
-        quadrant: Quadrant = self._getANovaEventQuadrant()
+        quadrant: Quadrant = self._getATestEventQuadrant()
         fEvent.quadrantCoordinates = quadrant.coordinates
 
         return fEvent
 
-    def _getANovaEventQuadrant(self) -> Quadrant:
+    def _getATestEventQuadrant(self) -> Quadrant:
         """
+        Ensure the game is in a legal state for
         Returns:
         """
 

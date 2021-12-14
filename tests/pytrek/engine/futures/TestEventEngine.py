@@ -64,6 +64,7 @@ class TestEventEngine(TestBase):
         currentDate: float       = self._gameState.starDate
         fEvent:      FutureEvent = self._eventEngine.getEvent(FutureEventType.TRACTOR_BEAM)
         fireDate:    float       = fEvent.starDate
+        self.logger.info(f'currentDate={currentDate=:.2f}')
         #
         # Bump the game clock so this event fires
         #
@@ -71,6 +72,7 @@ class TestEventEngine(TestBase):
         self._gameState.remainingCommanders = 0    # Ensure there are none
         self._gameState.starBaseCount       = 0
 
+        self.logger.info(f'Updated star date: {self._gameState.starDate:.2f}')
         self._eventEngine._checkEvents(currentStarDate=self._gameState.starDate)
 
         fEvent: FutureEvent = self._eventEngine.getEvent(FutureEventType.TRACTOR_BEAM)
@@ -99,6 +101,9 @@ class TestEventEngine(TestBase):
         newFireDate: float = fEvent.starDate
         self.logger.info(f'newFireDate: {newFireDate:.2f}')
 
+        if (newFireDate > fireDate) is False:
+            self.logger.error(f'newFireDate{newFireDate:.2f}   fireDate: {fireDate:.2f}')
+            self.logger.error(f'{self._eventEngine=}')
         self.assertTrue(newFireDate > fireDate, 'It was supposed to be rescheduled')
 
     def testFixDevices(self):

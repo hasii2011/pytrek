@@ -47,14 +47,12 @@ class FutureEventHandlers:
 
         if quadrant.hasStarBase is True:
             self._gameState.starBaseCount -= 1
-            if self._gameState.starBaseCount < 0:
-                self._gameState.starBaseCount = 0
+            quadrant.hasStarBase = False
             self._messageConsole.displayMessage(f'Starbase in quadrant {quadrant.coordinates} destroyed')
 
         if quadrant.hasPlanet is True:
             self._gameState.planetCount -= 1
-            if self._gameState.planetCount < 0:
-                self._gameState.planetCount = 0
+            quadrant.hasPlanet = False
             self._messageConsole.displayMessage(f'Planet in quadrant {quadrant.coordinates} destroyed')
         quadrant.hasSuperNova = True
 
@@ -66,7 +64,7 @@ class FutureEventHandlers:
         else:
             from pytrek.engine.futures.EventEngine import EventEngine
 
-            self.logger.warning(f'All commanders are dead.')
+            self.logger.info(f'All commanders are dead.')
             eventEngine: EventEngine = EventEngine()
             eventEngine.unScheduleEvent(FutureEventType.TRACTOR_BEAM)
             eventEngine.makeUnSchedulable(FutureEventType.TRACTOR_BEAM)
@@ -79,7 +77,7 @@ class FutureEventHandlers:
         else:
             from pytrek.engine.futures.EventEngine import EventEngine
 
-            self.logger.warning(f'Out of StarBases or all commanders are dead.  So no attacking StarBases')
+            self.logger.info(f'Out of StarBases or all commanders are dead.  So no attacking StarBases')
             eventEngine: EventEngine = EventEngine()
             eventEngine.unScheduleEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
             eventEngine.makeUnSchedulable(FutureEventType.COMMANDER_ATTACKS_BASE)
@@ -114,6 +112,7 @@ class FutureEventHandlers:
             quadrant.decrementEnemyCount(enemy)
             remainingEnemyCount: int = getattr(self._gameState, gsPropertyName)
             remainingEnemyCount -= 1
+            assert remainingEnemyCount >= 0, f'{enemyName=}  Logic error;  Fix it !'
             setattr(self._gameState, gsPropertyName, remainingEnemyCount)
 
     def _canCommanderAttackAStarBase(self) -> bool:

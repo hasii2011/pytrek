@@ -76,7 +76,7 @@
             "propagate": "False"
         },
         "tests.pytrek.engine.futures.TestEventEngine": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "tests.pytrek.gui.TestGamePiece": {
@@ -100,11 +100,11 @@
             "propagate": "False"
         },
         "pytrek.engine.futures.EventEngine": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "pytrek.engine.futures.FutureEventHandlers": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
 
