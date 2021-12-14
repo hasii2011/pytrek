@@ -33,7 +33,9 @@ from pytrek.Singleton import Singleton
 
 class Intelligence(Singleton):
     """
-    This is a smart piece of code
+    This is a smart piece of code;  It is essentially the game 'computer';  Keeps me
+    from repeating computation code from all over the code;  Also contains Python versions
+    of some the original 'C' code's built-in math functions
     """
 
     RAND_MAX: int = 32767
@@ -352,6 +354,14 @@ class Intelligence(Singleton):
         planetName: str = choice(planetTypeList)
 
         return PlanetType(planetName)
+
+    def computeBaseAttackInterval(self, inTime: float) -> float:
+        interval: float = self.exponentialRandom(0.3 * inTime)
+        return interval
+
+    def computeBaseDestroyedInterval(self) -> float:
+        interval: float = 1.0 + 3.0 * self.rand()
+        return interval
 
     def rand(self) -> float:
         """

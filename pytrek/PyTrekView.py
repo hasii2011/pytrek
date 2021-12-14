@@ -136,10 +136,10 @@ class PyTrekView(View):
         self._computer     = Computer()
         self._galaxy       = Galaxy()           # This essentially finishes initializing most of the game
 
-        self._eventEngine: EventEngine = EventEngine()
+        self._messageConsole: MessageConsole = MessageConsole()
+        self._eventEngine:    EventEngine    = EventEngine(self._messageConsole)
 
         self._statusConsole    = StatusConsole(gameView=self)       # UI elements
-        self._messageConsole   = MessageConsole()
 
         # An important mediator
         self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
@@ -273,7 +273,7 @@ class PyTrekView(View):
 
     def _createInitialEvents(self):
 
-        eventCreator: EventCreator = EventCreator()
+        eventCreator: EventCreator = EventCreator(self._messageConsole)
         superNovaEvent:           FutureEvent = eventCreator.createSuperNovaEvent()
         commanderAttackBaseEvent: FutureEvent = eventCreator.createCommanderAttacksBaseEvent()
         tractorBeamEvent:         FutureEvent = eventCreator.createTractorBeamEvent()
@@ -295,7 +295,7 @@ class PyTrekView(View):
         self._quadrantMediator = QuadrantMediator()
 
         self._quadrantMediator.playerList = playerList
-        # Don't do this until we have setup the current quadrant
+        # Don't do this until we have set up the current quadrant
         self._makeEnemySpriteLists()
         self._doDebugActions()
 

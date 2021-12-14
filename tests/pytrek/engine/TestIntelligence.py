@@ -7,6 +7,8 @@ from typing import List
 from logging import Logger
 from logging import getLogger
 
+from itertools import count
+
 from statistics import median
 from statistics import mean
 from statistics import mode
@@ -59,6 +61,8 @@ class TestIntelligence(TestBase):
     RANGE_TESTS_LOOP_COUNT:            int = 50
     MAX_STAR_BASE_CALLS:               int = 100
     EXPONENTIAL_RANDOM_MAX_CALLS:      int = 150
+    BASE_ATTACK_INTERVAL_MAX_CALLS:    int = 150
+    BASE_DESTROYED_INTERVAL_MAX_CALLS: int = 150
 
     clsLogger: Logger = cast(Logger, None)
 
@@ -234,7 +238,7 @@ class TestIntelligence(TestBase):
 
     def testGenerateAdjacentCoordinatesNorthWest(self):
         """
-        Place center quadrant on north western edge
+        Place center quadrant on northwestern edge
         """
         baseCoordinates: Coordinates = Coordinates(x=0, y=0)
 
@@ -245,7 +249,7 @@ class TestIntelligence(TestBase):
 
     def testGenerateAdjacentCoordinatesNorthEast(self):
         """
-        Place center quadrant on north eastern edge
+        Place center quadrant on northeastern edge
         """
         baseCoordinates: Coordinates = Coordinates(x=9, y=0)
 
@@ -256,7 +260,7 @@ class TestIntelligence(TestBase):
 
     def testGenerateAdjacentCoordinatesSouthEast(self):
         """
-        Place center quadrant on south eastern edge
+        Place center quadrant on southeastern edge
         """
         baseCoordinates: Coordinates = Coordinates(x=0, y=9)
 
@@ -267,7 +271,7 @@ class TestIntelligence(TestBase):
 
     def testGenerateAdjacentCoordinatesSouthWest(self):
         """
-        Place center quadrant on south western edge
+        Place center quadrant on southwestern edge
         """
         baseCoordinates: Coordinates = Coordinates(x=0, y=9)
 
@@ -409,7 +413,7 @@ class TestIntelligence(TestBase):
 
         for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
             medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
-            ans:             bool = (medianStatistic > 1349.0) and (medianStatistic < 1451.0)
+            ans:             bool = (medianStatistic > 1348.0) and (medianStatistic < 1451.0)
             self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
     def testComputeSuperCommanderPowerExpertPlayer(self):
@@ -521,6 +525,50 @@ class TestIntelligence(TestBase):
             ans3:         float = self.smarty.exponentialRandom(initGameTime)
 
             self.assertGreater(10832.00, ans3, 'Longer Game Time failed upper bound')
+
+    def testComputeBaseAttackInterval(self):
+
+        intervals: List[float] = []
+        for x in count():
+            if x > TestIntelligence.BASE_ATTACK_INTERVAL_MAX_CALLS:
+                break
+            initialGameTime: float = self.smarty.generateInitialGameTime()
+            interval:        float = self.smarty.computeBaseAttackInterval(inTime=initialGameTime)
+            intervals.append(interval)
+
+        medianStatistic: float = median(intervals)
+        meanStatistic:   float = mean(intervals)
+        modeStatistic:   float = mode(intervals)
+
+        statsStr: str = (
+            f'Base Attack Interval: '
+            f'median={medianStatistic:.2f} average={meanStatistic:.2f} mode={modeStatistic:.2f}'
+        )
+        self.logger.warning(statsStr)
+
+        ans: bool = (medianStatistic > 27.0) and (medianStatistic < 91.0)
+        self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
+
+    def testComputeBaseDestroyedInterval(self):
+        intervals: List[float] = []
+        for x in count():
+            if x > TestIntelligence.BASE_DESTROYED_INTERVAL_MAX_CALLS:
+                break
+            interval:        float = self.smarty.computeBaseDestroyedInterval()
+            intervals.append(interval)
+
+        medianStatistic: float = median(intervals)
+        meanStatistic:   float = mean(intervals)
+        modeStatistic:   float = mode(intervals)
+
+        statsStr: str = (
+            f'BaseDestroyedInterval: '
+            f'median={medianStatistic:.2f} average={meanStatistic:.2f} mode={modeStatistic:.2f}'
+        )
+        self.logger.warning(statsStr)
+
+        ans: bool = (medianStatistic > 2.0) and (medianStatistic < 4.0)
+        self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
     def _runKlingonCountTest(self, gameType: GameType, playerType: PlayerType) -> float:
 

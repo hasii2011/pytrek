@@ -27,7 +27,10 @@ from pytrek.Singleton import Singleton
 
 class Computer(Singleton):
     """
-    Make a computer a singleton so we don't have to pass it around
+    Make a computer a singleton, so we don't have to pass it around
+    Makes basic computations related to converting to and from game coordinates
+    and the underlying PyArcade point system;
+    This unrelated to the game 'computer'
     """
     QUADRANT_TRAVEL_FACTOR: float = 0.1
     GALACTIC_TRAVEL_FACTOR: float = 10.0
