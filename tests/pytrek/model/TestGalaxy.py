@@ -33,6 +33,8 @@ class TestGalaxy(TestBase):
         TestGalaxy.clsLogger = getLogger(__name__)
         SettingsCommon.determineSettingsLocation()
 
+        TestBase.resetSingletons()
+
         TestGalaxy.clsGameSettings = GameSettings()
         TestGalaxy.clsGameSettings.debugCollectKlingonQuadrantCoordinates = True
 
