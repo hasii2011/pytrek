@@ -48,6 +48,6 @@ class Singleton(object):
 
     def init(self, *args, **kwds):
         """
-        Constructor of a singleton class constructor;  Make sure and overrid
+        Constructor of a singleton class constructor;  Make sure and override
         """
         pass

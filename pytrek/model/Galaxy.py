@@ -169,6 +169,7 @@ class Galaxy(Singleton):
             quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
             quadrant:            Quadrant  = self.getQuadrant(quadrantCoordinates)
             while quadrant.hasStarBase is False:
+                # TODO this code seems wrong
                 quadrantCoordinates = self._intelligence.generateQuadrantCoordinates()
                 quadrant            = self.getQuadrant(quadrantCoordinates)
 

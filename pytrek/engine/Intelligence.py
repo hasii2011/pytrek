@@ -160,6 +160,9 @@ class Intelligence(Singleton):
         commanderCount = playerType.value * 0.0625 * generatedKlingons * self.rand()
         commanderCount = round(commanderCount)
 
+        if commanderCount == 0:
+            commanderCount = 1
+            self.logger.warning(f'Manually generated a single commander')
         return commanderCount
 
     def generateInitialSuperCommanderCount(self, playerType: PlayerType, numberOfKlingons: int):

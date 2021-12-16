@@ -57,7 +57,7 @@ class TestAll:
 
     def runHtmlTestRunner(self) -> int:
 
-        runner = HTMLTestRunner(report_name='PyutTestResults', combine_reports=True, add_timestamp=True)
+        runner = HTMLTestRunner(report_name='PyArcadeStarTrekTestResults', combine_reports=True, add_timestamp=True)
         status = runner.run(self._testSuite)
         if len(status.failures) != 0:
             return 1

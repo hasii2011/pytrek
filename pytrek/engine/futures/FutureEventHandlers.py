@@ -98,6 +98,13 @@ class FutureEventHandlers:
         qPropertyName:  str = f'{enemyName[0].lower()}{enemyName[1:]}s'
 
         enemies: Enemies = getattr(quadrant, qPropertyName)
+        for enemy in enemies:
+            quadrant.decrementEnemyCount(enemy)
+            remainingEnemyCount: int = getattr(self._gameState, gsPropertyName)
+            remainingEnemyCount -= 1
+            assert remainingEnemyCount >= 0, f'{enemyName=}  Logic error;  Fix it !'
+            setattr(self._gameState, gsPropertyName, remainingEnemyCount)
+
         enemyCount: int = len(enemies)
         if enemyCount > 1:
             message: str = f'{len(enemies)} {enemyName}s destroyed'
@@ -107,13 +114,6 @@ class FutureEventHandlers:
         if enemyCount > 0:
             self.logger.debug(f'{message}')
             self._messageConsole.displayMessage(message)
-
-        for enemy in enemies:
-            quadrant.decrementEnemyCount(enemy)
-            remainingEnemyCount: int = getattr(self._gameState, gsPropertyName)
-            remainingEnemyCount -= 1
-            assert remainingEnemyCount >= 0, f'{enemyName=}  Logic error;  Fix it !'
-            setattr(self._gameState, gsPropertyName, remainingEnemyCount)
 
     def _canCommanderAttackAStarBase(self) -> bool:
         """

@@ -8,6 +8,7 @@ from unittest import TestSuite
 from unittest import main as unitTestMain
 
 from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
@@ -17,6 +18,9 @@ from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
 from pytrek.settings.GameSettings import GameSettings
 
 from pytrek.settings.SettingsCommon import SettingsCommon
@@ -38,6 +42,8 @@ class TestEventEngine(TestBase):
     clsLogMessageConsole: LogMessageConsole = cast(LogMessageConsole, None)
     clsEventEngine:       EventEngine       = cast(EventEngine, None)
     clsDevices:           Devices           = cast(Devices, None)
+    clsIntelligence:      Intelligence      = cast(Intelligence, None)
+    clsGalaxy:            Galaxy            = cast(Galaxy, None)
 
     @classmethod
     def setUpClass(cls):
@@ -54,23 +60,29 @@ class TestEventEngine(TestBase):
         # The game engine initializes the game state object (for better or worse)
         #
         self._logMessageConsole: LogMessageConsole = TestEventEngine.clsLogMessageConsole
+        self._gameSettings:      GameSettings      = TestEventEngine.clsGameSettings
+        self._intelligence:      Intelligence      = TestEventEngine.clsIntelligence
         self._gameEngine:        GameEngine        = TestEventEngine.clsGameEngine
         self._gameState:         GameState         = TestEventEngine.clsGameState
         self._eventEngine:       EventEngine       = TestEventEngine.clsEventEngine
         self._devices:           Devices           = TestEventEngine.clsDevices
+        self._galaxy:            Galaxy            = TestEventEngine.clsGalaxy
 
     def testEventUnSchedulable(self):
 
+        self._setupGame()
         currentDate: float       = self._gameState.starDate
         fEvent:      FutureEvent = self._eventEngine.getEvent(FutureEventType.TRACTOR_BEAM)
         fireDate:    float       = fEvent.starDate
-        self.logger.info(f'currentDate={currentDate=:.2f}')
         #
         # Bump the game clock so this event fires
         #
         self._gameState.starDate = fireDate + 1.0
         self._gameState.remainingCommanders = 0    # Ensure there are none
         self._gameState.starBaseCount       = 0
+
+        self._eventEngine.makeUnSchedulable(FutureEventType.SUPER_NOVA)
+        self._eventEngine.makeUnSchedulable(FutureEventType.COMMANDER_ATTACKS_BASE)
 
         self.logger.info(f'Updated star date: {self._gameState.starDate:.2f}')
         self._eventEngine._checkEvents(currentStarDate=self._gameState.starDate)
@@ -88,11 +100,12 @@ class TestEventEngine(TestBase):
         # Bump the game clock so this event fires
         #
         self._gameState.starDate = fireDate + 1.0
-        self._gameState.remainingCommanders = 1    # Ensure there is at least 1
-        self._gameState.starBaseCount       = 1
-        self.logger.info(f'{self._gameState.remainingCommanders=}')
 
-        self.logger.info(f'Date updated from {currentDate:.2f} to {self._gameState.starDate:.2f}')
+        self.logger.info(f'{self._gameState.remainingCommanders=}')
+        self._eventEngine.makeUnSchedulable(FutureEventType.SUPER_NOVA)
+        self._eventEngine.makeUnSchedulable(FutureEventType.TRACTOR_BEAM)
+
+        self.logger.info(f'Star Date updated from {currentDate:.2f} to {self._gameState.starDate:.2f}')
 
         self._eventEngine._checkEvents(currentStarDate=self._gameState.starDate)
 
@@ -102,7 +115,7 @@ class TestEventEngine(TestBase):
         self.logger.info(f'newFireDate: {newFireDate:.2f}')
 
         if (newFireDate > fireDate) is False:
-            self.logger.error(f'newFireDate{newFireDate:.2f}   fireDate: {fireDate:.2f}')
+            self.logger.error(f'newFireDate: {newFireDate:.2f}   fireDate: {fireDate:.2f}')
             self.logger.error(f'{self._eventEngine=}')
         self.assertTrue(newFireDate > fireDate, 'It was supposed to be rescheduled')
 
@@ -155,13 +168,20 @@ class TestEventEngine(TestBase):
         TODO: perhaps should go in a utility class so it is always current
 
         """
-        # These singletons are initialized for the first time
+        TestBase.resetSingletons()
+
         TestEventEngine.clsLogMessageConsole = LogMessageConsole()
         TestEventEngine.clsGameSettings      = GameSettings()     # Be able to read the preferences file
+        TestEventEngine.clsIntelligence      = Intelligence()
+
         TestEventEngine.clsGameState         = GameState()        # Set up the game parameters which uses the above
+        TestEventEngine.clsGameState.currentQuadrantCoordinates = TestEventEngine.clsIntelligence.generateQuadrantCoordinates()
+
         TestEventEngine.clsGameEngine        = GameEngine()       # Then the engine needs to be initialized
+
         TestEventEngine.clsEventEngine       = EventEngine(TestEventEngine.clsLogMessageConsole)
         TestEventEngine.clsDevices           = Devices()
+        TestEventEngine.clsGalaxy            = Galaxy()
 
 
 def suite() -> TestSuite:

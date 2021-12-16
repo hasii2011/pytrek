@@ -71,21 +71,25 @@ class TestFutureEventHandlers(TestBase):
 
     def testSuperNovaEventHandlerKlingonsAreDead(self):
 
+        self._setupGame()
         fEvent: FutureEvent = self._generateArtificialEvent(FutureEventType.SUPER_NOVA)
         self._testEnemyDeadHandler(fEvent=fEvent, enemyName='Klingon')
 
     def testSuperNovaEventHandlerCommandersAreDead(self):
 
+        self._setupGame()
         fEvent: FutureEvent = self._generateArtificialEvent(FutureEventType.SUPER_NOVA)
         self._testEnemyDeadHandler(fEvent=fEvent, enemyName='Commander')
 
     def testSuperNovaEventHandlerSuperCommandersAreDead(self):
 
+        self._setupGame()
         fEvent: FutureEvent = self._generateArtificialEvent(FutureEventType.SUPER_NOVA)
         self._testEnemyDeadHandler(fEvent=fEvent, enemyName='SuperCommander')
 
     def testSuperNovaEventStarBaseDestroyed(self):
 
+        self._setupGame()
         fEvent:                FutureEvent = self._generateArtificialEvent(FutureEventType.SUPER_NOVA)
         previousStarBaseCount: int         = self._gameState.starBaseCount
 
@@ -101,6 +105,8 @@ class TestFutureEventHandlers(TestBase):
         self.assertEqual(expectedStarBaseCount, actualStarBaseCount, 'StarBase not properly destroyed')
 
     def testSuperNovaEventPlanetDestroyed(self):
+
+        self._setupGame()
 
         fEvent:              FutureEvent = self._generateArtificialEvent(FutureEventType.SUPER_NOVA)
         previousPlanetCount: int         = self._gameState.planetCount
@@ -120,6 +126,7 @@ class TestFutureEventHandlers(TestBase):
         """
         Destroy all the StarBases and then try one more time
         """
+        self._setupGame()
         self.logger.debug(f'Before starbase count: {self._gameState.starBaseCount}')
         quadrant:    Quadrant    = self._getATestEventQuadrant()
         coordinates: Coordinates = quadrant.coordinates
@@ -154,7 +161,7 @@ class TestFutureEventHandlers(TestBase):
                 )
                 self.logger.info(counts)
                 coordinates = self._galaxy.getStarBaseCoordinates()
-                maxSearches +=1
+                maxSearches += 1
 
         if maxSearches < TestFutureEventHandlers.MAX_LOOPS:
             self.assertEqual(0, self._gameState.starBaseCount, 'Did not destroy all StarBases')
@@ -167,7 +174,7 @@ class TestFutureEventHandlers(TestBase):
             self._eventHandlers.superNovaEventHandler(futureEvent=fEvent)
             self.assertEqual(0, self._gameState.starBaseCount, 'Should be zero all StarBases destroyed')
         else:
-            self.logger.waring(f'To many starbase searches;  testSuperNovaEventStarBaseDestroyedNeverNegative did not run')
+            self.logger.warning(f'To many starbase searches;  testSuperNovaEventStarBaseDestroyedNeverNegative did not run')
 
     def testTractorBeamEventHandler(self):
         """Another test"""
@@ -176,6 +183,8 @@ class TestFutureEventHandlers(TestBase):
     def testCommanderAttacksBaseEventHandler(self):
         """
         """
+        self._setupGame()
+
         fEvent: FutureEvent = self._generateArtificialEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
 
         self._eventHandlers.commanderAttacksBaseEventHandler(futureEvent=fEvent)
@@ -261,7 +270,8 @@ class TestFutureEventHandlers(TestBase):
         TODO: perhaps should go in a utility class so it is always current
 
         """
-        # These singletons are initialized for the first time
+        TestBase.resetSingletons()
+
         TestFutureEventHandlers.clsGameSettings = GameSettings()     # Be able to read the preferences file
         TestFutureEventHandlers.clsGameState    = GameState()        # Set up the game parameters which uses the above
         TestFutureEventHandlers.clsGameEngine   = GameEngine()       # Then the engine needs to be initialized
