@@ -174,11 +174,12 @@ class TestFutureEventHandlers(TestBase):
             self._eventHandlers.superNovaEventHandler(futureEvent=fEvent)
             self.assertEqual(0, self._gameState.starBaseCount, 'Should be zero all StarBases destroyed')
         else:
-            self.logger.warning(f'To many starbase searches;  testSuperNovaEventStarBaseDestroyedNeverNegative did not run')
+            self.logger.warning(f'Too many starbase searches;  testSuperNovaEventStarBaseDestroyedNeverNegative did not run')
 
     def testTractorBeamEventHandler(self):
-        """Another test"""
-        pass
+        """
+        """
+        self._setupGame()
 
     def testCommanderAttacksBaseEventHandler(self):
         """

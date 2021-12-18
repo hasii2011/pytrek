@@ -60,6 +60,9 @@ class FutureEventHandlers:
         if self._gameState.remainingCommanders > 0:
             self._standardAnnouncement(futureEvent.starDate)
             self._messageConsole.displayMessage(f'Commander using tractor beam')
+            #
+            # Pick a random commander
+            #
 
         else:
             from pytrek.engine.futures.EventEngine import EventEngine

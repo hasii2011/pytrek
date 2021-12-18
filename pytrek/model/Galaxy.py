@@ -1,7 +1,8 @@
-
 from typing import NewType
 from typing import cast
 from typing import List
+
+from itertools import count
 
 from logging import Logger
 from logging import getLogger
@@ -29,7 +30,8 @@ class Galaxy(Singleton):
     Galaxy management
     """
 
-    MAX_STARBASE_SEARCHES: int = 128
+    MAX_STARBASE_SEARCHES:  int = 128   # TODO  Place in developer preferences
+    MAX_COMMANDER_SEARCHES: int = 128
 
     def init(self, *args, **kwds):
         """"""
@@ -101,8 +103,22 @@ class Galaxy(Singleton):
 
             potentialCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
             quadrant:             Quadrant    = self.getQuadrant(quadrantCoordinates=potentialCoordinates)
+
             if quadrant.hasStarBase is True:
                 # print(f'Executed {x} iterations to find 1 of  {self._gameState.starBaseCount} StarBases')
+                return potentialCoordinates
+
+        return cast(Coordinates, None)
+
+    def getCommanderCoordinates(self) -> Coordinates:
+
+        for x in count():
+            if x > Galaxy.MAX_COMMANDER_SEARCHES:
+                self.logger.warning(f'There appear to be no live Commander`s in the galaxy')
+                break
+            potentialCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
+            quadrant:             Quadrant    = self.getQuadrant(quadrantCoordinates=potentialCoordinates)
+            if quadrant.commanderCount > 0:
                 return potentialCoordinates
 
         return cast(Coordinates, None)
