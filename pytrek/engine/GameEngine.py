@@ -56,6 +56,7 @@ class GameEngine(Singleton):
         self._gameClock:        float = 0.0
 
         self.logger.info(f'GameEngine initialized')
+
     @property
     def gameClock(self) -> float:
         """

@@ -105,7 +105,7 @@ class EnterpriseMediator(MissesMediator):
 
     def _warpTravelDialogComplete(self, warpTravelAnswer: WarpTravelAnswer):
         """
-        The callback when we get an answer on whether or not we are traveling to
+        The callback when we get an answer on whether we are traveling to
         another quadrant
 
         Args:
