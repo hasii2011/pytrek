@@ -99,13 +99,18 @@ class Galaxy(Singleton):
         Returns:  The randomly located quadrant with a star base;  If no StarBases
         left return None
         """
-        for x in range(Galaxy.MAX_STARBASE_SEARCHES):
+        for x in count():
+            if x > Galaxy.MAX_STARBASE_SEARCHES:
+                linearSearchCoordinates: Coordinates = self._starBaseLinearSearch()
+                if linearSearchCoordinates is None:
+                    self.logger.warning(f'There really no StarBase`s')
+                    break
+                return linearSearchCoordinates
 
             potentialCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
             quadrant:             Quadrant    = self.getQuadrant(quadrantCoordinates=potentialCoordinates)
 
             if quadrant.hasStarBase is True:
-                # print(f'Executed {x} iterations to find 1 of  {self._gameState.starBaseCount} StarBases')
                 return potentialCoordinates
 
         return cast(Coordinates, None)
@@ -129,6 +134,18 @@ class Galaxy(Singleton):
         quadrant:    Quadrant    = quadrantRow[quadrantCoordinates.x]
 
         return quadrant
+
+    def _starBaseLinearSearch(self) -> Coordinates:
+
+        self.logger.warning(f'Starbase linear search initialized')
+        for y in range(GALAXY_ROWS):
+            quadrantRow = self.quadrants[y]
+            for x in range(GALAXY_COLUMNS):
+                quadrant: Quadrant = quadrantRow[x]
+                if quadrant.hasStarBase is True:
+                    return quadrant.coordinates
+
+        return cast(Coordinates, None)
 
     def _createGalaxy(self):
 

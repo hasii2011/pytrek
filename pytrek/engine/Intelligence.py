@@ -1,14 +1,17 @@
-from math import log
+from collections import namedtuple
 from typing import List
 
 from logging import Logger
 from logging import getLogger
-from logging import INFO
+
+from logging import DEBUG
 
 from random import randint
 from random import randrange
 from random import random
 from random import choice
+
+from math import log
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
@@ -19,6 +22,9 @@ from pytrek.engine.Direction import Direction
 from pytrek.engine.GameType import GameType
 from pytrek.engine.LRScanCoordinates import LRScanCoordinates
 from pytrek.engine.PlayerType import PlayerType
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.Devices import Devices
 
 from pytrek.gui.gamepieces.PlanetType import PlanetType
 
@@ -29,6 +35,8 @@ from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 from pytrek.Singleton import Singleton
+
+TractorBeamComputation = namedtuple('TractorBeamComputation', 'warpFactor, distance, wSquared')
 
 
 class Intelligence(Singleton):
@@ -49,6 +57,7 @@ class Intelligence(Singleton):
         """
         self.logger:        Logger       = getLogger(__name__)
         self._gameSettings: GameSettings = GameSettings()
+        self._devices:      Devices      = Devices()
 
     def getTorpedoSpeeds(self, playerType: PlayerType) -> TorpedoSpeeds:
         """
@@ -93,25 +102,25 @@ class Intelligence(Singleton):
 
     def generateInitialGameTime(self) -> float:
         """"""
-        if self.logger.level == INFO:
+        if self.logger.level == DEBUG:
             msg = (
                 f"Game Length factor: '{self._gameSettings.gameLengthFactor}' "
                 f"GameType: '{self._gameSettings.gameType}' "
                 f" GameTypeValue: '{self._gameSettings.gameType.value}'"
             )
-            self.logger.info(msg)
+            self.logger.debug(msg)
         remainingGameTime = self._gameSettings.gameLengthFactor * self._gameSettings.gameType.value
         return remainingGameTime
 
     # noinspection SpellCheckingInspection
     def generateInitialKlingonCount(self, gameType: GameType, playerType: PlayerType) -> int:
         """
-        ```
+        ```python
         private double dremkl = 2.0*intime*((skill+1 - 2*Intelligence.Rand())*skill*0.1+0.15);
 
         public int myRemainingKlingons = (int) Math.round(dremkl);
         self.remainingKlingons = ((2.0 * self.remainingGameTime) * (self.skill.value + 1)) - (2 * nextNum) * (self.skill.value * 0.1) + 0.15
-        ```
+
         // Determine the initial values of klingons.
         // Values are different for Wglxy variation because the small variation option
         // is usually set. That narrows the range low-high of k counts.
@@ -129,6 +138,7 @@ class Intelligence(Singleton):
         game.state.remkl = game.inkling = (int) Math.round (2.0*game.intime
                                                    * (game.skill+1 - rFactor*tk.rand ())
                                                    * game.skill*0.1 + mOffset);
+        ```
         """
 
         rFactor: int   = 2
@@ -140,7 +150,7 @@ class Intelligence(Singleton):
 
         remainingKlingons = round(remainingKlingons)
 
-        if self.logger.level == INFO:
+        if self.logger.level == DEBUG:
             message = (
                 f"PlayerType: '{playerType} "
                 f"GameType '{gameType}' "
@@ -222,7 +232,7 @@ class Intelligence(Singleton):
         retBaseCount: float = (multiplier * nextDouble) + extender
 
         retBaseCount = round(retBaseCount)
-        self.logger.info("calculated retBaseCount: %s", str(retBaseCount))
+        self.logger.debug("calculated retBaseCount: %s", str(retBaseCount))
 
         minimumStarBases: int = self._gameSettings.minimumStarBases
         maximumStarBases: int = self._gameSettings.maximumStarBases
@@ -365,6 +375,40 @@ class Intelligence(Singleton):
     def computeBaseDestroyedInterval(self) -> float:
         interval: float = 1.0 + 3.0 * self.rand()
         return interval
+
+    # noinspection SpellCheckingInspection
+    def computeTractorBeamFactors(self, energy: float) -> TractorBeamComputation:
+        """
+            game.warpfac = 6.0+2.0*tk.rand();
+            game.wfacsq = game.warpfac * game.warpfac;
+            ui.prout ("Warp factor set to %d", (int)game.warpfac);
+            power = 0.75*game.energy;
+            game.dist = power/(game.warpfac*game.warpfac*game.warpfac*((game.shldup ? 1 : 0) +1));
+            distreq = 1.4142+tk.rand();
+            if (distreq < game.dist)
+                game.dist = distreq;
+            game.optime = (game.wfacsq <= 0.0d) ? 0.0d : 10.0*game.dist/game.wfacsq;
+
+        Args:
+            energy:
+
+        Returns:  The namedtuple TractorBeamComputation
+        """
+        warpFactor: float = 6.0 + 2.0 * self.rand()
+        wSquared: float = warpFactor * warpFactor
+        power: float = 0.75 * energy
+        if self._devices.getDevice(DeviceType.Shields).deviceStatus == DeviceStatus.Up is True:
+            shieldFactor: float = 1.0
+        else:
+            shieldFactor = 0
+        distance: float = power / wSquared * warpFactor * (shieldFactor + 1)
+        requiredDistance: float = 1.4142 * self.rand()
+        if requiredDistance < distance:
+            distance = requiredDistance
+
+        tractorBeamComputation: TractorBeamComputation = TractorBeamComputation(warpFactor=warpFactor, distance=distance, wSquared=wSquared)
+
+        return tractorBeamComputation
 
     def rand(self) -> float:
         """

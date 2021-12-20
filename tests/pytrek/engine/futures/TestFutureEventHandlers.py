@@ -179,7 +179,24 @@ class TestFutureEventHandlers(TestBase):
     def testTractorBeamEventHandler(self):
         """
         """
-        self._setupGame()
+        self.logger.debug(f'{self._gameState=}')
+
+        eventHandlers: FutureEventHandlers = FutureEventHandlers(LogMessageConsole())
+
+        coordinates: Coordinates = self._galaxy.getStarBaseCoordinates()
+
+        fEvent:   FutureEvent = FutureEvent()
+
+        fEvent.type                = FutureEventType.SUPER_NOVA
+        fEvent.starDate            = self._gameState.starDate
+        fEvent.quadrantCoordinates = coordinates
+
+        previousOpTime: float = self._gameState.opTime
+        eventHandlers.tractorBeamEventHandler(futureEvent=fEvent)
+
+        self.logger.debug(f'testTractorBeamEventHandler - {self._gameState=}')
+        currentOptTime: float = self._gameState.opTime
+        self.assertNotEqual(previousOpTime, currentOptTime, 'Operation time did not change')
 
     def testCommanderAttacksBaseEventHandler(self):
         """
