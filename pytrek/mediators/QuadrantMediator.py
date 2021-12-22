@@ -15,6 +15,7 @@ from pytrek.GameState import GameState
 from pytrek.engine.Computer import Computer
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.gui.MessageConsole import MessageConsole
 
@@ -57,6 +58,7 @@ class QuadrantMediator(Singleton):
         self._gameState:    GameState    = GameState()
         self._gameSettings: GameSettings = GameSettings()
         self._computer:     Computer     = Computer()
+        self._intelligence: Intelligence = Intelligence()
 
         self._ktm: KlingonTorpedoMediator        = KlingonTorpedoMediator()
         self._ctm: CommanderTorpedoMediator      = CommanderTorpedoMediator()
@@ -141,6 +143,23 @@ class QuadrantMediator(Singleton):
             self._soundUnableToComply.play(volume=self._gameSettings.soundVolume.value)
             self._messageConsole.displayMessage(f'You are not adjacent to base')
 
+    def enterQuadrant(self, quadrant: Quadrant, enterprise):
+
+        currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
+
+        playerList: SpriteList = SpriteList()
+        playerList.append(enterprise)
+
+        self._gameState.currentSectorCoordinates = currentSectorCoordinates
+        quadrant.placeEnterprise(enterprise, currentSectorCoordinates)
+
+        # self._quadrantMediator = QuadrantMediator()
+
+        self.playerList = playerList
+        # Don't do this until we have set up the current quadrant
+        self._makeEnemySpriteLists(quadrant=quadrant)
+        self._doDebugActions(quadrant=quadrant)
+
     # noinspection PyUnusedLocal
     def handleMousePress(self, quadrant: Quadrant, arcadePoint: ArcadePoint, button: int, keyModifiers: int):
         pass
@@ -219,3 +238,81 @@ class QuadrantMediator(Singleton):
 
         self._soundUnableToComply = BaseMediator.loadSound(bareFileName='unableToComply.wav')
         self._soundDocked         = BaseMediator.loadSound(bareFileName='Docked.wav')
+
+    def _makeEnemySpriteLists(self, quadrant: Quadrant):
+        """
+        Place enemies in the appropriate sprite lists
+        Depends on the correct quadrant mediator is in place
+        """
+        self.__makeKlingonSpriteList(quadrant=quadrant)
+        self.__makeCommanderSpriteList(quadrant=quadrant)
+        self.__makeSuperCommanderSpriteList(quadrant=quadrant)
+
+    def _doDebugActions(self, quadrant: Quadrant):
+
+        self.__doEnemyDebugActions(quadrant=quadrant)
+
+        if self._gameSettings.debugAddPlanet is True:
+            quadrant.addPlanet()
+
+        if self._gameSettings.debugAddStarBase is True:
+            quadrant.addStarBase()
+
+    def __makeKlingonSpriteList(self, quadrant: Quadrant):
+        if quadrant.klingonCount > 0:
+            self._gameState.shipCondition = ShipCondition.Red
+            klingonSprites: SpriteList = SpriteList()
+            for klingon in quadrant.klingons:
+                klingonSprites.append(klingon)
+
+            self.klingonList = klingonSprites
+        else:
+            self.klingonList = SpriteList()
+
+    def __makeCommanderSpriteList(self, quadrant: Quadrant):
+        if quadrant.commanderCount > 0:
+            self._gameState.shipCondition = ShipCondition.Red
+            commanderSprites: SpriteList = SpriteList()
+            for commander in quadrant.commanders:
+                commanderSprites.append(commander)
+
+            self.commanderList = commanderSprites
+        else:
+            self.commanderList = SpriteList()
+
+    def __makeSuperCommanderSpriteList(self, quadrant: Quadrant):
+        if quadrant.superCommanderCount > 0:
+            self._gameState.shipCondition = ShipCondition.Red
+            superCommanderSprites: SpriteList = SpriteList()
+            for superCommander in quadrant.superCommanders:
+                superCommanderSprites.append(superCommander)
+
+            self.superCommanderList = superCommanderSprites
+        else:
+            self.superCommanderList = SpriteList()
+
+    def __doEnemyDebugActions(self, quadrant: Quadrant):
+
+        if self._gameSettings.debugAddKlingons is True:
+            numKlingons: int = self._gameSettings.debugKlingonCount
+            for x in range(numKlingons):
+                klingon: Klingon = quadrant.addKlingon()
+                self.klingonList.append(klingon)
+
+            self._gameState.remainingKlingons += numKlingons
+
+        if self._gameSettings.debugAddCommanders is True:
+            nCommanders: int = self._gameSettings.debugCommanderCount
+            for x in range(nCommanders):
+                commander: Commander = quadrant.addCommander()
+                self.commanderList.append(commander)
+
+            self._gameState.remainingCommanders += nCommanders
+
+        if self._gameSettings.debugAddSuperCommanders:
+            nSuperCommanders: int = self._gameSettings.debugSuperCommanderCount
+            for x in range(nSuperCommanders):
+                superCommander: SuperCommander = quadrant.addSuperCommander()
+                self.superCommanderList.append(superCommander)
+
+            self._gameState.remainingSuperCommanders += nSuperCommanders

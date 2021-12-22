@@ -8,8 +8,6 @@ import arcade
 # noinspection PyPackageRequirements
 from PIL import ImageFont
 
-# from arcade import PhysicsEngineSimple
-from arcade import SpriteList
 from arcade import Texture
 from arcade import View
 from arcade import Window
@@ -28,8 +26,8 @@ from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
-from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.engine.Intelligence import Intelligence
+
 from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
@@ -41,9 +39,6 @@ from pytrek.gui.StatusConsole import StatusConsole
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.gui.gamepieces.commander.Commander import Commander
-from pytrek.gui.gamepieces.klingon.Klingon import Klingon
-from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -143,6 +138,7 @@ class PyTrekView(View):
 
         # An important mediator
         self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
+        self._quadrantMediator   = QuadrantMediator()
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
 
@@ -151,7 +147,7 @@ class PyTrekView(View):
         self._createInitialEvents()
 
         # And finally the rest of the UI elements
-        self._enterQuadrant()
+        self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
         self.logger.info(f'Setup Complete')
 
@@ -267,8 +263,8 @@ class PyTrekView(View):
         self._galaxy.currentQuadrant               = self._quadrant
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
-        self._enterQuadrant()
-
+        self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
+        
         self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
 
     def _createInitialEvents(self):
@@ -282,103 +278,8 @@ class PyTrekView(View):
         self._eventEngine.scheduleEvent(futureEvent=commanderAttackBaseEvent)
         self._eventEngine.scheduleEvent(futureEvent=tractorBeamEvent)
 
-    def _enterQuadrant(self):
-
-        currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
-
-        playerList: SpriteList = SpriteList()
-        playerList.append(self._enterprise)
-
-        self._gameState.currentSectorCoordinates = currentSectorCoordinates
-        self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
-
-        self._quadrantMediator = QuadrantMediator()
-
-        self._quadrantMediator.playerList = playerList
-        # Don't do this until we have set up the current quadrant
-        self._makeEnemySpriteLists()
-        self._doDebugActions()
-
     def _switchViewBack(self):
         self.window.show_view(self)
-
-    def _doDebugActions(self):
-
-        self.__doEnemyDebugActions()
-
-        if self._gameSettings.debugAddPlanet is True:
-            self._quadrant.addPlanet()
-
-        if self._gameSettings.debugAddStarBase is True:
-            self._quadrant.addStarBase()
-
-    def _makeEnemySpriteLists(self):
-        """
-        Place enemies in the appropriate sprite lists
-        Depends on the correct quadrant mediator is in place
-        """
-        self.__makeKlingonSpriteList()
-        self.__makeCommanderSpriteList()
-        self.__makeSuperCommanderSpriteList()
-
-    def __makeCommanderSpriteList(self):
-        if self._quadrant.commanderCount > 0:
-            self._gameState.shipCondition = ShipCondition.Red
-            commanderSprites: SpriteList = SpriteList()
-            for commander in self._quadrant.commanders:
-                commanderSprites.append(commander)
-
-            self._quadrantMediator.commanderList = commanderSprites
-        else:
-            self._quadrantMediator.commanderList = SpriteList()
-
-    def __makeSuperCommanderSpriteList(self):
-        if self._quadrant.superCommanderCount > 0:
-            self._gameState.shipCondition = ShipCondition.Red
-            superCommanderSprites: SpriteList = SpriteList()
-            for superCommander in self._quadrant.superCommanders:
-                superCommanderSprites.append(superCommander)
-
-            self._quadrantMediator.superCommanderList = superCommanderSprites
-        else:
-            self._quadrantMediator.superCommanderList = SpriteList()
-
-    def __makeKlingonSpriteList(self):
-        if self._quadrant.klingonCount > 0:
-            self._gameState.shipCondition = ShipCondition.Red
-            klingonSprites: SpriteList = SpriteList()
-            for klingon in self._quadrant.klingons:
-                klingonSprites.append(klingon)
-
-            self._quadrantMediator.klingonList = klingonSprites
-        else:
-            self._quadrantMediator.klingonList = SpriteList()
-
-    def __doEnemyDebugActions(self):
-
-        if self._gameSettings.debugAddKlingons is True:
-            numKlingons: int = self._gameSettings.debugKlingonCount
-            for x in range(numKlingons):
-                klingon: Klingon = self._quadrant.addKlingon()
-                self._quadrantMediator.klingonList.append(klingon)
-
-            self._gameState.remainingKlingons += numKlingons
-
-        if self._gameSettings.debugAddCommanders is True:
-            nCommanders: int = self._gameSettings.debugCommanderCount
-            for x in range(nCommanders):
-                commander: Commander = self._quadrant.addCommander()
-                self._quadrantMediator.commanderList.append(commander)
-
-            self._gameState.remainingCommanders += nCommanders
-
-        if self._gameSettings.debugAddSuperCommanders:
-            nSuperCommanders: int = self._gameSettings.debugSuperCommanderCount
-            for x in range(nSuperCommanders):
-                superCommander: SuperCommander = self._quadrant.addSuperCommander()
-                self._quadrantMediator.superCommanderList.append(superCommander)
-
-            self._gameState.remainingSuperCommanders += nSuperCommanders
 
 
 def main():
@@ -386,7 +287,7 @@ def main():
     arcadeWindow: Window     = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     gameView:     PyTrekView = PyTrekView()
 
-    arcadeWindow.set_exclusive_keyboard(exclusive=True)
+    arcadeWindow.set_exclusive_keyboard(exclusive=False)
     arcadeWindow.show_view(gameView)
 
     gameView.setup()
