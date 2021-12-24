@@ -1,5 +1,5 @@
 setuptools~=57.4.0
-arcade~=2.5.7
+arcade~=2.6.7
 jsonpickle~=2.0.0
 html-testRunner~=1.2.1
 mypy~=0.910

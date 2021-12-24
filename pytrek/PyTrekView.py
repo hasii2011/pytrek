@@ -264,7 +264,7 @@ class PyTrekView(View):
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
-        
+
         self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
 
     def _createInitialEvents(self):
