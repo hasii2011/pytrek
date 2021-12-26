@@ -62,6 +62,13 @@ class EnterprisePhaserMediator(BaseMediator):
         return self._phaserFireTextures
 
     def firePhasers(self, quadrant: Quadrant, phaserPower: float = 300.0):
+        """
+
+        Args:
+            quadrant:       The quadrant we are in
+            phaserPower:    How much energy to expend
+
+        """
 
         enemies: Enemies = Enemies([])
         enemies.extend(quadrant.klingons)
@@ -81,8 +88,7 @@ class EnterprisePhaserMediator(BaseMediator):
                 self._placePhaserBolt(enterprise=quadrant.enterprise, enemy=enemy)
                 self._soundPhaser.play(volume=self._gameSettings.soundVolume.value)
                 if enemy.power <= 0.0:
-                    self._killEnemy(quadrant=quadrant,
-                                    enemy=enemy)
+                    self._killEnemy(quadrant=quadrant, enemy=enemy)
 
     def _placePhaserBolt(self, enterprise: Enterprise, enemy: Enemy):
 

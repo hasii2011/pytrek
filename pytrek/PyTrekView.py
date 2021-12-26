@@ -38,15 +38,13 @@ from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
-from pytrek.model.Sector import Sector
-from pytrek.model.SectorType import SectorType
 
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
+from pytrek.mediators.GalaxyMediator import GalaxyMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
 from pytrek.settings.GameSettings import GameSettings
@@ -95,6 +93,7 @@ class PyTrekView(View):
         self._quadrant:     Quadrant     = cast(Quadrant, None)
 
         self._quadrantMediator:   QuadrantMediator   = cast(QuadrantMediator, None)
+        self._galaxyMediator:     GalaxyMediator     = cast(GalaxyMediator, None)
         self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
 
         self._statusConsole:    StatusConsole    = cast(StatusConsole, None)
@@ -139,6 +138,7 @@ class PyTrekView(View):
         # An important mediator
         self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
         self._quadrantMediator   = QuadrantMediator()
+        self._galaxyMediator     = GalaxyMediator()
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
 
@@ -239,30 +239,9 @@ class PyTrekView(View):
     def _enterpriseHasWarped(self, warpSpeed: float, destinationCoordinates: Coordinates):
 
         currentCoordinates: Coordinates = self._quadrant.coordinates
-        travelDistance:     float       = self._computer.computeGalacticDistance(startQuadrantCoordinates=currentCoordinates,
-                                                                                 endQuadrantCoordinates=destinationCoordinates)
-        energyConsumed: float = self._gameEngine.computeEnergyForWarpTravel(travelDistance=travelDistance, warpFactor=warpSpeed)
 
-        self._gameState.energy -= energyConsumed
-        self._gameEngine.updateTimeAfterWarpTravel(travelDistance=travelDistance, warpFactor=warpSpeed)
-
-        self.logger.info(f'After warp travel consumed energy: {energyConsumed:.2f}')
-
-        #
-        # Cleanup old quadrant
-        #
-        sectorCoordinates: Coordinates = self._quadrant.enterpriseCoordinates
-        oldSector:         Sector      = self._quadrant.getSector(sectorCoordinates=sectorCoordinates)
-
-        oldSector.type   = SectorType.EMPTY
-        oldSector.sprite = cast(GamePiece, None)
-        #
-        # Set up new quadrant
-        #
-        self._quadrant                             = self._galaxy.getQuadrant(quadrantCoordinates=destinationCoordinates)
-        self._galaxy.currentQuadrant               = self._quadrant
-        self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
-
+        self._galaxyMediator.doWarp(currentCoordinates=currentCoordinates, destinationCoordinates=destinationCoordinates,
+                                    warpSpeed=warpSpeed)
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
         self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
