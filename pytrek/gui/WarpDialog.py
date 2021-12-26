@@ -197,8 +197,13 @@ class WarpDialog(View):
         buttonBox.add(okButton.with_space_around(top=10, bottom=10, left=5))
         buttonBox.add(cancelButton.with_space_around(top=10, bottom=10, left=5, right=5))
 
-        okButton.on_click     = self._onClickOk     # ignore type
-        cancelButton.on_click = self._onClickCancel
+        @okButton.event('on_click')
+        def onClickOk(event: UIOnClickEvent):
+            self._onClickOk(event)
+
+        @cancelButton.event('on_click')
+        def onClickCancel(event: UIOnClickEvent):
+            self._onClickCancel(event)
 
         return buttonBox
 
