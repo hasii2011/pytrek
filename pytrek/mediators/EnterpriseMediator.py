@@ -19,9 +19,9 @@ from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.gui.UITypes import WarpTravelCallback
 from pytrek.gui.WarpEffect import WarpEffect
-from pytrek.gui.WarpTravelDialog import DialogAnswer
-from pytrek.gui.WarpTravelDialog import WarpTravelAnswer
-from pytrek.gui.WarpTravelDialog import WarpTravelDialog
+from pytrek.gui.WarpDialog import DialogAnswer
+from pytrek.gui.WarpDialog import WarpTravelAnswer
+from pytrek.gui.WarpDialog import WarpDialog
 
 from pytrek.mediators.base.MissesMediator import MissesMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse
@@ -39,6 +39,12 @@ from pytrek.model.SectorType import SectorType
 class EnterpriseMediator(MissesMediator):
 
     def __init__(self, view: View, warpTravelCallback: WarpTravelCallback):
+        """
+
+        Args:
+            view:   The view to restore
+            warpTravelCallback:
+        """
 
         super().__init__()
 
@@ -99,7 +105,7 @@ class EnterpriseMediator(MissesMediator):
         #
         # Get warp speed and target quadrant coordinates from user
         # Stub out for now
-        warpTravelDialog: WarpTravelDialog = WarpTravelDialog(completeCallback=self._warpTravelDialogComplete)
+        warpTravelDialog: WarpDialog = WarpDialog(window=self._view.window, completeCallback=self._warpTravelDialogComplete)
 
         self._view.window.show_view(warpTravelDialog)
 
