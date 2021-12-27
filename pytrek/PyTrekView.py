@@ -135,7 +135,7 @@ class PyTrekView(View):
 
         self._statusConsole    = StatusConsole(gameView=self)       # UI elements
 
-        # An important mediator
+        # Important mediators
         self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
         self._quadrantMediator   = QuadrantMediator()
         self._galaxyMediator     = GalaxyMediator()

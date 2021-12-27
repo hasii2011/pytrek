@@ -168,7 +168,7 @@ class EventEngine(Singleton):
 
                 futureEvent: FutureEvent = self._eventMap[fsEventType]
                 # Might be unscheduled
-                if futureEvent.quadrantCoordinates is None:
+                if futureEvent.schedulable is False:
                     pass
                 else:
                     eventStarDate: float = futureEvent.starDate

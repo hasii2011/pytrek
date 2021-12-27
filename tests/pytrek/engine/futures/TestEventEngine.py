@@ -18,9 +18,9 @@ from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
-from pytrek.model.Coordinates import Coordinates
+
 from pytrek.model.Galaxy import Galaxy
-from pytrek.model.Quadrant import Quadrant
+
 from pytrek.settings.GameSettings import GameSettings
 
 from pytrek.settings.SettingsCommon import SettingsCommon
@@ -71,7 +71,7 @@ class TestEventEngine(TestBase):
     def testEventUnSchedulable(self):
 
         self._setupGame()
-        currentDate: float       = self._gameState.starDate
+        # currentDate: float       = self._gameState.starDate
         fEvent:      FutureEvent = self._eventEngine.getEvent(FutureEventType.TRACTOR_BEAM)
         fireDate:    float       = fEvent.starDate
         #
@@ -93,6 +93,11 @@ class TestEventEngine(TestBase):
 
     def testCommanderAttacksBaseEventHandler(self):
 
+        self._setupGame()
+
+        self._eventEngine.makeUnSchedulable(FutureEventType.SUPER_NOVA)
+        self._eventEngine.makeUnSchedulable(FutureEventType.TRACTOR_BEAM)
+
         currentDate: float       = self._gameState.starDate
         fEvent:      FutureEvent = self._eventEngine.getEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
         fireDate:    float       = fEvent.starDate
@@ -102,8 +107,6 @@ class TestEventEngine(TestBase):
         self._gameState.starDate = fireDate + 1.0
 
         self.logger.info(f'{self._gameState.remainingCommanders=}')
-        self._eventEngine.makeUnSchedulable(FutureEventType.SUPER_NOVA)
-        self._eventEngine.makeUnSchedulable(FutureEventType.TRACTOR_BEAM)
 
         self.logger.info(f'Star Date updated from {currentDate:.2f} to {self._gameState.starDate:.2f}')
 

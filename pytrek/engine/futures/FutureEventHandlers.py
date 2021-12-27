@@ -11,6 +11,7 @@ from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
 
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.mediators.GalaxyMediator import GalaxyMediator
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
 
@@ -23,10 +24,11 @@ class FutureEventHandlers:
     """
     def __init__(self, messageConsole: AbstractMessageConsole):
 
-        self.logger:          Logger       = getLogger(__name__)
-        self._gameState:      GameState    = GameState()
-        self._galaxy:         Galaxy       = Galaxy()
-        self._intelligence:   Intelligence  = Intelligence()
+        self.logger:          Logger         = getLogger(__name__)
+        self._gameState:      GameState      = GameState()
+        self._galaxy:         Galaxy         = Galaxy()
+        self._intelligence:   Intelligence   = Intelligence()
+        self._galaxyMediator: GalaxyMediator = GalaxyMediator()
 
         self._messageConsole: AbstractMessageConsole = messageConsole
 
@@ -77,16 +79,10 @@ class FutureEventHandlers:
             #
             tractorBeamComputation: TractorBeamComputation = self._intelligence.computeTractorBeamFactors(energy=self._gameState.energy)
             self._messageConsole.displayMessage(f'Warp factor set to {tractorBeamComputation.warpFactor:.2f}')
+            quadrant: Quadrant = self._galaxy.currentQuadrant
+            self._galaxyMediator.doWarp(currentCoordinates=quadrant.coordinates, destinationCoordinates=cmdrCoordinates,
+                                        warpSpeed=tractorBeamComputation.warpFactor)
 
-            # noinspection SpellCheckingInspection
-            """ game.optime = (game.wfacsq <= 0.0d) ? 0.0d : 10.0*game.dist/game.wfacsq; """
-            if tractorBeamComputation.wSquared <= 0:
-                self._gameState.opTime = 0
-            else:
-                newOpTime: float = 10.0 * tractorBeamComputation.distance / tractorBeamComputation.wSquared
-                self.logger.debug(f'tractorBeamEventHandler - {self._gameState=}')
-
-                self._gameState.opTime = newOpTime
         else:
             from pytrek.engine.futures.EventEngine import EventEngine
 

@@ -14,6 +14,8 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.futures.EventEngine import EventEngine
+from pytrek.mediators.GalaxyMediator import GalaxyMediator
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
 from pytrek.model.Galaxy import Galaxy
 
@@ -64,3 +66,6 @@ class TestBase(TestCase):
         EventEngine.__instance__  = None
         Devices.__instance__      = None
         Galaxy.__instance__       = None
+        GalaxyMediator.__instance__   = None
+        QuadrantMediator.__instance__ = None
+

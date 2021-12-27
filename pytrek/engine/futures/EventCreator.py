@@ -72,13 +72,17 @@ class EventCreator:
         """
         inTime:              float       = self._gameState.inTime
         remainingCommanders: int         = self._gameState.remainingCommanders
-        assert remainingCommanders != 0, 'Do we have a bug?'
-        elapsedStarDates:    float       = self._intelligence.exponentialRandom(2.5 * (inTime / remainingCommanders))
-        eventStarDate:       float       = self._gameState.starDate + elapsedStarDates
-        coordinates:         Coordinates = self._gameState.currentQuadrantCoordinates
 
-        futureEvent: FutureEvent = FutureEvent(type=FutureEventType.TRACTOR_BEAM, starDate=eventStarDate, quadrantCoordinates=coordinates)
+        if remainingCommanders == 0:
+            futureEvent: FutureEvent = FutureEvent(type=FutureEventType.TRACTOR_BEAM, starDate=0.0, quadrantCoordinates=Coordinates(x=-1, y=-1))
+            futureEvent.schedulable = False
+        else:
+            elapsedStarDates:    float       = self._intelligence.exponentialRandom(2.5 * (inTime / remainingCommanders))
+            eventStarDate:       float       = self._gameState.starDate + elapsedStarDates
+            coordinates:         Coordinates = self._gameState.currentQuadrantCoordinates
 
-        futureEvent.callback = EventCallback(self._futureEventHandlers.tractorBeamEventHandler)
+            futureEvent: FutureEvent = FutureEvent(type=FutureEventType.TRACTOR_BEAM, starDate=eventStarDate, quadrantCoordinates=coordinates)
+
+            futureEvent.callback = EventCallback(self._futureEventHandlers.tractorBeamEventHandler)
 
         return futureEvent

@@ -12,8 +12,12 @@ from pytrek.GameState import GameState
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.mediators.GalaxyMediator import GalaxyMediator
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -41,6 +45,9 @@ class TestFutureEventHandlers(TestBase):
     clsIntelligence: Intelligence = cast(Intelligence, None)
     clsComputer:     Computer     = cast(Computer, None)
     clsGalaxy:       Galaxy       = cast(Galaxy, None)
+    clsEventEngine:      EventEngine      = cast(EventEngine, None)
+    clsQuadrantMediator: QuadrantMediator = cast(QuadrantMediator, None)
+    clsGalaxyMediator:   GalaxyMediator   = cast(GalaxyMediator, None)
 
     @classmethod
     def setUpClass(cls):
@@ -63,6 +70,10 @@ class TestFutureEventHandlers(TestBase):
         self._intelligence: Intelligence = TestFutureEventHandlers.clsIntelligence
         self._computer:     Computer     = TestFutureEventHandlers.clsComputer
         self._galaxy:       Galaxy       = TestFutureEventHandlers.clsGalaxy
+
+        self._eventEngine:      EventEngine      = TestFutureEventHandlers.clsEventEngine
+        self._quadrantMediator: QuadrantMediator = TestFutureEventHandlers.clsQuadrantMediator
+        self._galaxyMediator:   GalaxyMediator   = TestFutureEventHandlers.clsGalaxyMediator
 
         self._eventHandlers: FutureEventHandlers = FutureEventHandlers(LogMessageConsole())
 
@@ -181,9 +192,18 @@ class TestFutureEventHandlers(TestBase):
         """
         self.logger.debug(f'{self._gameState=}')
 
+        # Simulate game start up
+        enterprise: Enterprise = Enterprise()
+
+        self._quadrant: Quadrant = self._galaxy.currentQuadrant
+
+        self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
+
+        self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=enterprise)
+
         eventHandlers: FutureEventHandlers = FutureEventHandlers(LogMessageConsole())
 
-        coordinates: Coordinates = self._galaxy.getStarBaseCoordinates()
+        coordinates: Coordinates = self._galaxy.currentQuadrant.coordinates
 
         fEvent:   FutureEvent = FutureEvent()
 
@@ -202,6 +222,8 @@ class TestFutureEventHandlers(TestBase):
         """
         """
         self._setupGame()
+
+        self._eventEngine.makeUnSchedulable(FutureEventType.TRACTOR_BEAM)
 
         fEvent: FutureEvent = self._generateArtificialEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
 
@@ -295,7 +317,10 @@ class TestFutureEventHandlers(TestBase):
         TestFutureEventHandlers.clsGameEngine   = GameEngine()       # Then the engine needs to be initialized
         TestFutureEventHandlers.clsIntelligence = Intelligence()
         TestFutureEventHandlers.clsComputer     = Computer()
-        TestFutureEventHandlers.clsGalaxy       = Galaxy()           # This essentially finishes initializing most of the game
+        TestFutureEventHandlers.clsGalaxy       = Galaxy()
+        TestFutureEventHandlers.clsEventEngine  = EventEngine(LogMessageConsole())
+        TestFutureEventHandlers.clsQuadrantMediator = QuadrantMediator()
+        TestFutureEventHandlers.clsGalaxyMediator   = GalaxyMediator()      # This essentially finishes initializing most of the game
 
 
 def suite() -> TestSuite:
