@@ -81,7 +81,7 @@ class EventCreator:
             eventStarDate:       float       = self._gameState.starDate + elapsedStarDates
             coordinates:         Coordinates = self._gameState.currentQuadrantCoordinates
 
-            futureEvent: FutureEvent = FutureEvent(type=FutureEventType.TRACTOR_BEAM, starDate=eventStarDate, quadrantCoordinates=coordinates)
+            futureEvent = FutureEvent(type=FutureEventType.TRACTOR_BEAM, starDate=eventStarDate, quadrantCoordinates=coordinates)
 
             futureEvent.callback = EventCallback(self._futureEventHandlers.tractorBeamEventHandler)
 
