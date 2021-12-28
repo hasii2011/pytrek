@@ -32,6 +32,7 @@ install:
   - pip3 install pyglet
   - pip3 install jsonpickle
   - pip3 install arcade
+  - pip3 install Shapely
 
 # command to run tests
 script: ${TRAVIS_BUILD_DIR}/scripts/runtests.sh
