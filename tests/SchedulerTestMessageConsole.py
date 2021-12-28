@@ -10,6 +10,7 @@ from arcade.color import WHITE
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 
 from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
+from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
 
 class SchedulerTestMessageConsole(AbstractMessageConsole):
@@ -45,11 +46,13 @@ class SchedulerTestMessageConsole(AbstractMessageConsole):
 
             runningY -= SchedulerTestMessageConsole.Y_DECREMENT
 
-    def displayMessage(self, message: str):
+    def displayMessage(self, message: str, messageType: ConsoleMessageType = ConsoleMessageType.Normal):
         """
         Simply adds the new message to the message buffer
         Args:
             message:  New message to display
+            messageType: How to display the message
+
         """
         if len(self._statusLines) == SchedulerTestMessageConsole.MAX_LINES:
             self._statusLines.pop(0)

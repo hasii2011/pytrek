@@ -25,6 +25,8 @@ from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
 from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
@@ -83,12 +85,17 @@ class TestEventScheduler(View):
         self._galaxy:       Galaxy       = Galaxy()
         self._devices:      Devices      = Devices()
 
-        self._messageConsole: SchedulerTestMessageConsole = SchedulerTestMessageConsole()
-        self._eventEngine:    EventEngine    = EventEngine(self._messageConsole)
+        self._messageConsole:   SchedulerTestMessageConsole = SchedulerTestMessageConsole()
+        self._eventEngine:      EventEngine                 = EventEngine(self._messageConsole)
+        self._quadrantMediator: QuadrantMediator            = QuadrantMediator()
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
 
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
+
+        enterprise: Enterprise = Enterprise()
+
+        self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=enterprise)
 
         self._createInitialEvents()
 

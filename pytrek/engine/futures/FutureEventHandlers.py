@@ -9,6 +9,7 @@ from pytrek.engine.Intelligence import TractorBeamComputation
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
+from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
@@ -49,7 +50,8 @@ class FutureEventHandlers:
         quadrant: Quadrant = self._galaxy.getQuadrant(quadrantCoordinates=futureEvent.quadrantCoordinates)
 
         self._standardAnnouncement(futureEvent.starDate)
-        self._messageConsole.displayMessage(f'Supernova in {quadrant.coordinates}; caution advised.')
+        self._messageConsole.displayMessage(f'Supernova in {quadrant.coordinates}; caution advised.',
+                                            messageType=ConsoleMessageType.Warning)
 
         self._decrementEnemyCount(quadrant=quadrant, enemyName='Klingon')
         self._decrementEnemyCount(quadrant=quadrant, enemyName='Commander')
@@ -74,11 +76,13 @@ class FutureEventHandlers:
             # Pick a random commander
             #
             cmdrCoordinates: Coordinates = self._galaxy.getCommanderCoordinates()
+            self._messageConsole.displayMessage(f'Enterprise yanked to quadrant: {cmdrCoordinates}', messageType=ConsoleMessageType.Warning)
             #
             # Yank the Enterprise to the commander quadrant
             #
             tractorBeamComputation: TractorBeamComputation = self._intelligence.computeTractorBeamFactors(energy=self._gameState.energy)
-            self._messageConsole.displayMessage(f'Warp factor set to {tractorBeamComputation.warpFactor:.2f}')
+            self._messageConsole.displayMessage(f'Warp factor set to {tractorBeamComputation.warpFactor:.2f}',
+                                                messageType=ConsoleMessageType.Warning)
             quadrant: Quadrant = self._galaxy.currentQuadrant
             self._galaxyMediator.doWarp(currentCoordinates=quadrant.coordinates, destinationCoordinates=cmdrCoordinates,
                                         warpSpeed=tractorBeamComputation.warpFactor)
@@ -95,7 +99,8 @@ class FutureEventHandlers:
 
         if self._canCommanderAttackAStarBase() is True:
             self._standardAnnouncement(futureEvent.starDate)
-            self._messageConsole.displayMessage(f'Commander attacking StarBase in {futureEvent.quadrantCoordinates}')
+            self._messageConsole.displayMessage(f'Commander attacking StarBase in {futureEvent.quadrantCoordinates}',
+                                                messageType=ConsoleMessageType.Warning)
         else:
             from pytrek.engine.futures.EventEngine import EventEngine
 

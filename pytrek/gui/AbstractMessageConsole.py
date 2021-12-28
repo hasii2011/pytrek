@@ -1,5 +1,6 @@
 
 from pytrek.Singleton import Singleton
+from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
 
 class AbstractMessageConsole(Singleton):
@@ -11,8 +12,9 @@ class AbstractMessageConsole(Singleton):
     def draw(self):
         pass
 
-    def displayMessage(self, message: str):
+    def displayMessage(self, message: str, messageType: ConsoleMessageType = ConsoleMessageType.Normal):
         """
         Args:
             message:  New message to display
+            messageType: How to display the message
         """

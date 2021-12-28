@@ -25,6 +25,9 @@ from pytrek.Constants import QUADRANT_GRID_WIDTH
 from pytrek.GameState import GameState
 
 from pytrek.engine.ShipCondition import ShipCondition
+from pytrek.engine.futures.EventEngine import EventEngine
+from pytrek.engine.futures.FutureEvent import FutureEvent
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.settings.GameSettings import GameSettings
@@ -74,6 +77,7 @@ class StatusConsole:
 
         self._gameSettings: GameSettings = GameSettings()
         self._gameState:    GameState    = GameState()
+        self._eventEngine:  EventEngine = EventEngine()
 
         self._statusProperties: PropertyNames = PropertyNames([])
 
@@ -118,10 +122,10 @@ class StatusConsole:
                       font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
             runningY = runningY + INLINE_STATUS_OFFSET
 
-        runningY = runningY + INLINE_STATUS_OFFSET
-        if self._gameSettings.consoleShowInternals is True:
-            draw_text('OpTime', labelX, runningY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+        # runningY = runningY + INLINE_STATUS_OFFSET
+        # if self._gameSettings.consoleShowInternals is True:
+        #     draw_text('OpTime', labelX, runningY, color=RED,
+        #               font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
 
     def drawStatusValues(self, statusX: int, runningY: int):
 
@@ -148,11 +152,7 @@ class StatusConsole:
 
             runningY = runningY + INLINE_STATUS_OFFSET
 
-        runningY = runningY + INLINE_STATUS_OFFSET
-        if self._gameSettings.consoleShowInternals is True:
-            opTimeStr: str = f'{self._gameState.opTime:.2f}'
-            draw_text(opTimeStr, statusX, runningY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+        self._showInternalValues(runningY, statusX)
 
     def _getStatusColor(self, shipCondition: ShipCondition):
 
@@ -176,3 +176,51 @@ class StatusConsole:
         Returns:  The formatted coordinates
         """
         return f'({coordinates.x},{coordinates.y})'
+
+    def _showInternalValues(self, runningY: int, statusX: int):
+
+        labelX:      int = QUADRANT_GRID_WIDTH + TITLE_MARGIN_X
+        compressedX: int = statusX - 16
+        currentY:    int = runningY
+
+        currentY = currentY + INLINE_STATUS_OFFSET
+
+        if self._gameSettings.consoleShowInternals is True:
+
+            draw_text('OpTime:', labelX, currentY, color=RED,
+                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+
+            opTimeStr: str = f'{self._gameState.opTime:.2f}'
+            draw_text(opTimeStr, compressedX, currentY, color=RED,
+                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+            #
+            currentY = currentY + INLINE_STATUS_OFFSET
+            draw_text('T Beam:', labelX, currentY, color=RED,
+                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+
+            evtStr: str = self.__getTimeString(FutureEventType.TRACTOR_BEAM)
+            draw_text(evtStr, compressedX, currentY, color=RED,
+                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+
+            currentY = currentY + INLINE_STATUS_OFFSET
+            draw_text('SNova:', labelX, currentY, color=RED,
+                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+
+            evtStr = self.__getTimeString(FutureEventType.SUPER_NOVA)
+            draw_text(evtStr, compressedX, currentY, color=RED,
+                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+
+            currentY = currentY + INLINE_STATUS_OFFSET
+            draw_text('CAttack:', labelX, currentY, color=RED,
+                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+
+            evtStr = self.__getTimeString(FutureEventType.COMMANDER_ATTACKS_BASE)
+            draw_text(evtStr, compressedX, currentY, color=RED,
+                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+
+    def __getTimeString(self, eventType: FutureEventType):
+
+        fEvent: FutureEvent = self._eventEngine.getEvent(eventType)
+        evtStr: str = f'{fEvent.starDate:.2f}'
+
+        return evtStr

@@ -47,5 +47,5 @@ MAX_QUADRANT_Y_COORDINATE: int = GALAXY_ROWS - 1
 FIXED_WIDTH_FONT_NAME:     str = 'UniverseCondensed'
 FIXED_WIDTH_FONT_FILENAME: str = f'{FIXED_WIDTH_FONT_NAME}.ttf'
 
-MINIMUM_WARP_FACTOR_VALUE: float = 1.0  # Below 1.0 is consider impulse speed
+MINIMUM_WARP_FACTOR_VALUE: float = 1.0  # Below 1.0 is considered impulse speed
 MAXIMUM_WARP_FACTOR_VALUE: float = 9.9  # The theoretical max warp speed

@@ -20,13 +20,13 @@ from arcade.gui import UIBoxLayout
 from arcade.gui import UIInputText
 from arcade.gui import UILabel
 from arcade.gui import UIManager
-from arcade.gui import UIMessageBox
 from arcade.gui import UIOnClickEvent
 from arcade.gui import UITextureButton
 
 from arcade import load_texture
 from arcade import start_render
 
+from pytrek.gui.StdMsgBox import StdMsgBox
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.LocateResources import LocateResources
@@ -281,11 +281,4 @@ class WarpDialog(View):
 
     def _displayError(self, msg: str):
 
-        message_box = UIMessageBox(
-            width=300,
-            height=200,
-            message_text=msg,
-            buttons=["Ok"]
-        )
-
-        self._uiManager.add(message_box)
+        StdMsgBox.displayMessageBox(uiManager=self._uiManager, msg=msg)

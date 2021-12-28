@@ -23,12 +23,12 @@
             "handlers":  ["consoleHandler"],
             "propagate": "False"
         },
-        "PyTrek": {
-            "level":     "INFO",
-            "propagate": "False"
-        },
         "pytrek": {
             "level":     "WARNING",
+            "propagate": "False"
+        },
+        "pytrek.PyTrekView": {
+            "level":     "INFO",
             "propagate": "False"
         },
         "pytrek.mediators.QuadrantMediator": {
@@ -40,7 +40,7 @@
             "propagate": "False"
         },
         "pytrek.mediators.base.BaseEnemyMediator": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         },
         "pytrek.mediators.base.BaseTorpedoMediator": {

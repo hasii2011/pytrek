@@ -242,6 +242,7 @@ class PyTrekView(View):
 
         self._galaxyMediator.doWarp(currentCoordinates=currentCoordinates, destinationCoordinates=destinationCoordinates,
                                     warpSpeed=warpSpeed)
+        self._quadrant = self._galaxy.getQuadrant(quadrantCoordinates=destinationCoordinates)
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
         self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")

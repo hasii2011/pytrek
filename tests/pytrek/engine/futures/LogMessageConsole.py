@@ -2,6 +2,7 @@ from logging import Logger
 from logging import getLogger
 
 from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
+from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
 
 class LogMessageConsole(AbstractMessageConsole):
@@ -16,9 +17,15 @@ class LogMessageConsole(AbstractMessageConsole):
     def draw(self):
         pass
 
-    def displayMessage(self, message: str):
+    def displayMessage(self, message: str, messageType: ConsoleMessageType = ConsoleMessageType.Normal):
         """
         Args:
             message:  New message to display
+            messageType: How to display the message
         """
-        self.logger.info(message)
+        if messageType == ConsoleMessageType.Normal:
+            self.logger.info(message)
+        elif messageType == ConsoleMessageType.Warning:
+            self.logger.warning(message)
+        else:
+            self.logger.error(message)
