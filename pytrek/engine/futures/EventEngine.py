@@ -64,6 +64,7 @@ class EventEngine(Singleton):
 
         self.logger.debug(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
 
+        # TODO Put in debug option that allows selectively scheduling these
         self._scheduleRecurringEvents(eventType=FutureEventType.COMMANDER_ATTACKS_BASE)
         self._scheduleRecurringEvents(eventType=FutureEventType.TRACTOR_BEAM)
         self._scheduleRecurringEvents(eventType=FutureEventType.SUPER_NOVA)

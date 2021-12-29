@@ -34,3 +34,15 @@ class Enterprise(
 
             self.doMotion(gamePiece=self, destinationPoint=self.destinationPoint,
                           angleDiffRadians=radianInfo.angleDiffRadians, actualAngleRadians=radianInfo.actualAngleRadians)
+
+    def __str__(self) -> str:
+
+        depiction: str = (
+            f'Enterprise('
+            f'Sector coordinates={self.gameCoordinates}'
+            f')'
+        )
+        return depiction
+
+    def __repr__(self) -> str:
+        return self.__str__()

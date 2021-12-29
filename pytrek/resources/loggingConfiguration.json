@@ -27,7 +27,7 @@
             "level":     "WARNING",
             "propagate": "False"
         },
-        "pytrek.PyTrekView": {
+        "PyTrekView": {
             "level":     "INFO",
             "propagate": "False"
         },

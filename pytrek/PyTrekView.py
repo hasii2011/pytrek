@@ -28,9 +28,7 @@ from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 
-from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.EventEngine import EventEngine
-from pytrek.engine.futures.FutureEvent import FutureEvent
 
 from pytrek.gui.GalaxyView import GalaxyView
 from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
@@ -68,7 +66,7 @@ class PyTrekView(View):
     If you do need a method, delete the 'pass' and replace it
     with your own code. Don't leave 'pass' in this program.
     """
-    MADE_UP_PRETTY_MAIN_NAME:     str = "PyTrek"
+    MADE_UP_PRETTY_MAIN_NAME:     str = "PyTrekView"
 
     def __init__(self):
 
@@ -120,8 +118,6 @@ class PyTrekView(View):
         # Create the 'physics engine'
         # self.physicsEngine = PhysicsEngineSimple(self._enterprise, self._hardSpriteList)
 
-        self._enterprise: Enterprise = Enterprise()
-
         # These singletons are initialized for the first time
         self._gameSettings = GameSettings()     # Be able to read the preferences file
         self._gameState    = GameState()        # Set up the game parameters which uses the above
@@ -135,6 +131,8 @@ class PyTrekView(View):
 
         self._statusConsole    = StatusConsole(gameView=self)       # UI elements
 
+        self._enterprise: Enterprise = self._gameState.enterprise
+
         # Important mediators
         self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
         self._quadrantMediator   = QuadrantMediator()
@@ -144,11 +142,11 @@ class PyTrekView(View):
 
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
-        self._createInitialEvents()
-
         # And finally the rest of the UI elements
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
+        self.logger.info(f'{self._enterprise=}')
+        self.logger.info(f'{self._quadrant=}')
         self.logger.info(f'Setup Complete')
 
     def on_draw(self):
@@ -246,17 +244,6 @@ class PyTrekView(View):
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
         self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
-
-    def _createInitialEvents(self):
-
-        eventCreator: EventCreator = EventCreator(self._messageConsole)
-        superNovaEvent:           FutureEvent = eventCreator.createSuperNovaEvent()
-        commanderAttackBaseEvent: FutureEvent = eventCreator.createCommanderAttacksBaseEvent()
-        tractorBeamEvent:         FutureEvent = eventCreator.createTractorBeamEvent()
-
-        self._eventEngine.scheduleEvent(futureEvent=superNovaEvent)
-        self._eventEngine.scheduleEvent(futureEvent=commanderAttackBaseEvent)
-        self._eventEngine.scheduleEvent(futureEvent=tractorBeamEvent)
 
     def _switchViewBack(self):
         self.window.show_view(self)

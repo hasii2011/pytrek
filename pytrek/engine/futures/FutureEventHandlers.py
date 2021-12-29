@@ -13,6 +13,7 @@ from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
 
@@ -29,7 +30,8 @@ class FutureEventHandlers:
         self._gameState:      GameState      = GameState()
         self._galaxy:         Galaxy         = Galaxy()
         self._intelligence:   Intelligence   = Intelligence()
-        self._galaxyMediator: GalaxyMediator = GalaxyMediator()
+        self._galaxyMediator:   GalaxyMediator   = GalaxyMediator()
+        self._quadrantMediator: QuadrantMediator = QuadrantMediator()
 
         self._messageConsole: AbstractMessageConsole = messageConsole
 
@@ -86,6 +88,8 @@ class FutureEventHandlers:
             quadrant: Quadrant = self._galaxy.currentQuadrant
             self._galaxyMediator.doWarp(currentCoordinates=quadrant.coordinates, destinationCoordinates=cmdrCoordinates,
                                         warpSpeed=tractorBeamComputation.warpFactor)
+
+            self._quadrantMediator.enterQuadrant(quadrant=quadrant, enterprise=self._gameState.enterprise)
 
         else:
             from pytrek.engine.futures.EventEngine import EventEngine

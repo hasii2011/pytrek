@@ -5,6 +5,7 @@ from logging import Logger
 from logging import getLogger
 
 from pytrek.engine.Intelligence import Intelligence
+from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.engine.PlayerType import PlayerType
@@ -58,9 +59,15 @@ class GameState(Singleton):
         self.currentQuadrantCoordinates: Coordinates    = cast(Coordinates, None)
         self.currentSectorCoordinates:   Coordinates    = cast(Coordinates, None)
 
+        self._enterprise: Enterprise = Enterprise()
+
         self.gameActive:    bool = True
 
         self.logger.info(f'Game State singleton initialized')
+
+    @property
+    def enterprise(self) -> Enterprise:
+        return self._enterprise
 
     @property
     def energy(self) -> float:
