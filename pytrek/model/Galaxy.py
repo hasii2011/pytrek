@@ -27,11 +27,8 @@ GalaxyGrid  = NewType('GalaxyGrid', List[QuadrantRow])
 
 class Galaxy(Singleton):
     """
-    Galaxy management
+    The Galaxy model
     """
-
-    MAX_STARBASE_SEARCHES:  int = 128   # TODO  Place in developer preferences
-    MAX_COMMANDER_SEARCHES: int = 128
 
     def init(self, *args, **kwds):
         """"""
@@ -99,11 +96,12 @@ class Galaxy(Singleton):
         Returns:  The randomly located quadrant with a star base;  If no StarBases
         left return None
         """
+        maxStarbaseSearches: int = self._gameSettings.maxStarbaseSearches
         for x in count():
-            if x > Galaxy.MAX_STARBASE_SEARCHES:
+            if x > maxStarbaseSearches:
                 linearSearchCoordinates: Coordinates = self._starBaseLinearSearch()
                 if linearSearchCoordinates is None:
-                    self.logger.warning(f'There really no StarBase`s')
+                    self.logger.warning(f'There really are no StarBase`s')
                     break
                 return linearSearchCoordinates
 
@@ -117,8 +115,10 @@ class Galaxy(Singleton):
 
     def getCommanderCoordinates(self) -> Coordinates:
 
+        maxCommanderSearches: int = self._gameSettings.maxCommanderSearches
+
         for x in count():
-            if x > Galaxy.MAX_COMMANDER_SEARCHES:
+            if x > maxCommanderSearches:
                 self.logger.warning(f'There appear to be no live Commander`s in the galaxy')
                 break
             potentialCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
@@ -235,7 +235,7 @@ class Galaxy(Singleton):
             quadrant.addKlingon()
 
         if self._gameSettings.debugPrintKlingonPlacement is True:
-            self._debugPrintKlingonPlacement()
+            self.__debugPrintKlingonPlacement()
 
     def __placeCommandersInGalaxy(self):
         """
@@ -255,7 +255,7 @@ class Galaxy(Singleton):
             quadrant    = self.getQuadrant(coordinates)
             quadrant.addSuperCommander()
 
-    def _debugPrintKlingonPlacement(self):
+    def __debugPrintKlingonPlacement(self):
         """
         """
         for y in range(GALAXY_ROWS):

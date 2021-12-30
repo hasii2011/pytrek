@@ -159,6 +159,18 @@ class TestGameSettings(TestBase):
         self.assertTrue(self._settings.debugPrintKlingonPlacement, 'Should have changed to non-default')
         self._settings.debugPrintKlingonPlacement = saveSetting
 
+    def testMaxStarbaseSearches(self):
+        saveSetting: int = self._settings.maxStarbaseSearches
+        self._settings.maxStarbaseSearches = 42
+        self.assertEqual(42, self._settings.maxStarbaseSearches, 'Value did not change')
+        self._settings.maxStarbaseSearches = saveSetting
+
+    def testMaxCommanderSearches(self):
+        saveSetting: int = self._settings.maxCommanderSearches
+        self._settings.maxStarbaseSearches = 69
+        self.assertEqual(69, self._settings.maxStarbaseSearches, 'Value did not change')
+        self._settings.maxStarbaseSearches = saveSetting
+
 
 def suite() -> TestSuite:
     """You need to change the name of the test class here also."""

@@ -10,7 +10,6 @@ from pytrek.Singleton import Singleton
 
 from pytrek.engine.GameType import GameType
 from pytrek.engine.PlayerType import PlayerType
-from pytrek.settings.DebugSettings import DebugSettings
 
 from pytrek.settings.FactorsSettings import FactorsSettings
 from pytrek.settings.GameLevelSettings import GameLevelSettings
@@ -20,6 +19,8 @@ from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.SoundVolume import SoundVolume
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 from pytrek.settings.TorpedoSpeedSettings import TorpedoSpeedSettings
+from pytrek.settings.DebugSettings import DebugSettings
+from pytrek.settings.DeveloperSettings import DeveloperSettings
 
 
 class GameSettings(Singleton):
@@ -37,6 +38,7 @@ class GameSettings(Singleton):
         self._factors:        FactorsSettings      = FactorsSettings()
         self._debug:          DebugSettings        = DebugSettings()
         self._torpedoSpeeds:  TorpedoSpeedSettings = TorpedoSpeedSettings()
+        self._developer:      DeveloperSettings    = DeveloperSettings()
 
         self._createEmptySettings()
         self._loadSettings()
@@ -300,12 +302,28 @@ class GameSettings(Singleton):
         self._debug.noSuperCommanders = newValue
 
     @property
-    def consoleShowInternals(self) -> bool:
+    def debugConsoleShowInternals(self) -> bool:
         return self._debug.consoleShowInternals
 
-    @consoleShowInternals.setter
-    def consoleShowInternals(self, newValue: bool):
+    @debugConsoleShowInternals.setter
+    def debugConsoleShowInternals(self, newValue: bool):
         self._debug.consoleShowInternals = newValue
+
+    @property
+    def maxStarbaseSearches(self) -> int:
+        return self._developer.maxStarbaseSearches
+
+    @maxStarbaseSearches.setter
+    def maxStarbaseSearches(self, newValue: int):
+        self._developer.maxStarbaseSearches = newValue
+
+    @property
+    def maxCommanderSearches(self) -> int:
+        return self._developer.maxCommanderSearches
+
+    @maxCommanderSearches.setter
+    def maxCommanderSearches(self, newValue: int):
+        self._developer.maxCommanderSearches = newValue
 
     def _createEmptySettings(self):
 
@@ -318,6 +336,7 @@ class GameSettings(Singleton):
         self._factors.configParser        = self._config
         self._debug.configParser          = self._config
         self._torpedoSpeeds.configParser  = self._config
+        self._developer.configParser      = self._config
 
     def _loadSettings(self):
         """
@@ -347,3 +366,4 @@ class GameSettings(Singleton):
         self._factors.addMissingSettings()
         self._debug.addMissingSettings()
         self._torpedoSpeeds.addMissingSettings()
+        self._developer.addMissingSettings()
