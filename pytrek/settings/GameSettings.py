@@ -310,6 +310,30 @@ class GameSettings(Singleton):
         self._debug.consoleShowInternals = newValue
 
     @property
+    def scheduleSuperNova(self) -> bool:
+        return self._debug.scheduleSuperNova
+
+    @scheduleSuperNova.setter
+    def scheduleSuperNova(self, newValue: bool):
+        self._debug.scheduleSuperNova = newValue
+
+    @property
+    def scheduleTractorBeam(self) -> bool:
+        return self._debug.scheduleTractorBeam
+
+    @scheduleTractorBeam.setter
+    def scheduleTractorBeam(self, newValue: bool):
+        self._debug.scheduleTractorBeam = newValue
+
+    @property
+    def scheduleCommanderAttacksBase(self) -> bool:
+        return self._debug.scheduleCommanderAttacksBase
+
+    @scheduleCommanderAttacksBase.setter
+    def scheduleCommanderAttacksBase(self, newValue: bool):
+        self._debug.scheduleCommanderAttacksBase = newValue
+
+    @property
     def maxStarbaseSearches(self) -> int:
         return self._developer.maxStarbaseSearches
 

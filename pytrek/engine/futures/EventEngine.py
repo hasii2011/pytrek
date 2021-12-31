@@ -23,6 +23,7 @@ from pytrek.GameState import GameState
 from pytrek.Singleton import Singleton
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.model.Coordinates import Coordinates
+from pytrek.settings.GameSettings import GameSettings
 
 EventMap = NewType('EventMap', Dict[FutureEventType, FutureEvent])
 
@@ -54,6 +55,7 @@ class EventEngine(Singleton):
 
         self._intelligence: Intelligence = Intelligence()
         self._gameState:    GameState    = GameState()
+        self._gameSettings: GameSettings = GameSettings()
         self._devices:      Devices      = Devices()
 
         self._eventMap:     EventMap = cast(EventMap, None)
@@ -79,6 +81,7 @@ class EventEngine(Singleton):
 
         eventType: FutureEventType = futureEvent.type
 
+        futureEvent = self._debugActions(futureEvent=futureEvent)
         self._eventMap[eventType] = futureEvent
 
     def unScheduleEvent(self, eventType: FutureEventType):
@@ -216,6 +219,25 @@ class EventEngine(Singleton):
 
         ans: bool = self._eventMap[eventType].schedulable
         return ans
+
+    def _debugActions(self, futureEvent: FutureEvent) -> FutureEvent:
+
+        if futureEvent.type == FutureEventType.SUPER_NOVA and self._gameSettings.scheduleSuperNova is False:
+            futureEvent.starDate = 0.0
+            futureEvent.quadrantCoordinates = cast(Coordinates, None)
+            futureEvent.schedulable = False
+
+        if futureEvent.type == FutureEventType.COMMANDER_ATTACKS_BASE and self._gameSettings.scheduleCommanderAttacksBase is False:
+            futureEvent.starDate = 0.0
+            futureEvent.quadrantCoordinates = cast(Coordinates, None)
+            futureEvent.schedulable = False
+
+        if futureEvent.type == FutureEventType.TRACTOR_BEAM and self._gameSettings.scheduleTractorBeam is False:
+            futureEvent.starDate = 0.0
+            futureEvent.quadrantCoordinates = cast(Coordinates, None)
+            futureEvent.schedulable = False
+
+        return futureEvent
 
     def __repr__(self):
 

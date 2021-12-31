@@ -29,6 +29,9 @@ class DebugSettings(BaseSubSetting):
     ANNOUNCE_QUADRANT_CREATION:                   str = 'announce_quadrant_creation'
 
     CONSOLE_SHOW_INTERNALS: str = 'console_show_internals'
+    SCHEDULE_SUPER_NOVA:             str = 'schedule_super_nova'
+    SCHEDULE_TRACTOR_BEAM:           str = 'schedule_tractor_beam'
+    SCHEDULE_COMMANDER_ATTACKS_BASE: str = 'schedule_commander_attacks_base'
 
     DEBUG_SETTINGS: SettingsNameValues = SettingsNameValues({
         ADD_KLINGONS:  'False',
@@ -48,6 +51,9 @@ class DebugSettings(BaseSubSetting):
         NO_COMMANDERS:          'False',
         NO_SUPER_COMMANDERS:    'False',
         CONSOLE_SHOW_INTERNALS: 'False',
+        SCHEDULE_SUPER_NOVA:             'True',
+        SCHEDULE_TRACTOR_BEAM:           'True',
+        SCHEDULE_COMMANDER_ATTACKS_BASE: 'True',
     })
 
     def init(self, *args, **kwds):
@@ -184,4 +190,31 @@ class DebugSettings(BaseSubSetting):
     @consoleShowInternals.setter
     def consoleShowInternals(self, newValue: bool):
         self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.CONSOLE_SHOW_INTERNALS, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def scheduleSuperNova(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.SCHEDULE_SUPER_NOVA)
+
+    @scheduleSuperNova.setter
+    def scheduleSuperNova(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.SCHEDULE_SUPER_NOVA, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def scheduleTractorBeam(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.SCHEDULE_TRACTOR_BEAM)
+
+    @scheduleTractorBeam.setter
+    def scheduleTractorBeam(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.SCHEDULE_TRACTOR_BEAM, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def scheduleCommanderAttacksBase(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.SCHEDULE_COMMANDER_ATTACKS_BASE)
+
+    @scheduleCommanderAttacksBase.setter
+    def scheduleCommanderAttacksBase(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.SCHEDULE_COMMANDER_ATTACKS_BASE, str(newValue))
         self._settingsCommon.saveSettings()

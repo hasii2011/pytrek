@@ -93,7 +93,7 @@ class TestEventScheduler(View):
 
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
-        enterprise: Enterprise = Enterprise()
+        enterprise: Enterprise = self._gameState.enterprise
 
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=enterprise)
 
@@ -162,14 +162,14 @@ class TestEventScheduler(View):
 
     def _drawGameState(self):
         starDate: float = self._gameState.starDate
-        draw_text(f'Current Star Date: {starDate}', 10, GAME_STATE_Y, color.YELLOW, 12)
-        draw_text(f'Klingon Count: {self._gameState.remainingKlingons}',     200, GAME_STATE_Y, color.YELLOW, 12)
-        draw_text(f'Commander Count: {self._gameState.remainingCommanders}', 330, GAME_STATE_Y, color.YELLOW, 12)
-        draw_text(f'StarBase Count: {self._gameState.starBaseCount}',        485, GAME_STATE_Y, color.YELLOW, 12)
+        draw_text(f'Current Star Date: {starDate:.2f}', 10, GAME_STATE_Y, color.YELLOW, 12)
+        draw_text(f'Klingon Count: {self._gameState.remainingKlingons}',     225, GAME_STATE_Y, color.YELLOW, 12)
+        draw_text(f'Commander Count: {self._gameState.remainingCommanders}', 365, GAME_STATE_Y, color.YELLOW, 12)
+        draw_text(f'StarBase Count: {self._gameState.starBaseCount}',        530, GAME_STATE_Y, color.YELLOW, 12)
 
     def _drawHelpText(self):
         draw_line(start_x=10, end_x=SCREEN_WIDTH - (2 * X_MARGIN), start_y=HELP_SEPARATOR_Y, end_y=HELP_SEPARATOR_Y, color=color.YELLOW, line_width=1)
-        draw_text(f'Q: `Quit` U: `Update Time` C: `Kill Commanders` A: `Reset`', 10, HELP_Y, color.YELLOW)
+        draw_text(f'Q: `Quit`   1-9: `Update Time`   C: `Kill Commanders`   A: `Reset`', 10, HELP_Y, color.YELLOW)
 
     def on_update(self, deltaTime: float):
         """

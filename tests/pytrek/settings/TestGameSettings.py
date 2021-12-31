@@ -171,6 +171,24 @@ class TestGameSettings(TestBase):
         self.assertEqual(69, self._settings.maxStarbaseSearches, 'Value did not change')
         self._settings.maxStarbaseSearches = saveSetting
 
+    def testSuperNovaSchedulable(self):
+        saveSetting: int = self._settings.scheduleSuperNova
+        self._settings.scheduleSuperNova = False
+        self.assertEqual(False, self._settings.scheduleSuperNova, 'Value did not change')
+        self._settings.scheduleSuperNova = saveSetting
+
+    def testTractorBeamSchedulable(self):
+        saveSetting: int = self._settings.scheduleTractorBeam
+        self._settings.scheduleTractorBeam = False
+        self.assertEqual(False, self._settings.scheduleTractorBeam, 'Value did not change')
+        self._settings.scheduleTractorBeam = saveSetting
+
+    def testsCommanderAttacksBaseSchedulable(self):
+        saveSetting: int = self._settings.scheduleCommanderAttacksBase
+        self._settings.scheduleCommanderAttacksBase = False
+        self.assertEqual(False, self._settings.scheduleCommanderAttacksBase, 'Value did not change')
+        self._settings.scheduleCommanderAttacksBase = saveSetting
+
 
 def suite() -> TestSuite:
     """You need to change the name of the test class here also."""
