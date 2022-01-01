@@ -22,7 +22,7 @@ class Planet(BaseGamePiece):
 
         super().__init__(filename=bareFileName, scale=0.35)
 
-        # Compute these once since planets don't move
+        # Compute these values once since planets don't move
         self.gameCoordinates     = sectorCoordinates
         arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(sectorCoordinates)
 
