@@ -39,9 +39,9 @@ class TestIntelligence(TestBase):
     DEFAULT_GAME_LENGTH: float  = 210.00
     DEFAULT_AVERAGE:     float  = 7.0
 
-    EXPECTED_SHORT_GAME_LENGTH:  int = 168
-    EXPECTED_LONG_GAME_LENGTH:   int = 672
-    EXPECTED_MEDIUM_GAME_LENGTH: int = 336
+    EXPECTED_SHORT_GAME_LENGTH:  int = 512
+    EXPECTED_LONG_GAME_LENGTH:   int = 2048
+    EXPECTED_MEDIUM_GAME_LENGTH: int = 1024
 
     MAX_STAR_DATE_CALLS:          int = 7
     MAX_COORDINATES_COUNT:        int = 8
@@ -422,7 +422,7 @@ class TestIntelligence(TestBase):
 
         for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
             medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
-            ans:              bool = (medianStatistic >= 1300.0) and (medianStatistic <= 1400.0)
+            ans:              bool = (medianStatistic >= 1300.0) and (medianStatistic <= 1402.0)
             self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
     def testComputeCommanderMoveInterval(self):
@@ -509,7 +509,7 @@ class TestIntelligence(TestBase):
 
         for x in range(0, TestIntelligence.EXPONENTIAL_RANDOM_MAX_CALLS):
             ans: float = self.smarty.exponentialRandom(TestIntelligence.DEFAULT_AVERAGE)
-            self.assertGreater(113.00, ans, 'Average failed upper bound')
+            self.assertGreater(11924.00, ans, 'Average failed upper bound')
 
     def testExponentialRandomFiftySix(self):
         for x in range(0, TestIntelligence.EXPONENTIAL_RANDOM_MAX_CALLS):
@@ -522,9 +522,8 @@ class TestIntelligence(TestBase):
         initGameTime: float = self.smarty.generateInitialGameTime()
 
         for x in range(0, TestIntelligence.EXPONENTIAL_RANDOM_MAX_CALLS):
-            ans3:         float = self.smarty.exponentialRandom(initGameTime)
-
-            self.assertGreater(10832.00, ans3, 'Longer Game Time failed upper bound')
+            ans: float = self.smarty.exponentialRandom(initGameTime)
+            self.assertGreater(21286.00, ans, 'Longer Game Time failed upper bound')
 
     def testComputeBaseAttackInterval(self):
 
