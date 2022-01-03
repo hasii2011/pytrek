@@ -39,8 +39,6 @@ DEFAULT_ALPHA: int = 32
 class WarpEffect(View):
     """
     """
-    MADE_UP_PRETTY_MAIN_NAME: str = 'TestWarpEffect'
-
     def __init__(self, screenWidth: int, screenHeight: int):
 
         super().__init__()
@@ -82,7 +80,7 @@ class WarpEffect(View):
 
         # Call draw() on all your sprite lists below
 
-    def on_update(self, delta_time):
+    def on_update(self, delta_time: float):
         """
         All the logic to move, and the game logic goes here.
         Normally, you'll call update() on the sprite lists that
@@ -97,6 +95,11 @@ class WarpEffect(View):
 
         if releasedKey == arcadeKey.A:
             self.setup()
+        if releasedKey == arcadeKey.Q:
+            import os
+            # noinspection PyUnresolvedReferences
+            # noinspection PyProtectedMember
+            os._exit(0)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
@@ -130,7 +133,7 @@ class WarpEffect(View):
         tileCount: int = 4
         spriteWidth:  int = 32
         spriteHeight: int = 32
-        bareFileName: str = f'WarpSpeedEffectSheet.png'
+        bareFileName: str = f'WarpEffectSpriteSheet.png'
         fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
 
         textureList: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))

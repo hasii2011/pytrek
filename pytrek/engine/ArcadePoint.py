@@ -10,7 +10,7 @@ class ArcadePoint:
     x: float = 0.0
     y: float = 0.0
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()
 
     def __str__(self) -> str:
@@ -24,4 +24,3 @@ class ArcadePoint:
                 return False
         else:
             return False
-

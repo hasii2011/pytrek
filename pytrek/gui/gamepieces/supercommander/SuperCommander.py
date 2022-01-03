@@ -13,7 +13,7 @@ from pytrek.model.Coordinates import Coordinates
 
 class SuperCommander(BaseEnemy):
 
-    FILENAME:       str = 'SuperCommander2.png'
+    FILENAME:       str = 'SuperCommander.png'
     ROTATION_ANGLE: int = 270   # Orientation of sprite;  Zero is point straight right
 
     def __init__(self, coordinates: Coordinates, moveInterval: int):

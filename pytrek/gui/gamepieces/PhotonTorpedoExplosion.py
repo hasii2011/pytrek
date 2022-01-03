@@ -10,4 +10,3 @@ class PhotonTorpedoExplosion(BaseTorpedoExplosion):
     def __init__(self, textureList: TextureList):
 
         super().__init__(textureList=textureList, delayFrames=PhotonTorpedoExplosion.DELAY_FRAMES, scale=0.5)
-

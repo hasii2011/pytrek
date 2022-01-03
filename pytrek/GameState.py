@@ -211,5 +211,5 @@ class GameState(Singleton):
     def resetStatistics(self):
         self.gameActive = True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<{self.__class__.__name__} at {hex(id(self))}>'
