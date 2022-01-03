@@ -129,7 +129,7 @@ class PyTrekView(View):
         self._messageConsole: MessageConsole = MessageConsole()
         self._eventEngine:    EventEngine    = EventEngine(self._messageConsole)
 
-        self._statusConsole    = StatusConsole(gameView=self)       # UI elements
+        self._statusConsole:  StatusConsole = StatusConsole(gameView=self)       # UI elements
 
         self._enterprise: Enterprise = self._gameState.enterprise
 

@@ -32,6 +32,8 @@ from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.model.Coordinates import Coordinates
 from pytrek.settings.GameSettings import GameSettings
 
+from tests.LogMessageConsole import LogMessageConsole
+
 SECTION_LABEL_FONT_SIZE: int = 16
 STATUS_LABEL_FONT_SIZE: int = 11
 STATUS_TEXT_COLOR = WHITE           # has no type
@@ -77,7 +79,7 @@ class StatusConsole:
 
         self._gameSettings: GameSettings = GameSettings()
         self._gameState:    GameState    = GameState()
-        self._eventEngine:  EventEngine = EventEngine()
+        self._eventEngine:  EventEngine = EventEngine(LogMessageConsole())
 
         self._statusProperties: PropertyNames = PropertyNames([])
 

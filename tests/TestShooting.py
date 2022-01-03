@@ -42,6 +42,7 @@ from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
+from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.EnterprisePhaserMediator import EnterprisePhaserMediator
 
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
@@ -119,31 +120,34 @@ class TestShooting(View):
                                                            bareFileName='QuadrantBackground.png')
         self.background = load_texture(fqFileName)
 
-        self._galaxy       = Galaxy()
-        self._gameState    = GameState()
         self._gameSettings = GameSettings()
+        self._gameState    = GameState()
         self._gameEngine   = GameEngine()
         self._intelligence = Intelligence()
         self._computer     = Computer()
+        self._galaxy       = Galaxy()
 
-        self._enterprise: Enterprise = Enterprise()
+        self._quadrantMediator   = QuadrantMediator()
+
+        self._enterprise: Enterprise = self._gameState.enterprise
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
+
+        self._quadrant.klingonCount        = 0
+        self._quadrant.commanderCount      = 0
+        self._quadrant.superCommanderCount = 0
 
         currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
 
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
         self._gameState.currentSectorCoordinates   = currentSectorCoordinates
 
-        self._quadrant.placeEnterprise(self._enterprise, currentSectorCoordinates)
+        self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
-        self._sprites.append(self._enterprise)
+        self._enterpriseMediator: EnterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._noOp)
 
-        self._quadrantMediator = QuadrantMediator()
         self._statusConsole    = StatusConsole(gameView=self)
         self._messageConsole   = MessageConsole()
-
-        self._quadrantMediator.playerList = self._sprites
 
         self._makeEnemySpriteLists()
 
@@ -171,7 +175,7 @@ class TestShooting(View):
         need it.
         """
         self._quadrantMediator.update(quadrant=self._quadrant)
-        # self._gameEngine.updateRealTimeClock(deltaTime=delta_time)
+        self._enterpriseMediator.update(quadrant=self._quadrant)
 
     def on_key_release(self, releasedKey: int, key_modifiers: int):
         """
@@ -284,6 +288,10 @@ class TestShooting(View):
         epm: EnterprisePhaserMediator = self._quadrantMediator._epm
 
         epm.firePhasers(quadrant=self._quadrant)
+
+    # noinspection PyUnusedLocal
+    def _noOp(self, warpSpeed: float, destinationCoordinates: Coordinates):
+        self.logger.warning(f'******** How did we warp? *************')
 
     def __fireEnemyTorpedo(self, torpedoMediator: BaseTorpedoMediator, enemySprites: SpriteList, rotationAngle: int = 0):
 

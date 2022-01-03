@@ -133,9 +133,13 @@ class Quadrant:
         self._enterpriseCoordinates = newCoordinates
 
     @property
-    def klingonCount(self):
+    def klingonCount(self) -> int:
         """"""
         return self._klingonCount
+
+    @klingonCount.setter
+    def klingonCount(self, newValue: int):
+        self._klingonCount = newValue
 
     @property
     def commanderCount(self) -> int:

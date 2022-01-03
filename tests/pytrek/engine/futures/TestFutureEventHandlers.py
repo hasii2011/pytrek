@@ -29,7 +29,7 @@ from pytrek.settings.SettingsCommon import SettingsCommon
 from tests.TestBase import TestBase
 
 from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
-from tests.pytrek.engine.futures.LogMessageConsole import LogMessageConsole
+from tests.LogMessageConsole import LogMessageConsole
 
 
 class TestFutureEventHandlers(TestBase):
@@ -193,7 +193,7 @@ class TestFutureEventHandlers(TestBase):
         self.logger.debug(f'{self._gameState=}')
 
         # Simulate game start up
-        enterprise: Enterprise = Enterprise()
+        enterprise: Enterprise = self._gameState.enterprise
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
 

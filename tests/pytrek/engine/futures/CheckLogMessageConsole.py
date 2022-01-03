@@ -1,4 +1,5 @@
-from tests.pytrek.engine.futures.LogMessageConsole import LogMessageConsole
+
+from tests.LogMessageConsole import LogMessageConsole
 
 from tests.TestBase import TestBase
 
