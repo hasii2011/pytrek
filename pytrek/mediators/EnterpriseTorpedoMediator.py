@@ -14,7 +14,7 @@ from arcade import load_spritesheet
 
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.gui.gamepieces.EnterpriseTorpedoExplosion import EnterpriseTorpedoExplosion
+from pytrek.gui.gamepieces.PhotonTorpedoExplosion import PhotonTorpedoExplosion
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.PhotonTorpedo import PhotonTorpedo
@@ -205,7 +205,7 @@ class EnterpriseTorpedoMediator(MissesMediator):
         tileCount: int = 21
         spriteWidth:  int = 128
         spriteHeight: int = 128
-        bareFileName: str = f'EnterpriseTorpedoExplosionSheet.png'
+        bareFileName: str = f'PhotonTorpedoExplosionSpriteSheet.png'
         fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
 
         explosions: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
@@ -235,7 +235,7 @@ class EnterpriseTorpedoMediator(MissesMediator):
 
     def __doExplosion(self, killerTorpedo: PhotonTorpedo):
 
-        explosion: EnterpriseTorpedoExplosion = EnterpriseTorpedoExplosion(textureList=self._torpedoExplosionTextures)
+        explosion: PhotonTorpedoExplosion = PhotonTorpedoExplosion(textureList=self._torpedoExplosionTextures)
         explosion.center_x = killerTorpedo.center_x
         explosion.center_y = killerTorpedo.center_y
 

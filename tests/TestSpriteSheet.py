@@ -19,7 +19,7 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
 from pytrek.gui.gamepieces.PhaserBolt import PhaserBolt
-from pytrek.gui.gamepieces.EnterpriseTorpedoExplosion import EnterpriseTorpedoExplosion
+from pytrek.gui.gamepieces.PhotonTorpedoExplosion import PhotonTorpedoExplosion
 
 from pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosion import KlingonTorpedoExplosion
@@ -91,7 +91,7 @@ class TestSpriteSheet(Window):
         Set up the game here. Call this function to restart the game.
         """
 
-        enterpriseTorpedoExplosion:     EnterpriseTorpedoExplosion     = self._getEnterpriseTorpedoExplosion()
+        enterpriseTorpedoExplosion:     PhotonTorpedoExplosion     = self._getEnterpriseTorpedoExplosion()
         klingonTorpedoExplosion:        KlingonTorpedoExplosion        = self._getKlingonTorpedoExplosion()
         commanderTorpedoExplosion:      CommanderTorpedoExplosion      = self._getCommanderTorpedoExplosion()
         superCommanderTorpedoExplosion: SuperCommanderTorpedoExplosion = self._getSuperCommanderTorpedoExplosion()
@@ -175,9 +175,9 @@ class TestSpriteSheet(Window):
         elif releasedKey == arcadeKey.A:
             self.setup()
 
-    def _getEnterpriseTorpedoExplosion(self) -> EnterpriseTorpedoExplosion:
+    def _getEnterpriseTorpedoExplosion(self) -> PhotonTorpedoExplosion:
 
-        explosion: EnterpriseTorpedoExplosion = EnterpriseTorpedoExplosion(textureList=self._enterpriseTorpedoExplosionTextures)
+        explosion: PhotonTorpedoExplosion = PhotonTorpedoExplosion(textureList=self._enterpriseTorpedoExplosionTextures)
 
         etxPoint: ArcadePoint = self.enterpriseTorpedoExplosionPoint
         explosion.center_x = etxPoint.x
