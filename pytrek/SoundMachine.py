@@ -1,6 +1,8 @@
 from enum import Enum
 from logging import Logger
 from logging import getLogger
+from typing import Dict
+from typing import NewType
 
 from arcade import Sound
 
@@ -10,9 +12,15 @@ from pytrek.settings.GameSettings import GameSettings
 
 
 class SoundType(Enum):
-    UnableToComply = 'UnableToComply.wav'
-    Docked         = 'Docked.wav'
-    PhaserFire     = 'PhaserFire.wav'
+    UnableToComply      = 'UnableToComply.wav'
+    Docked              = 'Docked.wav'
+    PhaserFire          = 'PhaserFire.wav'
+    PleaseRepeatRequest = 'PleaseRepeatRequest.wav'
+    Impulse             = 'Impulse.wav'
+    EnterpriseBlocked   = 'EnterpriseBlocked.wav'
+
+
+SoundDictionary = NewType('SoundDictionary', Dict[SoundType, Sound])
 
 
 class SoundMachine(Singleton):
@@ -24,9 +32,16 @@ class SoundMachine(Singleton):
 
         self._gameSettings: GameSettings = GameSettings()
 
-        self._unableToComply: Sound = self.loadSound(bareFileName=SoundType.UnableToComply.value)
-        self._docked:         Sound = self.loadSound(bareFileName=SoundType.Docked.value)
-        self._phaser:         Sound = self.loadSound(bareFileName=SoundType.PhaserFire.value)
+        self._unableToComply:              Sound = self.loadSound(bareFileName=SoundType.UnableToComply.value)
+        self._docked:                      Sound = self.loadSound(bareFileName=SoundType.Docked.value)
+        self._phaser:                      Sound = self.loadSound(bareFileName=SoundType.PhaserFire.value)
+        self._pleaseRepeatRequest:         Sound = self.loadSound(bareFileName=SoundType.PleaseRepeatRequest.value)
+        self._impulse:                     Sound = self.loadSound(bareFileName=SoundType.Impulse.value)
+        self._enterpriseBlocked:           Sound = self.loadSound(bareFileName=SoundType.EnterpriseBlocked.value)
+
+        self._sounds: SoundDictionary = SoundDictionary(
+            {SoundType.UnableToComply: self._unableToComply}
+        )
 
     def loadSound(self, bareFileName: str) -> Sound:
         """
@@ -51,3 +66,7 @@ class SoundMachine(Singleton):
             self._docked.play(volume=self._gameSettings.soundVolume.value)
         elif soundType == SoundType.PhaserFire:
             self._phaser.play(volume=self._gameSettings.soundVolume.value)
+        elif soundType == SoundType.Impulse:
+            self._impulse.play(volume=self._gameSettings.soundVolume.value)
+        elif soundType == SoundType.EnterpriseBlocked:
+            self._impulse.play(volume=self._gameSettings.soundVolume.value)

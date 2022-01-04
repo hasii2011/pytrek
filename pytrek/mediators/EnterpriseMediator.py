@@ -4,7 +4,6 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from arcade import Sound
 from arcade import SpriteList
 from arcade import View
 from arcade import Window
@@ -13,6 +12,8 @@ from arcade import color
 from arcade import schedule
 from arcade import unschedule
 
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.DirectionData import DirectionData
 from pytrek.engine.ShipCondition import ShipCondition
@@ -51,17 +52,11 @@ class EnterpriseMediator(MissesMediator):
         self._view:               View = view
         self._warpTravelCallback: WarpTravelCallback = warpTravelCallback
 
-        self.logger: Logger = getLogger(__name__)
-
-        self._soundImpulse:            Sound = cast(Sound, None)
-        self._soundUnableToComply:     Sound = cast(Sound, None)
-        self._soundRepeatRequest:      Sound = cast(Sound, None)
-        self._soundEnterpriseBlocked:  Sound = cast(Sound, None)
-
-        self._warpEffect:             WarpEffect  = cast(WarpEffect, None)
-        self._warpSpeed:              float       = 0.0
+        self.logger:                  Logger       = getLogger(__name__)
+        self._soundMachine:           SoundMachine = SoundMachine()
+        self._warpSpeed:              float        = 0.0
+        self._warpEffect:             WarpEffect   = cast(WarpEffect, None)
         self._destinationCoordinates: Coordinates = cast(Coordinates, None)
-        self._loadSounds()
 
     def update(self, quadrant: Quadrant):
 
@@ -85,9 +80,8 @@ class EnterpriseMediator(MissesMediator):
         enterpriseCoordinates: Coordinates = self._gameState.currentSectorCoordinates
 
         if targetCoordinates == enterpriseCoordinates:
-            soundVolume: float = self._gameSettings.soundVolume.value
             self._messageConsole.displayMessage("WTF.  You are already here!")
-            self._soundUnableToComply.play(volume=soundVolume)
+            self._soundMachine.playSound(SoundType.UnableToComply)
         else:
             startingPoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(enterpriseCoordinates)
             endPoint:      ArcadePoint = arcadePoint
@@ -162,15 +156,13 @@ class EnterpriseMediator(MissesMediator):
             targetCoordinates:      Where the player indicated we were moving
         """
 
-        soundVolume: float = self._gameSettings.soundVolume.value
-
         self.__updateQuadrant(quadrant=quadrant, currentCoordinates=enterpriseCoordinates, targetCoordinates=targetCoordinates)
         quadrant.enterprise.destinationPoint = GamePiece.gamePositionToScreenPosition(gameCoordinates=targetCoordinates)
         quadrant.enterpriseCoordinates = targetCoordinates
         quadrant.enterprise.inMotion   = True
 
         self._gameEngine.impulse(newCoordinates=targetCoordinates, quadrant=quadrant, enterprise=quadrant.enterprise)
-        self._soundImpulse.play(volume=soundVolume)
+        self._soundMachine.playSound(SoundType.Impulse)
         if quadrant.klingonCount > 0 or quadrant.commanderCount > 0 or quadrant.superCommanderCount > 0:
             self._gameState.shipCondition = ShipCondition.Red
         else:
@@ -185,10 +177,8 @@ class EnterpriseMediator(MissesMediator):
             enterpriseCoordinates:  Then enterprise sector coordinates
             results:                The results from the line of sight query
         """
-        soundVolume: float = self._gameSettings.soundVolume.value
-
         self._messageConsole.displayMessage(f'Destination is blocked by: {results.obstacle.id}')
-        self._soundRepeatRequest.play(volume=soundVolume)
+        self._soundMachine.playSound(SoundType.PleaseRepeatRequest)
 
         baseGamePiece:      BaseGamePiece = cast(BaseGamePiece, results.obstacle)
         blockerCoordinates: Coordinates    = baseGamePiece.gameCoordinates
@@ -203,7 +193,7 @@ class EnterpriseMediator(MissesMediator):
         quadrant.enterpriseCoordinates = directionData.coordinates
 
         self._gameEngine.impulse(newCoordinates=directionData.coordinates, quadrant=quadrant, enterprise=quadrant.enterprise)
-        self._soundEnterpriseBlocked.play(volume=soundVolume)
+        self._soundMachine.playSound(SoundType.EnterpriseBlocked)
 
     def _doWeHaveLineOfSight(self, quadrant: Quadrant, startingPoint: ArcadePoint, endPoint: ArcadePoint) -> LineOfSightResponse:
         """
@@ -242,14 +232,6 @@ class EnterpriseMediator(MissesMediator):
             self.logger.info(f'Try again: {directionData=}')
 
         return directionData
-
-    def _loadSounds(self):
-
-        self._soundImpulse           = self.loadSound(bareFileName='impulse.wav')
-        # self._soundWarp              = self.loadSound(bareFileName='warp.wav')
-        self._soundUnableToComply    = self.loadSound(bareFileName='UnableToComply.wav')
-        self._soundRepeatRequest     = self.loadSound(bareFileName='pleaseRepeatRequest.wav')
-        self._soundEnterpriseBlocked = self.loadSound(bareFileName='EnterpriseBlocked.wav')
 
     def __updateQuadrant(self, quadrant: Quadrant, currentCoordinates: Coordinates, targetCoordinates: Coordinates) -> Quadrant:
         """
