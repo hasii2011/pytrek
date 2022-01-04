@@ -4,16 +4,15 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from arcade import Sound
 from arcade import Sprite
 from arcade import SpriteList
 from arcade import load_spritesheet
 
-from pytrek.Constants import SOUND_UNABLE_TO_COMPLY
-
 from pytrek.GameState import GameState
 
 from pytrek.LocateResources import LocateResources
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.gui.MessageConsole import MessageConsole
@@ -44,11 +43,7 @@ class EnterprisePhaserMediator(BaseMediator):
         self._gameEngine:     GameEngine     = GameEngine()
         self._gameState:      GameState      = GameState()
         self._messageConsole: MessageConsole = MessageConsole()
-
-        self._soundPhaser:         Sound = cast(Sound, None)
-        self._soundUnableToComply: Sound = cast(Sound, None)
-
-        self._loadSounds()
+        self._soundMachine:   SoundMachine   = SoundMachine()
 
         self._phaserBolts: SpriteList = SpriteList()
         self._phaserFireTextures: TextureList = self._loadFirePhaserTextures()
@@ -79,7 +74,7 @@ class EnterprisePhaserMediator(BaseMediator):
         enemies.extend(quadrant.superCommanders)
 
         if len(enemies) == 0:
-            self._soundUnableToComply.play(volume=self._gameSettings.soundVolume.value)
+            self._soundMachine.playSound(soundType=SoundType.UnableToComply)
             self._messageConsole.displayMessage("Nothing to fire at")
         else:
             enterpriseCoordinates: Coordinates = quadrant.enterpriseCoordinates
@@ -89,7 +84,7 @@ class EnterprisePhaserMediator(BaseMediator):
                 self._damageEnemy(enemy, enterpriseCoordinates, phaserPower)
 
                 self._placePhaserBolt(enterprise=quadrant.enterprise, enemy=enemy)
-                self._soundPhaser.play(volume=self._gameSettings.soundVolume.value)
+                self._soundMachine.playSound(soundType=SoundType.PhaserFire)
                 if enemy.power <= 0.0:
                     self._killEnemy(quadrant=quadrant, enemy=enemy)
 
@@ -107,10 +102,6 @@ class EnterprisePhaserMediator(BaseMediator):
         self._pointAtTarget(shooter=phaserBolt, target=enterprise, rotationAngle=180)
 
         self._phaserBolts.append(phaserBolt)
-
-    def _loadSounds(self):
-        self._soundPhaser         = self.loadSound('PhaserFire.wav')
-        self._soundUnableToComply = self.loadSound(bareFileName=SOUND_UNABLE_TO_COMPLY)
 
     def _loadFirePhaserTextures(self) -> TextureList:
 

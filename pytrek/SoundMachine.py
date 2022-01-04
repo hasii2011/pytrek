@@ -12,6 +12,7 @@ from pytrek.settings.GameSettings import GameSettings
 class SoundType(Enum):
     UnableToComply = 'UnableToComply.wav'
     Docked         = 'Docked.wav'
+    PhaserFire     = 'PhaserFire.wav'
 
 
 class SoundMachine(Singleton):
@@ -25,6 +26,7 @@ class SoundMachine(Singleton):
 
         self._unableToComply: Sound = self.loadSound(bareFileName=SoundType.UnableToComply.value)
         self._docked:         Sound = self.loadSound(bareFileName=SoundType.Docked.value)
+        self._phaser:         Sound = self.loadSound(bareFileName=SoundType.PhaserFire.value)
 
     def loadSound(self, bareFileName: str) -> Sound:
         """
@@ -47,3 +49,5 @@ class SoundMachine(Singleton):
             self._unableToComply.play(volume=self._gameSettings.soundVolume.value)
         elif soundType == SoundType.Docked:
             self._docked.play(volume=self._gameSettings.soundVolume.value)
+        elif soundType == SoundType.PhaserFire:
+            self._phaser.play(volume=self._gameSettings.soundVolume.value)
