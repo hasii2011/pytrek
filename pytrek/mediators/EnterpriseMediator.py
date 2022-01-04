@@ -247,7 +247,7 @@ class EnterpriseMediator(MissesMediator):
 
         self._soundImpulse           = self.loadSound(bareFileName='impulse.wav')
         # self._soundWarp              = self.loadSound(bareFileName='warp.wav')
-        self._soundUnableToComply    = self.loadSound(bareFileName='unableToComply.wav')
+        self._soundUnableToComply    = self.loadSound(bareFileName='UnableToComply.wav')
         self._soundRepeatRequest     = self.loadSound(bareFileName='pleaseRepeatRequest.wav')
         self._soundEnterpriseBlocked = self.loadSound(bareFileName='EnterpriseBlocked.wav')
 

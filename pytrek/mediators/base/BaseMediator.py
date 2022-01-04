@@ -64,7 +64,6 @@ class BaseMediator:
         lineOfSight: LineString = LineString([(startingPoint.x, startingPoint.y), (endPoint.x, endPoint.y)])
 
         for obstacle in obstacles:
-            # obstacle: Sprite = cast(Sprite, obstacle)
 
             pointList: PointList = obstacle.get_adjusted_hit_box()
             polygon:   Polygon   = Polygon(pointList)

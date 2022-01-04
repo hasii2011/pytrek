@@ -22,6 +22,7 @@ from pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
+from pytrek.SoundMachine import SoundMachine
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
@@ -130,13 +131,14 @@ class PyTrekView(View):
         self._eventEngine:    EventEngine    = EventEngine(self._messageConsole)
 
         self._statusConsole:  StatusConsole = StatusConsole(gameView=self)       # UI elements
+        self._soundMachine:   SoundMachine = SoundMachine()
 
         self._enterprise: Enterprise = self._gameState.enterprise
 
         # Important mediators
-        self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
-        self._quadrantMediator   = QuadrantMediator()
-        self._galaxyMediator     = GalaxyMediator()
+        self._enterpriseMediator: EnterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
+        self._quadrantMediator:   QuadrantMediator   = QuadrantMediator()
+        self._galaxyMediator:     GalaxyMediator     = GalaxyMediator()
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
 

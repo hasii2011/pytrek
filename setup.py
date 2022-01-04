@@ -71,7 +71,7 @@ DATA_FILES = [
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/SuperCommanderCannotFire.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/SuperCommanderMove.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/SuperCommanderTorpedo.wav']),
-    ('pytrek/resources/sounds', ['pytrek/resources/sounds/unableToComply.wav']),
+    ('pytrek/resources/sounds', ['pytrek/resources/sounds/UnableToComply.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/warp.wav']),
 
     ('pytrek/resources', ['pytrek/resources/loggingConfiguration.json']),

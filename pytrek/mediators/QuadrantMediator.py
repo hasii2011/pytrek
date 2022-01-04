@@ -5,12 +5,14 @@ from logging import Logger
 from logging import getLogger
 from logging import DEBUG
 
-from arcade import Sound
 from arcade import SpriteList
 
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
+
 from pytrek.GameState import GameState
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 
 from pytrek.engine.Computer import Computer
 from pytrek.engine.ArcadePoint import ArcadePoint
@@ -33,7 +35,6 @@ from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 from pytrek.mediators.EnterpriseTorpedoMediator import EnterpriseTorpedoMediator
 from pytrek.mediators.SuperCommanderMediator import SuperCommanderMediator
 from pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedoMediator
-from pytrek.mediators.base.BaseMediator import BaseMediator
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -72,16 +73,12 @@ class QuadrantMediator(Singleton):
         self._epm: EnterprisePhaserMediator      = EnterprisePhaserMediator()
 
         self._messageConsole: MessageConsole = MessageConsole()
+        self._soundMachine:   SoundMachine   = SoundMachine()
 
         self._playerList:         SpriteList = SpriteList()
         self._klingonList:        SpriteList = SpriteList()
         self._commanderList:      SpriteList = SpriteList()
         self._superCommanderList: SpriteList = SpriteList()
-
-        self._soundUnableToComply: Sound = cast(Sound, None)
-        self._soundDocked:         Sound = cast(Sound, None)
-
-        self._loadSounds()
 
     @property
     def playerList(self) -> SpriteList:
@@ -129,7 +126,7 @@ class QuadrantMediator(Singleton):
         """
 
         if quadrant.hasStarBase is False:
-            self._soundUnableToComply.play(volume=self._gameSettings.soundVolume.value)
+            self._soundMachine.playSound(soundType=SoundType.UnableToComply)
             self._messageConsole.displayMessage(f'No Star Base in quadrant')
             return
         shipPosition: Coordinates = quadrant.enterprise.gameCoordinates
@@ -138,9 +135,9 @@ class QuadrantMediator(Singleton):
             self._gameState.shipCondition = ShipCondition.Docked
             self._gameEngine.resetEnergyLevels()
             self._messageConsole.displayMessage(f'Docked.')
-            self._soundDocked.play(volume=self._gameSettings.soundVolume.value)
+            self._soundMachine.playSound(SoundType.Docked)
         else:
-            self._soundUnableToComply.play(volume=self._gameSettings.soundVolume.value)
+            self._soundMachine.playSound(SoundType.UnableToComply)
             self._messageConsole.displayMessage(f'You are not adjacent to base')
 
     def enterQuadrant(self, quadrant: Quadrant, enterprise):
@@ -152,8 +149,6 @@ class QuadrantMediator(Singleton):
 
         self._gameState.currentSectorCoordinates = currentSectorCoordinates
         quadrant.placeEnterprise(enterprise, currentSectorCoordinates)
-
-        # self._quadrantMediator = QuadrantMediator()
 
         self.playerList = playerList
         # Don't do this until we have set up the current quadrant
@@ -233,11 +228,6 @@ class QuadrantMediator(Singleton):
             ans = True
 
         return ans
-
-    def _loadSounds(self):
-
-        self._soundUnableToComply = BaseMediator.loadSound(bareFileName='unableToComply.wav')
-        self._soundDocked         = BaseMediator.loadSound(bareFileName='Docked.wav')
 
     def _makeEnemySpriteLists(self, quadrant: Quadrant):
         """

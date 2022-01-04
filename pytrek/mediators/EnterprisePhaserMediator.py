@@ -9,7 +9,10 @@ from arcade import Sprite
 from arcade import SpriteList
 from arcade import load_spritesheet
 
+from pytrek.Constants import SOUND_UNABLE_TO_COMPLY
+
 from pytrek.GameState import GameState
+
 from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
@@ -107,7 +110,7 @@ class EnterprisePhaserMediator(BaseMediator):
 
     def _loadSounds(self):
         self._soundPhaser         = self.loadSound('PhaserFire.wav')
-        self._soundUnableToComply = self.loadSound(bareFileName='unableToComply.wav')
+        self._soundUnableToComply = self.loadSound(bareFileName=SOUND_UNABLE_TO_COMPLY)
 
     def _loadFirePhaserTextures(self) -> TextureList:
 
