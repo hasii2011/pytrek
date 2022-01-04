@@ -545,7 +545,7 @@ class TestIntelligence(TestBase):
         )
         self.logger.info(statsStr)
 
-        ans: bool = (medianStatistic > 21.0) and (medianStatistic < 447.0)
+        ans: bool = (medianStatistic > 21.0) and (medianStatistic < 467.0)
         self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
     def testComputeBaseDestroyedInterval(self):
