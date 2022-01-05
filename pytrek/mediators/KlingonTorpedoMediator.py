@@ -4,7 +4,6 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from arcade import Sound
 from arcade import load_texture
 
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
@@ -20,9 +19,11 @@ from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosion import KlingonTorpedo
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosionColor import KlingonTorpedoExplosionColor
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
 
-
 from pytrek.mediators.base.MissesMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
+
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 
 from pytrek.LocateResources import LocateResources
 
@@ -37,16 +38,11 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
     def __init__(self):
 
-        self.logger: Logger = getLogger(__name__)
-
+        self.logger:        Logger       = getLogger(__name__)
+        self._soundMachine: SoundMachine = SoundMachine()
         super().__init__()
 
-        self._soundKlingonTorpedo:    Sound = cast(Sound, None)
-        self._soundKlingonCannotFire: Sound = cast(Sound, None)
-
         self._explosionTextures: TextureList = self._loadTorpedoExplosionTextures()
-
-        self._loadSounds()
 
     @property
     def torpedoExplosionTextures(self) -> TextureList:
@@ -74,25 +70,19 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         """
         Implement empty base class method
         """
-        self._soundKlingonCannotFire.play(volume=self._gameSettings.soundVolume.value)
+        self._soundMachine.playSound(SoundType.KlingonCannotFire)
 
     def _playTorpedoFiredSound(self):
         """
         Implement empty base class method
         """
-        self._soundKlingonTorpedo.play(volume=self._gameSettings.soundVolume.value)
+        self._soundMachine.playSound(SoundType.KlingonTorpedo)
 
     def _playTorpedoExplodedSound(self):
         """
         We must implement this
         """
         pass
-
-    def _loadSounds(self):
-
-        self._soundKlingonTorpedo    = self.loadSound(bareFileName='klingonTorpedo.wav')
-        # self._soundShieldHit         = self._loadSound(bareFileName='ShieldHit.wav')
-        self._soundKlingonCannotFire = self.loadSound(bareFileName='KlingonCannotFire.wav')
 
     def _loadTorpedoExplosionTextures(self) -> TextureList:
 

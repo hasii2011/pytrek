@@ -4,10 +4,10 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from arcade import Sound
 from arcade import load_spritesheet
 
-
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 from pytrek.engine.ArcadePoint import ArcadePoint
 
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
@@ -23,7 +23,6 @@ from pytrek.gui.gamepieces.commander.CommanderTorpedoMiss import CommanderTorped
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
-from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.mediators.base.MissesMediator import Misses
 from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
@@ -38,14 +37,11 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
 
     def __init__(self):
 
-        self.logger: Logger = getLogger(__name__)
+        self.logger:        Logger       = getLogger(__name__)
+        self._soundMachine: SoundMachine = SoundMachine()
 
         super().__init__()
 
-        self._soundCommanderTorpedo:    Sound = cast(Sound, None)
-        self._soundCommanderCannotFire: Sound = cast(Sound, None)
-
-        self._loadSounds()
         self._explosionTextures: TextureList = self._loadTorpedoExplosionTextures()
 
     @property
@@ -125,24 +121,19 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         """
         We must implement this
         """
-        self._soundCommanderCannotFire.play(self._gameSettings.soundVolume.value)
+        self._soundMachine.playSound(SoundType.CommanderCannotFire)
 
     def _playTorpedoFiredSound(self):
         """
         We must implement this
         """
-        self._soundCommanderTorpedo.play(self._gameSettings.soundVolume.value)
+        self._soundMachine.playSound(SoundType.CommanderTorpedo)
 
     def _playTorpedoExplodedSound(self):
         """
         We must implement this
         """
         pass
-
-    def _loadSounds(self):
-
-        self._soundCommanderTorpedo    = BaseMediator.loadSound(bareFileName='CommanderTorpedo.wav')
-        self._soundCommanderCannotFire = BaseMediator.loadSound(bareFileName='CommanderCannotFire.wav')
 
     def _loadTorpedoExplosionTextures(self) -> TextureList:
 

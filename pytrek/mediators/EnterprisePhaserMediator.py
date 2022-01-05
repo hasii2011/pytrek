@@ -84,7 +84,7 @@ class EnterprisePhaserMediator(BaseMediator):
                 self._damageEnemy(enemy, enterpriseCoordinates, phaserPower)
 
                 self._placePhaserBolt(enterprise=quadrant.enterprise, enemy=enemy)
-                self._soundMachine.playSound(soundType=SoundType.PhaserFire)
+                self._soundMachine.playSound(soundType=SoundType.PhaserFired)
                 if enemy.power <= 0.0:
                     self._killEnemy(quadrant=quadrant, enemy=enemy)
 

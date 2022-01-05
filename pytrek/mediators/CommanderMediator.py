@@ -1,16 +1,13 @@
 
-from typing import cast
-
 from logging import Logger
 from logging import getLogger
 
-from arcade import Sound
-
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 from pytrek.gui.gamepieces.commander.Commander import Commander
 
 from pytrek.model.Quadrant import Quadrant
 
-from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.mediators.base.BaseEnemyMediator import BaseEnemyMediator
 
 
@@ -20,11 +17,8 @@ class CommanderMediator(BaseEnemyMediator):
 
         super().__init__()
 
-        self.logger: Logger = getLogger(__name__)
-
-        self._commanderMove: Sound = cast(Sound, None)
-
-        self._loadSounds()
+        self.logger:        Logger       = getLogger(__name__)
+        self._soundMachine: SoundMachine = SoundMachine()
 
     def update(self, quadrant: Quadrant, commander: Commander):
         self.moveEnemy(quadrant=quadrant, enemy=commander)
@@ -33,8 +27,4 @@ class CommanderMediator(BaseEnemyMediator):
         """
         Override super class
         """
-        self._commanderMove.play(self._gameSettings.soundVolume.value)
-
-    def _loadSounds(self):
-
-        self._commanderMove = BaseMediator.loadSound(bareFileName='CommanderMove.wav')
+        self._soundMachine.playSound(SoundType.CommanderMove)

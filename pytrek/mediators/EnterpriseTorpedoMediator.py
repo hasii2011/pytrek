@@ -5,13 +5,14 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from arcade import Sound
 from arcade import Sprite
 from arcade import SpriteList
 from arcade import check_for_collision_with_list
 
 from arcade import load_spritesheet
 
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.PhotonTorpedoExplosion import PhotonTorpedoExplosion
@@ -39,21 +40,13 @@ class EnterpriseTorpedoMediator(MissesMediator):
 
     def __init__(self):
 
-        self.logger: Logger = getLogger(__name__)
+        self.logger:        Logger       = getLogger(__name__)
+        self._soundMachine: SoundMachine = SoundMachine()
         super().__init__()
 
         self._torpedoes:  SpriteList = SpriteList()
         self._misses:     SpriteList = SpriteList()
         self._explosions: SpriteList = SpriteList()
-
-        self._photonTorpedoFired:  Sound = cast(Sound, None)
-        self._explosionSound:      Sound = cast(Sound, None)
-        self._noKlingonsSound:     Sound = cast(Sound, None)
-        self._torpedoMisfire:      Sound = cast(Sound, None)
-        self._torpedoMiss:         Sound = cast(Sound, None)
-        self._soundUnableToComply: Sound = cast(Sound, None)
-
-        self._loadSounds()
 
         self._torpedoExplosionTextures: TextureList = self._loadPhotonTorpedoExplosions()
 
@@ -77,13 +70,12 @@ class EnterpriseTorpedoMediator(MissesMediator):
     def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
 
         if self._gameState.torpedoCount <= 0:
-            self._soundUnableToComply.play(volume=self._gameSettings.soundVolume.value)
+            self._soundMachine.playSound(SoundType.UnableToComply)
             self._messageConsole.displayMessage("You are out of photon torpedoes!!")
-            return  # Take a short cut out of here
+            return  # Take a shortcut out of here
 
         self._messageConsole.displayMessage("Firing Torpedoes!!")
 
-        soundVolume: float      = self._gameSettings.soundVolume.value
         enterprise:  Enterprise = quadrant.enterprise
 
         enemies: Enemies = Enemies([])
@@ -94,7 +86,7 @@ class EnterpriseTorpedoMediator(MissesMediator):
         numberOfEnemies: int = len(enemies)
         if numberOfEnemies == 0:
             self._messageConsole.displayMessage("Don't waste torpedoes.  Nothing to fire at")
-            self._noKlingonsSound.play(volume=soundVolume)
+            self._soundMachine.playSound(SoundType.Inaccurate)
         else:
             startingPoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
             #
@@ -109,10 +101,10 @@ class EnterpriseTorpedoMediator(MissesMediator):
                     self._pointAtEnemy(enterprise=enterprise, enemy=enemy)
                     if self._intelligence.rand() <= self._gameSettings.photonTorpedoMisfireRate:
                         self._messageConsole.displayMessage(f'Torpedo pointed at {enemy} misfired')
-                        self._torpedoMisfire.play(volume=soundVolume)
+                        self._soundMachine.playSound(SoundType.PhotonTorpedoMisfire)
                     else:
                         self._fireTorpedo(enterprise=enterprise, enemy=enemy)
-                        self._photonTorpedoFired.play(volume=soundVolume)
+                        self._soundMachine.playSound(SoundType.PhotonTorpedoFired)
                         self._gameState.torpedoCount -= 1
                 else:
                     msg: str = (
@@ -159,19 +151,10 @@ class EnterpriseTorpedoMediator(MissesMediator):
 
             miss: PhotonTorpedoMiss = PhotonTorpedoMiss(placedTime=self._gameEngine.gameClock)
             self._placeMiss(quadrant=quadrant, torpedoDud=torpedoDud, miss=miss)
-            self._torpedoMiss.play(self._gameSettings.soundVolume.value)
+            self._soundMachine.playSound(SoundType.PhotonTorpedoMisfire)
             self._misses.append(miss)
 
             torpedoDud.remove_from_sprite_lists()
-
-    def _loadSounds(self):
-
-        self._photonTorpedoFired  = self.loadSound(bareFileName='photonTorpedo.wav')
-        self._explosionSound      = self.loadSound(bareFileName='SmallExplosion.wav')
-        self._noKlingonsSound     = self.loadSound(bareFileName='inaccurateError.wav')
-        self._torpedoMisfire      = self.loadSound(bareFileName='PhotonTorpedoMisfire.wav')
-        self._torpedoMiss         = self.loadSound(bareFileName='PhotonTorpedoMiss.wav')
-        self._soundUnableToComply = self.loadSound(bareFileName='UnableToComply.wav')
 
     def _pointAtEnemy(self, enemy: Enemy, enterprise: Enterprise):
 
@@ -241,7 +224,7 @@ class EnterpriseTorpedoMediator(MissesMediator):
 
         self._explosions.append(explosion)
 
-        self._explosionSound.play(self._gameSettings.soundVolume.value)
+        self._soundMachine.playSound(SoundType.PhotonTorpedoExploded)
 
     def __damageOrKillEnemy(self, enterprise: Enterprise, enemy: Enemy):
 
