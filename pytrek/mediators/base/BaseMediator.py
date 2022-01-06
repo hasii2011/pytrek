@@ -24,20 +24,12 @@ LineOfSightResponse = namedtuple('LineOfSightResponse', 'answer, obstacle')
 
 class BaseMediator:
 
-    clsLogger: Logger = getLogger(__name__)
     """
-    Has common stuff to handle torpedo misses
+    Has common stuff to handle pointing and shooting pre-checks
     """
     def __init__(self):
-        self._computer: Computer = Computer()
-
-    @classmethod
-    def loadSound(cls, bareFileName: str) -> Sound:
-
-        fqFileName: str   = LocateResources.getResourcesPath(LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName)
-        sound:      Sound = Sound(fqFileName)
-
-        return sound
+        self._baseMediatorLogger: Logger   = getLogger(__name__)
+        self._computer:           Computer = Computer()
 
     def _pointAtTarget(self, shooter: Sprite, target: GamePiece, rotationAngle: int = 125):
 
@@ -47,7 +39,7 @@ class BaseMediator:
         normalAngle: float = self._computer.computeAngleToTarget(shooter=currentPoint, deadMeat=destinationPoint)
         shooter.angle = normalAngle + rotationAngle
 
-        BaseMediator.clsLogger.info(f'{normalAngle=} -  {shooter.angle=}')
+        self._baseMediatorLogger.info(f'{normalAngle=} -  {shooter.angle=}')
 
     def _hasLineOfSight(self, startingPoint: ArcadePoint, endPoint: ArcadePoint, obstacles: SpriteList) -> LineOfSightResponse:
         """

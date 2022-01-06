@@ -23,11 +23,15 @@ class SoundType(Enum):
     PhotonTorpedoMisfire  = 'PhotonTorpedoMisfire.wav'
     PhotonTorpedoMiss     = 'PhotonTorpedoMiss.wav'
     Inaccurate            = 'Inaccurate.wav'
+    KlingonMove           = 'KlingonMove.wav'
     KlingonTorpedo        = 'KlingonTorpedo.wav'
     KlingonCannotFire     = 'KlingonCannotFire.wav'
     CommanderMove         = 'CommanderMove.wav'
     CommanderTorpedo      = 'CommanderTorpedo.wav'
     CommanderCannotFire   = 'CommanderCannotFire.wav'
+    SuperCommanderMove       = 'SuperCommanderMove.wav'
+    SuperCommanderTorpedo    = 'SuperCommanderTorpedo.wav'
+    SuperCommanderCannotFire = 'SuperCommanderCannotFire.wav'
     Warp                  = 'Warp.wav'
     ShieldHit             = 'ShieldHit.wav'
 
@@ -55,11 +59,16 @@ class SoundMachine(Singleton):
         self._photonTorpedoMisfire:  Sound = self.loadSound(bareFileName=SoundType.PhotonTorpedoMisfire.value)
         self._photonTorpedoMiss:     Sound = self.loadSound(bareFileName=SoundType.PhotonTorpedoMiss.value)
         self._inaccurate:            Sound = self.loadSound(bareFileName=SoundType.Inaccurate.value)
+        self._klingonMove:           Sound = self.loadSound(bareFileName=SoundType.KlingonMove.value)
         self._klingonTorpedo:        Sound = self.loadSound(bareFileName=SoundType.KlingonTorpedo.value)
         self._klingonCannotFire:     Sound = self.loadSound(bareFileName=SoundType.KlingonCannotFire.value)
         self._commanderMove:         Sound = self.loadSound(bareFileName=SoundType.CommanderMove.value)
         self._commanderTorpedo:      Sound = self.loadSound(bareFileName=SoundType.CommanderTorpedo.value)
         self._commanderCannotFire:   Sound = self.loadSound(bareFileName=SoundType.CommanderCannotFire.value)
+        self._superCommanderMove:    Sound = self.loadSound(bareFileName=SoundType.SuperCommanderMove.value)
+        self._superCommanderTorpedo:    Sound = self.loadSound(bareFileName=SoundType.SuperCommanderTorpedo.value)
+        self._superCommanderCannotFire: Sound = self.loadSound(bareFileName=SoundType.SuperCommanderCannotFire.value)
+
         self._warp:                  Sound = self.loadSound(bareFileName=SoundType.Warp.value)
         self._shieldHit:             Sound = self.loadSound(bareFileName=SoundType.ShieldHit.value)
 
@@ -76,11 +85,16 @@ class SoundMachine(Singleton):
                 SoundType.PhotonTorpedoMisfire:  self._photonTorpedoMisfire,
                 SoundType.PhotonTorpedoMiss:     self._photonTorpedoMiss,
                 SoundType.Inaccurate:            self._inaccurate,
+                SoundType.KlingonMove:           self._klingonMove,
                 SoundType.KlingonTorpedo:        self._klingonTorpedo,
                 SoundType.KlingonCannotFire:     self._klingonCannotFire,
                 SoundType.CommanderMove:         self._commanderMove,
                 SoundType.CommanderTorpedo:      self._commanderTorpedo,
                 SoundType.CommanderCannotFire:   self._commanderCannotFire,
+                SoundType.SuperCommanderMove:       self._superCommanderMove,
+                SoundType.SuperCommanderTorpedo:    self._superCommanderTorpedo,
+                SoundType.SuperCommanderCannotFire: self._superCommanderCannotFire,
+
                 SoundType.Warp:                  self._warp,
                 SoundType.ShieldHit:             self._shieldHit
              }

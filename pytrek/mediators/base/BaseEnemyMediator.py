@@ -22,14 +22,14 @@ from pytrek.mediators.base.MissesMediator import MissesMediator
 
 class BaseEnemyMediator(MissesMediator):
 
-    clsLogger: Logger = getLogger(__name__)
-
     def __init__(self):
+
+        self._baseEnemyMediatorLogger: Logger = getLogger(__name__)
         super().__init__()
 
     def _playMoveSound(self):
         """
-        Must be implemented by subclass or you will hear nada' if enemy moves
+        Must be implemented by subclass, or you will hear nada' if enemy moves
         """
         pass
 
@@ -42,7 +42,7 @@ class BaseEnemyMediator(MissesMediator):
             oldPosition: Coordinates = enemy.gameCoordinates
             newPosition: Coordinates = self._keepTryingToMoveUntilValid(quadrant, oldPosition)
 
-            self.logger.info(f'Enemy {enemy} moves from {oldPosition} to {newPosition}')
+            self._baseEnemyMediatorLogger.info(f'Enemy {enemy} moves from {oldPosition} to {newPosition}')
             self._enemyMovedUpdateQuadrant(quadrant=quadrant, enemy=enemy, newSectorCoordinates=newPosition, oldSectorCoordinates=oldPosition)
 
             enemy.gameCoordinates = newPosition
@@ -61,8 +61,6 @@ class BaseEnemyMediator(MissesMediator):
             oldSectorCoordinates:    new sector coordinates
 
         """
-        self.logger: Logger = BaseEnemyMediator.clsLogger
-
         oldSector: Sector = quadrant.getSector(sectorCoordinates=oldSectorCoordinates)
 
         oldSector.type   = SectorType.EMPTY
@@ -90,7 +88,7 @@ class BaseEnemyMediator(MissesMediator):
         if targetSector.type == SectorType.EMPTY:
             return True
         else:
-            self.logger.info(f'Commander cannot move to sector: {targetCoordinates} occupied by {targetSector.type}')
+            self._baseEnemyMediatorLogger.info(f'Commander cannot move to sector: {targetCoordinates} occupied by {targetSector.type}')
             return False
 
     def _evade(self, currentLocation: Coordinates) -> Coordinates:
@@ -106,7 +104,7 @@ class BaseEnemyMediator(MissesMediator):
             pDirection:     Direction   = self.__randomDirection_()
             newCoordinates: Coordinates = currentLocation.newCoordinates(pDirection)
 
-            self.logger.debug(f"Random direction {pDirection.name}: currentLocation: {currentLocation} newCoordinates {newCoordinates}")
+            self._baseEnemyMediatorLogger.debug(f"Random direction={pDirection.name} {currentLocation=} {newCoordinates=}")
             if newCoordinates.valid():
                 break
         return newCoordinates
@@ -116,7 +114,7 @@ class BaseEnemyMediator(MissesMediator):
         Sets the arcade points for the input enemy.
         Args:
             enemy:   The enemy that moved
-            newPosition: Its' new game position
+            newPosition: The enemy new game position
 
         """
         arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(newPosition)

@@ -4,9 +4,10 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from arcade import Sound
 from arcade import load_spritesheet
 
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
@@ -36,14 +37,11 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
 
     def __init__(self):
 
-        self.logger: Logger = getLogger(__name__)
+        self.logger:        Logger       = getLogger(__name__)
+        self._soundMachine: SoundMachine = SoundMachine()
 
         super().__init__()
 
-        self._soundSuperCommanderTorpedo:    Sound = cast(Sound, None)
-        self._soundSuperCommanderCannotFire: Sound = cast(Sound, None)
-
-        self._loadSounds()
         self._explosionTextures: TextureList = self._loadTorpedoExplosionTextures()
 
     @property
@@ -114,13 +112,13 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
         """
         We must implement this
         """
-        self._soundSuperCommanderCannotFire.play(volume=self._gameSettings.soundVolume.value)
+        self._soundMachine.playSound(SoundType.SuperCommanderCannotFire)
 
     def _playTorpedoFiredSound(self):
         """
         We must implement this
         """
-        self._soundSuperCommanderTorpedo.play(volume=self._gameSettings.soundVolume.value)
+        self._soundMachine.playSound(SoundType.SuperCommanderTorpedo)
 
     def _playTorpedoExplodedSound(self):
         """
@@ -136,11 +134,6 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
 
         """
         return SuperCommanderTorpedoExplosion(textureList=self._explosionTextures)
-
-    def _loadSounds(self):
-
-        self._soundSuperCommanderTorpedo    = self.loadSound(bareFileName='SuperCommanderTorpedo.wav')
-        self._soundSuperCommanderCannotFire = self.loadSound(bareFileName='SuperCommanderCannotFire.wav')
 
     def _loadTorpedoExplosionTextures(self) -> TextureList:
 

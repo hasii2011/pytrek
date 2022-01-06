@@ -36,13 +36,12 @@ from pytrek.model.Quadrant import Quadrant
 
 class BaseTorpedoMediator(MissesMediator):
 
-    clsLogger: Logger = getLogger(__name__)
-
     def __init__(self):
 
         super().__init__()
 
-        self.logger:        Logger       = BaseTorpedoMediator.clsLogger
+        self._baseTorpedoMediatorLogger: Logger = getLogger(__name__)
+
         self._soundMachine: SoundMachine = SoundMachine()
 
         self._devices: Devices = Devices()
@@ -54,7 +53,7 @@ class BaseTorpedoMediator(MissesMediator):
 
         self._lastTimeCheck:  float = self._gameEngine.gameClock / 1000
 
-        self.logger.info(f'{self._lastTimeCheck=}')
+        self._baseTorpedoMediatorLogger.info(f'{self._lastTimeCheck=}')
 
     @property
     def torpedoes(self) -> SpriteList:
@@ -164,9 +163,6 @@ class BaseTorpedoMediator(MissesMediator):
             quadrant:   Quadrant we are in
             enemies:    The enemies to fire from
             rotationAngle: The offset to add to the image when pointing at enterprise
-
-        Returns:
-
         """
 
         currentTime: float = self._gameEngine.gameClock
@@ -174,7 +170,7 @@ class BaseTorpedoMediator(MissesMediator):
         for enemy in enemies:
             deltaClockTime: float = currentTime - enemy.lastTimeCheck
             if deltaClockTime > enemy.firingInterval:
-                self.logger.debug(f'Time for {enemy} to fire torpedoes')
+                self._baseTorpedoMediatorLogger.debug(f'Time for {enemy} to fire torpedoes')
 
                 endPoint:            ArcadePoint = ArcadePoint(x=quadrant.enterprise.center_x, y=quadrant.enterprise.center_y)
                 lineOfSightResponse: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant, shooter=enemy, endPoint=endPoint)
@@ -194,7 +190,7 @@ class BaseTorpedoMediator(MissesMediator):
             enterprise: The poor lowly enterprise is the target
         """
 
-        self.logger.info(f'{enemy.id} @ {enemy.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
+        self._baseTorpedoMediatorLogger.info(f'{enemy.id} @ {enemy.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
         self._messageConsole.displayMessage(f'{enemy.id} @ {enemy.gameCoordinates} firing; Enterprise @ {enterprise.gameCoordinates}')
 
         enemyTorpedo: BaseEnemyTorpedo = self._getTorpedoToFire(enemy, enterprise)
@@ -202,7 +198,7 @@ class BaseTorpedoMediator(MissesMediator):
         self.torpedoes.append(enemyTorpedo)
         self._playTorpedoFiredSound()
 
-        self.logger.info(f'{enemyTorpedo.firedFromPosition=}')
+        self._baseTorpedoMediatorLogger.info(f'{enemyTorpedo.firedFromPosition=}')
 
     def _handleTorpedoMisses(self, quadrant: Quadrant, enemies: Enemies):
 
@@ -226,7 +222,7 @@ class BaseTorpedoMediator(MissesMediator):
         for sprite in self.torpedoFollowers:
             follower: BaseTorpedoFollower = cast(BaseTorpedoFollower, sprite)
             if follower.following == enemyTorpedo.id:
-                self.logger.debug(f'Removing follower: {follower.id}')
+                self._baseTorpedoMediatorLogger.debug(f'Removing follower: {follower.id}')
                 followersToRemove.append(follower)
 
         for followerToRemove in followersToRemove:
@@ -255,7 +251,7 @@ class BaseTorpedoMediator(MissesMediator):
 
         results: LineOfSightResponse = self._hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
 
-        self.logger.debug(f'{results=}')
+        self._baseTorpedoMediatorLogger.debug(f'{results=}')
         return results
 
     def _findFiringEnemy(self, enemyId: EnemyId, enemies: Enemies) -> Enemy:
@@ -291,7 +287,7 @@ class BaseTorpedoMediator(MissesMediator):
         expendedTorpedoes: List[Sprite] = check_for_collision_with_list(sprite=quadrant.enterprise, sprite_list=self.torpedoes)
         for sprite in expendedTorpedoes:
             expendedTorpedo: BaseEnemyTorpedo = cast(BaseEnemyTorpedo, sprite)
-            self.logger.info(f'{expendedTorpedo.id} arrived at destination')
+            self._baseTorpedoMediatorLogger.info(f'{expendedTorpedo.id} arrived at destination')
             self._removeTorpedoFollowers(enemyTorpedo=expendedTorpedo)
 
             firedBy: EnemyId = expendedTorpedo.firedBy
@@ -325,10 +321,10 @@ class BaseTorpedoMediator(MissesMediator):
                                                       targetPosition=quadrant.enterpriseCoordinates,
                                                       klingonPower=shooter.power)
 
-        self.logger.info(f"Original Hit Value: {hitValue:.4f} {shooter=}")
+        self._baseTorpedoMediatorLogger.info(f"Original Hit Value: {hitValue:.4f} {shooter=}")
         shieldHitData: ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=hitValue, currentShieldPower=self._gameState.shieldEnergy)
 
-        self.logger.info(f'{shieldHitData=}')
+        self._baseTorpedoMediatorLogger.info(f'{shieldHitData=}')
         shieldAbsorptionValue   = shieldHitData.shieldAbsorptionValue
         degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
 

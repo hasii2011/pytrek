@@ -34,11 +34,12 @@ Misses               = List[BaseMiss]
 
 class MissesMediator(BaseMediator):
 
-    clsLogger: Logger = getLogger(__name__)
     """
     Has common stuff to handle torpedo misses
     """
     def __init__(self):
+
+        self._missesMediatorLogger: Logger = getLogger(__name__)
 
         super().__init__()
 
@@ -74,7 +75,7 @@ class MissesMediator(BaseMediator):
     def _placeMiss(self, quadrant: Quadrant, torpedoDud: GamePiece, miss: BaseMiss):
         """
         Convert to game coordinates
-        Then to game point in order to get miss to center in sector
+        Then to game point in order to get miss center as a sector coordinates
 
         Args:
             miss:  The appropriate "miss" sprite
@@ -93,7 +94,7 @@ class MissesMediator(BaseMediator):
 
         miss.gameCoordinates = gameCoordinates
         self.__placeMissInQuadrant(quadrant, gameCoordinates, sectorType)
-        self.clsLogger.info(f'Placed miss at: {gameCoordinates=}  {arcadePoint=}')
+        self._missesMediatorLogger.info(f'Placed miss at: {gameCoordinates=}  {arcadePoint=}')
 
     def __placeMissInQuadrant(self, quadrant: Quadrant, sectorCoordinates: Coordinates, sectorType: SectorType):
 
