@@ -50,7 +50,6 @@ DATA_FILES = [
     ('pytrek/resources/images', ['pytrek/resources/images/SuperCommanderTorpedoFollower.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/SuperCommanderTorpedoMiss.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/WarpEffectSpriteSheet.png']),
-
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/CommanderCannotFire.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/CommanderMove.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/CommanderTorpedo.wav']),
@@ -63,16 +62,16 @@ DATA_FILES = [
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/KlingonTorpedo.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/PhaserFired.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/PhotonTorpedoFired.wav']),
+    ('pytrek/resources/sounds', ['pytrek/resources/sounds/PhotonTorpedoExploded.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/PhotonTorpedoMisfire.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/PhotonTorpedoMiss.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/PleaseRepeatRequest.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/ShieldHit.wav']),
-    ('pytrek/resources/sounds', ['pytrek/resources/sounds/PhotonTorpedoExploded.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/SuperCommanderCannotFire.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/SuperCommanderMove.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/SuperCommanderTorpedo.wav']),
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/UnableToComply.wav']),
-    ('pytrek/resources/sounds', ['pytrek/resources/sounds/warp.wav']),
+    ('pytrek/resources/sounds', ['pytrek/resources/sounds/Warp.wav']),
 
     ('pytrek/resources', ['pytrek/resources/loggingConfiguration.json']),
 ]

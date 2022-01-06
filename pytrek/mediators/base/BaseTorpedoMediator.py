@@ -5,11 +5,12 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from arcade import Sound
 from arcade import Sprite
 from arcade import SpriteList
 from arcade import check_for_collision_with_list
 
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.ShieldHitData import ShieldHitData
 from pytrek.engine.devices.Devices import Devices
@@ -26,7 +27,6 @@ from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
-from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse
 from pytrek.mediators.base.MissesMediator import MissesMediator
 from pytrek.mediators.base.MissesMediator import Torpedoes
@@ -42,7 +42,8 @@ class BaseTorpedoMediator(MissesMediator):
 
         super().__init__()
 
-        self.logger: Logger = BaseTorpedoMediator.clsLogger
+        self.logger:        Logger       = BaseTorpedoMediator.clsLogger
+        self._soundMachine: SoundMachine = SoundMachine()
 
         self._devices: Devices = Devices()
 
@@ -52,7 +53,6 @@ class BaseTorpedoMediator(MissesMediator):
         self._misses:           SpriteList = SpriteList()
 
         self._lastTimeCheck:  float = self._gameEngine.gameClock / 1000
-        self._soundShieldHit: Sound = BaseMediator.loadSound(bareFileName='ShieldHit.wav')
 
         self.logger.info(f'{self._lastTimeCheck=}')
 
@@ -281,7 +281,7 @@ class BaseTorpedoMediator(MissesMediator):
         """
         For each torpedo use arcade to determine collision
 
-         * Remove it's followers
+         * Remove the followers
          * Determine which Klingon fired it
          * Determine how severe of a hit it was
          * Adjust the Enterprise shield power value or the Enterprise power value itself
@@ -332,7 +332,7 @@ class BaseTorpedoMediator(MissesMediator):
         shieldAbsorptionValue   = shieldHitData.shieldAbsorptionValue
         degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
 
-        self._soundShieldHit.play()
+        self._soundMachine.playSound(SoundType.ShieldHit)
         self._gameEngine.degradeShields(shieldAbsorptionValue)
 
         shieldPercentage: int = round((self._gameState.shieldEnergy / self._gameSettings.defaultFullShields) * 100)

@@ -28,6 +28,8 @@ class SoundType(Enum):
     CommanderMove         = 'CommanderMove.wav'
     CommanderTorpedo      = 'CommanderTorpedo.wav'
     CommanderCannotFire   = 'CommanderCannotFire.wav'
+    Warp                  = 'Warp.wav'
+    ShieldHit             = 'ShieldHit.wav'
 
 
 SoundDictionary = NewType('SoundDictionary', Dict[SoundType, Sound])
@@ -58,6 +60,8 @@ class SoundMachine(Singleton):
         self._commanderMove:         Sound = self.loadSound(bareFileName=SoundType.CommanderMove.value)
         self._commanderTorpedo:      Sound = self.loadSound(bareFileName=SoundType.CommanderTorpedo.value)
         self._commanderCannotFire:   Sound = self.loadSound(bareFileName=SoundType.CommanderCannotFire.value)
+        self._warp:                  Sound = self.loadSound(bareFileName=SoundType.Warp.value)
+        self._shieldHit:             Sound = self.loadSound(bareFileName=SoundType.ShieldHit.value)
 
         self._sounds: SoundDictionary = SoundDictionary(
             {
@@ -76,7 +80,9 @@ class SoundMachine(Singleton):
                 SoundType.KlingonCannotFire:     self._klingonCannotFire,
                 SoundType.CommanderMove:         self._commanderMove,
                 SoundType.CommanderTorpedo:      self._commanderTorpedo,
-                SoundType.CommanderCannotFire:   self._commanderCannotFire
+                SoundType.CommanderCannotFire:   self._commanderCannotFire,
+                SoundType.Warp:                  self._warp,
+                SoundType.ShieldHit:             self._shieldHit
              }
         )
 

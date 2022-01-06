@@ -12,7 +12,7 @@ import pyglet.media as media
 from arcade import Emitter
 from arcade import EmitterIntervalWithTime
 from arcade import LifetimeParticle
-from arcade import Sound
+
 from arcade import View
 from arcade import color
 from arcade import draw_text
@@ -24,8 +24,9 @@ from arcade import start_render
 from arcade import key as arcadeKey
 
 from pytrek.LocateResources import LocateResources
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 from pytrek.gui.gamepieces.base.BaseAnimator import TextureList
-from pytrek.mediators.base.BaseMediator import BaseMediator
 
 PARTICLE_SPEED_FAST:       float = 1.0
 DEFAULT_EMIT_INTERVAL:     float = 0.003
@@ -43,7 +44,8 @@ class WarpEffect(View):
 
         super().__init__()
 
-        self.logger: Logger = getLogger(__name__)
+        self.logger:        Logger       = getLogger(__name__)
+        self._soundMachine: SoundMachine = SoundMachine()
 
         self._centerPosition: tuple[float, float] = (screenWidth / 2, screenHeight / 2)
 
@@ -53,7 +55,6 @@ class WarpEffect(View):
         self._emitter: Emitter      = cast(Emitter, None)
         self._media:   media.Player = cast(media.Player, None)
 
-        self._soundWarp: Sound = BaseMediator.loadSound('warp.wav')
         self._playing: bool = False
 
         set_background_color(color.BLACK)
@@ -88,7 +89,7 @@ class WarpEffect(View):
         """
         self._emitter.update()
         if self._playing is False:
-            self._media = self._soundWarp.play(volume=1.0)
+            self._media = self._soundMachine.playSound(SoundType.Warp)
             self._playing = True
 
     def on_key_release(self, releasedKey: int, key_modifiers: int):
