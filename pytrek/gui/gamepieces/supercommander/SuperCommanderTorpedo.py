@@ -16,11 +16,9 @@ class SuperCommanderTorpedo(BaseEnemyTorpedo):
     def __init__(self, speed: float = 3.0):
 
         torpedoId: EnemyTorpedoId = EnemyTorpedoId(f'SuperCommanderTorpedo-{SuperCommanderTorpedo.nextId}')
-
         SuperCommanderTorpedo.nextId += 1
 
         super().__init__(filename=SuperCommanderTorpedo.FILENAME, speed=speed, torpedoId=torpedoId, scale=0.15)
-
         self.logger: Logger = getLogger(__name__)
 
     def _placeTorpedoFollower(self, x: float, y: float):

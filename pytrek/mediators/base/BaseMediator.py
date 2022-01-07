@@ -5,7 +5,6 @@ from logging import getLogger
 from collections import namedtuple
 
 from arcade import PointList
-from arcade import Sound
 from arcade import Sprite
 from arcade import SpriteList
 
@@ -14,7 +13,6 @@ from shapely.geometry import LineString
 # noinspection PyPackageRequirements
 from shapely.geometry import Polygon
 
-from pytrek.LocateResources import LocateResources
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 from pytrek.gui.gamepieces.GamePiece import GamePiece

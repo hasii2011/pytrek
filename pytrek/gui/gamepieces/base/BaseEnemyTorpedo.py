@@ -1,4 +1,5 @@
-
+from logging import Logger
+from logging import getLogger
 from typing import cast
 
 from arcade import SpriteList
@@ -21,6 +22,8 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
 
         GamePiece.__init__(self, filename=filename, speed=speed, scale=scale)
         SmoothMotion.__init__(self)
+
+        self._baseEnemyTorpedoLogger: Logger = getLogger(__name__)
 
         self._id: EnemyTorpedoId = torpedoId
 
@@ -76,6 +79,7 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
                                                               spriteRotationAngle=self.angle,
                                                               rotationalSpeed=self.rotationSpeed)
 
+            # self._baseEnemyTorpedoLogger.debug(f'{radianInfo=} {self.destinationPoint=}')
             self.doMotion(gamePiece=self, destinationPoint=self.destinationPoint,
                           angleDiffRadians=radianInfo.angleDiffRadians, actualAngleRadians=radianInfo.actualAngleRadians)
 
@@ -90,7 +94,7 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
         position: Coordinates = self._computer.computeSectorCoordinates(x=currentX, y=currentY)
 
         if position != self.currentPosition:
-            self.logger.debug(f'Created a follower @ {position}')
+            self._baseEnemyTorpedoLogger.debug(f'Created a follower @ {position}')
             self._placeTorpedoFollower(x=currentX, y=currentY)
             self.currentPosition = position
 

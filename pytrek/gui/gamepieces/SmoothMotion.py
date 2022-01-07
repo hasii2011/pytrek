@@ -28,7 +28,7 @@ class SmoothMotion:
 
     def __init__(self, imageRotation: int = IMAGE_ROTATION):
 
-        self.logger: Logger = getLogger(__name__)
+        self._smoothMotionLogger: Logger = getLogger(__name__)
 
         self._inMotion: bool = False
         """
@@ -51,7 +51,7 @@ class SmoothMotion:
     @property
     def destinationPoint(self) -> ArcadePoint:
         """
-        Use for game piece motion.  This this the the ArcadePoint.
+        Use for game piece motion.  This is the ArcadePoint.
         Returns:
         """
         return self._destinationPoint
@@ -70,34 +70,34 @@ class SmoothMotion:
 
     def doMotion(self, gamePiece: GamePiece, destinationPoint: ArcadePoint, angleDiffRadians: float, actualAngleRadians: float):
 
-        dest_x: float = destinationPoint.x
-        dest_y: float = destinationPoint.y
+        destinationX: float = destinationPoint.x
+        destinationY: float = destinationPoint.y
 
         gamePiece.angle = degrees(actualAngleRadians) + self.imageRotation     # Convert back to degrees
 
         # Are we close to the correct angle? If so, move forward.
         if abs(angleDiffRadians) < pi / 4:
-            # self.change_x = cos(actualAngleRadians) * gamePiece.speed
-            # self.change_y = sin(actualAngleRadians) * gamePiece.speed
             gamePiece.change_x = cos(actualAngleRadians) * gamePiece.speed
             gamePiece.change_y = sin(actualAngleRadians) * gamePiece.speed
 
         # Fine-tune our change_x/change_y if we are really close to destinationPoint
         # point and just need to set to that location.
         traveling = False
-        if abs(gamePiece.center_x - dest_x) < abs(gamePiece.change_x):
-            gamePiece.center_x = dest_x
+        self._smoothMotionLogger.debug(f'{gamePiece.center_x=} {destinationX=} {gamePiece.center_y=} {destinationY=}')
+        if abs(gamePiece.center_x - destinationX) < abs(gamePiece.change_x):
+            gamePiece.center_x = destinationX
         else:
             gamePiece.center_x += gamePiece.change_x
             traveling = True
 
-        if abs(gamePiece.center_y - dest_y) < abs(gamePiece.change_y):
-            gamePiece.center_y = dest_y
+        if abs(gamePiece.center_y - destinationY) < abs(gamePiece.change_y):
+            gamePiece.center_y = destinationY
         else:
             gamePiece.center_y += gamePiece.change_y
             traveling = True
 
-        # If we have arrived, then way we are not in motion
+        # self._smoothMotionLogger.debug(f'({gamePiece.center_x},{gamePiece.center_y})')
+        # If we have arrived, then we are not in motion
         if not traveling:
             # self.destinationPoint = None      # Leave this set for klingon torpedo hit computation
             self._inMotion  = False
@@ -121,11 +121,11 @@ class SmoothMotion:
         # Position the start at our current location
         startX: float = currentPoint.x
         startY: float = currentPoint.y
-        destX:  float = destinationPoint.x
-        destY:  float = destinationPoint.y
+        destinationX:  float = destinationPoint.x
+        destinationY:  float = destinationPoint.y
 
-        xDiff: float = destX - startX
-        yDiff: float = destY - startY
+        xDiff: float = destinationX - startX
+        yDiff: float = destinationY - startY
 
         targetAngleRadians:   float = self.computeTargetAngle(xDiff, yDiff)
         actualAngleRadians:   float = radians(spriteRotationAngle - self.imageRotation)  # What angle are we at now in radians?
@@ -143,7 +143,7 @@ class SmoothMotion:
                                                   targetAngleRadians=targetAngleRadians, clockwise=clockwise)
 
         radianInfo: RadianInfo = RadianInfo(actualAngleRadians=actualAngleRadians, angleDiffRadians=angleDiffRadians)
-        # return actualAngleRadians, angleDiffRadians
+
         return radianInfo
 
     def computeTargetAngle(self, xDiff: float, yDiff: float) -> float:

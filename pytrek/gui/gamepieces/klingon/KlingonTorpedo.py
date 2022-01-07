@@ -8,7 +8,6 @@ from pytrek.gui.gamepieces.klingon.KlingonTorpedoFollower import KlingonTorpedoF
 
 
 class KlingonTorpedo(BaseEnemyTorpedo):
-
     FILENAME: str = 'KlingonTorpedo.png'
 
     nextId: int = 0

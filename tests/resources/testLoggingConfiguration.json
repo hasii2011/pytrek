@@ -32,7 +32,7 @@
             "propagate": "False"
         },
         "Test Shooter": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "TestSmoothMotion": {
@@ -40,7 +40,7 @@
             "propagate": "False"
         },
         "TestEventEngineScheduler": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "tests.pytrek.model.TestQuadrant": {
@@ -48,7 +48,7 @@
             "propagate": "False"
         },
         "tests.pytrek.model.TestGalaxy": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "tests.pytrek.engine.TestIntelligence": {
@@ -107,7 +107,6 @@
             "level": "WARNING",
             "propagate": "False"
         },
-
         "pytrek.model.Quadrant": {
             "level": "WARNING",
             "propagate": "False"
@@ -117,15 +116,26 @@
             "propagate": "False"
         },
         "pytrek.gui.gamepieces.SmoothMotion": {
-            "level": "WARNING",
+            "level": "DEBUG",
             "propagate": "False"
         },
         "pytrek.gui.CourseDistanceDialog": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         },
-
         "pytrek.mediators.EnterprisePhaserMediator": {
+            "level":     "WARNING",
+            "propagate": "False"
+        },
+        "pytrek.mediators.base.BaseMediator": {
+            "level":     "DEBUG",
+            "propagate": "False"
+        },
+        "pytrek.mediators.base.BaseTorpedoMediator": {
+            "level":     "DEBUG",
+            "propagate": "False"
+        },
+        "pytrek.gui.gamepieces.base.BaseEnemyTorpedo": {
             "level":     "WARNING",
             "propagate": "False"
         }

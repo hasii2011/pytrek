@@ -10,7 +10,6 @@ from pytrek.gui.gamepieces.commander.CommanderTorpedoFollower import CommanderTo
 
 
 class CommanderTorpedo(BaseEnemyTorpedo):
-
     FILENAME: str = 'CommanderTorpedo.png'
 
     nextId: int = 0
@@ -18,11 +17,9 @@ class CommanderTorpedo(BaseEnemyTorpedo):
     def __init__(self, speed: float = 3.0):
 
         torpedoId: EnemyTorpedoId = EnemyTorpedoId(f'CommanderTorpedo-{CommanderTorpedo.nextId}')
-
         CommanderTorpedo.nextId += 1
 
         super().__init__(filename=CommanderTorpedo.FILENAME, speed=speed, torpedoId=torpedoId, scale=0.4)
-
         self.logger: Logger = getLogger(__name__)
 
     def _placeTorpedoFollower(self, x: float, y: float):
