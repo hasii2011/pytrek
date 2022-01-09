@@ -29,8 +29,8 @@ class GalaxyView(View):
 
         self.texture = load_texture(fqFileName)
 
-        # Reset the viewport, necessary if we have a scrolling game and we need
-        # to reset the viewport back to the start so we can see what we draw.
+        # Reset the viewport, necessary if we have a scrolling game, and we need
+        # to reset the viewport back to the start, so we can see what we draw.
         # set_viewport(0, QUADRANT_GRID_WIDTH - 1, 0, QUADRANT_GRID_HEIGHT - 1)
         self._gameState: GameState          = GameState()
         self._mediator:  GalaxyViewMediator = GalaxyViewMediator()

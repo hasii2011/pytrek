@@ -1,0 +1,25 @@
+You are Captain of the starship 'Enterprise' with a mission to seek and destroy
+a fleet of enemy warships which are menacing the United Federation of Planets.
+
+You have a specified number of star dates in which to complete your mission.
+
+You also have a few Federation star bases for resupplying your ship.
+
+Commands
+---------
+Q - Quit You will have the option of saving your game.
+
+L - Long Range Sensor Scan - 9 Quadrants; Left mouse click to dismiss
+
+G - Galaxy Scan;  You can only see what has been "long range scanned";
+Left mouseclick to dismiss
+
+P - Fire Phasers; Computer controlled
+
+T - Fire Torpedoes; Computer controlled
+
+W - Warp to another quadrant; You provide quadrant number and speed
+
+D - Dock at star base;  Only valid if you are immediately adjacent to the base
+
+Left Mouse click - invokes impulse travel within the quadrant
