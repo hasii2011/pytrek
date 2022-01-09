@@ -1,4 +1,4 @@
-
+from collections import namedtuple
 from logging import Logger
 from logging import getLogger
 
@@ -11,6 +11,8 @@ from arcade.gui import UIAnchorWidget
 from arcade.gui import UIBoxLayout
 from arcade.gui import UILabel
 from arcade.gui import UIManager
+from arcade.gui import UIMouseScrollEvent
+from arcade.gui import UIOnClickEvent
 from arcade.gui import UIPadding
 from arcade.gui import UITextArea
 
@@ -21,6 +23,8 @@ from arcade.gui import UITextureButton
 from arcade.gui import UITexturePane
 
 from pytrek.LocateResources import LocateResources
+
+CreateTextResponse = namedtuple('CreateTextResponse', 'textArea, texturePane')
 
 
 class HelpView(View):
@@ -40,7 +44,10 @@ class HelpView(View):
         window.background_color = color.BLUE_YONDER
 
         title:               UILabel        = self._createLabel(text='PyArcadeStarTrek Help', height=24, fontSize=18)
-        wrappedHelpTextArea: UITexturePane  = self._createHelpTextArea()
+        createTextResponse: CreateTextResponse  = self._createHelpTextArea()
+
+        wrappedHelpTextArea: UITexturePane = createTextResponse.texturePane
+        self._helpTextArea:  UITextArea    = createTextResponse.textArea
 
         padding:   UIPadding = UIPadding(child=wrappedHelpTextArea, padding=(4, 4, 4, 4))
         buttonBox: UIBoxLayout = self._createScrollButtonContainer()
@@ -97,14 +104,21 @@ class HelpView(View):
                                                  downButton.with_space_around(bottom=10, top=10)
                                              ])
 
+        @upButton.event('on_click')
+        def onClickOk(event: UIOnClickEvent):
+            self._onClickUp(event)
+
+        @downButton.event('on_click')
+        def onClickOk(event: UIOnClickEvent):
+            self._onClickDown(event)
+
         return buttonBox
 
-    def _createHelpTextArea(self) -> UITexturePane:
+    def _createHelpTextArea(self) -> CreateTextResponse:
         """
         Creates and loads the help text
 
-        Returns:  The UITextArea loaded with help text wrapped by
-        a nice texture pane
+        Returns:  A named tuple that has the texture pane and the text area widgets
         """
         fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.RESOURCES_PACKAGE_NAME,
                                                            bareFileName='Help.txt')
@@ -124,8 +138,7 @@ class HelpView(View):
             tex=background,
             padding=(10, 10, 10, 10)
         )
-
-        return texturePane
+        return CreateTextResponse(textArea=textArea, texturePane=texturePane)
 
     def _createTextureButton(self, bareFileName: str) -> UITextureButton:
 
@@ -147,3 +160,26 @@ class HelpView(View):
                                                   width=32, height=32)
 
         return button
+
+    def _onClickUp(self, event: UIOnClickEvent):
+        self.__scrollHelp(event, -2)
+
+    def _onClickDown(self, event: UIOnClickEvent):
+        self.__scrollHelp(event, 2)
+
+    def __scrollHelp(self, event: UIOnClickEvent, scroll_y: int):
+        """
+        This is my hack to do scrolling.  I do not kno2 how to post an event on arcade's
+        UI event queue;  Not sure if that is possible at this point
+
+        Only scroll in the vertical direction
+
+        Args:
+            event:      Some UI event
+            scroll_y:   How much to scroll;  Negative numbers scroll up
+        """
+        x = self._helpTextArea.center_x
+        y = self._helpTextArea.center_y
+
+        mouseEvent: UIMouseScrollEvent = UIMouseScrollEvent(source=event.source, scroll_y=scroll_y, scroll_x=0, x=x, y=y)
+        self._helpTextArea.on_event(mouseEvent)
