@@ -4,18 +4,19 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-import arcade
 # noinspection PyPackageRequirements
 from PIL import ImageFont
 
 from arcade import Texture
 from arcade import View
 from arcade import Window
-from arcade import key
 
 from arcade import draw_lrwh_rectangle_textured
 from arcade import load_texture
 from arcade import start_render
+
+from arcade import key as arcadeKey
+from arcade import run as arcadeRun
 
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
@@ -32,6 +33,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.futures.EventEngine import EventEngine
 
 from pytrek.gui.GalaxyView import GalaxyView
+from pytrek.gui.HelpView import HelpView
 from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
@@ -190,30 +192,33 @@ class PyTrekView(View):
         For a full list of keys, see:
         https://arcade.academy/arcade.key.html
         """
-        if pressedKey == arcade.key.Q:
+        if pressedKey == arcadeKey.Q:
             import os
             # noinspection PyUnresolvedReferences
             # noinspection PyProtectedMember
             os._exit(0)
-        elif pressedKey == key.G:
+        elif pressedKey == arcadeKey.G:
             galaxyView: GalaxyView = GalaxyView(viewCompleteCallback=self._switchViewBack)
             self.window.show_view(galaxyView)
             self._gameEngine.resetOperationTime()
-        elif pressedKey == key.L:
+        elif pressedKey == arcadeKey.L:
             longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(viewCompleteCallback=self._switchViewBack)
             self.window.show_view(longRangeSensorView)
             self._gameEngine.resetOperationTime()
-        elif pressedKey == key.T:
+        elif pressedKey == arcadeKey.T:
             self._quadrantMediator.fireEnterpriseTorpedoes(self._quadrant)
             self._gameEngine.resetOperationTime()
-        elif pressedKey == key.P:
+        elif pressedKey == arcadeKey.P:
             self._quadrantMediator.firePhasers(self._quadrant)
             self._gameEngine.resetOperationTime()
-        elif pressedKey == key.D:
+        elif pressedKey == arcadeKey.D:
             self._quadrantMediator.dock(self._quadrant)
             self._gameEngine.resetOperationTime()
-        elif pressedKey == key.W:
+        elif pressedKey == arcadeKey.W:
             self._enterpriseMediator.warp()
+        elif pressedKey == arcadeKey.H or pressedKey == arcadeKey.QUESTION:
+            print('Asked for help!')
+            self._displayHelp()
 
     def on_mouse_motion(self, x: float, y: float, delta_x: float, delta_y: float):
         """
@@ -247,6 +252,12 @@ class PyTrekView(View):
 
         self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
 
+    def _displayHelp(self):
+
+        helpView: HelpView = HelpView(completeCallback=self._switchViewBack)
+
+        self.window.show_view(helpView)
+
     def _switchViewBack(self):
         self.window.show_view(self)
 
@@ -260,7 +271,7 @@ def main():
     arcadeWindow.show_view(gameView)
 
     gameView.setup()
-    arcade.run()
+    arcadeRun()
 
 
 if __name__ == "__main__":

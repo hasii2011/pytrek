@@ -9,7 +9,7 @@ from collections import namedtuple
 
 from arcade import Texture
 from arcade import View
-from arcade import Window
+
 from arcade import color
 
 from arcade.gui import UIAnchorWidget
@@ -26,8 +26,6 @@ from arcade.gui import UITexturePane
 from arcade import start_render
 from arcade import load_texture
 
-from arcade import key as arcadeKey
-
 from pytrek.LocateResources import LocateResources
 
 CreateTextResponse = namedtuple('CreateTextResponse', 'textArea, texturePane')
@@ -37,9 +35,9 @@ class HelpView(View):
 
     FONT_NAME: str = 'UniverseCondensed'
 
-    def __init__(self, window: Window, completeCallback: Callable):
+    def __init__(self, completeCallback: Callable):
 
-        super().__init__(window=window)
+        super().__init__()
 
         self.logger:            Logger   = getLogger(__name__)
         self._completeCallback: Callable = completeCallback
@@ -47,8 +45,6 @@ class HelpView(View):
         self._uiManager: UIManager = UIManager()
 
         self._uiManager.enable()
-
-        window.background_color = color.BLUE_YONDER
 
         title:               UILabel        = self._createLabel(text='PyArcadeStarTrek Help', height=24, fontSize=18)
         createTextResponse: CreateTextResponse  = self._createHelpTextArea()
@@ -86,16 +82,6 @@ class HelpView(View):
         """
         start_render()
         self._uiManager.draw()
-
-    def on_key_release(self, releasedKey: int, key_modifiers: int):
-        """
-        Called whenever the user lets off a previously pressed key.
-        """
-        if releasedKey == arcadeKey.Q:
-            import os
-            # noinspection PyUnresolvedReferences
-            # noinspection PyProtectedMember
-            os._exit(0)
 
     def _createLabel(self, text: str = '', height: int = 16, fontSize: int = 12) -> UILabel:
 
@@ -202,6 +188,7 @@ class HelpView(View):
     def _onClickDown(self, event: UIOnClickEvent):
         self.__scrollHelp(event, 2)
 
+    # noinspection PyUnusedLocal
     def _onClickOk(self, event: UIOnClickEvent):
         self._completeCallback()
 

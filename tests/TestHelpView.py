@@ -1,5 +1,6 @@
 
 from arcade import Window
+from arcade import color
 
 from arcade import run as arcadeRun
 
@@ -30,10 +31,12 @@ def main():
     SettingsCommon.determineSettingsLocation()
 
     arcadeWindow: Window = Window(title=SCREEN_TITLE, width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
-    # arcadeWindow.background_color = color.BLUE
+
+    arcadeWindow.background_color = color.BLUE_YONDER
+
     arcadeWindow.clear()
 
-    helpView:  HelpView = HelpView(window=arcadeWindow, completeCallback=completeCallback)
+    helpView:  HelpView = HelpView(completeCallback=completeCallback)
 
     arcadeWindow.show_view(helpView)
 
