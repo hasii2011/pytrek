@@ -21,9 +21,9 @@ from arcade import run as arcadeRun
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
+from pytrek.Constants import QUADRANT_GRID_WIDTH
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
-from pytrek.SoundMachine import SoundMachine
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
@@ -50,6 +50,8 @@ from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
+
+from pytrek.SoundMachine import SoundMachine
 
 from pytrek.GameState import GameState
 
@@ -232,7 +234,7 @@ class PyTrekView(View):
         Called when the user presses a mouse button.
         """
         arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
-        if y >= CONSOLE_HEIGHT:
+        if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_HEIGHT :
             self._enterpriseMediator.impulse(quadrant=self._quadrant, arcadePoint=arcadePoint)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
