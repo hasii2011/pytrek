@@ -1,16 +1,27 @@
+
 from arcade import Window
-from arcade import color
 
 from arcade import run as arcadeRun
 
 from pytrek.gui.HelpView import HelpView
 
 from pytrek.settings.SettingsCommon import SettingsCommon
+
 from tests.TestBase import TestBase
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Test Help View"
+
+
+def completeCallback():
+
+    import os
+
+    print(f'Help View has been terminated')
+    # noinspection PyUnresolvedReferences
+    # noinspection PyProtectedMember
+    os._exit(0)
 
 
 def main():
@@ -22,7 +33,7 @@ def main():
     # arcadeWindow.background_color = color.BLUE
     arcadeWindow.clear()
 
-    helpView:  HelpView = HelpView(window=arcadeWindow)
+    helpView:  HelpView = HelpView(window=arcadeWindow, completeCallback=completeCallback)
 
     arcadeWindow.show_view(helpView)
 

@@ -1,5 +1,6 @@
 
 from typing import Dict
+from typing import Callable
 
 from logging import Logger
 from logging import getLogger
@@ -36,11 +37,12 @@ class HelpView(View):
 
     FONT_NAME: str = 'UniverseCondensed'
 
-    def __init__(self, window: Window):
+    def __init__(self, window: Window, completeCallback: Callable):
 
         super().__init__(window=window)
 
-        self.logger: Logger = getLogger(__name__)
+        self.logger:            Logger   = getLogger(__name__)
+        self._completeCallback: Callable = completeCallback
 
         self._uiManager: UIManager = UIManager()
 
@@ -201,7 +203,7 @@ class HelpView(View):
         self.__scrollHelp(event, 2)
 
     def _onClickOk(self, event: UIOnClickEvent):
-        pass
+        self._completeCallback()
 
     def __scrollHelp(self, event: UIOnClickEvent, scroll_y: int):
         """
