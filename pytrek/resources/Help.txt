@@ -12,7 +12,7 @@ Q - Quit You will have the option of saving your game.
 L - Long Range Sensor Scan - 9 Quadrants; Left mouse click to dismiss
 
 G - Galaxy Scan;  You can only see what has been "long range scanned";
-Left mouseclick to dismiss
+Left mouse click to dismiss
 
 P - Fire Phasers; Computer controlled
 

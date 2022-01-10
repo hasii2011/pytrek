@@ -1,12 +1,16 @@
-from collections import namedtuple
+
+from typing import Dict
+
 from logging import Logger
 from logging import getLogger
+
+from collections import namedtuple
 
 from arcade import Texture
 from arcade import View
 from arcade import Window
 from arcade import color
-from arcade import load_texture
+
 from arcade.gui import UIAnchorWidget
 from arcade.gui import UIBoxLayout
 from arcade.gui import UILabel
@@ -15,12 +19,13 @@ from arcade.gui import UIMouseScrollEvent
 from arcade.gui import UIOnClickEvent
 from arcade.gui import UIPadding
 from arcade.gui import UITextArea
-
-from arcade import start_render
-
-from arcade import key as arcadeKey
 from arcade.gui import UITextureButton
 from arcade.gui import UITexturePane
+
+from arcade import start_render
+from arcade import load_texture
+
+from arcade import key as arcadeKey
 
 from pytrek.LocateResources import LocateResources
 
@@ -58,10 +63,12 @@ class HelpView(View):
                                             buttonBox.with_space_around(left=15, top=20),
                                         ])
 
+        okButton: UITextureButton = self._createOkButton()
         mainBox: UIBoxLayout = UIBoxLayout(vertical=True,
                                            children=[
                                                title.with_space_around(top=20),
-                                               hBox
+                                               hBox,
+                                               okButton
                                            ])
 
         self._uiManager.add(
@@ -105,11 +112,11 @@ class HelpView(View):
                                              ])
 
         @upButton.event('on_click')
-        def onClickOk(event: UIOnClickEvent):
+        def onClickUp(event: UIOnClickEvent):
             self._onClickUp(event)
 
         @downButton.event('on_click')
-        def onClickOk(event: UIOnClickEvent):
+        def onClickDown(event: UIOnClickEvent):
             self._onClickDown(event)
 
         return buttonBox
@@ -161,11 +168,40 @@ class HelpView(View):
 
         return button
 
+    def _createOkButton(self) -> UITextureButton:
+
+        buttonFileName:        str = LocateResources.getResourcesPath(LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='HelpOkButton.png')
+        pressedButtonFileName: str = LocateResources.getResourcesPath(LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='HelpOkButtonPressed.png')
+        hoveredButtonFileName: str = LocateResources.getResourcesPath(LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='HelpOkButtonHovered.png')
+
+        okButtonTexture:        Texture = load_texture(buttonFileName)
+        okButtonPressedTexture: Texture = load_texture(pressedButtonFileName)
+        okButtonHoveredTexture: Texture = load_texture(hoveredButtonFileName)
+
+        buttonStyle: Dict = {'font_name': 'arial',
+                             'font_size': 12
+                             }
+
+        okButton: UITextureButton = UITextureButton(width=35, height=35,
+                                                    texture=okButtonTexture,
+                                                    texture_pressed=okButtonPressedTexture,
+                                                    texture_hovered=okButtonHoveredTexture,
+                                                    style=buttonStyle)
+
+        @okButton.event('on_click')
+        def onClickOk(event: UIOnClickEvent):
+            self._onClickOk(event)
+
+        return okButton
+
     def _onClickUp(self, event: UIOnClickEvent):
         self.__scrollHelp(event, -2)
 
     def _onClickDown(self, event: UIOnClickEvent):
         self.__scrollHelp(event, 2)
+
+    def _onClickOk(self, event: UIOnClickEvent):
+        pass
 
     def __scrollHelp(self, event: UIOnClickEvent, scroll_y: int):
         """

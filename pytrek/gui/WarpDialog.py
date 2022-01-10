@@ -182,13 +182,11 @@ class WarpDialog(View):
         buttonStyle: Dict = {'font_name': 'arial',
                              'font_size': 12
                              }
-        # okButton: UIFlatButton = UIFlatButton(text='Ok', width=75, height=35, style=buttonStyle)
         okButton: UITextureButton = UITextureButton(width=35, height=35,
                                                     texture=okButtonTexture,
                                                     texture_pressed=okButtonPressedTexture,
                                                     style=buttonStyle)
 
-        # cancelButton: UIFlatButton = UIFlatButton(text='Cancel', width=75, height=35, style=buttonStyle)
         cancelButton: UITextureButton = UITextureButton(width=35, height=35,
                                                         texture=cancelButtonTexture,
                                                         texture_pressed=cancelButtonPressedTexture,
