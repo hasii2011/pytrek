@@ -144,6 +144,9 @@ class QuadrantMediator(Singleton):
 
         currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
 
+        if self._gameSettings.debugManualPlaceShipInQuadrant is True:
+            currentSectorCoordinates = self._gameSettings.manualSectorCoordinates
+
         playerList: SpriteList = SpriteList()
         playerList.append(enterprise)
 

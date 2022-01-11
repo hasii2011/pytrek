@@ -10,6 +10,7 @@ from pytrek.Singleton import Singleton
 
 from pytrek.engine.GameType import GameType
 from pytrek.engine.PlayerType import PlayerType
+from pytrek.model.Coordinates import Coordinates
 
 from pytrek.settings.FactorsSettings import FactorsSettings
 from pytrek.settings.GameLevelSettings import GameLevelSettings
@@ -204,6 +205,22 @@ class GameSettings(Singleton):
     @property
     def emeritusTorpedoSpeeds(self) -> TorpedoSpeeds:
         return self._torpedoSpeeds.emeritusTorpedoSpeeds
+
+    @property
+    def debugManualPlaceShipInQuadrant(self) -> bool:
+        return self._debug.manualPlaceShipInQuadrant
+
+    @debugManualPlaceShipInQuadrant.setter
+    def debugManualPlaceShipInQuadrant(self, newValue: bool):
+        self._debug.manualPlaceShipInQuadrant = newValue
+
+    @property
+    def manualSectorCoordinates(self) -> Coordinates:
+        return self._debug.manualSectorCoordinates
+
+    @manualSectorCoordinates.setter
+    def manualSectorCoordinates(self, newValue: Coordinates):
+        self._debug.manualSectorCoordinates = newValue
 
     @property
     def debugAddKlingons(self) -> bool:

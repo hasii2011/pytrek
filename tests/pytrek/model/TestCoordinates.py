@@ -7,6 +7,8 @@ from logging import getLogger
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from pytrek.Constants import MAX_SECTOR_X_COORDINATE
+from pytrek.Constants import MAX_SECTOR_Y_COORDINATE
 from pytrek.engine.Direction import Direction
 from pytrek.model.Coordinates import Coordinates
 from pytrek.settings.SettingsCommon import SettingsCommon
@@ -140,6 +142,37 @@ class TestCoordinates(TestBase):
     def testYHighBoundaryOk(self):
         coordinate = Coordinates(0, 9)
         self.assertTrue(coordinate.valid())
+
+    def testToCoordinatesNotNone(self):
+        values: str = '5,5'
+        coordinates: Coordinates = Coordinates.toCoordinates(values=values)
+
+        self.assertIsNotNone(coordinates, 'Should get something!!')
+
+    def testToCoordinatesSimple(self):
+        values: str = '5,5'
+        actualCoordinates:   Coordinates = Coordinates.toCoordinates(values=values)
+        expectedCoordinates: Coordinates = Coordinates(5, 5)
+
+        self.assertEqual(expectedCoordinates, actualCoordinates, 'Did not get appropriate coordinates')
+
+    def testToCoordinatesInvalidX(self):
+
+        invalidX: int = MAX_SECTOR_X_COORDINATE + 1
+        values: str = f'{invalidX},5'
+        actualCoordinates:   Coordinates = Coordinates.toCoordinates(values=values)
+        expectedCoordinates: Coordinates = Coordinates(0, 0)
+
+        self.assertEqual(expectedCoordinates, actualCoordinates, 'Did not detect invalid X')
+
+    def testToCoordinatesInvalidY(self):
+
+        invalidY: int = MAX_SECTOR_Y_COORDINATE + 1
+        values: str = f'5,{invalidY}'
+        actualCoordinates:   Coordinates = Coordinates.toCoordinates(values=values)
+        expectedCoordinates: Coordinates = Coordinates(0, 0)
+
+        self.assertEqual(expectedCoordinates, actualCoordinates, 'Did not detect invalid Y')
 
 
 def suite() -> TestSuite:

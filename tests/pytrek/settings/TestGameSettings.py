@@ -7,6 +7,7 @@ from logging import getLogger
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from pytrek.model.Coordinates import Coordinates
 from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
@@ -188,6 +189,31 @@ class TestGameSettings(TestBase):
         self._settings.scheduleCommanderAttacksBase = False
         self.assertEqual(False, self._settings.scheduleCommanderAttacksBase, 'Value did not change')
         self._settings.scheduleCommanderAttacksBase = saveSetting
+
+    def testDebugManualPlaceShipInQuadrant(self):
+
+        saveSetting: bool = self._settings.debugManualPlaceShipInQuadrant
+        if saveSetting is False:
+            self._settings.debugManualPlaceShipInQuadrant = True
+            actualValue: bool = self._settings.debugManualPlaceShipInQuadrant
+            self.assertEqual(True, actualValue, 'Value did not change to True')
+        else:
+            self._settings.debugManualPlaceShipInQuadrant = False
+            actualValue: bool = self._settings.debugManualPlaceShipInQuadrant
+            self.assertEqual(False, actualValue, 'Value did not change to False')
+
+        self._settings.debugManualPlaceShipInQuadrant = saveSetting
+
+    def testManualSectorCoordinates(self):
+        saveSetting: Coordinates = self._settings.manualSectorCoordinates
+
+        expectedCoordinates: Coordinates = Coordinates(x=7, y=7)
+        self._settings.manualSectorCoordinates = expectedCoordinates
+        actualCoordinates: Coordinates =  self._settings.manualSectorCoordinates
+
+        self.assertEqual(expectedCoordinates, actualCoordinates, 'Ship manual positioning coordinates did not change')
+
+        self._settings.manualSectorCoordinates = saveSetting
 
 
 def suite() -> TestSuite:

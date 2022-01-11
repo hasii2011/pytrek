@@ -1,5 +1,6 @@
 
 from dataclasses import dataclass
+from typing import List
 
 from pytrek.Constants import MAXIMUM_COORDINATE
 from pytrek.Constants import MINIMUM_COORDINATE
@@ -65,6 +66,27 @@ class Coordinates:
             assert False
 
         return newCoordinates
+
+    @classmethod
+    def toCoordinates(cls, values: str) -> "Coordinates":
+        """
+        Assumes the string is in the format x,y;  e.g. '0,0' or '5,5'
+
+        Args:
+            values: The string representation
+
+        Returns:  A Coordinate object
+        """
+        valueList: List[str] = values.split(',')
+
+        x: int = int(valueList[0])
+        y: int = int(valueList[1])
+
+        coordinates: Coordinates = Coordinates(x=x, y=y)
+        if coordinates.valid() is False:
+            coordinates = Coordinates(x=0, y=0)
+
+        return coordinates
 
     def __repr__(self):
         return f"({self.x},{self.y})"

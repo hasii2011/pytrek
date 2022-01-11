@@ -1,6 +1,7 @@
 from logging import Logger
 from logging import getLogger
 
+from pytrek.model.Coordinates import Coordinates
 from pytrek.settings.BaseSubSetting import BaseSubSetting
 from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.SettingsCommon import SettingsNameValues
@@ -10,6 +11,8 @@ class DebugSettings(BaseSubSetting):
 
     DEBUG_SECTION: str = 'Debug'
 
+    MANUAL_PLACE_SHIP_IN_QUADRANT: str = 'manual_place_ship_in_quadrant'
+    MANUAL_SECTOR_COORDINATES:     str = 'manual_sector_coordinates'
     ADD_KLINGONS:             str = 'add_klingons'
     KLINGON_COUNT:            str = 'klingon_count'
     ADD_COMMANDERS:           str = 'add_commanders'
@@ -28,12 +31,14 @@ class DebugSettings(BaseSubSetting):
     COLLECT_SUPER_COMMANDER_QUADRANT_COORDINATES: str = 'collect_super_commander_quadrant_coordinates'
     ANNOUNCE_QUADRANT_CREATION:                   str = 'announce_quadrant_creation'
 
-    CONSOLE_SHOW_INTERNALS: str = 'console_show_internals'
+    CONSOLE_SHOW_INTERNALS:          str = 'console_show_internals'
     SCHEDULE_SUPER_NOVA:             str = 'schedule_super_nova'
     SCHEDULE_TRACTOR_BEAM:           str = 'schedule_tractor_beam'
     SCHEDULE_COMMANDER_ATTACKS_BASE: str = 'schedule_commander_attacks_base'
 
     DEBUG_SETTINGS: SettingsNameValues = SettingsNameValues({
+        MANUAL_PLACE_SHIP_IN_QUADRANT: 'False',
+        MANUAL_SECTOR_COORDINATES:     '0,0',
         ADD_KLINGONS:  'False',
         KLINGON_COUNT: '2',
         ADD_COMMANDERS: 'False',
@@ -68,6 +73,26 @@ class DebugSettings(BaseSubSetting):
 
     def addMissingSettings(self):
         self._settingsCommon.addMissingSettings(sectionName=DebugSettings.DEBUG_SECTION, nameValues=DebugSettings.DEBUG_SETTINGS)
+
+    @property
+    def manualPlaceShipInQuadrant(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.MANUAL_PLACE_SHIP_IN_QUADRANT)
+
+    @manualPlaceShipInQuadrant.setter
+    def manualPlaceShipInQuadrant(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.MANUAL_PLACE_SHIP_IN_QUADRANT, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def manualSectorCoordinates(self) -> Coordinates:
+        values: str = self._config.get(DebugSettings.DEBUG_SECTION, DebugSettings.MANUAL_SECTOR_COORDINATES)
+        return Coordinates.toCoordinates(values)
+
+    @manualSectorCoordinates.setter
+    def manualSectorCoordinates(self, newValue: Coordinates):
+        values: str = f'{newValue.x},{newValue.y}'
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.MANUAL_SECTOR_COORDINATES, values)
+        self._settingsCommon.saveSettings()
 
     @property
     def addKlingons(self) -> bool:
