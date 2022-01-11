@@ -234,7 +234,7 @@ class PyTrekView(View):
         Called when the user presses a mouse button.
         """
         arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
-        if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_HEIGHT :
+        if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_HEIGHT:
             self._enterpriseMediator.impulse(quadrant=self._quadrant, arcadePoint=arcadePoint)
 
     def on_mouse_release(self, x, y, button, key_modifiers):

@@ -20,6 +20,7 @@ from pytrek.GameState import GameState
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.GameType import GameType
 from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.Intelligence import TractorBeamComputation
 from pytrek.engine.PlayerType import PlayerType
 from pytrek.gui.gamepieces.PlanetType import PlanetType
 
@@ -568,6 +569,14 @@ class TestIntelligence(TestBase):
 
         ans: bool = (medianStatistic > 2.0) and (medianStatistic < 4.0)
         self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
+
+    def testComputeTractorBeamFactors(self):
+
+        expendedEnergy: float = 200.00
+
+        factors: TractorBeamComputation = self.smarty.computeTractorBeamFactors(energy=expendedEnergy)
+
+        self.assertTrue(6.0 <= factors.warpFactor <= 8.0, msg='The answer is not close enough')
 
     def _runKlingonCountTest(self, gameType: GameType, playerType: PlayerType) -> float:
 
