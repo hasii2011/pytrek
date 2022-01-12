@@ -9,6 +9,7 @@ from logging import Logger
 from logging import getLogger
 
 from arcade import MOUSE_BUTTON_LEFT
+
 from arcade import Sprite
 from arcade import SpriteList
 from arcade import Texture
@@ -202,23 +203,7 @@ class TestShooting(View):
         Called when the user presses a mouse button.
         """
         self.logger.info(f'{button=} {keyModifiers=}')
-        if button == MOUSE_BUTTON_LEFT and keyModifiers == 0:
-
-            if self._selectedGamePiece is None:
-                clickedPaletteSprites: List[Sprite] = get_sprites_at_point(point=(x, y), sprite_list=self._staticSprites)
-
-                for paletteSprite in clickedPaletteSprites:
-                    paletteSprite.color = color.BLACK
-                    self._selectedGamePiece = paletteSprite
-            else:
-                # A palette sprite is selected
-                self._placeSpriteOnBoard(x=x, y=y)
-
-                self.logger.info(f'Clear selected Sprite')
-                self._selectedGamePiece.color = color.WHITE
-                self._selectedGamePiece       = cast(GamePiece, None)
-
-        elif button == MOUSE_BUTTON_LEFT and keyModifiers == arcadeKey.MOD_CTRL:
+        if button == MOUSE_BUTTON_LEFT and keyModifiers == arcadeKey.MOD_CTRL:
             # Try klingons first
             clickedEnemies: List[Sprite] = get_sprites_at_point(point=(x, y), sprite_list=self._quadrantMediator.klingonList)
 
@@ -233,6 +218,21 @@ class TestShooting(View):
             for enemy in clickedEnemies:
                 print(f'Delete {enemy}')
                 enemy.remove_from_sprite_lists()
+        elif button == MOUSE_BUTTON_LEFT:
+
+            if self._selectedGamePiece is None:
+                clickedPaletteSprites: List[Sprite] = get_sprites_at_point(point=(x, y), sprite_list=self._staticSprites)
+
+                for paletteSprite in clickedPaletteSprites:
+                    paletteSprite.color = color.BLACK
+                    self._selectedGamePiece = paletteSprite
+            else:
+                # A palette sprite is selected
+                self._placeSpriteOnBoard(x=x, y=y)
+
+                self.logger.info(f'Clear selected Sprite')
+                self._selectedGamePiece.color = color.WHITE
+                self._selectedGamePiece       = cast(GamePiece, None)
 
         arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
         self._quadrantMediator.handleMousePress(quadrant=self._quadrant, arcadePoint=arcadePoint, button=button, keyModifiers=keyModifiers)

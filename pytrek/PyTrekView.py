@@ -7,6 +7,8 @@ from logging import getLogger
 # noinspection PyPackageRequirements
 from PIL import ImageFont
 
+from arcade import MOUSE_BUTTON_LEFT
+
 from arcade import Texture
 from arcade import View
 from arcade import Window
@@ -233,9 +235,10 @@ class PyTrekView(View):
         """
         Called when the user presses a mouse button.
         """
-        arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
-        if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_HEIGHT:
-            self._enterpriseMediator.impulse(quadrant=self._quadrant, arcadePoint=arcadePoint)
+        if button == MOUSE_BUTTON_LEFT:
+            arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
+            if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_HEIGHT:
+                self._enterpriseMediator.impulse(quadrant=self._quadrant, arcadePoint=arcadePoint)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
