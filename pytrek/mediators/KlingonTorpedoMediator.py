@@ -13,6 +13,7 @@ from pytrek.gui.gamepieces.base.BaseAnimator import TextureList
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 
 from pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosion import KlingonTorpedoExplosion
@@ -57,7 +58,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
     def update(self, quadrant: Quadrant):
 
-        self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.klingons)
+        self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.klingons, rotationAngle=Klingon.ROTATION_ANGLE)
         self.torpedoes.update()
         self.torpedoFollowers.update()
         self.torpedoExplosions.update()

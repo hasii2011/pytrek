@@ -82,6 +82,7 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
             # self._baseEnemyTorpedoLogger.debug(f'{radianInfo=} {self.destinationPoint=}')
             self.doMotion(gamePiece=self, destinationPoint=self.destinationPoint,
                           angleDiffRadians=radianInfo.angleDiffRadians, actualAngleRadians=radianInfo.actualAngleRadians)
+            # self.doMotion2(gamePiece=self, destinationPoint=self.destinationPoint)
 
             self._potentiallyCreateAFollower()
 

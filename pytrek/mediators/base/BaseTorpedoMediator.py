@@ -11,8 +11,10 @@ from arcade import check_for_collision_with_list
 
 from pytrek.SoundMachine import SoundMachine
 from pytrek.SoundMachine import SoundType
+
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.ShieldHitData import ShieldHitData
+
 from pytrek.engine.devices.Devices import Devices
 
 from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
@@ -33,6 +35,8 @@ from pytrek.mediators.base.MissesMediator import Torpedoes
 
 from pytrek.model.Quadrant import Quadrant
 
+from pytrek.Constants import MILLISECONDS
+
 
 class BaseTorpedoMediator(MissesMediator):
 
@@ -40,18 +44,16 @@ class BaseTorpedoMediator(MissesMediator):
 
         super().__init__()
 
-        self._baseTorpedoMediatorLogger: Logger = getLogger(__name__)
-
-        self._soundMachine: SoundMachine = SoundMachine()
-
-        self._devices: Devices = Devices()
+        self._baseTorpedoMediatorLogger: Logger       = getLogger(__name__)
+        self._soundMachine:              SoundMachine = SoundMachine()
+        self._devices:                   Devices      = Devices()
 
         self._torpedoes:        SpriteList = SpriteList()
         self._explosions:       SpriteList = SpriteList()
         self._torpedoFollowers: SpriteList = SpriteList(is_static=True)
         self._misses:           SpriteList = SpriteList()
 
-        self._lastTimeCheck:  float = self._gameEngine.gameClock / 1000
+        self._lastTimeCheck:  float = self._gameEngine.gameClock / MILLISECONDS
 
         self._baseTorpedoMediatorLogger.info(f'{self._lastTimeCheck=}')
 
@@ -162,7 +164,7 @@ class BaseTorpedoMediator(MissesMediator):
         Args:
             quadrant:   Quadrant we are in
             enemies:    The enemies to fire from
-            rotationAngle: The offset to add to the image when pointing at enterprise
+            rotationAngle: The offset to add to the image when pointing at the enterprise
         """
 
         currentTime: float = self._gameEngine.gameClock
@@ -172,7 +174,7 @@ class BaseTorpedoMediator(MissesMediator):
             if deltaClockTime > enemy.firingInterval:
                 self._baseTorpedoMediatorLogger.debug(f'Time for {enemy} to fire torpedoes')
 
-                endPoint:            ArcadePoint = ArcadePoint(x=quadrant.enterprise.center_x, y=quadrant.enterprise.center_y)
+                endPoint:            ArcadePoint         = ArcadePoint(x=quadrant.enterprise.center_x, y=quadrant.enterprise.center_y)
                 lineOfSightResponse: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant, shooter=enemy, endPoint=endPoint)
                 if lineOfSightResponse.answer is True:
                     self._pointAtEnterprise(enemy=enemy, enterprise=quadrant.enterprise, rotationAngle=rotationAngle)

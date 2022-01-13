@@ -23,7 +23,6 @@ GALAXY_COLUMNS: int = 10
 MINIMUM_COORDINATE: int = 0     # These should match the galaxy/quadrant size
 MAXIMUM_COORDINATE: int = 9     # Currently, assumed that are the same size
 
-
 STANDARD_SPRITE_WIDTH:  int = 32
 STANDARD_SPRITE_HEIGHT: int = 32
 
@@ -49,3 +48,5 @@ FIXED_WIDTH_FONT_FILENAME: str = f'{FIXED_WIDTH_FONT_NAME}.ttf'
 
 MINIMUM_WARP_FACTOR_VALUE: float = 1.0  # Below 1.0 is considered impulse speed
 MAXIMUM_WARP_FACTOR_VALUE: float = 9.9  # The theoretical max warp speed
+
+MILLISECONDS: float = 1000.0       # milliseconds in a second, duh !!

@@ -39,7 +39,6 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
 
         self.logger:        Logger       = getLogger(__name__)
         self._soundMachine: SoundMachine = SoundMachine()
-
         super().__init__()
 
         self._explosionTextures: TextureList = self._loadTorpedoExplosionTextures()
