@@ -128,11 +128,11 @@
             "propagate": "False"
         },
         "pytrek.mediators.base.BaseMediator": {
-            "level":     "DEBUG",
+            "level":     "WARNING",
             "propagate": "False"
         },
         "pytrek.mediators.base.BaseTorpedoMediator": {
-            "level":     "DEBUG",
+            "level":     "WARNING",
             "propagate": "False"
         },
         "pytrek.gui.gamepieces.base.BaseEnemyTorpedo": {

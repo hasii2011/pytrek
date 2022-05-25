@@ -216,7 +216,7 @@ class TestShooting(View):
                 clickedEnemies = get_sprites_at_point(point=(x, y), sprite_list=self._quadrantMediator.superCommanderList)
 
             for enemy in clickedEnemies:
-                print(f'Delete {enemy}')
+                self.logger.info(f'Delete {enemy}')
                 enemy.remove_from_sprite_lists()
         elif button == MOUSE_BUTTON_LEFT:
 
