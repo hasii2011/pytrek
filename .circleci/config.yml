@@ -1,0 +1,37 @@
+
+version: '2.1'
+
+orbs:
+  python: circleci/python@2.1.1
+
+workflows:
+  main:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+
+jobs:
+  build:
+    docker:
+      - image: cimg/python:3.10-browsers
+    executor: python/default
+    steps:
+      - checkout
+      - run:
+          name: Install library dependencies
+          command: |
+            sudo apt install libjpeg-dev zlib1g-dev
+            sudo apt-get install freeglut3-dev
+            pip install --upgrade pip
+            python3 --version
+            pip install html-testRunner
+            pip install pyglet
+            pip install jsonpickle
+            pip install arcade
+            pip install Shapely
+      - run:
+            name: run tests
+            command: | 
+              scripts/runtests.sh
