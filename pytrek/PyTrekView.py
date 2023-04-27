@@ -107,7 +107,6 @@ class PyTrekView(View):
         self._soundMachine:     SoundMachine     = cast(SoundMachine, None)
 
         self._eventEngine: EventEngine = cast(EventEngine, None)
-
         #
         # I am cheating here because I know arcade use PIL under the covers
         #
@@ -204,11 +203,11 @@ class PyTrekView(View):
             os._exit(0)
         elif pressedKey == arcadeKey.G:
             galaxyView: GalaxyView = GalaxyView(viewCompleteCallback=self._switchViewBack)
-            self.window.show_view(galaxyView)
+            self.window.show_view(galaxyView)   # type: ignore
             self._gameEngine.resetOperationTime()
         elif pressedKey == arcadeKey.L:
             longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(viewCompleteCallback=self._switchViewBack)
-            self.window.show_view(longRangeSensorView)
+            self.window.show_view(longRangeSensorView)      # type: ignore
             self._gameEngine.resetOperationTime()
         elif pressedKey == arcadeKey.T:
             self._quadrantMediator.fireEnterpriseTorpedoes(self._quadrant)
@@ -262,10 +261,10 @@ class PyTrekView(View):
 
         helpView: HelpView = HelpView(completeCallback=self._switchViewBack)
 
-        self.window.show_view(helpView)
+        self.window.show_view(helpView)     # type: ignore
 
     def _switchViewBack(self):
-        self.window.show_view(self)
+        self.window.show_view(self)     # type: ignore
 
 
 def main():

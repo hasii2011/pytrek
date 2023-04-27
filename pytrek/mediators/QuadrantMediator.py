@@ -20,9 +20,9 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.gui.MessageConsole import MessageConsole
+from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
 
 from pytrek.gui.gamepieces.commander.Commander import Commander
-from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
@@ -46,12 +46,11 @@ from pytrek.settings.GameSettings import GameSettings
 
 
 class QuadrantMediator(Singleton):
-
     """
-    This class avoids putting UI logic (arcade) in the model class, Quadrant.
+    This class avoids implementing UI logic (arcade) in the model class, Quadrant.
     """
-    # noinspection SpellCheckingInspection
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
 
         self.logger: Logger = getLogger(__name__)
 
@@ -84,6 +83,7 @@ class QuadrantMediator(Singleton):
     def playerList(self) -> SpriteList:
         return self._playerList
 
+    # noinspection PyAttributeOutsideInit
     @playerList.setter
     def playerList(self, newValues: SpriteList):
         self._playerList = newValues
@@ -92,6 +92,7 @@ class QuadrantMediator(Singleton):
     def klingonList(self) -> SpriteList:
         return self._klingonList
 
+    # noinspection PyAttributeOutsideInit
     @klingonList.setter
     def klingonList(self, newValues: SpriteList):
         self._klingonList     = newValues
@@ -100,6 +101,7 @@ class QuadrantMediator(Singleton):
     def commanderList(self) -> SpriteList:
         return self._commanderList
 
+    # noinspection PyAttributeOutsideInit
     @commanderList.setter
     def commanderList(self, newValues: SpriteList):
         self._commanderList = newValues
@@ -108,6 +110,7 @@ class QuadrantMediator(Singleton):
     def superCommanderList(self) -> SpriteList:
         return self._superCommanderList
 
+    # noinspection PyAttributeOutsideInit
     @superCommanderList.setter
     def superCommanderList(self, newValues: SpriteList):
         self._superCommanderList = newValues
@@ -200,8 +203,8 @@ class QuadrantMediator(Singleton):
                 sector: Sector = quadrant.getSector(Coordinates(x, y))
                 self.logger.debug(f'{sector}')
 
-                gamePiece: GamePiece = sector.sprite
-                sectorType: SectorType = sector.type
+                gamePiece:  BaseGamePiece = sector.sprite
+                sectorType: SectorType    = sector.type
 
                 if sectorType != SectorType.EMPTY:
                     if sectorType == SectorType.KLINGON:

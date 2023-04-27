@@ -99,9 +99,9 @@ class EnterpriseMediator(MissesMediator):
         #
         # Get warp speed and target quadrant coordinates from user
         # Stub out for now
-        warpTravelDialog: WarpDialog = WarpDialog(window=self._view.window, completeCallback=self._warpTravelDialogComplete)
+        warpTravelDialog: WarpDialog = WarpDialog(window=self._view.window, completeCallback=self._warpTravelDialogComplete)    # type: ignore
 
-        self._view.window.show_view(warpTravelDialog)
+        self._view.window.show_view(warpTravelDialog)   # type: ignore
 
     def _warpTravelDialogComplete(self, warpTravelAnswer: WarpTravelAnswer):
         """
@@ -115,7 +115,7 @@ class EnterpriseMediator(MissesMediator):
             self._warpSpeed              = warpTravelAnswer.warpFactor
             self._destinationCoordinates = warpTravelAnswer.coordinates
 
-            viewWindow:   Window = self._view.window
+            viewWindow:   Window = self._view.window        # type: ignore
             screenWidth:  int    = viewWindow.width
             screenHeight: int    = viewWindow.height
             warpEffect: WarpEffect = WarpEffect(screenWidth=screenWidth, screenHeight=screenHeight)
@@ -127,9 +127,9 @@ class EnterpriseMediator(MissesMediator):
             # I do not know what a Number is  tell mypy so
             schedule(function_pointer=self.doWarpWhenEffectComplete, interval=1.0)  # type: ignore
         else:
-            self._view.window.show_view(self._view)
+            self._view.window.show_view(self._view)     # type: ignore
 
-        self._view.window.background_color = color.BLACK
+        self._view.window.background_color = color.BLACK    # type: ignore
 
     def doWarpWhenEffectComplete(self, deltaTime: float):
 
@@ -139,7 +139,7 @@ class EnterpriseMediator(MissesMediator):
 
         if effectComplete is True:
             unschedule(self.doWarpWhenEffectComplete)
-            self._view.window.show_view(self._view)
+            self._view.window.show_view(self._view)     # type: ignore
             #
             # Callback to someone (presumably top level view) to let them know
             # it is time to warp;

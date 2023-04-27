@@ -1,6 +1,9 @@
 setuptools==67.7.2
-arcade~=2.6.7
-jsonpickle~=2.0.0
+wheel==0.40.0
 html-testRunner~=1.2.1
-mypy~=0.930
-Shapely~=1.8.0
+mypy~=1.2.0
+
+jsonpickle==3.0.1
+
+arcade~=2.6.7
+shapely~=2.0.1

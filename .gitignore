@@ -6,7 +6,7 @@ __pycache__/
 /build/
 /dist/
 /pyenv-3.9.1/
-/venv-pyenv-3.9.1.alternate/
+/pyenv-3.9.16
 /archive/
 /UNKNOWN.egg-info
 .envrc

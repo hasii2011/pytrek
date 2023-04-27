@@ -434,7 +434,7 @@ class Quadrant:
 
     def _createQuadrant(self):
         for y in range(QUADRANT_ROWS):
-            row: List[Sector] = []
+            row: SectorRow = SectorRow([])
             for x in range(QUADRANT_COLUMNS):
 
                 coordinates: Coordinates = Coordinates(x=x, y=y)

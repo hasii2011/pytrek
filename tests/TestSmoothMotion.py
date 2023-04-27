@@ -49,7 +49,7 @@ class TestSmoothMotion(TestBase):
                                               spriteRotationAngle=0,
                                               rotationalSpeed=TestSmoothMotion.TEST_ROTATIONAL_SPEED)
 
-        mockSprite: MagicMock(spec=GamePiece)
+        # mockSprite = MagicMock(spec=GamePiece)
 
     def testComputeTargetAngle(self):
 
@@ -82,7 +82,7 @@ class TestSmoothMotion(TestBase):
 
     def _checkRotateClockWise(self, spriteRotationAngle: float, xDiff: float, yDiff: float, expectedAnswer: bool):
 
-        rotationSpeedRadians: float = radians(TestSmoothMotion.TEST_ROTATIONAL_SPEED)
+        # rotationSpeedRadians: float = radians(TestSmoothMotion.TEST_ROTATIONAL_SPEED)
         targetAngleRadians:   float = self.smoothMotion.computeTargetAngle(xDiff=xDiff, yDiff=yDiff)
 
         actualAngleRadians:   float = radians(spriteRotationAngle - SmoothMotion.IMAGE_ROTATION)  # What angle are we at now in radians?

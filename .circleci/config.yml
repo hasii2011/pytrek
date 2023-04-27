@@ -26,11 +26,12 @@ jobs:
             # sudo apt-get install freeglut3-dev
             pip install --upgrade pip
             python3 --version
+            pip install setuptools
+            pip install wheel
             pip install html-testRunner~=1.2.1
-            pip install pyglet==2.0.dev23
-            pip install jsonpickle~=2.0.0
-            pip install arcade~=2.6.7
-            pip install Shapely~=1.8.0
+            pip install jsonpickle==3.0.1
+            pip install arcade~=2.6.17
+            pip install shapely~=2.0.1
       - run:
             name: run tests
             command: | 

@@ -21,7 +21,7 @@ from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 @dataclass
 class MessageLine:
     message: str = ''
-    textColor: Tuple = WHITE
+    textColor: Tuple[int, int, int] = WHITE
 
 
 class MessageConsole(AbstractMessageConsole):
@@ -37,11 +37,10 @@ class MessageConsole(AbstractMessageConsole):
 
     CONSOLE_TEXT_COLOR = WHITE
 
-    # noinspection SpellCheckingInspection
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
 
-        self.logger: Logger = getLogger(__name__)
-
+        self.logger:       Logger = getLogger(__name__)
         self._statusLines: List[MessageLine] = []
 
     def draw(self):

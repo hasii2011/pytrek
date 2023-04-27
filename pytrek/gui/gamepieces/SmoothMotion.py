@@ -82,7 +82,7 @@ class SmoothMotion:
             angleDiffDegrees:   float = degrees(angleDiffRadians)
             actualAngleDegrees: float = degrees(actualAngleRadians)
             # noinspection PyUnresolvedReferences
-            self._smoothMotionLogger.debug(f'id={gamePiece.id} angleDiffDegrees={angleDiffDegrees:.2f} actualAngleDegrees={actualAngleDegrees:.2f}')
+            self._smoothMotionLogger.debug(f'{gamePiece=} angleDiffDegrees={angleDiffDegrees:.2f} actualAngleDegrees={actualAngleDegrees:.2f}')
 
         # Are we close to the correct angle? If so, move forward.
         if abs(angleDiffRadians) < pi / 4:
