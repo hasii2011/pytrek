@@ -113,7 +113,7 @@ class BaseTorpedoMediator(MissesMediator):
 
         Returns:  A torpedo of the correct kind
         """
-        pass
+        return cast(BaseEnemyTorpedo, None)
 
     def _loadTorpedoExplosionTextures(self) -> TextureList:
         """
@@ -121,7 +121,7 @@ class BaseTorpedoMediator(MissesMediator):
 
         Returns:  The textures (images) that display an explosion
         """
-        pass
+        return cast(TextureList, None)
 
     def _getTorpedoExplosion(self) -> BaseTorpedoExplosion:
         """
@@ -130,7 +130,7 @@ class BaseTorpedoMediator(MissesMediator):
         Returns: An explosion of the correct type
 
         """
-        pass
+        return cast(BaseTorpedoExplosion, None)
 
     def _getTorpedoMiss(self) -> BaseMiss:
         """
@@ -138,7 +138,7 @@ class BaseTorpedoMediator(MissesMediator):
 
         Returns:  An appropriate 'miss' sprite
         """
-        pass
+        return cast(BaseMiss, None)
 
     def _playCannotFireSound(self):
         """

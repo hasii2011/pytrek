@@ -173,19 +173,19 @@ class TestGameSettings(TestBase):
         self._settings.maxStarbaseSearches = saveSetting
 
     def testSuperNovaSchedulable(self):
-        saveSetting: int = self._settings.scheduleSuperNova
+        saveSetting: bool = self._settings.scheduleSuperNova
         self._settings.scheduleSuperNova = False
         self.assertEqual(False, self._settings.scheduleSuperNova, 'Value did not change')
         self._settings.scheduleSuperNova = saveSetting
 
     def testTractorBeamSchedulable(self):
-        saveSetting: int = self._settings.scheduleTractorBeam
+        saveSetting: bool = self._settings.scheduleTractorBeam
         self._settings.scheduleTractorBeam = False
         self.assertEqual(False, self._settings.scheduleTractorBeam, 'Value did not change')
         self._settings.scheduleTractorBeam = saveSetting
 
     def testsCommanderAttacksBaseSchedulable(self):
-        saveSetting: int = self._settings.scheduleCommanderAttacksBase
+        saveSetting: bool = self._settings.scheduleCommanderAttacksBase
         self._settings.scheduleCommanderAttacksBase = False
         self.assertEqual(False, self._settings.scheduleCommanderAttacksBase, 'Value did not change')
         self._settings.scheduleCommanderAttacksBase = saveSetting
@@ -199,7 +199,7 @@ class TestGameSettings(TestBase):
             self.assertEqual(True, actualValue, 'Value did not change to True')
         else:
             self._settings.debugManualPlaceShipInQuadrant = False
-            actualValue: bool = self._settings.debugManualPlaceShipInQuadrant
+            actualValue = self._settings.debugManualPlaceShipInQuadrant
             self.assertEqual(False, actualValue, 'Value did not change to False')
 
         self._settings.debugManualPlaceShipInQuadrant = saveSetting

@@ -87,7 +87,7 @@ class TestEventEngine(TestBase):
         self.logger.info(f'Updated star date: {self._gameState.starDate:.2f}')
         self._eventEngine._checkEvents(currentStarDate=self._gameState.starDate)
 
-        fEvent: FutureEvent = self._eventEngine.getEvent(FutureEventType.TRACTOR_BEAM)
+        fEvent = self._eventEngine.getEvent(FutureEventType.TRACTOR_BEAM)
 
         self.assertTrue(fEvent.schedulable is False, 'Game State should indicate we cannot do this')
 
@@ -112,7 +112,7 @@ class TestEventEngine(TestBase):
 
         self._eventEngine._checkEvents(currentStarDate=self._gameState.starDate)
 
-        fEvent: FutureEvent = self._eventEngine.getEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
+        fEvent = self._eventEngine.getEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
 
         newFireDate: float = fEvent.starDate
         self.logger.info(f'newFireDate: {newFireDate:.2f}')

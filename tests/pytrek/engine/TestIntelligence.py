@@ -327,8 +327,8 @@ class TestIntelligence(TestBase):
             self.assertGreaterEqual(ans, minFiringInterval, 'Cannot be below the min')
             self.assertLessEqual(ans, maxFiringInterval, 'Cannot be above the  max')
 
-        medianCount: int = median(generatedFiringIntervals)
-        meanCount:   int = mean(generatedFiringIntervals)
+        medianCount: int = self._toInt(median(generatedFiringIntervals))
+        meanCount:   int = self._toInt(mean(generatedFiringIntervals))
         modeCount:   int = mode(generatedFiringIntervals)
 
         minValue: int = min(generatedFiringIntervals)
@@ -357,8 +357,8 @@ class TestIntelligence(TestBase):
             self.assertGreaterEqual(ans, minMoveInterval, 'Cannot be below the min')
             self.assertLessEqual(ans, maxMoveInterval, 'Cannot be above the  max')
 
-        medianCount: int = median(generatedMoveIntervals)
-        meanCount:   int = mean(generatedMoveIntervals)
+        medianCount: int = self._toInt(median(generatedMoveIntervals))
+        meanCount:   int = self._toInt(mean(generatedMoveIntervals))
         modeCount:   int = mode(generatedMoveIntervals)
 
         minValue: int = min(generatedMoveIntervals)
@@ -433,8 +433,8 @@ class TestIntelligence(TestBase):
             moveInterval: int = self.smarty.computeCommanderMoveInterval()
             generatedMoveIntervals.append(moveInterval)
 
-        medianCount: int = median(generatedMoveIntervals)
-        meanCount:   int = mean(generatedMoveIntervals)
+        medianCount: int = self._toInt(median(generatedMoveIntervals))
+        meanCount:   int = self._toInt(mean(generatedMoveIntervals))
         modeCount:   int = mode(generatedMoveIntervals)
 
         minValue: int = min(generatedMoveIntervals)
@@ -458,8 +458,8 @@ class TestIntelligence(TestBase):
             moveInterval: int = self.smarty.computeKlingonMoveInterval()
             generatedMoveIntervals.append(moveInterval)
 
-        medianCount: int = median(generatedMoveIntervals)
-        meanCount:   int = mean(generatedMoveIntervals)
+        medianCount: int = self._toInt(median(generatedMoveIntervals))
+        meanCount:   int = self._toInt(mean(generatedMoveIntervals))
         modeCount:   int = mode(generatedMoveIntervals)
 
         minValue: int = min(generatedMoveIntervals)
@@ -628,6 +628,9 @@ class TestIntelligence(TestBase):
         actualSuperCommanderCount: int = self.smarty.generateInitialSuperCommanderCount(playerType=playerType, numberOfKlingons=klingonCount)
 
         self.assertEqual(expectedSuperCommanderCount, actualSuperCommanderCount, assertionMsg)
+
+    def _toInt(self, floatValue: float) -> int:
+        return round(floatValue)
 
 
 def suite() -> TestSuite:

@@ -1,14 +1,17 @@
 
-import json
+from typing import cast
 
 import logging
 import logging.config
+
+import json
 
 from unittest import TestCase
 
 from pkg_resources import resource_filename
 
 from pytrek.GameState import GameState
+from pytrek.Singleton import Singleton
 
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
@@ -58,14 +61,14 @@ class TestBase(TestCase):
         """
         Force stateful singletons to re-initialize
         """
-        GameSettings.__instance__ = None
-        Intelligence.__instance__ = None
-        GameState.__instance__    = None
-        Galaxy.__instance__       = None
-        GameEngine.__instance__   = None
-        EventEngine.__instance__  = None
-        Devices.__instance__      = None
-        Galaxy.__instance__       = None
-        GalaxyMediator.__instance__   = None
-        QuadrantMediator.__instance__ = None
+        GameSettings.__instance__ = cast(Singleton, None)
+        Intelligence.__instance__ = cast(Singleton, None)
+        GameState.__instance__    = cast(Singleton, None)
+        Galaxy.__instance__       = cast(Singleton, None)
+        GameEngine.__instance__   = cast(Singleton, None)
+        EventEngine.__instance__  = cast(Singleton, None)
+        Devices.__instance__      = cast(Singleton, None)
+        Galaxy.__instance__       = cast(Singleton, None)
+        GalaxyMediator.__instance__   = cast(Singleton, None)
+        QuadrantMediator.__instance__ = cast(Singleton, None)
 

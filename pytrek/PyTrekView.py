@@ -104,6 +104,8 @@ class PyTrekView(View):
         self._statusConsole:    StatusConsole    = cast(StatusConsole, None)
         self._messageConsole:   MessageConsole   = cast(MessageConsole, None)
 
+        self._soundMachine:     SoundMachine     = cast(SoundMachine, None)
+
         self._eventEngine: EventEngine = cast(EventEngine, None)
 
         #
@@ -133,20 +135,19 @@ class PyTrekView(View):
         self._computer     = Computer()
         self._galaxy       = Galaxy()           # This essentially finishes initializing most of the game
 
-        self._messageConsole: MessageConsole = MessageConsole()
-        self._eventEngine:    EventEngine    = EventEngine(self._messageConsole)
+        self._messageConsole = MessageConsole()
+        self._eventEngine    = EventEngine(self._messageConsole)
 
-        self._statusConsole:  StatusConsole = StatusConsole(gameView=self)       # UI elements
-        self._soundMachine:   SoundMachine = SoundMachine()
+        self._statusConsole = StatusConsole(gameView=self)       # UI elements
+        self._soundMachine  = SoundMachine()
 
-        self._enterprise: Enterprise = self._gameState.enterprise
+        self._enterprise = self._gameState.enterprise
 
         # Important mediators
-        self._enterpriseMediator: EnterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
-        self._quadrantMediator:   QuadrantMediator   = QuadrantMediator()
-        self._galaxyMediator:     GalaxyMediator     = GalaxyMediator()
-
-        self._quadrant: Quadrant = self._galaxy.currentQuadrant
+        self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
+        self._quadrantMediator   = QuadrantMediator()
+        self._galaxyMediator     = GalaxyMediator()
+        self._quadrant           = self._galaxy.currentQuadrant
 
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 

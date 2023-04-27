@@ -177,7 +177,7 @@ class TestFutureEventHandlers(TestBase):
         if maxSearches < TestFutureEventHandlers.MAX_LOOPS:
             self.assertEqual(0, self._gameState.starBaseCount, 'Did not destroy all StarBases')
 
-            coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
+            coordinates                = self._intelligence.generateQuadrantCoordinates()
             fEvent.type                = FutureEventType.SUPER_NOVA
             fEvent.starDate            = self._gameState.starDate
             fEvent.quadrantCoordinates = coordinates

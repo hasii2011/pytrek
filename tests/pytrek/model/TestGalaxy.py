@@ -79,8 +79,8 @@ class TestGalaxy(TestBase):
         """
         galaxy: Galaxy = self._galaxy
         debugKlingonQuadrants: List[Coordinates] = galaxy._debugKlingonQuadrants
-        for kCoordinates in debugKlingonQuadrants:
-            kCoordinates: Coordinates = cast(Coordinates, kCoordinates)
+        for coordinates in debugKlingonQuadrants:
+            kCoordinates: Coordinates = cast(Coordinates, coordinates)
             quadrant: Quadrant = galaxy.getQuadrant(kCoordinates)
             self.assertNotEqual(0, quadrant.klingonCount, 'We should have some Klingons in this quadrant')
             self.logger.debug(f'{kCoordinates=} {quadrant.klingonCount=}')

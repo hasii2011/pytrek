@@ -38,6 +38,7 @@ from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
+from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
 from pytrek.gui.gamepieces.commander.Commander import Commander
 from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.Enterprise import Enterprise
@@ -78,9 +79,9 @@ class TestShooting(View):
 
     MADE_UP_PRETTY_MAIN_NAME: str = "Test Shooter"
 
-    PALETTE_KLINGON_ID:         str = 'paletteKlingon'
-    PALETTE_COMMANDER_ID:       str = 'paletteCommander'
-    PALETTE_SUPER_COMMANDER_ID: str = 'paletteSuperCommander'
+    PALETTE_KLINGON_ID:         EnemyId = EnemyId('paletteKlingon')
+    PALETTE_COMMANDER_ID:       EnemyId = EnemyId('paletteCommander')
+    PALETTE_SUPER_COMMANDER_ID: EnemyId = EnemyId('paletteSuperCommander')
 
     def __init__(self):
 
@@ -112,6 +113,8 @@ class TestShooting(View):
 
         self._selectedGamePiece: GamePiece = cast(GamePiece, None)
 
+        self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
+
     def setup(self):
         """
         Set up the game here. Call this function to restart the game.
@@ -130,9 +133,8 @@ class TestShooting(View):
 
         self._quadrantMediator   = QuadrantMediator()
 
-        self._enterprise: Enterprise = self._gameState.enterprise
-
-        self._quadrant: Quadrant = self._galaxy.currentQuadrant
+        self._enterprise = self._gameState.enterprise
+        self._quadrant   = self._galaxy.currentQuadrant
 
         self._quadrant.klingonCount        = 0
         self._quadrant.commanderCount      = 0
@@ -145,7 +147,7 @@ class TestShooting(View):
 
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
-        self._enterpriseMediator: EnterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._noOp)
+        self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._noOp)
 
         self._statusConsole    = StatusConsole(gameView=self)
         self._messageConsole   = MessageConsole()
@@ -290,7 +292,7 @@ class TestShooting(View):
         epm.firePhasers(quadrant=self._quadrant)
 
     # noinspection PyUnusedLocal
-    def _noOp(self, warpSpeed: float, destinationCoordinates: Coordinates):
+    def _noOp(self, warpSpeed: float, destinationCoordinates: Coordinates) -> None:
         self.logger.warning(f'******** How did we warp? *************')
 
     def __fireEnemyTorpedo(self, torpedoMediator: BaseTorpedoMediator, enemySprites: SpriteList, rotationAngle: int = 0):

@@ -30,7 +30,8 @@ class Galaxy(Singleton):
     The Galaxy model
     """
 
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
         """"""
         self._gameEngine:   GameEngine    = GameEngine()
         self._intelligence: Intelligence  = Intelligence()
@@ -85,6 +86,7 @@ class Galaxy(Singleton):
 
     @currentQuadrant.setter
     def currentQuadrant(self, quadrant: Quadrant):
+        # noinspection PyAttributeOutsideInit
         self._currentQuadrant = quadrant
 
     def getStarBaseCoordinates(self) -> Coordinates:
@@ -149,7 +151,7 @@ class Galaxy(Singleton):
 
     def _createGalaxy(self):
 
-        self.quadrants = []
+        self.quadrants = GalaxyGrid([])
         for y in range(GALAXY_ROWS):
             quadrantRow: QuadrantRow = QuadrantRow([])
             for x in range(GALAXY_COLUMNS):
@@ -261,6 +263,6 @@ class Galaxy(Singleton):
         for y in range(GALAXY_ROWS):
             quadRow = self.quadrants[y]
             for x in range(GALAXY_COLUMNS):
-                quadrant = quadRow[x]
-                quadrant: Quadrant = cast(Quadrant, quadrant)
+                quadrant = cast(Quadrant, quadRow[x])
+                # quadrant: Quadrant = cast(Quadrant, quadrant)
                 self.logger.debug(f'Quadrant({x},{y}) Klingon Count: {quadrant.klingonCount}')

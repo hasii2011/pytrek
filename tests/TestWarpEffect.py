@@ -26,7 +26,7 @@ class WarpEffectRunner:
         arcadeWindow.set_exclusive_keyboard(exclusive=True)
         arcadeWindow.show_view(warpEffect)
 
-        schedule(function_pointer=self.checkEffectComplete, interval=1.0)
+        schedule(function_pointer=self.checkEffectComplete, interval=1.0)  # type:ignore
         warpEffect.setup()
 
         self._warpEffect: WarpEffect = warpEffect

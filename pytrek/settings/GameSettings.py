@@ -26,6 +26,7 @@ from pytrek.settings.DeveloperSettings import DeveloperSettings
 
 class GameSettings(Singleton):
 
+    # noinspection PyAttributeOutsideInit
     def init(self):
 
         self.logger: Logger = getLogger(__name__)
@@ -368,7 +369,7 @@ class GameSettings(Singleton):
 
     def _createEmptySettings(self):
 
-        self._config: ConfigParser = ConfigParser()
+        self._config = ConfigParser()
 
         self._settingsCommon.configParser = self._config
         self._limits.configParser         = self._config
