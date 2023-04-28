@@ -76,8 +76,7 @@ class WarpDialog(View):
         self._xCoordinateInput: UIInputText = cast(UIInputText, None)
         self._yCoordinateInput: UIInputText = cast(UIInputText, None)
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='EmptySpace.png')
+        fqFileName: str = LocateResources.getImagePath(bareFileName='EmptySpace.png')
 
         self._inputTexture: Texture = load_texture(fqFileName)
 
@@ -162,21 +161,17 @@ class WarpDialog(View):
 
         Returns:  The button box container
         """
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='OkButton.png')
+        fqFileName: str = LocateResources.getImagePath(bareFileName='OkButton.png')
 
         okButtonTexture: Texture = load_texture(fqFileName)
-        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                      bareFileName='OkButtonPressed.png')
+        fqFileName = LocateResources.getImagePath(bareFileName='OkButtonPressed.png')
         okButtonPressedTexture: Texture = load_texture(fqFileName)
 
-        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                      bareFileName='CancelButton.png')
+        fqFileName = LocateResources.getImagePath(bareFileName='CancelButton.png')
 
         cancelButtonTexture: Texture = load_texture(fqFileName)
 
-        fqFileName = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                      bareFileName='CancelButtonPressed.png')
+        fqFileName = LocateResources.getImagePath(bareFileName='CancelButtonPressed.png')
 
         cancelButtonPressedTexture: Texture = load_texture(fqFileName)
 

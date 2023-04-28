@@ -110,7 +110,9 @@ class SoundMachine(Singleton):
         Args:
             bareFileName:
         """
-        fqFileName: str   = LocateResources.getResourcesPath(LocateResources.SOUND_RESOURCES_PACKAGE_NAME, bareFileName)
+        fqFileName: str   = LocateResources.getResourcesPath(bareFileName=bareFileName,
+                                                             resourcePath=LocateResources.SOUND_RESOURCES_PATH,
+                                                             packageName=LocateResources.SOUND_RESOURCES_PACKAGE_NAME)
         sound:      Sound = Sound(fqFileName)
 
         return sound

@@ -12,7 +12,7 @@ class BaseGamePiece(Sprite):
 
     def __init__(self, filename: str = '', scale: float = 1.0):
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=filename)
+        fqFileName: str = LocateResources.getImagePath(bareFileName=filename)
 
         super().__init__(filename=fqFileName, scale=scale)
 

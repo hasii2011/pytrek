@@ -110,7 +110,7 @@ class EnterprisePhaserMediator(BaseMediator):
         spriteWidth:  int = 231
         spriteHeight: int = 134
         bareFileName: str = f'PhaserSpriteSheet.png'
-        fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
+        fqFileName:   str = LocateResources.getImagePath(bareFileName=bareFileName)
 
         textureList: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
 

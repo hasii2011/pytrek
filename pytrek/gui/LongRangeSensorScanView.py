@@ -32,8 +32,7 @@ class LongRangeSensorScanView(View):
         super().__init__()
 
         self._viewCompleteCallback: Callable = viewCompleteCallback
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='LongRangeSensorBackground.png')
+        fqFileName: str = LocateResources.getImagePath(bareFileName='LongRangeSensorBackground.png')
 
         self.texture = load_texture(fqFileName)
 

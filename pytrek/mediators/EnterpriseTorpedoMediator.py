@@ -189,7 +189,7 @@ class EnterpriseTorpedoMediator(MissesMediator):
         spriteWidth:  int = 128
         spriteHeight: int = 128
         bareFileName: str = f'PhotonTorpedoExplosionSpriteSheet.png'
-        fqFileName:   str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
+        fqFileName:   str = LocateResources.getImagePath(bareFileName=bareFileName)
 
         explosions: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
 

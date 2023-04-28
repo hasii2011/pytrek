@@ -92,7 +92,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
         for explosionColor in KlingonTorpedoExplosionColor:
 
             bareFileName: str = f'KlingonTorpedoExplosion{explosionColor.value}.png'
-            fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=bareFileName)
+            fqFileName: str = LocateResources.getImagePath(bareFileName=bareFileName)
 
             texture = load_texture(fqFileName)
 

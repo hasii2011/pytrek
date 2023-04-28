@@ -115,8 +115,7 @@ class HelpView(View):
 
         Returns:  A named tuple that has the texture pane and the text area widgets
         """
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='Help.txt')
+        fqFileName: str = LocateResources.getImagePath(bareFileName='Help.txt')
         with open(fqFileName) as fd:
             lines: str = fd.read()
         textArea: UITextArea = UITextArea(width=550, height=360,
@@ -124,8 +123,7 @@ class HelpView(View):
                                           text_color=color.BLACK,
                                           font_name=HelpView.FONT_NAME)
 
-        textureFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                                bareFileName='GreyPanel.png')
+        textureFileName: str = LocateResources.getImagePath(bareFileName='GreyPanel.png')
         background: Texture = load_texture(textureFileName)
 
         texturePane: UITexturePane = UITexturePane(
@@ -141,9 +139,9 @@ class HelpView(View):
         pressedFileName: str = f'{bareFileName}Pressed.png'
         hoveredFileName: str = f'{bareFileName}Hovered.png'
 
-        fqNormalFileName:  str = LocateResources.getResourcesPath(LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=normalFileName)
-        fqPressedFileName: str = LocateResources.getResourcesPath(LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=pressedFileName)
-        fqHoveredFileName: str = LocateResources.getResourcesPath(LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName=hoveredFileName)
+        fqNormalFileName:  str = LocateResources.getImagePath(bareFileName=normalFileName)
+        fqPressedFileName: str = LocateResources.getImagePath(bareFileName=pressedFileName)
+        fqHoveredFileName: str = LocateResources.getImagePath(bareFileName=hoveredFileName)
 
         normalTexture:  Texture = load_texture(fqNormalFileName)
         pressedTexture: Texture = load_texture(fqPressedFileName)
@@ -158,9 +156,9 @@ class HelpView(View):
 
     def _createOkButton(self) -> UITextureButton:
 
-        buttonFileName:        str = LocateResources.getResourcesPath(LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='HelpOkButton.png')
-        pressedButtonFileName: str = LocateResources.getResourcesPath(LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='HelpOkButtonPressed.png')
-        hoveredButtonFileName: str = LocateResources.getResourcesPath(LocateResources.IMAGE_RESOURCES_PACKAGE_NAME, bareFileName='HelpOkButtonHovered.png')
+        buttonFileName:        str = LocateResources.getImagePath(bareFileName='HelpOkButton.png')
+        pressedButtonFileName: str = LocateResources.getImagePath(bareFileName='HelpOkButtonPressed.png')
+        hoveredButtonFileName: str = LocateResources.getImagePath(bareFileName='HelpOkButtonHovered.png')
 
         okButtonTexture:        Texture = load_texture(buttonFileName)
         okButtonPressedTexture: Texture = load_texture(pressedButtonFileName)

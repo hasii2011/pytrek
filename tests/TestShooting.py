@@ -120,8 +120,7 @@ class TestShooting(View):
         Set up the game here. Call this function to restart the game.
         """
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='QuadrantBackground.png')
+        fqFileName: str = LocateResources.getImagePath(bareFileName='QuadrantBackground.png')
         self.background = load_texture(fqFileName)
 
         self._gameSettings = GameSettings()

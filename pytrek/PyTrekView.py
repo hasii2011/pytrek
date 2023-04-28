@@ -110,8 +110,10 @@ class PyTrekView(View):
         #
         # I am cheating here because I know arcade use PIL under the covers
         #
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.FONT_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName=FIXED_WIDTH_FONT_FILENAME)
+        fqFileName: str = LocateResources.getResourcesPath(bareFileName=FIXED_WIDTH_FONT_FILENAME,
+                                                           resourcePath=LocateResources.FONT_RESOURCES_PATH,
+                                                           packageName=LocateResources.FONT_RESOURCES_PACKAGE_NAME,
+                                                           )
         ImageFont.truetype(fqFileName)
 
     def setup(self):
@@ -120,8 +122,7 @@ class PyTrekView(View):
 
         # self._backgroundSprite: QuadrantBackground = QuadrantBackground()
 
-        fqFileName: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.IMAGE_RESOURCES_PACKAGE_NAME,
-                                                           bareFileName='QuadrantBackground.png')
+        fqFileName: str = LocateResources.getImagePath(bareFileName='QuadrantBackground.png')
         self.background = load_texture(fqFileName)
         # Create the 'physics engine'
         # self.physicsEngine = PhysicsEngineSimple(self._enterprise, self._hardSpriteList)

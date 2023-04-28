@@ -3,8 +3,6 @@ from os import sep as osSep
 
 from hasiihelper.ResourceManager import ResourceManager
 
-from pkg_resources import resource_filename
-
 from json import load as jsonLoad
 
 import logging.config
@@ -37,8 +35,8 @@ class LocateResources:
                                  SOUND_RESOURCES_PACKAGE_NAME: SOUND_RESOURCES_PATH
                                  }
 
-    @staticmethod
-    def setupSystemLogging():
+    @classmethod
+    def setupSystemLogging(cls):
 
         configFilePath: str = ResourceManager.retrieveResourcePath(bareFileName=LocateResources.JSON_LOGGING_CONFIG_FILENAME,
                                                                    resourcePath=LocateResources.RESOURCES_PATH,
@@ -50,22 +48,16 @@ class LocateResources:
         logging.logProcesses = False
         logging.logThreads   = False
 
-    # noinspection SpellCheckingInspection
-    @staticmethod
-    def getResourcesPath(resourcePackageName: str, bareFileName: str) -> str:
-        # Use this method in Python 3.9
-        # from importlib_resources import files
-        # configFilePath: str  = files('pytrek.resources').joinpath(JSON_LOGGING_CONFIG_FILENAME)
-        try:
-            fqFileName: str = resource_filename(resourcePackageName, bareFileName)
-        except (ValueError, Exception):
-            #
-            # Maybe we are in an app
-            #
-            from os import environ
-            # pathToResources: str = environ.get(LocateResources.RESOURCE_ENV_VAR)
-            pathToResources: str = environ[LocateResources.RESOURCE_ENV_VAR]
-            resourcesPath:   str = LocateResources.PACKAGE_TO_PATH_MAP[resourcePackageName]
-            fqFileName = f'{pathToResources}/{resourcesPath}/{bareFileName}'
+    @classmethod
+    def getResourcesPath(cls, bareFileName: str, resourcePath: str, packageName: str) -> str:
 
+        fqFileName: str = ResourceManager.retrieveResourcePath(bareFileName=bareFileName, resourcePath=resourcePath, packageName=packageName)
+
+        return fqFileName
+
+    @classmethod
+    def getImagePath(cls, bareFileName: str) -> str:
+        fqFileName: str = cls.getResourcesPath(bareFileName=bareFileName,
+                                               resourcePath=cls.IMAGE_RESOURCES_PATH,
+                                               packageName=cls.IMAGE_RESOURCES_PACKAGE_NAME)
         return fqFileName
