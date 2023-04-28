@@ -1,9 +1,5 @@
 
 from typing import TextIO
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
 
 from os import remove as osRemove
 
@@ -28,19 +24,10 @@ class TestGameState(TestBase):
 
     TEST_PICKLE_FILENAME: str = 'GameStats.json'
 
-    clsLogger: Logger = cast(Logger, None)
-
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestGameState.clsLogger = getLogger(__name__)
+        TestBase.setUpClass()
         SettingsCommon.determineSettingsLocation()
-
-    def setUp(self):
-        self.logger: Logger = TestGameState.clsLogger
-
-    def tearDown(self):
-        pass
 
     def testJsonSerialization(self):
 
