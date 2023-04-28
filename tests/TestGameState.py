@@ -13,8 +13,6 @@ from pytrek.engine.PlayerType import PlayerType
 
 from pytrek.model.Coordinates import Coordinates
 
-from pytrek.settings.SettingsCommon import SettingsCommon
-
 from tests.TestBase import TestBase
 
 from pytrek.GameState import GameState
@@ -23,11 +21,6 @@ from pytrek.GameState import GameState
 class TestGameState(TestBase):
 
     TEST_PICKLE_FILENAME: str = 'GameStats.json'
-
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpClass()
-        SettingsCommon.determineSettingsLocation()
 
     def testJsonSerialization(self):
 

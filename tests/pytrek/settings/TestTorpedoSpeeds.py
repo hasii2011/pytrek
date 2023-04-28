@@ -2,8 +2,6 @@
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.settings.SettingsCommon import SettingsCommon
-
 from tests.TestBase import TestBase
 
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
@@ -12,10 +10,6 @@ from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 class TestTorpedoSpeeds(TestBase):
     """
     """
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpClass()
-        SettingsCommon.determineSettingsLocation()
 
     def testParseSpeedString(self):
 

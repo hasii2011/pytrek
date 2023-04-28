@@ -20,14 +20,26 @@ from pytrek.model.Galaxy import Galaxy
 
 from pytrek.settings.GameSettings import GameSettings
 
+from pytrek.settings.SettingsCommon import SettingsCommon
+
 
 class TestBase(UnitTestBase):
     # noinspection SpellCheckingInspection
     RESOURCES_TEST_CLASSES_PACKAGE_NAME: str = 'tests.resources.testclass'
-
     """
     A base unit test class to initialize some logging stuff we need
     """
+    @classmethod
+    def setUpClass(cls):
+        """"""
+        UnitTestBase.setUpClass()
+        SettingsCommon.determineSettingsLocation()
+
+    def setUp(self):
+        super().setUp()
+
+    def tearDown(self):
+        super().tearDown()
 
     @classmethod
     def resetSingletons(cls):
@@ -44,9 +56,3 @@ class TestBase(UnitTestBase):
         Galaxy.__instance__       = cast(Singleton, None)
         GalaxyMediator.__instance__   = cast(Singleton, None)
         QuadrantMediator.__instance__ = cast(Singleton, None)
-
-    def setUp(self):
-        super().setUp()
-
-    def tearDown(self):
-        super().tearDown()

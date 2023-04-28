@@ -1,10 +1,6 @@
 
 from typing import Dict
 from typing import NewType
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
 
 from math import degrees
 
@@ -21,7 +17,6 @@ from pytrek.engine.devices.Devices import Devices
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.settings.GameSettings import GameSettings
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from pytrek.GameState import GameState
 
@@ -36,26 +31,14 @@ TestedDirections = NewType('TestedDirections', Dict[Direction, bool])
 class TestGameEngine(TestBase):
     """
     """
-    clsLogger: Logger = cast(Logger, None)
-
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestGameEngine.clsLogger = getLogger(__name__)
-        SettingsCommon.determineSettingsLocation()
-
     def setUp(self):
-        self.logger:      Logger     = TestGameEngine.clsLogger
-
+        super().setUp()
         self._gameSettings: GameSettings = GameSettings()
         self._gameEngine:   GameEngine   = GameEngine()
         self._gameState:    GameState    = GameState()
         self._computer:     Computer     = Computer()
 
         self._devices:      Devices    = Devices()
-
-    def tearDown(self):
-        pass
 
     def testComputeHitValueOnKlingon(self):
 

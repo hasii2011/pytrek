@@ -1,7 +1,4 @@
 
-
-from logging import Logger
-from logging import getLogger
 from typing import cast
 
 from unittest import TestSuite
@@ -22,8 +19,6 @@ from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.model.Galaxy import Galaxy
 
 from pytrek.settings.GameSettings import GameSettings
-
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from pytrek.GameState import GameState
 
@@ -47,15 +42,11 @@ class TestEventEngine(TestBase):
 
     @classmethod
     def setUpClass(cls):
-        """"""
-        TestBase.setUpLogging()
-        SettingsCommon.determineSettingsLocation()
-
+        TestBase.setUpClass()
         TestEventEngine._setupGame()
 
     def setUp(self):
-        """"""
-        self.logger:      Logger      = getLogger(__name__)
+        super().setUp()
         #
         # The game engine initializes the game state object (for better or worse)
         #
@@ -167,7 +158,7 @@ class TestEventEngine(TestBase):
         at the start of this test class.  Then each instance test will just
         use the pre-initialized singletons
 
-        The initializaton code copied from PyTrekView
+        The initialization code copied from PyTrekView
         TODO: perhaps should go in a utility class so it is always current
 
         """
@@ -188,7 +179,6 @@ class TestEventEngine(TestBase):
 
 
 def suite() -> TestSuite:
-    """You need to change the name of the test class here also."""
     import unittest
 
     testSuite: TestSuite = TestSuite()

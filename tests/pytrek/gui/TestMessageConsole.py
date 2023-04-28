@@ -1,13 +1,6 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
-
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase
 
@@ -17,20 +10,9 @@ from pytrek.gui.MessageConsole import MessageConsole
 class TestMessageConsole(TestBase):
     """
     """
-    clsLogger: Logger = cast(Logger, None)
-
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestMessageConsole.clsLogger = getLogger(__name__)
-        SettingsCommon.determineSettingsLocation()
-
     def setUp(self):
-        self.logger:         Logger         = TestMessageConsole.clsLogger
+        super().setUp()
         self.messageConsole: MessageConsole = MessageConsole()
-
-    def tearDown(self):
-        pass
 
     def testMaxBufferedMessages(self):
 
@@ -43,7 +25,6 @@ class TestMessageConsole(TestBase):
 
 
 def suite() -> TestSuite:
-    """You need to change the name of the test class here also."""
     import unittest
 
     testSuite: TestSuite = TestSuite()

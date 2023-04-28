@@ -3,7 +3,6 @@ from unittest import TestSuite
 from unittest import main as unitTestMain
 
 from pytrek.model.Coordinates import Coordinates
-from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
@@ -13,11 +12,6 @@ from tests.TestBase import TestBase
 class TestGameSettings(TestBase):
     """
     """
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpClass()
-        SettingsCommon.determineSettingsLocation()
-
     def setUp(self):
         super().setUp()
         self._settings: GameSettings = GameSettings()

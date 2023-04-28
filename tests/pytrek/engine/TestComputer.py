@@ -1,9 +1,4 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from math import floor
 
 from unittest import TestSuite
@@ -42,20 +37,14 @@ class TestComputer(TestBase):
     MIN_GALACTIC_DISTANCE: float = 0.0
     MAX_GALACTIC_DISTANCE: float = 90.0
 
-    clsLogger: Logger = cast(Logger, None)
-
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestComputer.clsLogger = getLogger(__name__)
+        TestBase.setUpClass()
         SettingsCommon.determineSettingsLocation()
 
     def setUp(self):
-        self.logger: Logger   = TestComputer.clsLogger
+        super().setUp()
         self.smarty: Computer = Computer()
-
-    def tearDown(self):
-        pass
 
     def testKnownCoordinates_2_0(self):
 

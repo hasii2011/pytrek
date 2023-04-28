@@ -4,13 +4,9 @@ from typing import cast
 
 from itertools import count
 
-from logging import Logger
-from logging import getLogger
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.GameState import GameState
 
@@ -34,7 +30,6 @@ class TestGalaxy(TestBase):
     @classmethod
     def setUpClass(cls):
         TestBase.setUpClass()
-        SettingsCommon.determineSettingsLocation()
 
         TestBase.resetSingletons()
 

@@ -1,11 +1,7 @@
 
 from typing import cast
-
 from typing import Callable
 from typing import List
-
-from logging import Logger
-from logging import getLogger
 
 from itertools import count
 
@@ -65,16 +61,13 @@ class TestIntelligence(TestBase):
     BASE_ATTACK_INTERVAL_MAX_CALLS:    int = 150
     BASE_DESTROYED_INTERVAL_MAX_CALLS: int = 150
 
-    clsLogger: Logger = cast(Logger, None)
-
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestIntelligence.clsLogger = getLogger(__name__)
+        TestBase.setUpClass()
         SettingsCommon.determineSettingsLocation()
 
     def setUp(self):
-        self.logger: Logger = TestIntelligence.clsLogger
+        super().setUp()
 
         self._gameEngine:   GameEngine   = GameEngine()
         self._gameSettings: GameSettings = GameSettings()
@@ -87,7 +80,7 @@ class TestIntelligence(TestBase):
         self._powerTestPlayerType: PlayerType = cast(PlayerType, None)
 
     def tearDown(self):
-
+        super().tearDown()
         self._gameSettings.playerType = self._savePlayerType
         self._gameSettings.gameType   = self._saveGameType
 

@@ -6,7 +6,6 @@ from pytrek.Constants import MAX_SECTOR_X_COORDINATE
 from pytrek.Constants import MAX_SECTOR_Y_COORDINATE
 from pytrek.engine.Direction import Direction
 from pytrek.model.Coordinates import Coordinates
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase
 
@@ -32,11 +31,6 @@ EXPECTED_Y_COORDINATE_SE_MOVEMENT: int = 5
 class TestCoordinates(TestBase):
     """
     """
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpClass()
-        SettingsCommon.determineSettingsLocation()
-
     def testNewCoordinatesNorth(self):
         coordinates   = Coordinates(STANDARD_X_COORDINATE, STANDARD_Y_COORDINATE)
         newCoordinate = coordinates.newCoordinates(Direction.North)
@@ -162,7 +156,6 @@ class TestCoordinates(TestBase):
 
 
 def suite() -> TestSuite:
-    """You need to change the name of the test class here also."""
     import unittest
 
     testSuite: TestSuite = TestSuite()

@@ -1,9 +1,6 @@
 
 from typing import cast
 
-from logging import Logger
-from logging import getLogger
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
@@ -24,7 +21,6 @@ from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.settings.GameSettings import GameSettings
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase
 
@@ -37,32 +33,26 @@ class TestFutureEventHandlers(TestBase):
     """
     MAX_LOOPS = 128
 
-    clsLogger: Logger = cast(Logger, None)
-
     clsGameSettings: GameSettings = cast(GameSettings, None)
     clsGameState:    GameState    = cast(GameState, None)
     clsGameEngine:   GameEngine   = cast(GameEngine, None)
     clsIntelligence: Intelligence = cast(Intelligence, None)
     clsComputer:     Computer     = cast(Computer, None)
     clsGalaxy:       Galaxy       = cast(Galaxy, None)
+
     clsEventEngine:      EventEngine      = cast(EventEngine, None)
     clsQuadrantMediator: QuadrantMediator = cast(QuadrantMediator, None)
     clsGalaxyMediator:   GalaxyMediator   = cast(GalaxyMediator, None)
 
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestFutureEventHandlers.clsLogger = getLogger(__name__)
-        SettingsCommon.determineSettingsLocation()
+        TestBase.setUpClass()
+
         TestFutureEventHandlers._setupGame()
         TestFutureEventHandlers.clsLogger.debug(f'Running TestFutureEventHandlers')
 
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
     def setUp(self):
-        self.logger: Logger = TestFutureEventHandlers.clsLogger
+        super().setUp()
 
         self._gameSettings: GameSettings = TestFutureEventHandlers.clsGameSettings
         self._gameState:    GameState    = TestFutureEventHandlers.clsGameState
@@ -71,14 +61,10 @@ class TestFutureEventHandlers(TestBase):
         self._computer:     Computer     = TestFutureEventHandlers.clsComputer
         self._galaxy:       Galaxy       = TestFutureEventHandlers.clsGalaxy
 
-        self._eventEngine:      EventEngine      = TestFutureEventHandlers.clsEventEngine
-        self._quadrantMediator: QuadrantMediator = TestFutureEventHandlers.clsQuadrantMediator
-        self._galaxyMediator:   GalaxyMediator   = TestFutureEventHandlers.clsGalaxyMediator
-
-        self._eventHandlers: FutureEventHandlers = FutureEventHandlers(LogMessageConsole())
-
-    def tearDown(self):
-        pass
+        self._eventEngine:      EventEngine        = TestFutureEventHandlers.clsEventEngine
+        self._quadrantMediator: QuadrantMediator   = TestFutureEventHandlers.clsQuadrantMediator
+        self._galaxyMediator:   GalaxyMediator     = TestFutureEventHandlers.clsGalaxyMediator
+        self._eventHandlers:    FutureEventHandlers = FutureEventHandlers(LogMessageConsole())
 
     def testSuperNovaEventHandlerKlingonsAreDead(self):
 
@@ -249,7 +235,7 @@ class TestFutureEventHandlers(TestBase):
         coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
         quadrant:    Quadrant    = self._galaxy.getQuadrant(quadrantCoordinates=coordinates)
 
-        self.logger.debug (f'{quadrant.hasSuperNova=}')
+        self.logger.debug(f'{quadrant.hasSuperNova=}')
         quadrant.addKlingon()
         quadrant.addCommander()
         quadrant.addSuperCommander()
@@ -306,7 +292,7 @@ class TestFutureEventHandlers(TestBase):
         at the start of this test class.  Then each instance test will just
         use the pre-initialized singletons
 
-        The initializaton code copied from PyTrekView
+        The initialization code copied from PyTrekView
         TODO: perhaps should go in a utility class so it is always current
 
         """

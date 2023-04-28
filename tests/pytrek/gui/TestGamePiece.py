@@ -1,16 +1,10 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.model.Coordinates import Coordinates
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase
 
@@ -18,23 +12,6 @@ from tests.TestBase import TestBase
 class TestGamePiece(TestBase):
     """
     """
-    clsLogger: Logger = cast(Logger, None)
-
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestGamePiece.clsLogger = getLogger(__name__)
-        SettingsCommon.determineSettingsLocation()
-
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
-    def setUp(self):
-        self.logger: Logger = TestGamePiece.clsLogger
-
-    def tearDown(self):
-        pass
 
     def testGamePositionToScreenPositionZeroZero(self):
 
@@ -68,7 +45,6 @@ class TestGamePiece(TestBase):
 
 
 def suite() -> TestSuite:
-    """You need to change the name of the test class here also."""
     import unittest
 
     testSuite: TestSuite = TestSuite()

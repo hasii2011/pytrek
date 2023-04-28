@@ -1,16 +1,10 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase
 
@@ -20,19 +14,6 @@ from pytrek.engine.devices.Devices import Devices
 class TestDevices(TestBase):
     """
     """
-    clsLogger: Logger = cast(Logger, None)
-
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestDevices.clsLogger = getLogger(__name__)
-        SettingsCommon.determineSettingsLocation()
-
-    def setUp(self):
-        self.logger: Logger = TestDevices.clsLogger
-
-    def tearDown(self):
-        pass
 
     def testGetDevice(self):
 
@@ -67,7 +48,6 @@ class TestDevices(TestBase):
 
 
 def suite() -> TestSuite:
-    """You need to change the name of the test class here also."""
     import unittest
 
     testSuite: TestSuite = TestSuite()
