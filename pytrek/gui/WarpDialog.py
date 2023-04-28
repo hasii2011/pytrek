@@ -106,7 +106,8 @@ class WarpDialog(View):
 
     def _createWarpFactorInputBox(self) -> UIBoxLayout:
 
-        warpFactorInputBox: UIBoxLayout = UIBoxLayout(width=400, vertical=False, align='x:right, y:center')
+        # warpFactorInputBox: UIBoxLayout = UIBoxLayout(width=400, vertical=False, align='x:right, y:center')
+        warpFactorInputBox: UIBoxLayout = UIBoxLayout(vertical=False, align='x:right, y:center')
 
         warpLabel: UILabel     = self._createLabel(text='Warp Factor: ')
         warpInput: UIInputText = UIInputText(text='5', height=18, width=100, font_size=12, text_color=color.BLACK)
@@ -144,7 +145,8 @@ class WarpDialog(View):
                            .with_background(texture=self._inputTexture)
                            )
 
-        mainLayout: UIBoxLayout = UIBoxLayout(width=300, vertical=False)
+        # mainLayout: UIBoxLayout = UIBoxLayout(width=300, vertical=False)
+        mainLayout: UIBoxLayout = UIBoxLayout(vertical=False)
 
         mainLayout.add(quadrantLabel.with_space_around(left=47, top=5))
         mainLayout.add(quadrantLayout)
@@ -178,7 +180,8 @@ class WarpDialog(View):
 
         cancelButtonPressedTexture: Texture = load_texture(fqFileName)
 
-        buttonBox: UIBoxLayout = UIBoxLayout(width=300, vertical=False)
+        # buttonBox: UIBoxLayout = UIBoxLayout(width=300, vertical=False)
+        buttonBox: UIBoxLayout = UIBoxLayout(vertical=False)
         buttonStyle: Dict = {'font_name': 'arial',
                              'font_size': 12
                              }
