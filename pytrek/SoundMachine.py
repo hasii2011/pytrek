@@ -1,13 +1,17 @@
-from enum import Enum
-from logging import Logger
-from logging import getLogger
+
 from typing import Dict
 from typing import NewType
 
+from logging import Logger
+from logging import getLogger
+
+from enum import Enum
+
+from hasiihelper.Singleton import Singleton
 from arcade import Sound
 
 from pytrek.LocateResources import LocateResources
-from pytrek.Singleton import Singleton
+
 from pytrek.settings.GameSettings import GameSettings
 
 
@@ -41,8 +45,8 @@ SoundDictionary = NewType('SoundDictionary', Dict[SoundType, Sound])
 
 class SoundMachine(Singleton):
 
-    # noinspection SpellCheckingInspection
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
 
         self.logger: Logger = getLogger(__name__)
 

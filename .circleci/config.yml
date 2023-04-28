@@ -28,6 +28,7 @@ jobs:
             pip install wheel
             pip install html-testRunner~=1.2.1
             # pip install jsonpickle==3.0.1
+            pip install hasiihelper~=0.2.0
             pip install arcade~=2.6.17
             pip install shapely~=2.0.1
       - run:

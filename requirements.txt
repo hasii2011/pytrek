@@ -1,6 +1,8 @@
 setuptools~=67.7.2
-arcade~=2.6.17
-# jsonpickle~=2.0.0
 html-testRunner~=1.2.1
 mypy~=1.2.0
+
+hasiihelper~=0.2.0
+arcade~=2.6.17
 shapely~=2.0.1
+# jsonpickle~=2.0.0

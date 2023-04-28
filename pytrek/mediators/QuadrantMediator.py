@@ -7,6 +7,8 @@ from logging import DEBUG
 
 from arcade import SpriteList
 
+from hasiihelper.Singleton import Singleton
+
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 
@@ -41,7 +43,6 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
 
-from pytrek.Singleton import Singleton
 from pytrek.settings.GameSettings import GameSettings
 
 

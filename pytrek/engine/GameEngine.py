@@ -9,6 +9,8 @@ from math import sqrt
 
 from random import choice
 
+from hasiihelper.Singleton import Singleton
+
 from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction
 from pytrek.engine.DirectionData import DirectionData
@@ -30,7 +32,6 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.settings.GameSettings import GameSettings
 
 from pytrek.GameState import GameState
-from pytrek.Singleton import Singleton
 
 
 class GameEngine(Singleton):
@@ -41,7 +42,8 @@ class GameEngine(Singleton):
     Initializes the game singletons in correct order to allow testability.  In
     general the PyTrekView class will initialize them in this order.
     """
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
 
         self.logger: Logger = getLogger(__name__)
 

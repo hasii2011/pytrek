@@ -1,6 +1,10 @@
+
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
-from typing import cast
+
+from hasiihelper.Singleton import Singleton
 
 from arcade import View
 from arcade import color
@@ -8,10 +12,9 @@ from arcade import draw_text
 
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
-from pytrek.Singleton import Singleton
+
 from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction
-
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.LRScanCoordinates import LRScanCoordinates
 
@@ -25,7 +28,8 @@ LR_SCAN_FONT_SIZE: int = 14
 
 class LongRangeSensorScanMediator(Singleton):
 
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
         """
         Accepts the following keyword arguments:
         * view The arcade view for the long range scan
@@ -33,7 +37,7 @@ class LongRangeSensorScanMediator(Singleton):
         * graphicCenterY  The background center Y position
         Args:
             *args:
-            **kwds:
+            **kwargs:
 
         """
 
@@ -47,7 +51,7 @@ class LongRangeSensorScanMediator(Singleton):
         self.graphicCenterX: float = 0
         self.graphicCenterY: float = 0
 
-        self._setKeywordParameters(**kwds)
+        self._setKeywordParameters(**kwargs)
 
     def draw(self, centerCoordinates: Coordinates):
 
@@ -67,14 +71,14 @@ class LongRangeSensorScanMediator(Singleton):
             self.logger.debug(f'{scanCoordinates=}')
             self._drawQuadrantContents(scanCoordinates=scanCoordinates, centerX=graphicCenterX, centerY=graphicCenterY)
 
-    def _setKeywordParameters(self, **kwds):
+    def _setKeywordParameters(self, **kwargs):
         """
         Scans the keyword argument input list and attempts to set the defined instance properties;  "Declare"
         instance variables you wish to accept prior to calling this method
         Args:
-            **kwds:
+            **kwargs:
         """
-        for name, value in kwds.items():
+        for name, value in kwargs.items():
             if not hasattr(self, name):
                 raise TypeError(f"Unexpected keyword argument `{name}`")
             setattr(self, name, value)

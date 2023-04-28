@@ -1,12 +1,14 @@
 
+from typing import cast
 from typing import Dict
 from typing import NewType
 
 from logging import getLogger
 from logging import Logger
-from typing import cast
 
 from arcade import schedule
+
+from hasiihelper.Singleton import Singleton
 
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.devices.Device import Device
@@ -20,7 +22,6 @@ from pytrek.engine.futures.FutureEventType import FutureEventType
 
 from pytrek.GameState import GameState
 
-from pytrek.Singleton import Singleton
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.model.Coordinates import Coordinates
 from pytrek.settings.GameSettings import GameSettings

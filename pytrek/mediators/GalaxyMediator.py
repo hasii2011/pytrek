@@ -1,13 +1,18 @@
 
-from logging import Logger
-from logging import getLogger
 from typing import cast
 
+from logging import Logger
+from logging import getLogger
+
+from hasiihelper.Singleton import Singleton
+
 from pytrek.GameState import GameState
-from pytrek.Singleton import Singleton
+
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
+
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
@@ -19,8 +24,8 @@ class GalaxyMediator(Singleton):
     """
     This class aids in updating the Galaxy model and the game state
     """
-    # noinspection SpellCheckingInspection
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
 
         self.logger: Logger = getLogger(__name__)
 

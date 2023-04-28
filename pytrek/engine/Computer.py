@@ -1,7 +1,8 @@
 
-
 from logging import Logger
 from logging import getLogger
+
+from hasiihelper.Singleton import Singleton
 
 from math import atan2
 from math import degrees
@@ -22,8 +23,6 @@ from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.model.Coordinates import Coordinates
 
-from pytrek.Singleton import Singleton
-
 
 class Computer(Singleton):
     """
@@ -35,6 +34,7 @@ class Computer(Singleton):
     QUADRANT_TRAVEL_FACTOR: float = 0.1
     GALACTIC_TRAVEL_FACTOR: float = 10.0
 
+    # noinspection PyAttributeOutsideInit
     def init(self):
         self.logger:        Logger       = getLogger(__name__)
         self._intelligence: Intelligence = Intelligence()
@@ -132,7 +132,7 @@ class Computer(Singleton):
             commanderCount: The Quadrant's commander count
             hasStarBase:    Indicates whether the quadrant has a star bae
 
-        Returns:  A string in the from NNN
+        Returns:  A string in the form NNN
         """
 
         klingonCount = klingonCount + commanderCount

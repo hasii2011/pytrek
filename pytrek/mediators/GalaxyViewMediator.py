@@ -5,10 +5,10 @@ from logging import getLogger
 from arcade import color
 from arcade import draw_text
 
+from hasiihelper.Singleton import Singleton
+
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
-
-from pytrek.Singleton import Singleton
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
@@ -20,7 +20,8 @@ from pytrek.model.Quadrant import Quadrant
 
 class GalaxyViewMediator(Singleton):
 
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
 
         self.logger: Logger = getLogger(__name__)
 

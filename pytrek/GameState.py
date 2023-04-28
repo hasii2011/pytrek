@@ -4,6 +4,8 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
+from hasiihelper.Singleton import Singleton
+
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.model.Coordinates import Coordinates
@@ -12,10 +14,10 @@ from pytrek.engine.PlayerType import PlayerType
 from pytrek.engine.GameType import GameType
 from pytrek.engine.ShipCondition import ShipCondition
 
-from pytrek.Singleton import Singleton
 from pytrek.settings.GameSettings import GameSettings
 
 
+# noinspection PyAttributeOutsideInit
 class GameState(Singleton):
     """
     Keeps track of the game state

@@ -1,20 +1,23 @@
 
 from typing import Dict
 
-import logging
+from logging import Logger
+from logging import getLogger
+
+
+from hasiihelper.Singleton import Singleton
 
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 
-from pytrek.Singleton import Singleton
-
 
 class Devices(Singleton):
 
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
 
-        self.logger = logging.getLogger(__name__)
+        self.logger: Logger = getLogger(__name__)
 
         self.deviceMap: Dict[DeviceType, Device] = {}
 

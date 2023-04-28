@@ -1,12 +1,13 @@
 
-from pytrek.Singleton import Singleton
+from hasiihelper.Singleton import Singleton
+
 from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
 
 class AbstractMessageConsole(Singleton):
 
     # noinspection SpellCheckingInspection
-    def init(self, *args, **kwds):
+    def init(self, *args, **kwargs):
         pass
 
     def draw(self):

@@ -7,6 +7,8 @@ from itertools import count
 from logging import Logger
 from logging import getLogger
 
+from hasiihelper.Singleton import Singleton
+
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
 
@@ -19,7 +21,6 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.settings.GameSettings import GameSettings
 
 from pytrek.GameState import GameState
-from pytrek.Singleton import Singleton
 
 QuadrantRow = NewType('QuadrantRow', List[Quadrant])
 GalaxyGrid  = NewType('GalaxyGrid', List[QuadrantRow])

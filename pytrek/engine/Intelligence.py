@@ -1,4 +1,4 @@
-from collections import namedtuple
+
 from typing import List
 
 from logging import Logger
@@ -6,12 +6,16 @@ from logging import getLogger
 
 from logging import DEBUG
 
+from collections import namedtuple
+
 from random import randint
 from random import randrange
 from random import random
 from random import choice
 
 from math import log
+
+from hasiihelper.Singleton import Singleton
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
@@ -34,8 +38,6 @@ from pytrek.model.DataTypes import LRScanCoordinatesList
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
-from pytrek.Singleton import Singleton
-
 TractorBeamComputation = namedtuple('TractorBeamComputation', 'warpFactor, distance, wSquared')
 
 
@@ -52,6 +54,7 @@ class Intelligence(Singleton):
         Direction.North, Direction.NorthEast, Direction.East
     ]
 
+    # noinspection PyAttributeOutsideInit
     def init(self):
         """
         """

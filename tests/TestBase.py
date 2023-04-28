@@ -10,8 +10,9 @@ from unittest import TestCase
 
 from pkg_resources import resource_filename
 
+from hasiihelper.Singleton import Singleton
+
 from pytrek.GameState import GameState
-from pytrek.Singleton import Singleton
 
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
