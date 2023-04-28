@@ -1,6 +1,8 @@
 
 from os import sep as osSep
 
+from hasiihelper.ResourceManager import ResourceManager
+
 from pkg_resources import resource_filename
 
 from json import load as jsonLoad
@@ -38,9 +40,9 @@ class LocateResources:
     @staticmethod
     def setupSystemLogging():
 
-        configFilePath: str = LocateResources.getResourcesPath(resourcePackageName=LocateResources.RESOURCES_PACKAGE_NAME,
-                                                               bareFileName=LocateResources.JSON_LOGGING_CONFIG_FILENAME)
-
+        configFilePath: str = ResourceManager.retrieveResourcePath(bareFileName=LocateResources.JSON_LOGGING_CONFIG_FILENAME,
+                                                                   resourcePath=LocateResources.RESOURCES_PATH,
+                                                                   packageName=LocateResources.RESOURCES_PACKAGE_NAME)
         with open(configFilePath, 'r') as loggingConfigurationFile:
             configurationDictionary = jsonLoad(loggingConfigurationFile)
 
