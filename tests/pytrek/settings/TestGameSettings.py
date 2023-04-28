@@ -1,9 +1,4 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
@@ -18,24 +13,14 @@ from tests.TestBase import TestBase
 class TestGameSettings(TestBase):
     """
     """
-    clsLogger: Logger = cast(Logger, None)
-
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestGameSettings.clsLogger = getLogger(__name__)
+        TestBase.setUpClass()
         SettingsCommon.determineSettingsLocation()
 
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
     def setUp(self):
-        self.logger:    Logger       = TestGameSettings.clsLogger
+        super().setUp()
         self._settings: GameSettings = GameSettings()
-
-    def tearDown(self):
-        pass
 
     def testMaxStarsExistence(self):
         self.assertIsNotNone(self._settings.maximumStars)
@@ -209,7 +194,7 @@ class TestGameSettings(TestBase):
 
         expectedCoordinates: Coordinates = Coordinates(x=7, y=7)
         self._settings.manualSectorCoordinates = expectedCoordinates
-        actualCoordinates: Coordinates =  self._settings.manualSectorCoordinates
+        actualCoordinates: Coordinates = self._settings.manualSectorCoordinates
 
         self.assertEqual(expectedCoordinates, actualCoordinates, 'Ship manual positioning coordinates did not change')
 

@@ -1,19 +1,11 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from math import radians
 from math import degrees
 
 from unittest import TestSuite
 from unittest import main as unitTestMain
-from unittest.mock import MagicMock
 
 from pytrek.engine.ArcadePoint import ArcadePoint
-
-from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 from tests.TestBase import TestBase
 
@@ -26,19 +18,12 @@ class TestSmoothMotion(TestBase):
     """
     TEST_ROTATIONAL_SPEED: int = 5
 
-    clsLogger: Logger = cast(Logger, None)
-
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestSmoothMotion.clsLogger = getLogger(__name__)
-
     def setUp(self):
-        self.logger:       Logger       = TestSmoothMotion.clsLogger
+        super().setUp()
         self.smoothMotion: SmoothMotion = SmoothMotion()
 
     def tearDown(self):
-        pass
+        super().tearDown()
 
     def testDoMotion(self):
 

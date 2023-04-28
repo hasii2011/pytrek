@@ -1,9 +1,4 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
@@ -37,19 +32,10 @@ EXPECTED_Y_COORDINATE_SE_MOVEMENT: int = 5
 class TestCoordinates(TestBase):
     """
     """
-    clsLogger: Logger = cast(Logger, None)
-
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestCoordinates.clsLogger = getLogger(__name__)
+        TestBase.setUpClass()
         SettingsCommon.determineSettingsLocation()
-
-    def setUp(self):
-        self.logger: Logger = TestCoordinates.clsLogger
-
-    def tearDown(self):
-        pass
 
     def testNewCoordinatesNorth(self):
         coordinates   = Coordinates(STANDARD_X_COORDINATE, STANDARD_Y_COORDINATE)

@@ -1,9 +1,4 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
@@ -11,27 +6,16 @@ from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.TestBase import TestBase
 
-# import the class you want to test here
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class TestTorpedoSpeeds(TestBase):
     """
     """
-    clsLogger: Logger = cast(Logger, None)
-
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestTorpedoSpeeds.clsLogger = getLogger(__name__)
+        TestBase.setUpClass()
         SettingsCommon.determineSettingsLocation()
-
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
-    def setUp(self):
-        self.logger: Logger = TestTorpedoSpeeds.clsLogger
 
     def testParseSpeedString(self):
 

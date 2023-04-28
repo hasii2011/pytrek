@@ -27,15 +27,13 @@ class TestGalaxy(TestBase):
     MAX_GET_STARBASE_COORDINATES_RETRIES:  int = 128    # TODO make runtime configurable
     MAX_GET_COMMANDER_COORDINATES_RETRIES: int = 128
 
-    clsLogger:       Logger       = cast(Logger, None)
     clsGameSettings: GameSettings = cast(GameSettings, None)
     clsGameState:    GameState    = cast(GameState, None)
     clsGalaxy:       Galaxy       = cast(Galaxy, None)
 
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestGalaxy.clsLogger = getLogger(__name__)
+        TestBase.setUpClass()
         SettingsCommon.determineSettingsLocation()
 
         TestBase.resetSingletons()
@@ -47,7 +45,7 @@ class TestGalaxy(TestBase):
         TestGalaxy.clsGalaxy    = Galaxy()
 
     def setUp(self):
-        self.logger: Logger = TestGalaxy.clsLogger
+        super().setUp()
 
         # Set the flag prior to instantiating the Galaxy singleton
         self._gameSettings: GameSettings = TestGalaxy.clsGameSettings
@@ -58,6 +56,7 @@ class TestGalaxy(TestBase):
         self.logger.info(f'setup:  {self._gameSettings.debugCollectKlingonQuadrantCoordinates=}')
 
     def tearDown(self):
+        super().tearDown()
         self._gameSettings.debugCollectKlingonQuadrantCoordinates = False
 
     def testPlaceKlingonsInGalaxyCount(self):

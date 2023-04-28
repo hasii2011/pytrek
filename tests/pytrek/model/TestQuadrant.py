@@ -1,9 +1,4 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
@@ -18,19 +13,6 @@ from tests.TestBase import TestBase
 class TestQuadrant(TestBase):
     """
     """
-    clsLogger: Logger = cast(Logger, None)
-
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestQuadrant.clsLogger = getLogger(__name__)
-
-    def setUp(self):
-        self.logger: Logger = TestQuadrant.clsLogger
-
-    def tearDown(self):
-        pass
-
     def testInitialization(self):
 
         coordinates: Coordinates = Coordinates(1, 1)
@@ -52,7 +34,6 @@ class TestQuadrant(TestBase):
 
 
 def suite() -> TestSuite:
-    """You need to change the name of the test class here also."""
     import unittest
 
     testSuite: TestSuite = TestSuite()
