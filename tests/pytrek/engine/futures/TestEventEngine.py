@@ -23,7 +23,7 @@ from pytrek.settings.GameSettings import GameSettings
 from pytrek.GameState import GameState
 
 from tests.TestBase import TestBase
-from tests.LogMessageConsole import LogMessageConsole
+from pytrek.gui.LogMessageConsole import LogMessageConsole
 
 BASIC_DAMAGE = 4.0
 

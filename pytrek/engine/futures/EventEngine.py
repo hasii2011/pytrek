@@ -41,6 +41,7 @@ class EventEngine(Singleton):
     a check for events. It exists so the check for zero does not have to be exact.
     
     """
+    # noinspection PyAttributeOutsideInit
     def init(self, *args, **kwargs):
         """
 

@@ -25,7 +25,7 @@ from pytrek.settings.GameSettings import GameSettings
 from tests.TestBase import TestBase
 
 from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
-from tests.LogMessageConsole import LogMessageConsole
+from pytrek.gui.LogMessageConsole import LogMessageConsole
 
 
 class TestFutureEventHandlers(TestBase):

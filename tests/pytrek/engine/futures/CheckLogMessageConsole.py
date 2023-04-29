@@ -1,5 +1,5 @@
 
-from tests.LogMessageConsole import LogMessageConsole
+from pytrek.gui.LogMessageConsole import LogMessageConsole
 
 from tests.TestBase import TestBase
 

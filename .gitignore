@@ -8,5 +8,6 @@ __pycache__/
 /pyenv-3.9.1/
 /pyenv-3.9.16
 /archive/
-/UNKNOWN.egg-info
+/PyTrekView.egg-info
+/.eggs
 .envrc

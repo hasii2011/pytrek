@@ -10,8 +10,8 @@ class LogMessageConsole(AbstractMessageConsole):
     Used by the unit tests to inject it TestFutureEventHandlers
     """
 
-    # noinspection SpellCheckingInspection
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
         self.logger: Logger = getLogger(__name__)
 
     def draw(self):

@@ -31,6 +31,10 @@
             "level":     "INFO",
             "propagate": "False"
         },
+        "pytrek.gui.LogMessageConsole": {
+            "level":     "INFO",
+            "propagate": "False"
+        },
         "pytrek.mediators.QuadrantMediator": {
             "level":     "WARNING",
             "propagate": "False"

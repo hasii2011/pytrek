@@ -103,6 +103,6 @@ setup(
     description='Yet another classic Star Trek game re-written in Python and Arcade',
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
-    install_requires=['arcade']
+    install_requires=['arcade~=2.6.17', 'shapely~=2.0.1']
 
 )
