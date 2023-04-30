@@ -7,7 +7,17 @@ Usage:
 
 from setuptools import setup
 
+import pathlib
+
+# The directory containing this file
+HERE = pathlib.Path(__file__).parent
+
 APP = ['pytrek/PyTrekView.py']
+
+README = (HERE / "README.md").read_text()
+LICENSE = (HERE / 'LICENSE').read_text()
+VERSION = (HERE / 'pytrek/resources/version.txt').read_text()
+
 DATA_FILES = [
     ('pytrek/resources/fonts', ['pytrek/resources/fonts/FuturistFixedWidth.ttf']),
     ('pytrek/resources/fonts', ['pytrek/resources/fonts/MonoFonto.ttf']),
@@ -78,6 +88,8 @@ DATA_FILES = [
 OPTIONS = {}
 
 setup(
+    name='PyTrek',
+    version=VERSION,
     app=APP,
     data_files=DATA_FILES,
     packages=[
@@ -97,12 +109,14 @@ setup(
     ],
     include_package_data=True,
 
-    url='https://github.com/hasii2011/PyArcadeStarTrek',
+    url='https://github.com/hasii2011/pytrek',
     author='Humberto A. Sanchez II',
     author_email='Humberto.A.Sanchez.II@gmail.com',
+    maintainer='Humberto A. Sanchez II',
+    maintainer_email='humberto.a.sanchez.ii@gmail.com',
     description='Yet another classic Star Trek game re-written in Python and Arcade',
+    long_description=README,
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
     install_requires=['arcade~=2.6.17', 'shapely~=2.0.1']
-
 )

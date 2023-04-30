@@ -1,0 +1,2 @@
+rm -rf build dist
+python -O setup.py py2app --packages=arcade,shapely --iconfile pytrek/resources/images/StarTrek.icns
