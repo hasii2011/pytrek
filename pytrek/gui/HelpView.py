@@ -115,7 +115,9 @@ class HelpView(View):
 
         Returns:  A named tuple that has the texture pane and the text area widgets
         """
-        fqFileName: str = LocateResources.getImagePath(bareFileName='Help.txt')
+        fqFileName: str = LocateResources.getResourcesPath(bareFileName='Help.txt',
+                                                           resourcePath=LocateResources.RESOURCES_PATH,
+                                                           packageName=LocateResources.RESOURCES_PACKAGE_NAME)
         with open(fqFileName) as fd:
             lines: str = fd.read()
         textArea: UITextArea = UITextArea(width=550, height=360,

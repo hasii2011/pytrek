@@ -3,7 +3,7 @@ from pytrek.gui.LogMessageConsole import LogMessageConsole
 
 from tests.TestBase import TestBase
 
-TestBase.setUpLogging()
+TestBase.setUpClass()
 
 pmc: LogMessageConsole = LogMessageConsole()
 

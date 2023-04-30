@@ -83,6 +83,10 @@
             "level": "WARNING",
             "propagate": "False"
         },
+        "pytrek.gui.LogMessageConsole": {
+            "level": "INFO",
+            "propagate": "False"
+        },
         "pytrek.settings.GameSettings": {
             "level": "WARNING",
             "propagate": "False"

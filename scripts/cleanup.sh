@@ -2,7 +2,7 @@
 
 function changeToProjectRoot {
 
-    export areHere=`basename ${PWD}`
+    areHere=$(basename "${PWD}")
     if [[ ${areHere} = "scripts" ]]; then
         cd ..
     fi
@@ -10,7 +10,4 @@ function changeToProjectRoot {
 
 changeToProjectRoot
 
-rm -rf dist build .eggs UNKNOWN.egg-info
-
-
-cd - > /dev/null 2>&1
+rm -rf dist build .eggs PyTrek.egg-info
