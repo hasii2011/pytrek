@@ -1,5 +1,5 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://app.travis-ci.com/hasii2011/PyArcadeStarTrek.svg?branch=master)](https://app.travis-ci.com/hasii2011/PyArcadeStarTrek)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/hasii2011/pytrek/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/hasii2011/pytrek/tree/master)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![macOS](https://svgshare.com/i/ZjP.svg)](https://svgshare.com/i/ZjP.svg)
 

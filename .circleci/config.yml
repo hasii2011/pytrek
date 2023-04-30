@@ -26,6 +26,7 @@ jobs:
             python3 --version
             pip install setuptools
             pip install wheel
+            pip install buildlackey~=0.8.1
             pip install html-testRunner~=1.2.1
             pip install jsonpickle==3.0.1
             pip install hasiihelper~=0.2.0
@@ -34,4 +35,4 @@ jobs:
       - run:
             name: run tests
             command: | 
-              scripts/runtests.sh
+              runtests
