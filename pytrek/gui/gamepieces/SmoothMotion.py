@@ -81,8 +81,8 @@ class SmoothMotion:
         if SmoothMotion.smoothMotionCounter > SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:
             angleDiffDegrees:   float = degrees(angleDiffRadians)
             actualAngleDegrees: float = degrees(actualAngleRadians)
-            # noinspection PyUnresolvedReferences
-            self._smoothMotionLogger.debug(f'{gamePiece=} angleDiffDegrees={angleDiffDegrees:.2f} actualAngleDegrees={actualAngleDegrees:.2f}')
+
+            self._smoothMotionLogger.debug(f'{gamePiece} angleDiffDegrees={angleDiffDegrees:.2f} actualAngleDegrees={actualAngleDegrees:.2f}')
 
         # Are we close to the correct angle? If so, move forward.
         if abs(angleDiffRadians) < pi / 4:
@@ -93,7 +93,7 @@ class SmoothMotion:
         # point and just need to set to that location.
         traveling = False
         if SmoothMotion.smoothMotionCounter > SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:
-            self._smoothMotionLogger.debug(f'Before: {gamePiece.center_x=} {destinationX=} {gamePiece.center_y=} {destinationY=}')
+            self._smoothMotionLogger.debug(f'Before: {gamePiece} ({gamePiece.center_x},{gamePiece.center_y}) destination ({destinationX},{destinationY})')
 
         if abs(gamePiece.center_x - destinationX) < abs(gamePiece.change_x):
             gamePiece.center_x = destinationX
@@ -108,7 +108,7 @@ class SmoothMotion:
             traveling = True
 
         if SmoothMotion.smoothMotionCounter > SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:
-            self._smoothMotionLogger.debug(f'After: {gamePiece.center_x=} {destinationX=} {gamePiece.center_y=} {destinationY=}')
+            self._smoothMotionLogger.debug(f'After: {gamePiece} ({gamePiece.center_x},{gamePiece.center_y}) destination ({destinationX},{destinationY})')
             SmoothMotion.smoothMotionCounter = 0
 
         # self._smoothMotionLogger.debug(f'({gamePiece.center_x},{gamePiece.center_y})')

@@ -29,6 +29,7 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
 
         self._firedBy:           EnemyId     = cast(EnemyId, None)
         self._firedFromPosition: Coordinates = cast(Coordinates, None)
+        self._currentPosition:   Coordinates = cast(Coordinates, None)
         self._followers:         SpriteList  = cast(SpriteList, None)
 
         self._computer: Computer = Computer()
@@ -55,7 +56,7 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
     @firedFromPosition.setter
     def firedFromPosition(self, newValue: Coordinates):
         self._firedFromPosition = newValue
-        self.currentPosition    = newValue
+        self._currentPosition   = newValue
 
     @property
     def followers(self) -> SpriteList:
@@ -94,10 +95,10 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
         currentY: float = self.center_y
         position: Coordinates = self._computer.computeSectorCoordinates(x=currentX, y=currentY)
 
-        if position != self.currentPosition:
+        if position != self._currentPosition:
             self._baseEnemyTorpedoLogger.debug(f'Created a follower @ {position}')
             self._placeTorpedoFollower(x=currentX, y=currentY)
-            self.currentPosition = position
+            self._currentPosition = position
 
     def _placeTorpedoFollower(self, x: float, y: float):
         """
@@ -108,3 +109,10 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
             y:  Arcade y
         """
         pass
+
+    def __str__(self) -> str:
+
+        return f'{self.id}'
+
+    def __repr__(self):
+        return self.__str__()
