@@ -82,7 +82,7 @@ class TestGameSettings(TestBase):
 
         self.assertIsNotNone(tpNovice, 'We should at least get an object back')
 
-        self.assertEqual(-1, tpNovice.superCommander)
+        self.assertEqual(1, tpNovice.superCommander)
 
     def testFairTorpedoSpeeds(self):
 
@@ -90,7 +90,7 @@ class TestGameSettings(TestBase):
 
         self.assertIsNotNone(tpFair, 'We should at least get an object back')
 
-        self.assertEqual(-1, tpFair.superCommander)
+        self.assertEqual(1, tpFair.superCommander)
 
     def testGoodTorpedoSpeeds(self):
 
