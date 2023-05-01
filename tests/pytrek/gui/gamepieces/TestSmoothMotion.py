@@ -76,7 +76,7 @@ class TestSmoothMotion(TestBase):
 
         self.logger.info(f'{angleDiffRadians=}')
 
-        rotateClockwise: bool = self.smoothMotion.rotateClockwise(angleDiffRadians=angleDiffRadians)
+        rotateClockwise: bool = self.smoothMotion._rotateClockwise(angleDiffRadians=angleDiffRadians)
 
         self.logger.info(f'{rotateClockwise=}')
 

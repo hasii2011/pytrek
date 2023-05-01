@@ -5,6 +5,7 @@ from collections import namedtuple
 
 from logging import Logger
 from logging import getLogger
+from logging import DEBUG
 
 from math import atan2
 from math import pi
@@ -93,31 +94,16 @@ class SmoothMotion:
             gamePiece.change_x = cos(actualAngleRadians) * gamePiece.speed
             gamePiece.change_y = sin(actualAngleRadians) * gamePiece.speed
 
-        # Fine-tune our change_x/change_y if we are really close to destinationPoint
-        # point and just need to set to that location.
-        traveling = False
-        if self._smoothMotionCounter > SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:
-            self._smLogger.debug(f'Before: {gamePiece} ({gamePiece.center_x},{gamePiece.center_y}) destination ({destinationX},{destinationY})')
-
-        if abs(gamePiece.center_x - destinationX) < abs(gamePiece.change_x):
-            gamePiece.center_x = destinationX
-        else:
-            gamePiece.center_x += gamePiece.change_x
-            traveling = True
-
-        if abs(gamePiece.center_y - destinationY) < abs(gamePiece.change_y):
-            gamePiece.center_y = destinationY
-        else:
-            gamePiece.center_y += gamePiece.change_y
-            traveling = True
+        moving: bool = self._fineTuneMotion(gamePiece=gamePiece, destinationX=destinationX, destinationY=destinationY)
 
         if self._smoothMotionCounter > SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:
-            self._smLogger.debug(f'After: {gamePiece} ({gamePiece.center_x},{gamePiece.center_y}) destination ({destinationX},{destinationY})')
+            if DEBUG:
+                self._smLogger.debug(f'After: {gamePiece} ({gamePiece.center_x},{gamePiece.center_y}) destination ({destinationX},{destinationY})')
             self._smoothMotionCounter = 0
 
         # self._smLogger.debug(f'({gamePiece.center_x},{gamePiece.center_y})')
         # If we have arrived, then we are not in motion
-        if not traveling:
+        if not moving:
             # self.destinationPoint = None      # Leave this set for klingon torpedo hit computation
             self._inMotion  = False
             gamePiece.angle = 0
@@ -159,10 +145,10 @@ class SmoothMotion:
         if abs(angleDiffRadians) <= rotationSpeedRadians:
             actualAngleRadians = targetAngleRadians            # Close enough, let's set our angle to the target
         else:
-            clockwise = self.rotateClockwise(angleDiffRadians=angleDiffRadians)
+            clockwise = self._rotateClockwise(angleDiffRadians=angleDiffRadians)
 
-        actualAngleRadians = self.correctRotation(actualAngleRadians=actualAngleRadians, rotationSpeedRadians=rotationSpeedRadians,
-                                                  targetAngleRadians=targetAngleRadians, clockwise=clockwise)
+        actualAngleRadians = self._correctRotation(actualAngleRadians=actualAngleRadians, rotationSpeedRadians=rotationSpeedRadians,
+                                                   targetAngleRadians=targetAngleRadians, clockwise=clockwise)
 
         radianInfo: RadianInfo = RadianInfo(actualAngleRadians=actualAngleRadians, angleDiffRadians=angleDiffRadians)
 
@@ -188,18 +174,49 @@ class SmoothMotion:
 
         return targetAngleRadians
 
-    def correctRotation(self, actualAngleRadians, rotationSpeedRadians, targetAngleRadians, clockwise: bool):
+    def _fineTuneMotion(self, gamePiece: GamePiece, destinationX: float, destinationY: float) -> bool:
+        """
+        Fine-tune our change_x/change_y if we are really close to destinationPoint
+        and just need to set to that location.
+
+        Args:
+            gamePiece:
+            destinationX:
+            destinationY:
+
+        Returns: True if we are too far and need to continue moving
+        """
+        moving: bool = False
+        if DEBUG:
+            if self._smoothMotionCounter > SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:
+                self._smLogger.debug(f'Before: {gamePiece} ({gamePiece.center_x},{gamePiece.center_y}) destination ({destinationX},{destinationY})')
+
+        if abs(gamePiece.center_x - destinationX) < abs(gamePiece.change_x):
+            gamePiece.center_x = destinationX
+        else:
+            gamePiece.center_x += gamePiece.change_x
+            moving = True
+
+        if abs(gamePiece.center_y - destinationY) < abs(gamePiece.change_y):
+            gamePiece.center_y = destinationY
+        else:
+            gamePiece.center_y += gamePiece.change_y
+            moving = True
+
+        return moving
+
+    def _correctRotation(self, actualAngleRadians, rotationSpeedRadians, targetAngleRadians, clockwise: bool):
 
         if actualAngleRadians != rotationSpeedRadians and clockwise:
             actualAngleRadians -= rotationSpeedRadians
         elif actualAngleRadians != targetAngleRadians:
             actualAngleRadians += rotationSpeedRadians
 
-        actualAngleRadians = self.keepInRange(actualAngleRadians)
+        actualAngleRadians = self._keepInRange(actualAngleRadians)
 
         return actualAngleRadians
 
-    def rotateClockwise(self, angleDiffRadians: float) -> bool:
+    def _rotateClockwise(self, angleDiffRadians: float) -> bool:
         """
         Figure out if we rotate clockwise or counter-clockwise
 
@@ -223,7 +240,7 @@ class SmoothMotion:
 
         return clockwise
 
-    def keepInRange(self, actualAngleRadians):
+    def _keepInRange(self, actualAngleRadians):
 
         # Keep in a range of 0 to 2pi
         if actualAngleRadians > 2 * pi:
