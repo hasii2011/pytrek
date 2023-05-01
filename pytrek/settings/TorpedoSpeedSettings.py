@@ -28,8 +28,8 @@ class TorpedoSpeedSettings(BaseSubSetting):
     # -1 value used because super commander are not generated for Novice or Fair players
     #
     SPEED_SETTINGS:  SettingsNameValues = SettingsNameValues({
-        NOVICE_PLAYER:   '5,2,2,-1',
-        FAIR_PLAYER:     '4,2,2,-1',
+        NOVICE_PLAYER:   '5,2,2,1',
+        FAIR_PLAYER:     '4,2,2,1',
         GOOD_PLAYER:     '3,2,3,4',
         EXPERT_PLAYER:   '2,2,4,4',
         EMERITUS_PLAYER: '1,2,5,5',
