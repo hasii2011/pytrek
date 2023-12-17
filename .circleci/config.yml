@@ -29,7 +29,7 @@ jobs:
             pip install buildlackey~=0.8.1
             pip install html-testRunner~=1.2.1
             pip install jsonpickle==3.0.1
-            pip install codeallybasci==0.5.2
+            pip install codeallybasic==0.5.2
             pip install arcade~=2.6.17
             pip install shapely~=2.0.1
       - run:
