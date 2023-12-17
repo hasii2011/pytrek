@@ -1,9 +1,11 @@
-
+from abc import abstractmethod
 from typing import List
 from typing import cast
 
 from logging import Logger
 from logging import getLogger
+
+from abc import ABCMeta
 
 from arcade import Sprite
 from arcade import SpriteList
@@ -36,6 +38,14 @@ from pytrek.mediators.base.MissesMediator import Torpedoes
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.Constants import MILLISECONDS
+
+
+class MyMetaBaseMediator(ABCMeta, type(MissesMediator)):        # type: ignore
+    """
+    I have know idea why this works:
+    https://stackoverflow.com/questions/66591752/metaclass-conflict-when-trying-to-create-a-python-abstract-class-that-also-subcl
+    """
+    pass
 
 
 class BaseTorpedoMediator(MissesMediator):
@@ -89,12 +99,14 @@ class BaseTorpedoMediator(MissesMediator):
     def torpedoExplosions(self) -> SpriteList:
         return self._explosions
 
+    @abstractmethod
     def draw(self):
         """
         Implemented by subclass
         """
         pass
 
+    @abstractmethod
     def update(self, quadrant: Quadrant):
         """
         Implemented by subclass
