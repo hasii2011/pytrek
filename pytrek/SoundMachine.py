@@ -7,7 +7,8 @@ from logging import getLogger
 
 from enum import Enum
 
-from hasiihelper.Singleton import Singleton
+from codeallybasic.Singleton import Singleton
+
 from arcade import Sound
 
 from pytrek.LocateResources import LocateResources

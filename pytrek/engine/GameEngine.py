@@ -9,7 +9,7 @@ from math import sqrt
 
 from random import choice
 
-from hasiihelper.Singleton import Singleton
+from codeallybasic.Singleton import Singleton
 
 from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction

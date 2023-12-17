@@ -2,10 +2,10 @@
 from typing import cast
 
 
-from hasiihelper.UnitTestBase import UnitTestBase
+from codeallybasic.UnitTestBase import UnitTestBase
 
 
-from hasiihelper.Singleton import Singleton
+from codeallybasic.Singleton import Singleton
 
 from pytrek.GameState import GameState
 

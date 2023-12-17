@@ -84,7 +84,7 @@
             "propagate": "False"
         },
         "pytrek.gui.LogMessageConsole": {
-            "level": "INFO",
+            "level": "ERROR",
             "propagate": "False"
         },
         "pytrek.settings.GameSettings": {
@@ -120,7 +120,7 @@
             "propagate": "False"
         },
         "pytrek.gui.gamepieces.SmoothMotion": {
-            "level": "DEBUG",
+            "level": "WARNING",
             "propagate": "False"
         },
         "pytrek.gui.CourseDistanceDialog": {

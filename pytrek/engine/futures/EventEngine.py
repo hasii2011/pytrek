@@ -8,7 +8,7 @@ from logging import Logger
 
 from arcade import schedule
 
-from hasiihelper.Singleton import Singleton
+from codeallybasic.Singleton import Singleton
 
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.devices.Device import Device

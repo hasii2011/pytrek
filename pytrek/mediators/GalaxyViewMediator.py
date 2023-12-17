@@ -5,7 +5,7 @@ from logging import getLogger
 from arcade import color
 from arcade import draw_text
 
-from hasiihelper.Singleton import Singleton
+from codeallybasic.Singleton import Singleton
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS

@@ -1,7 +1,7 @@
 
 from typing import cast
 
-from hasiihelper.Singleton import Singleton
+from codeallybasic.Singleton import Singleton
 
 from configparser import ConfigParser
 

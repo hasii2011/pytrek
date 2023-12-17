@@ -1,3 +1,4 @@
+
 from typing import NewType
 from typing import cast
 from typing import List
@@ -7,7 +8,7 @@ from itertools import count
 from logging import Logger
 from logging import getLogger
 
-from hasiihelper.Singleton import Singleton
+from codeallybasic.Singleton import Singleton
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
@@ -104,7 +105,7 @@ class Galaxy(Singleton):
             if x > maxStarbaseSearches:
                 linearSearchCoordinates: Coordinates = self._starBaseLinearSearch()
                 if linearSearchCoordinates is None:
-                    self.logger.warning(f'There really are no StarBase`s')
+                    self.logger.info(f'Really? there are no StarBase`s')
                     break
                 return linearSearchCoordinates
 
@@ -140,7 +141,7 @@ class Galaxy(Singleton):
 
     def _starBaseLinearSearch(self) -> Coordinates:
 
-        self.logger.warning(f'Starbase linear search initialized')
+        self.logger.info(f'Starbase linear search initialized')
         for y in range(GALAXY_ROWS):
             quadrantRow = self.quadrants[y]
             for x in range(GALAXY_COLUMNS):

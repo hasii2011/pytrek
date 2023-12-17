@@ -1,0 +1,1066 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<PyutProject version="10" CodePath="">
+	<PyutDocument type="CLASS_DIAGRAM" title="Class Diagram" scrollPositionX="0" scrollPositionY="0" pixelsPerUnitX="20" pixelsPerUnitY="20">
+		<GraphicClass width="226" height="123" x="1182" y="25">
+			<Class id="1" name="BaseAnimator" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="textureList" type="TextureList" defaultValue=""/>
+					<Param name="delayFrames" type="int" defaultValue=""/>
+					<Param name="scale" type="float" defaultValue="1.0"/>
+					<SourceCode/>
+				</Method>
+				<Method name="update" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Field visibility="PROTECTED">
+					<Param name="textures" type="TextureList" defaultValue="textureList"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="delayFrames" type="int" defaultValue="delayFrames"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="textureIdx" type="int" defaultValue="0"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="delayCounter" type="int" defaultValue="0"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="texture" type="" defaultValue="_textures[0]"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="285" height="266" x="2375" y="25">
+			<Class id="2" name="BaseEnemy" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="filename" type="str" defaultValue=""/>
+					<Param name="coordinates" type="Coordinates" defaultValue=""/>
+					<Param name="moveInterval" type="int" defaultValue="NEVER_MOVE_INTERVAL"/>
+					<Param name="scale" type="float" defaultValue="1.0"/>
+					<Param name="imageRotation" type="int" defaultValue="SmoothMotion.IMAGE_ROTATION"/>
+					<SourceCode>
+						<Code></Code>
+						<Code>        Args:</Code>
+						<Code>            filename:       The image file name</Code>
+						<Code>            coordinates:    The game sector coordinates within the quadrant</Code>
+						<Code>            moveInterval:   How often this enemy moves</Code>
+						<Code>            scale:          How to scale the image</Code>
+						<Code>            imageRotation:  How much to rotate image when the enemy is shooting at Captain Kirk.</Code>
+						<Code>        &quot;&quot;&quot; GamePiece.__init__(self,filename=filename,scale=scale) SmoothMotion.__init__(self,imageRotation=imageRotation) self.gameCoordinates=coordinates self._moveInterval:int=moveInterval self._id:EnemyId=EnemyId('IdNotSet') self._power:float=cast(float,None) self._firingInterval:int=BaseEnemy.NEVER_FIRE_INTERVAL self._lastTimeCheck:int=0 self._timeSinceMovement:float=0.0  </Code>
+					</SourceCode>
+				</Method>
+				<Method name="__str__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__repr__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Method name="id" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="id" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="power" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="t" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="power" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="moveInterval" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="moveInterval" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="firingInterval" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="firingInterval" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="lastTimeCheck" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="lastTimeCheck" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="timeSinceMovement" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="timeSinceMovement" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Field visibility="PRIVATE">
+					<Param name="gameCoordinates" type="" defaultValue="coordinates"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="moveInterval" type="int" defaultValue="moveInterval"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="id" type="EnemyId" defaultValue="EnemyId('IdNotSet')"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="power" type="float" defaultValue="cast(float,None)"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="firingInterval" type="int" defaultValue="BaseEnemy.NEVER_FIRE_INTERVAL"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="lastTimeCheck" type="int" defaultValue="0"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="timeSinceMovement" type="float" defaultValue="0.0"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="318" height="215" x="1075" y="825">
+			<Class id="3" name="BaseEnemyTorpedo" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="filename" type="str" defaultValue=""/>
+					<Param name="torpedoId" type="EnemyTorpedoId" defaultValue=""/>
+					<Param name="speed" type="float" defaultValue="3"/>
+					<Param name="scale" type="float" defaultValue="1.0"/>
+					<SourceCode/>
+				</Method>
+				<Method name="update" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="_potentiallyCreateAFollower" visibility="PROTECTED">
+					<Return type=""/>
+					<SourceCode>
+						<Code>        Only create one if we have entered another sector</Code>
+						<Code>        &quot;&quot;&quot; currentX:float=self.center_x currentY:float=self.center_y position:Coordinates=self._computer.computeSectorCoordinates(x=currentX,y=currentY) ifposition!=self.currentPosition:             self._baseEnemyTorpedoLogger.debug(f'Created a follower @ {position}') self._placeTorpedoFollower(x=currentX,y=currentY) self.currentPosition=position   </Code>
+					</SourceCode>
+				</Method>
+				<Method name="_placeTorpedoFollower" visibility="PROTECTED">
+					<Return type=""/>
+					<Param name="x" type="float" defaultValue=""/>
+					<Param name="y" type="float" defaultValue=""/>
+					<SourceCode>
+						<Code>        Must be implemented by subclass to create correct follower</Code>
+						<Code></Code>
+						<Code>        Args:</Code>
+						<Code>            x:  Arcade x</Code>
+						<Code>            y:  Arcade y</Code>
+						<Code>        &quot;&quot;&quot; pass</Code>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Method name="id" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="firedBy" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="k" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="firedBy" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="firedFromPosition" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="firedFromPosition" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="followers" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="followers" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Field visibility="PROTECTED">
+					<Param name="baseEnemyTorpedoLogger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="id" type="EnemyTorpedoId" defaultValue="torpedoId"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="firedBy" type="EnemyId" defaultValue="cast(EnemyId,None)"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="firedFromPosition" type="Coordinates" defaultValue="cast(Coordinates,None)"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="followers" type="SpriteList" defaultValue="cast(SpriteList,None)"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="computer" type="Computer" defaultValue="Computer()"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="301" height="92" x="350" y="25">
+			<Class id="4" name="BaseGamePiece" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="filename" type="str" defaultValue="''"/>
+					<Param name="scale" type="float" defaultValue="1.0"/>
+					<SourceCode/>
+				</Method>
+				<Method name="gameCoordinates" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="gameCoordinates" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Field visibility="PROTECTED">
+					<Param name="gameCoordinates" type="Coordinates" defaultValue="cast(Coordinates,None)"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="850" y="175">
+			<Class id="5" name="BaseMiss" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="fileName" type="str" defaultValue=""/>
+					<Param name="placedTime" type="float" defaultValue=""/>
+					<Param name="scale" type="float" defaultValue="1.0"/>
+					<SourceCode/>
+				</Method>
+				<Method name="placedTime" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Field visibility="PUBLIC">
+					<Param name="logger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="placedTime" type="float" defaultValue="placedTime"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="181" height="68" x="1600" y="225">
+			<Class id="6" name="BaseTorpedoExplosion" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="textureList" type="TextureList" defaultValue=""/>
+					<Param name="delayFrames" type="int" defaultValue=""/>
+					<Param name="scale" type="float" defaultValue="1.0"/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="175" y="675">
+			<Class id="7" name="BaseTorpedoFollower" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="filename" type="str" defaultValue=""/>
+					<Param name="followerId" type="EnemyFollowerId" defaultValue=""/>
+					<Param name="scale" type="float" defaultValue="1.0"/>
+					<SourceCode/>
+				</Method>
+				<Method name="id" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="following" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="following" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Field visibility="PROTECTED">
+					<Param name="id" type="EnemyFollowerId" defaultValue="followerId"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="following" type="EnemyTorpedoId" defaultValue="EnemyTorpedoId('')"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="118" x="2675" y="525">
+			<Class id="8" name="Commander" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="coordinates" type="Coordinates" defaultValue=""/>
+					<Param name="moveInterval" type="int" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__str__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__repr__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Field visibility="PUBLIC">
+					<Param name="logger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="id" type="" defaultValue="EnemyId(f'Commander-{gameCoordinates}')"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="center_x" type="" defaultValue="arcadePoint.x"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="center_y" type="" defaultValue="arcadePoint.y"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="205" height="102" x="1475" y="1200">
+			<Class id="9" name="CommanderTorpedo" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="speed" type="float" defaultValue="3.0"/>
+					<SourceCode/>
+				</Method>
+				<Method name="_placeTorpedoFollower" visibility="PROTECTED">
+					<Return type=""/>
+					<Param name="x" type="float" defaultValue=""/>
+					<Param name="y" type="float" defaultValue=""/>
+					<SourceCode>
+						<Code>        We implement the empty base class method</Code>
+						<Code></Code>
+						<Code>        Args:</Code>
+						<Code>            x:  Arcade x</Code>
+						<Code>            y:  Arcade y</Code>
+						<Code>        &quot;&quot;&quot; commanderTorpedoFollower:CommanderTorpedoFollower=CommanderTorpedoFollower() commanderTorpedoFollower.center_x=x commanderTorpedoFollower.center_y=y commanderTorpedoFollower.following=self._id self._followers.append(commanderTorpedoFollower)</Code>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Field visibility="PUBLIC">
+					<Param name="logger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="159" height="80" x="1375" y="650">
+			<Class id="10" name="CommanderTorpedoExplosion" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="textureList" type="TextureList" defaultValue=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="243" y="858">
+			<Class id="11" name="CommanderTorpedoFollower" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="156" height="54" x="625" y="500">
+			<Class id="12" name="CommanderTorpedoMiss" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="placedTime" type="float" defaultValue=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="230" height="118" x="2125" y="525">
+			<Class id="13" name="Klingon" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="coordinates" type="Coordinates" defaultValue=""/>
+					<Param name="moveInterval" type="int" defaultValue="0"/>
+					<SourceCode>
+						<Code></Code>
+						<Code>        Args:</Code>
+						<Code>            coordinates:   Current Game Position</Code>
+						<Code>            moveInterval:  Only set at advanced game levels</Code>
+						<Code>        &quot;&quot;&quot; super().__init__(filename=Klingon.FILENAME,coordinates=coordinates) self.id=EnemyId(f'Klingon-{self.gameCoordinates}') self.moveInterval=moveInterval arcadePoint:ArcadePoint=GamePiece.gamePositionToScreenPosition(coordinates) self.center_x=arcadePoint.x self.center_y=arcadePoint.y  </Code>
+					</SourceCode>
+				</Method>
+				<Method name="__str__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__repr__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Field visibility="PRIVATE">
+					<Param name="id" type="" defaultValue="EnemyId(f'Klingon-{gameCoordinates}')"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="moveInterval" type="" defaultValue="moveInterval"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="center_x" type="" defaultValue="arcadePoint.x"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="center_y" type="" defaultValue="arcadePoint.y"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="850" y="1200">
+			<Class id="14" name="KlingonTorpedo" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="speed" type="float" defaultValue="3.0"/>
+					<SourceCode/>
+				</Method>
+				<Method name="_placeTorpedoFollower" visibility="PROTECTED">
+					<Return type=""/>
+					<Param name="x" type="float" defaultValue=""/>
+					<Param name="y" type="float" defaultValue=""/>
+					<SourceCode>
+						<Code>        We implement the empty base class method</Code>
+						<Code></Code>
+						<Code>        Args:</Code>
+						<Code>            x:  Arcade x</Code>
+						<Code>            y:  Arcade y</Code>
+						<Code>        &quot;&quot;&quot; klingonTorpedoFollower:KlingonTorpedoFollower=KlingonTorpedoFollower() klingonTorpedoFollower.center_x=x klingonTorpedoFollower.center_y=y klingonTorpedoFollower.following=self._id self._followers.append(klingonTorpedoFollower)</Code>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Field visibility="PUBLIC">
+					<Param name="logger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="137" height="83" x="1575" y="625">
+			<Class id="15" name="KlingonTorpedoExplosion" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="textureList" type="TextureList" defaultValue=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="34" y="1029">
+			<Class id="16" name="KlingonTorpedoExplosionColor" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified"/>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="468" y="858">
+			<Class id="17" name="KlingonTorpedoFollower" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="147" height="55" x="825" y="500">
+			<Class id="18" name="KlingonTorpedoMiss" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="placedTime" type="float" defaultValue=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="212" height="115" x="2400" y="525">
+			<Class id="19" name="SuperCommander" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="coordinates" type="Coordinates" defaultValue=""/>
+					<Param name="moveInterval" type="int" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__str__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__repr__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Field visibility="PUBLIC">
+					<Param name="logger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="id" type="" defaultValue="EnemyId(f'SuperCommander-{gameCoordinates}')"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="center_x" type="" defaultValue="arcadePoint.x"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="center_y" type="" defaultValue="arcadePoint.y"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="1146" y="1218">
+			<Class id="20" name="SuperCommanderTorpedo" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="speed" type="float" defaultValue="3.0"/>
+					<SourceCode/>
+				</Method>
+				<Method name="_placeTorpedoFollower" visibility="PROTECTED">
+					<Return type=""/>
+					<Param name="x" type="float" defaultValue=""/>
+					<Param name="y" type="float" defaultValue=""/>
+					<SourceCode>
+						<Code>        We implement the empty base class method</Code>
+						<Code></Code>
+						<Code>        Args:</Code>
+						<Code>            x:  Arcade x</Code>
+						<Code>            y:  Arcade y</Code>
+						<Code>        &quot;&quot;&quot; superCommanderTorpedoFollower:SuperCommanderTorpedoFollower=SuperCommanderTorpedoFollower() superCommanderTorpedoFollower.center_x=x superCommanderTorpedoFollower.center_y=y superCommanderTorpedoFollower.following=self._id self._followers.append(superCommanderTorpedoFollower)</Code>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Field visibility="PUBLIC">
+					<Param name="logger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="195" height="76" x="1725" y="625">
+			<Class id="21" name="SuperCommanderTorpedoExplosion" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="textureList" type="TextureList" defaultValue=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="19" y="857">
+			<Class id="22" name="SuperCommanderTorpedoFollower" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="157" height="54" x="992" y="500">
+			<Class id="23" name="SuperCommanderTorpedoMiss" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="placedTime" type="float" defaultValue=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="608" y="1028">
+			<Class id="24" name="Enterprise" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="update" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__str__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__repr__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Field visibility="PUBLIC">
+					<Param name="logger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="imageRotation" type="" defaultValue="0"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="34" y="1154">
+			<Class id="25" name="ExplosionColor" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified"/>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="50" y="225">
+			<Class id="26" name="GamePiece" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="filename" type="str" defaultValue="''"/>
+					<Param name="speed" type="float" defaultValue="2"/>
+					<Param name="scale" type="float" defaultValue="1.0"/>
+					<SourceCode>
+						<Code>        Max speed</Code>
+						<Code>        &quot;&quot;&quot; self._rotationSpeed:float=3 &quot;&quot;&quot;</Code>
+						<Code>        Max speed we can rotate</Code>
+						<Code>        &quot;&quot;&quot;  </Code>
+					</SourceCode>
+				</Method>
+				<Method name="gamePositionToScreenPosition" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="cls" type="" defaultValue=""/>
+					<Param name="gameCoordinates" type="Coordinates" defaultValue=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Method name="speed" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="speed" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="rotationSpeed" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="rotationSpeed" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Field visibility="PROTECTED">
+					<Param name="speed" type="float" defaultValue="speed"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="rotationSpeed" type="float" defaultValue="3"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="195" height="100" x="1250" y="225">
+			<Class id="27" name="PhaserBolt" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="textureList" type="TextureList" defaultValue=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="333" y="1028">
+			<Class id="28" name="PhotonTorpedo" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="speed" type="float" defaultValue="3.0"/>
+					<SourceCode/>
+				</Method>
+				<Method name="update" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Method name="id" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="firedAt" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="k" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="firedAt" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Field visibility="PUBLIC">
+					<Param name="logger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="id" type="PhotonTorpedoId" defaultValue="PhotonTorpedoId(f'Torpedo-{PhotonTorpedo.nextId}')"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="firedAt" type="EnemyId" defaultValue="cast(EnemyId,None)"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="132" height="62" x="1975" y="625">
+			<Class id="29" name="PhotonTorpedoExplosion" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="textureList" type="TextureList" defaultValue=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="123" height="56" x="1183" y="500">
+			<Class id="30" name="PhotonTorpedoMiss" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="placedTime" type="float" defaultValue=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="300" y="225">
+			<Class id="31" name="Planet" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="planetType" type="PlanetType" defaultValue=""/>
+					<Param name="sectorCoordinates" type="Coordinates" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__str__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__repr__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Method name="id" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Field visibility="PUBLIC">
+					<Param name="logger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="gameCoordinates" type="" defaultValue="sectorCoordinates"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="center_x" type="" defaultValue="arcadePoint.x"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="center_y" type="" defaultValue="arcadePoint.y"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="type" type="PlanetType" defaultValue="planetType"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="id" type="str" defaultValue="f'{_type.value} type planet'"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="34" y="1279">
+			<Class id="32" name="PlanetType" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified"/>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="3116" y="10">
+			<Class id="33" name="SmoothMotion" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="imageRotation" type="int" defaultValue="IMAGE_ROTATION"/>
+					<SourceCode>
+						<Code>        True if we are moving, else False</Code>
+						<Code>        &quot;&quot;&quot; self._destinationPoint:ArcadePoint=cast(ArcadePoint,None) &quot;&quot;&quot;</Code>
+						<Code>        The arcade game library final destination screen position if the game piece is in motion</Code>
+						<Code>        &quot;&quot;&quot; self._imageRotation:int=imageRotation  </Code>
+					</SourceCode>
+				</Method>
+				<Method name="doMotion" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="gamePiece" type="GamePiece" defaultValue=""/>
+					<Param name="destinationPoint" type="ArcadePoint" defaultValue=""/>
+					<Param name="angleDiffRadians" type="float" defaultValue=""/>
+					<Param name="actualAngleRadians" type="float" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="computeArcadeMotion" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="currentPoint" type="ArcadePoint" defaultValue=""/>
+					<Param name="destinationPoint" type="ArcadePoint" defaultValue=""/>
+					<Param name="spriteRotationAngle" type="float" defaultValue=""/>
+					<Param name="rotationalSpeed" type="float" defaultValue=""/>
+					<SourceCode>
+						<Code>        Do math to calculate how to get the sprite to the destinationPoint.</Code>
+						<Code>        Calculate the angle in radians between the start points</Code>
+						<Code>        and end points. This is the angle the player will travel.</Code>
+						<Code></Code>
+						<Code>        Args:</Code>
+						<Code>            currentPoint:        Sprite's current position</Code>
+						<Code>            destinationPoint:    Sprite's desired position</Code>
+						<Code>            spriteRotationAngle:    How much is sprite rotated; in radians</Code>
+						<Code>            rotationalSpeed:        How fast can we rotate the sprite</Code>
+						<Code></Code>
+						<Code>        Returns:</Code>
+						<Code>        &quot;&quot;&quot; startX:float=currentPoint.x startY:float=currentPoint.y destinationX:float=destinationPoint.x destinationY:float=destinationPoint.y xDiff:float=destinationX-startX yDiff:float=destinationY-startY targetAngleRadians:float=self.computeTargetAngle(xDiff,yDiff) actualAngleRadians:float=radians(spriteRotationAngle-self.imageRotation) rotationSpeedRadians:float=radians(rotationalSpeed) angleDiffRadians:float=targetAngleRadians-actualAngleRadians ifSmoothMotion.smoothMotionCounter&gt;=SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:             self._smoothMotionLogger.debug(f'spriteRotationAngle={spriteRotationAngle:.2f} imageRotation={self.imageRotation:.2f}')  clockwise:bool=cast(bool,None) ifabs(angleDiffRadians)&lt;=rotationSpeedRadians:             actualAngleRadians=targetAngleRadians  else:             clockwise=self.rotateClockwise(angleDiffRadians=angleDiffRadians)  actualAngleRadians=self.correctRotation(actualAngleRadians=actualAngleRadians,rotationSpeedRadians=rotationSpeedRadians,targetAngleRadians=targetAngleRadians,clockwise=clockwise) radianInfo:RadianInfo=RadianInfo(actualAngleRadians=actualAngleRadians,angleDiffRadians=angleDiffRadians) returnradianInfo  </Code>
+					</SourceCode>
+				</Method>
+				<Method name="computeTargetAngle" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="xDiff" type="float" defaultValue=""/>
+					<Param name="yDiff" type="float" defaultValue=""/>
+					<SourceCode>
+						<Code>        Args:</Code>
+						<Code>            xDiff:  Difference between the 2 x coordinates</Code>
+						<Code>            yDiff:  Difference between the 2 y coordinates</Code>
+						<Code></Code>
+						<Code>        Returns: the angle in radians</Code>
+						<Code>        &quot;&quot;&quot; targetAngleRadians=atan2(yDiff,xDiff) iftargetAngleRadians&lt;0:             targetAngleRadians+=2*pi  ifSmoothMotion.smoothMotionCounter&gt;=SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:             targetAngleDegrees:float=degrees(targetAngleRadians) self._smoothMotionLogger.debug(f'targetAngleDegrees={targetAngleDegrees:0.2f}')  returntargetAngleRadians  </Code>
+					</SourceCode>
+				</Method>
+				<Method name="correctRotation" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="actualAngleRadians" type="" defaultValue=""/>
+					<Param name="rotationSpeedRadians" type="" defaultValue=""/>
+					<Param name="targetAngleRadians" type="" defaultValue=""/>
+					<Param name="clockwise" type="bool" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="rotateClockwise" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="angleDiffRadians" type="float" defaultValue=""/>
+					<SourceCode>
+						<Code>        Figure out if we rotate clockwise or counter-clockwise</Code>
+						<Code></Code>
+						<Code>        Args:</Code>
+						<Code>            angleDiffRadians:</Code>
+						<Code></Code>
+						<Code>        Returns: `True` then rotate clockwise, `False` rotate counter-clockwise</Code>
+						<Code>        &quot;&quot;&quot; ifangleDiffRadians&gt;0andabs(angleDiffRadians)&lt;pi:             clockwise=False  elifangleDiffRadians&gt;0andabs(angleDiffRadians)&gt;=pi:             clockwise=True  elifangleDiffRadians&lt;0andabs(angleDiffRadians)&lt;pi:             clockwise=True  else:             clockwise=False  returnclockwise  </Code>
+					</SourceCode>
+				</Method>
+				<Method name="keepInRange" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="actualAngleRadians" type="" defaultValue=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Method name="inMotion" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="inMotion" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="destinationPoint" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="d" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="destinationPoint" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="imageRotation" visibility="PUBLIC">
+					<Return type=""/>
+					<Param name="n" type="" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="imageRotation" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Field visibility="PROTECTED">
+					<Param name="smoothMotionLogger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="inMotion" type="bool" defaultValue="False"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="destinationPoint" type="ArcadePoint" defaultValue="cast(ArcadePoint,None)"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="imageRotation" type="int" defaultValue="imageRotation"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicClass width="200" height="100" x="525" y="225">
+			<Class id="34" name="StarBase" stereotype="noStereotype" filename="" description="" showMethods="True" showFields="True" showStereotype="True" displayParameters="Unspecified">
+				<Method name="__init__" visibility="PRIVATE">
+					<Return type=""/>
+					<Param name="sectorCoordinates" type="Coordinates" defaultValue=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__str__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Method name="__repr__" visibility="PRIVATE">
+					<Return type=""/>
+					<SourceCode>
+						<Code></Code>
+						<Code></Code>
+					</SourceCode>
+				</Method>
+				<Method name="id" visibility="PUBLIC">
+					<Return type=""/>
+					<SourceCode/>
+				</Method>
+				<Field visibility="PUBLIC">
+					<Param name="logger" type="Logger" defaultValue="getLogger(__name__)"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="gameCoordinates" type="" defaultValue="sectorCoordinates"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="center_x" type="" defaultValue="arcadePoint.x"/>
+				</Field>
+				<Field visibility="PRIVATE">
+					<Param name="center_y" type="" defaultValue="arcadePoint.y"/>
+				</Field>
+				<Field visibility="PROTECTED">
+					<Param name="id" type="str" defaultValue="f'StarBase-{StarBase.nextId}'"/>
+				</Field>
+			</Class>
+		</GraphicClass>
+		<GraphicLink srcX="923" srcY="175" dstX="650" dstY="74" spline="False">
+			<ControlPoint x="923" y="73"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="5" destId="4"/>
+		</GraphicLink>
+		<GraphicLink srcX="148" srcY="225" dstX="350" dstY="75" spline="False">
+			<ControlPoint x="153" y="77"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="26" destId="4"/>
+		</GraphicLink>
+		<GraphicLink srcX="401" srcY="225" dstX="402" dstY="116" spline="False">
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="31" destId="4"/>
+		</GraphicLink>
+		<GraphicLink srcX="566" srcY="225" dstX="567" dstY="116" spline="False">
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="34" destId="4"/>
+		</GraphicLink>
+		<GraphicLink srcX="1689" srcY="225" dstX="1407" dstY="74" spline="False">
+			<ControlPoint x="1690" y="75"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="6" destId="1"/>
+		</GraphicLink>
+		<GraphicLink srcX="1372" srcY="225" dstX="1371" dstY="147" spline="False">
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="27" destId="1"/>
+		</GraphicLink>
+		<GraphicLink srcX="279" srcY="675" dstX="249" dstY="284" spline="False">
+			<ControlPoint x="279" y="283"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="7" destId="26"/>
+		</GraphicLink>
+		<GraphicLink srcX="2781" srcY="525" dstX="2659" dstY="129" spline="False">
+			<ControlPoint x="2776" y="129"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="8" destId="2"/>
+		</GraphicLink>
+		<GraphicLink srcX="2230" srcY="525" dstX="2375" dstY="131" spline="False">
+			<ControlPoint x="2222" y="134"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="13" destId="2"/>
+		</GraphicLink>
+		<GraphicLink srcX="2507" srcY="525" dstX="2506" dstY="290" spline="False">
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="19" destId="2"/>
+		</GraphicLink>
+		<GraphicLink srcX="1575" srcY="1200" dstX="1392" dstY="917" spline="False">
+			<ControlPoint x="1572" y="918"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="9" destId="3"/>
+		</GraphicLink>
+		<GraphicLink srcX="952" srcY="1200" dstX="1075" dstY="920" spline="False">
+			<ControlPoint x="951" y="919"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="14" destId="3"/>
+		</GraphicLink>
+		<GraphicLink srcX="1244" srcY="1218" dstX="1245" dstY="1039" spline="False">
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="20" destId="3"/>
+		</GraphicLink>
+		<GraphicLink srcX="1483" srcY="650" dstX="1600" dstY="253" spline="False">
+			<ControlPoint x="1487" y="254"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="10" destId="6"/>
+		</GraphicLink>
+		<GraphicLink srcX="1621" srcY="625" dstX="1624" dstY="292" spline="False">
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="15" destId="6"/>
+		</GraphicLink>
+		<GraphicLink srcX="1776" srcY="625" dstX="1771" dstY="292" spline="False">
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="21" destId="6"/>
+		</GraphicLink>
+		<GraphicLink srcX="2040" srcY="625" dstX="1780" dstY="254" spline="False">
+			<ControlPoint x="2034" y="253"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="29" destId="6"/>
+		</GraphicLink>
+		<GraphicLink srcX="330" srcY="858" dstX="328" dstY="774" spline="False">
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="11" destId="7"/>
+		</GraphicLink>
+		<GraphicLink srcX="526" srcY="858" dstX="374" dstY="750" spline="False">
+			<ControlPoint x="526" y="750"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="17" destId="7"/>
+		</GraphicLink>
+		<GraphicLink srcX="116" srcY="857" dstX="175" dstY="729" spline="False">
+			<ControlPoint x="116" y="726"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="22" destId="7"/>
+		</GraphicLink>
+		<GraphicLink srcX="770" srcY="500" dstX="850" dstY="227" spline="False">
+			<ControlPoint x="773" y="227"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="12" destId="5"/>
+		</GraphicLink>
+		<GraphicLink srcX="959" srcY="500" dstX="959" dstY="274" spline="False">
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="18" destId="5"/>
+		</GraphicLink>
+		<GraphicLink srcX="1043" srcY="500" dstX="1036" dstY="274" spline="False">
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="23" destId="5"/>
+		</GraphicLink>
+		<GraphicLink srcX="1201" srcY="500" dstX="1049" dstY="244" spline="False">
+			<ControlPoint x="1198" y="243"/>
+			<Link name="" type="INHERITANCE" cardSrc="" cardDestination="" bidir="False" sourceId="30" destId="5"/>
+		</GraphicLink>
+	</PyutDocument>
+</PyutProject>

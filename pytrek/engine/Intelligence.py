@@ -15,7 +15,7 @@ from random import choice
 
 from math import log
 
-from hasiihelper.Singleton import Singleton
+from codeallybasic.Singleton import Singleton
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
@@ -175,7 +175,7 @@ class Intelligence(Singleton):
 
         if commanderCount == 0:
             commanderCount = 1
-            self.logger.warning(f'Manually generated a single commander')
+            self.logger.info(f'Manually generated a single commander')
         return commanderCount
 
     def generateInitialSuperCommanderCount(self, playerType: PlayerType, numberOfKlingons: int):

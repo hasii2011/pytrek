@@ -1,12 +1,12 @@
-setuptools~=67.7.2
+setuptools==69.0.2
 py2app~=0.28.5
 html-testRunner~=1.2.1
-mypy~=1.2.0
+mypy==1.7.1
 
 jsonpickle~=3.0.1
 
 buildlackey~=0.8.1
-hasiihelper~=0.2.0
+codeallybasic==0.5.2
 
 arcade~=2.6.17
-shapely~=2.0.1
+shapely==2.0.2

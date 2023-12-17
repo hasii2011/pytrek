@@ -118,5 +118,9 @@ setup(
     long_description=README,
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
-    install_requires=['arcade~=2.6.17', 'shapely~=2.0.1']
+    install_requires=[
+        'arcade~=2.6.17',
+        'shapely~=2.0.1',
+        'codeallybasic~=0.5.2',
+    ]
 )

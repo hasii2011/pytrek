@@ -1,7 +1,7 @@
 
 from os import sep as osSep
 
-from hasiihelper.ResourceManager import ResourceManager
+from codeallybasic.ResourceManager import ResourceManager
 
 from json import load as jsonLoad
 

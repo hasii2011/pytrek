@@ -7,7 +7,7 @@ from logging import DEBUG
 
 from arcade import SpriteList
 
-from hasiihelper.Singleton import Singleton
+from codeallybasic.Singleton import Singleton
 
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
