@@ -32,7 +32,7 @@ class TestBase(UnitTestBase):
     @classmethod
     def setUpClass(cls):
         """"""
-        UnitTestBase.setUpClass()
+        super().setUpClass()
         SettingsCommon.determineSettingsLocation()
 
     def setUp(self):
@@ -46,13 +46,13 @@ class TestBase(UnitTestBase):
         """
         Force stateful singletons to re-initialize
         """
-        GameSettings.__instance__ = cast(Singleton, None)
-        Intelligence.__instance__ = cast(Singleton, None)
-        GameState.__instance__    = cast(Singleton, None)
-        Galaxy.__instance__       = cast(Singleton, None)
-        GameEngine.__instance__   = cast(Singleton, None)
-        EventEngine.__instance__  = cast(Singleton, None)
-        Devices.__instance__      = cast(Singleton, None)
-        Galaxy.__instance__       = cast(Singleton, None)
+        GameSettings.__instance__     = cast(Singleton, None)
+        Intelligence.__instance__     = cast(Singleton, None)
+        GameState.__instance__        = cast(Singleton, None)
+        Galaxy.__instance__           = cast(Singleton, None)
+        GameEngine.__instance__       = cast(Singleton, None)
+        EventEngine.__instance__      = cast(Singleton, None)
+        Devices.__instance__          = cast(Singleton, None)
+        Galaxy.__instance__           = cast(Singleton, None)
         GalaxyMediator.__instance__   = cast(Singleton, None)
         QuadrantMediator.__instance__ = cast(Singleton, None)
