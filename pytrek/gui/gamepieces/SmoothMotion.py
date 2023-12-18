@@ -15,7 +15,10 @@ from math import cos
 from math import sin
 
 from pytrek.engine.ArcadePoint import ArcadePoint
+
 from pytrek.gui.gamepieces.GamePiece import GamePiece
+
+from pytrek.settings.GameSettings import GameSettings
 
 RadianInfo = namedtuple('RadianInfo', 'actualAngleRadians, angleDiffRadians')
 
@@ -46,6 +49,8 @@ class SmoothMotion:
         """
         Counter that let's us know when to update the debug output
         """
+        self._gameSettings:              GameSettings = GameSettings()
+        self._smoothMotionDebugInterval: int          = 0
 
     @property
     def inMotion(self) -> bool:
@@ -87,7 +92,7 @@ class SmoothMotion:
             angleDiffDegrees:   float = degrees(angleDiffRadians)
             actualAngleDegrees: float = degrees(actualAngleRadians)
 
-            self._smLogger.debug(f'{gamePiece} angleDiffDegrees={angleDiffDegrees:.2f} actualAngleDegrees={actualAngleDegrees:.2f}')
+            self._smoothMotionDebugOutput(f'{gamePiece} angleDiffDegrees={angleDiffDegrees:.2f} actualAngleDegrees={actualAngleDegrees:.2f}')
 
         # Are we close to the correct angle? If so, move forward.
         if abs(angleDiffRadians) < pi / 4:
@@ -97,11 +102,9 @@ class SmoothMotion:
         moving: bool = self._fineTuneMotion(gamePiece=gamePiece, destinationX=destinationX, destinationY=destinationY)
 
         if self._smoothMotionCounter > SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:
-            if DEBUG:
-                self._smLogger.debug(f'After: {gamePiece} ({gamePiece.center_x},{gamePiece.center_y}) destination ({destinationX},{destinationY})')
+            self._smoothMotionDebugOutput(f'After: {gamePiece} ({gamePiece.center_x},{gamePiece.center_y}) destination ({destinationX},{destinationY})')
             self._smoothMotionCounter = 0
 
-        # self._smLogger.debug(f'({gamePiece.center_x},{gamePiece.center_y})')
         # If we have arrived, then we are not in motion
         if not moving:
             # self.destinationPoint = None      # Leave this set for klingon torpedo hit computation
@@ -138,7 +141,7 @@ class SmoothMotion:
         angleDiffRadians:     float = targetAngleRadians - actualAngleRadians        # What is the difference between what we want, and here we are?
 
         if self._smoothMotionCounter >= SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:
-            self._smLogger.debug(f'spriteRotationAngle={spriteRotationAngle:.2f} imageRotation={self.imageRotation:.2f}')
+            self._smoothMotionDebugOutput(f'spriteRotationAngle={spriteRotationAngle:.2f} imageRotation={self.imageRotation:.2f}')
 
         # Are we close enough to not need to rotate?
         clockwise: bool = cast(bool, None)
@@ -170,7 +173,8 @@ class SmoothMotion:
 
         if self._smoothMotionCounter >= SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:
             targetAngleDegrees: float = degrees(targetAngleRadians)
-            self._smLogger.debug(f'targetAngleDegrees={targetAngleDegrees:0.2f}')
+
+            self._smoothMotionDebugOutput(f'targetAngleDegrees={targetAngleDegrees:0.2f}')
 
         return targetAngleRadians
 
@@ -189,7 +193,7 @@ class SmoothMotion:
         moving: bool = False
         if DEBUG:
             if self._smoothMotionCounter > SmoothMotion.SMOOTH_MOTION_MAX_UPDATE:
-                self._smLogger.debug(f'Before: {gamePiece} ({gamePiece.center_x},{gamePiece.center_y}) destination ({destinationX},{destinationY})')
+                self._smoothMotionDebugOutput(f'Before: {gamePiece} ({gamePiece.center_x},{gamePiece.center_y}) destination ({destinationX},{destinationY})')
 
         if abs(gamePiece.center_x - destinationX) < abs(gamePiece.change_x):
             gamePiece.center_x = destinationX
@@ -249,3 +253,11 @@ class SmoothMotion:
             actualAngleRadians += 2 * pi
 
         return actualAngleRadians
+
+    def _smoothMotionDebugOutput(self, msg: str):
+
+        if self._gameSettings.smoothMotionDebug is True:
+            self._smoothMotionDebugInterval += 1
+            if self._smoothMotionDebugInterval > self._gameSettings.smoothMotionDebugInterval:
+                self._smLogger.debug(msg)
+                self._smoothMotionDebugInterval = 0

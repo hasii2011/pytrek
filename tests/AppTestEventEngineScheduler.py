@@ -42,30 +42,31 @@ SCREEN_HEIGHT: int = 600
 
 SCREEN_TITLE: str = 'Test Event Scheduler'
 
-DEVICE_HEADER_FONT_SIZE: int = 14
+DEVICE_HEADER_FONT_SIZE: int = 12
 DEVICE_HEADER_COLOR:     tuple[int, int, int]  = color.WHITE
 X_MARGIN:        float = 10.0
 Y_MARGIN:        float = 24.0
 DEVICE_Y:        float = SCREEN_HEIGHT - Y_MARGIN
 DEVICE_TYPE_X:   float = X_MARGIN
-DEVICE_DAMAGE_X: float = DEVICE_TYPE_X + 190
+DEVICE_DAMAGE_X: float = DEVICE_TYPE_X + 210
 DEVICE_STATUS_X: float = DEVICE_DAMAGE_X + 100
 
 DEVICE_DETAIL_COLOR:     tuple[int, int, int] = color.WHITE
-DEVICE_DETAIL_FONT_SIZE: int = 12
+DEVICE_DETAIL_FONT_SIZE: int = 10
 
 EVENT_TYPE_X:           float = DEVICE_STATUS_X + 120
 EVENT_DATE_X:           float = EVENT_TYPE_X    + 210
 EVENT_COORDINATES_X:    float = EVENT_DATE_X + 100
+HEADER_Y:               float = DEVICE_Y - 10
 EVENT_TYPE_Y:           float = DEVICE_Y
 
 EVENT_HEADER_COLOR:     tuple[int, int, int] = color.WHITE
-EVENT_HEADER_FONT_SIZE: int = 14
+EVENT_HEADER_FONT_SIZE: int = 12
 
 EVENT_DETAIL_COLOR:     tuple[int, int, int] = color.WHITE
-EVENT_DETAIL_FONT_SIZE: int = 12
+EVENT_DETAIL_FONT_SIZE: int = 10
 
-HELP_SEPARATOR_Y: int = 125
+HELP_SEPARATOR_Y: int = 135
 HELP_Y:           int = HELP_SEPARATOR_Y - 25
 GAME_STATE_Y:     int = HELP_SEPARATOR_Y + 50
 
@@ -117,7 +118,7 @@ class AppTestEventScheduler(View):
         draw_text(f'Event Type', EVENT_TYPE_X, EVENT_TYPE_Y, EVENT_HEADER_COLOR, EVENT_HEADER_FONT_SIZE)
         # Separator line
         draw_line(start_x=EVENT_TYPE_X, end_x=SCREEN_WIDTH - (2 * X_MARGIN),
-                  start_y=EVENT_TYPE_Y, end_y=EVENT_TYPE_Y,
+                  start_y=HEADER_Y, end_y=HEADER_Y,
                   color=color.WHITE, line_width=2)
 
     def _drawDevicesStatus(self):
@@ -129,7 +130,7 @@ class AppTestEventScheduler(View):
 
         # Separator line
         draw_line(start_x=DEVICE_TYPE_X, end_x=(SCREEN_WIDTH / 2) - (2 * X_MARGIN),
-                  start_y=DEVICE_Y, end_y=DEVICE_Y,
+                  start_y=HEADER_Y, end_y=HEADER_Y,
                   color=color.WHITE, line_width=2)
 
         # Devices themselves
@@ -162,14 +163,14 @@ class AppTestEventScheduler(View):
 
     def _drawGameState(self):
         starDate: float = self._gameState.starDate
-        draw_text(f'Current Star Date: {starDate:.2f}', 10, GAME_STATE_Y, color.YELLOW, 12)
-        draw_text(f'Klingon Count: {self._gameState.remainingKlingons}',     225, GAME_STATE_Y, color.YELLOW, 12)
-        draw_text(f'Commander Count: {self._gameState.remainingCommanders}', 365, GAME_STATE_Y, color.YELLOW, 12)
-        draw_text(f'StarBase Count: {self._gameState.starBaseCount}',        530, GAME_STATE_Y, color.YELLOW, 12)
+        draw_text(f'Current Star Date: {starDate:.2f}', 10, GAME_STATE_Y, color.APPLE_GREEN, 10)
+        draw_text(f'Klingon Count: {self._gameState.remainingKlingons}',     225, GAME_STATE_Y, color.YELLOW, 10)
+        draw_text(f'Commander Count: {self._gameState.remainingCommanders}', 365, GAME_STATE_Y, color.YELLOW, 10)
+        draw_text(f'StarBase Count: {self._gameState.starBaseCount}',        530, GAME_STATE_Y, color.YELLOW, 10)
 
     def _drawHelpText(self):
         draw_line(start_x=10, end_x=SCREEN_WIDTH - (2 * X_MARGIN), start_y=HELP_SEPARATOR_Y, end_y=HELP_SEPARATOR_Y, color=color.YELLOW, line_width=1)
-        draw_text(f'Q: `Quit`   1-9: `Update Time`   C: `Kill Commanders`   A: `Reset`', 10, HELP_Y, color.YELLOW)
+        draw_text(f'Q: `Quit`   1-9: `Update Time`   C: `Kill Commanders`   A: `Reset`', 10, HELP_Y, color.YELLOW, 10)
 
     def on_update(self, deltaTime: float):
         """

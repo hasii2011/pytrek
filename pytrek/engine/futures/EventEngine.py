@@ -111,7 +111,7 @@ class EventEngine(Singleton):
     def fixDevices(self):
         # noinspection SpellCheckingInspection
         """
-        // #define Time a.Time // time taken by current operation
+        // time taken by current operation
         double fintim = d.date + Time
         datemin = fintim;
 
@@ -177,8 +177,8 @@ class EventEngine(Singleton):
                 if futureEvent.schedulable is False:
                     pass
                 else:
-                    eventStarDate: float = futureEvent.starDate
-                    if eventStarDate != 0 and currentStarDate >= eventStarDate:
+                    eventStartDate: float = futureEvent.starDate
+                    if eventStartDate != 0 and currentStarDate >= eventStartDate:
                         self._fireEvent(eventToFire=futureEvent)
                         self._scheduleRecurringEvents(eventType=futureEvent.type)
 

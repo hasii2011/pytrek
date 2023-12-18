@@ -1,6 +1,8 @@
+
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
-from typing import cast
 
 from arcade import SpriteList
 
@@ -32,7 +34,8 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
         self._currentPosition:   Coordinates = cast(Coordinates, None)
         self._followers:         SpriteList  = cast(SpriteList, None)
 
-        self._computer: Computer = Computer()
+        self._computer:                      Computer     = Computer()
+        self._baseEnemyTorpedoDebugInterval: int          = 0
 
     @property
     def id(self) -> EnemyTorpedoId:
@@ -80,10 +83,9 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
                                                               spriteRotationAngle=self.angle,
                                                               rotationalSpeed=self.rotationSpeed)
 
-            # self._baseEnemyTorpedoLogger.debug(f'{radianInfo=} {self.destinationPoint=}')
+            self._baseEnemyTorpedoDebugOutput(f'{radianInfo=} {self.destinationPoint=}')
             self.doMotion(gamePiece=self, destinationPoint=self.destinationPoint,
                           angleDiffRadians=radianInfo.angleDiffRadians, actualAngleRadians=radianInfo.actualAngleRadians)
-            # self.doMotion2(gamePiece=self, destinationPoint=self.destinationPoint)
 
             self._potentiallyCreateAFollower()
 
@@ -96,7 +98,7 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
         position: Coordinates = self._computer.computeSectorCoordinates(x=currentX, y=currentY)
 
         if position != self._currentPosition:
-            self._baseEnemyTorpedoLogger.debug(f'Created a follower @ {position}')
+            self._baseEnemyTorpedoDebugOutput(f'Created a follower @ {position}')
             self._placeTorpedoFollower(x=currentX, y=currentY)
             self._currentPosition = position
 
@@ -109,6 +111,14 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
             y:  Arcade y
         """
         pass
+
+    def _baseEnemyTorpedoDebugOutput(self, msg: str):
+
+        if self._gameSettings.baseEnemyTorpedoDebug is True:
+            self._baseEnemyTorpedoDebugInterval += 1
+            if self._baseEnemyTorpedoDebugInterval > self._gameSettings.baseEnemyTorpedoDebugInterval:
+                self._baseEnemyTorpedoLogger.debug(msg)
+                self._baseEnemyTorpedoDebugInterval = 0
 
     def __str__(self) -> str:
 

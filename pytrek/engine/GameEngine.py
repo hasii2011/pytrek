@@ -180,7 +180,6 @@ class GameEngine(Singleton):
             power = 20.0 + 100.0*game.dist;
             game.energy -= power;
 
-
         Returns:   The Java calculated version
 
         """
@@ -349,6 +348,7 @@ class GameEngine(Singleton):
             self._gameState.shieldEnergy = 0
             self._devices.getDevice(DeviceType.Shields).setDeviceStatus(DeviceStatus.Down)
 
+    # noinspection PyAttributeOutsideInit
     def updateRealTimeClock(self, deltaTime: float):
         """
         Essentially our real time clock ticks every REAL_TIME_CLOCK_TICK second(s).  The
