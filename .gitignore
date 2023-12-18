@@ -5,8 +5,8 @@ __pycache__/
 /html/
 /build/
 /dist/
-/pyenv-3.9.1/
-/pyenv-3.9.16
+/pyenv-3.10.13/
+/pyenv-3.9.16/
 /archive/
 /PyTrek.egg-info
 /.eggs
