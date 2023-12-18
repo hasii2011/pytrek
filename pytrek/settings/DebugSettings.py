@@ -36,6 +36,11 @@ class DebugSettings(BaseSubSetting):
     SCHEDULE_TRACTOR_BEAM:           str = 'schedule_tractor_beam'
     SCHEDULE_COMMANDER_ATTACKS_BASE: str = 'schedule_commander_attacks_base'
 
+    BASE_ENEMY_TORPEDO_DEBUG:          str = 'base_enemy_torpedo_debug'
+    BASE_ENEMY_TORPEDO_DEBUG_INTERVAL: str = 'base_enemy_torpedo_debug_interval'
+    SMOOTH_MOTION_DEBUG:               str = 'smooth_motion_debug'
+    SMOOTH_MOTION_DEBUG_INTERVAL:      str = 'smooth_motion_debug_interval'
+
     DEBUG_SETTINGS: SettingsNameValues = SettingsNameValues({
         MANUAL_PLACE_SHIP_IN_QUADRANT: 'False',
         MANUAL_SECTOR_COORDINATES:     '0,0',
@@ -59,15 +64,20 @@ class DebugSettings(BaseSubSetting):
         SCHEDULE_SUPER_NOVA:             'True',
         SCHEDULE_TRACTOR_BEAM:           'True',
         SCHEDULE_COMMANDER_ATTACKS_BASE: 'True',
+        BASE_ENEMY_TORPEDO_DEBUG:          'False',
+        BASE_ENEMY_TORPEDO_DEBUG_INTERVAL: '5',
+        SMOOTH_MOTION_DEBUG:               'False',
+        SMOOTH_MOTION_DEBUG_INTERVAL:      '5',
     })
 
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
         """
         This is a singleton based on the inheritance hierarchy
         """
         self.logger: Logger = getLogger(__name__)
 
-        BaseSubSetting.init(self, *args, **kwds)
+        BaseSubSetting.init(self, *args, **kwargs)
 
         self._settingsCommon: SettingsCommon = SettingsCommon(self._config)
 
@@ -242,4 +252,40 @@ class DebugSettings(BaseSubSetting):
     @scheduleCommanderAttacksBase.setter
     def scheduleCommanderAttacksBase(self, newValue: bool):
         self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.SCHEDULE_COMMANDER_ATTACKS_BASE, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def baseEnemyTorpedoDebug(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.BASE_ENEMY_TORPEDO_DEBUG)
+
+    @baseEnemyTorpedoDebug.setter
+    def baseEnemyTorpedoDebug(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.BASE_ENEMY_TORPEDO_DEBUG, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def baseEnemyTorpedoDebugInterval(self) -> int:
+        return self._config.getint(DebugSettings.DEBUG_SECTION, DebugSettings.BASE_ENEMY_TORPEDO_DEBUG_INTERVAL)
+
+    @baseEnemyTorpedoDebugInterval.setter
+    def baseEnemyTorpedoDebugInterval(self, newValue: int):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.BASE_ENEMY_TORPEDO_DEBUG_INTERVAL, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def smoothMotionDebug(self) -> bool:
+        return self._config.getboolean(DebugSettings.DEBUG_SECTION, DebugSettings.SMOOTH_MOTION_DEBUG)
+
+    @smoothMotionDebug.setter
+    def smoothMotionDebug(self, newValue: bool):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.SMOOTH_MOTION_DEBUG, str(newValue))
+        self._settingsCommon.saveSettings()
+
+    @property
+    def smoothMotionDebugInterval(self) -> int:
+        return self._config.getint(DebugSettings.DEBUG_SECTION, DebugSettings.SMOOTH_MOTION_DEBUG_INTERVAL)
+
+    @smoothMotionDebugInterval.setter
+    def smoothMotionDebugInterval(self, newValue: int):
+        self._config.set(DebugSettings.DEBUG_SECTION, DebugSettings.SMOOTH_MOTION_DEBUG_INTERVAL, str(newValue))
         self._settingsCommon.saveSettings()

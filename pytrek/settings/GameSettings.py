@@ -352,6 +352,38 @@ class GameSettings(Singleton):
         self._debug.scheduleCommanderAttacksBase = newValue
 
     @property
+    def baseEnemyTorpedoDebug(self) -> bool:
+        return self._debug.baseEnemyTorpedoDebug
+
+    @baseEnemyTorpedoDebug.setter
+    def baseEnemyTorpedoDebug(self, newValue: bool):
+        self._debug.baseEnemyTorpedoDebug = newValue
+
+    @property
+    def baseEnemyTorpedoDebugInterval(self) -> int:
+        return self._debug.baseEnemyTorpedoDebugInterval
+
+    @baseEnemyTorpedoDebugInterval.setter
+    def baseEnemyTorpedoDebugInterval(self, newValue: int):
+        self._debug.baseEnemyTorpedoDebugInterval = newValue
+
+    @property
+    def smoothMotionDebug(self) -> bool:
+        return self._debug.smoothMotionDebug
+
+    @smoothMotionDebug.setter
+    def smoothMotionDebug(self, newValue: bool):
+        self._debug.smoothMotionDebug = newValue
+
+    @property
+    def smoothMotionDebugInterval(self) -> int:
+        return self._debug.smoothMotionDebugInterval
+
+    @smoothMotionDebugInterval.setter
+    def smoothMotionDebugInterval(self, newValue: int):
+        self._debug.smoothMotionDebugInterval = newValue
+
+    @property
     def maxStarbaseSearches(self) -> int:
         return self._developer.maxStarbaseSearches
 
