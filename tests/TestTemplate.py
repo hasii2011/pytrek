@@ -1,9 +1,4 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
@@ -18,27 +13,24 @@ from tests.ProjectTestBase import ProjectTestBase
 class TestTemplate(ProjectTestBase):
     """
     You need to change the name of this class to Test`XXXX`
-    Where `XXXX' is the name of the class that you want to test.
+    Where `XXXX` is the name of the class that you want to test.
 
     See existing tests for more information.
     """
-    clsLogger: Logger = cast(Logger, None)
-
     @classmethod
     def setUpClass(cls):
-        ProjectTestBase.setUpLogging()
-        TestTemplate.clsLogger = getLogger(__name__)
+        super().setUpClass()
         SettingsCommon.determineSettingsLocation()
 
     @classmethod
     def tearDownClass(cls):
-        pass
+        super().tearDownClass()
 
     def setUp(self):
-        self.logger: Logger = TestTemplate.clsLogger
+        super().setUp()
 
     def tearDown(self):
-        pass
+        super().tearDown()
 
     def testName1(self):
         pass
