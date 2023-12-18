@@ -6,10 +6,10 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.model.Coordinates import Coordinates
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 
-class TestGamePiece(TestBase):
+class TestGamePiece(ProjectTestBase):
     """
     """
 

@@ -67,12 +67,12 @@ from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.LocateResources import LocateResources
 
 from pytrek.GameState import GameState
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 SCREEN_TITLE:  str = "Test Shooting"
 
 
-class TestShooting(View):
+class AppTestShooting(View):
     """
     Main application class.
     """
@@ -87,7 +87,7 @@ class TestShooting(View):
 
         super().__init__()
 
-        self.logger: Logger = getLogger(TestShooting.MADE_UP_PRETTY_MAIN_NAME)
+        self.logger: Logger = getLogger(AppTestShooting.MADE_UP_PRETTY_MAIN_NAME)
 
         set_background_color(color.WHITE)
 
@@ -242,18 +242,18 @@ class TestShooting(View):
 
         enemy: BaseEnemy = cast(BaseEnemy, self._selectedGamePiece)
 
-        if enemy.id == TestShooting.PALETTE_KLINGON_ID:
+        if enemy.id == AppTestShooting.PALETTE_KLINGON_ID:
             klingon: Klingon = self._quadrant.addKlingon()
             added: bool = self._addEnemyToTestGrid(enemy=klingon, x=x, y=y)
             if added is True:
                 self._quadrantMediator.klingonList.append(klingon)
-        elif enemy.id == TestShooting.PALETTE_COMMANDER_ID:
+        elif enemy.id == AppTestShooting.PALETTE_COMMANDER_ID:
             commander: Commander = self._quadrant.addCommander()
             added = self._addEnemyToTestGrid(enemy=commander, x=x, y=y)
             if added is True:
                 self._quadrantMediator.commanderList.append(commander)
 
-        elif enemy.id == TestShooting.PALETTE_SUPER_COMMANDER_ID:
+        elif enemy.id == AppTestShooting.PALETTE_SUPER_COMMANDER_ID:
             superCommander: SuperCommander = self._quadrant.addSuperCommander()
             added = self._addEnemyToTestGrid(enemy=superCommander, x=x, y=y)
             if added is True:
@@ -318,17 +318,17 @@ class TestShooting(View):
         """
         bogusCoordinates: Coordinates = Coordinates(-1, -1)
         paletteKlingon: Klingon = Klingon(coordinates=bogusCoordinates)
-        paletteKlingon.id = TestShooting.PALETTE_KLINGON_ID
+        paletteKlingon.id = AppTestShooting.PALETTE_KLINGON_ID
         paletteKlingon.center_x = 32
         paletteKlingon.center_y = 150
 
         paletteCommander: Commander = Commander(coordinates=bogusCoordinates, moveInterval=-1)
-        paletteCommander.id = TestShooting.PALETTE_COMMANDER_ID
+        paletteCommander.id = AppTestShooting.PALETTE_COMMANDER_ID
         paletteCommander.center_x = paletteKlingon.center_x + 64
         paletteCommander.center_y = 150
 
         paletteSuperCommander: SuperCommander = SuperCommander(coordinates=bogusCoordinates, moveInterval=-1)
-        paletteSuperCommander.id = TestShooting.PALETTE_SUPER_COMMANDER_ID
+        paletteSuperCommander.id = AppTestShooting.PALETTE_SUPER_COMMANDER_ID
         paletteSuperCommander.center_x = paletteCommander.center_x + 64
         paletteSuperCommander.center_y = 150
 
@@ -412,11 +412,11 @@ def main():
     """
     Main method
     """
-    TestBase.setUpLogging()
+    ProjectTestBase.setUpLogging()
     SettingsCommon.determineSettingsLocation()
 
     arcadeWindow: Window       = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    shootingView: TestShooting = TestShooting()
+    shootingView: AppTestShooting = AppTestShooting()
 
     arcadeWindow.set_exclusive_keyboard(exclusive=True)
     arcadeWindow.show_view(shootingView)

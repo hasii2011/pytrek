@@ -22,13 +22,13 @@ from pytrek.model.Quadrant import Quadrant
 
 from pytrek.settings.GameSettings import GameSettings
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
 from pytrek.gui.LogMessageConsole import LogMessageConsole
 
 
-class TestFutureEventHandlers(TestBase):
+class TestFutureEventHandlers(ProjectTestBase):
     """
     """
     MAX_LOOPS = 128
@@ -46,7 +46,7 @@ class TestFutureEventHandlers(TestBase):
 
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpClass()
+        ProjectTestBase.setUpClass()
 
         TestFutureEventHandlers._setupGame()
         TestFutureEventHandlers.clsLogger.debug(f'Running TestFutureEventHandlers')
@@ -296,7 +296,7 @@ class TestFutureEventHandlers(TestBase):
         TODO: perhaps should go in a utility class so it is always current
 
         """
-        TestBase.resetSingletons()
+        ProjectTestBase.resetSingletons()
 
         TestFutureEventHandlers.clsGameSettings = GameSettings()     # Be able to read the preferences file
         TestFutureEventHandlers.clsGameState    = GameState()        # Set up the game parameters which uses the above

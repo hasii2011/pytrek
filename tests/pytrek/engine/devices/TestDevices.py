@@ -6,12 +6,12 @@ from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 from pytrek.engine.devices.Devices import Devices
 
 
-class TestDevices(TestBase):
+class TestDevices(ProjectTestBase):
     """
     """
 

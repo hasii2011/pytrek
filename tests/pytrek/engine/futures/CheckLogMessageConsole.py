@@ -1,9 +1,9 @@
 
 from pytrek.gui.LogMessageConsole import LogMessageConsole
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
-TestBase.setUpClass()
+ProjectTestBase.setUpClass()
 
 pmc: LogMessageConsole = LogMessageConsole()
 

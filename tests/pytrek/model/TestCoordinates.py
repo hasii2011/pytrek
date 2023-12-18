@@ -7,7 +7,7 @@ from pytrek.Constants import MAX_SECTOR_Y_COORDINATE
 from pytrek.engine.Direction import Direction
 from pytrek.model.Coordinates import Coordinates
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 STANDARD_X_COORDINATE: int = 4
 STANDARD_Y_COORDINATE: int = 4
@@ -28,7 +28,7 @@ EXPECTED_X_COORDINATE_SE_MOVEMENT: int = 5
 EXPECTED_Y_COORDINATE_SE_MOVEMENT: int = 5
 
 
-class TestCoordinates(TestBase):
+class TestCoordinates(ProjectTestBase):
     """
     """
     def testNewCoordinatesNorth(self):

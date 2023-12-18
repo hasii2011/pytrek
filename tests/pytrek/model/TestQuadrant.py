@@ -7,10 +7,10 @@ from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
 from pytrek.model.Quadrant import Quadrant
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 
-class TestQuadrant(TestBase):
+class TestQuadrant(ProjectTestBase):
     """
     """
     def testInitialization(self):

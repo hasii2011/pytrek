@@ -23,7 +23,7 @@ from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
 
 
-class TestBase(UnitTestBase):
+class ProjectTestBase(UnitTestBase):
     # noinspection SpellCheckingInspection
     RESOURCES_TEST_CLASSES_PACKAGE_NAME: str = 'tests.resources.testclass'
     """

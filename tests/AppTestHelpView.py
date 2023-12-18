@@ -8,7 +8,7 @@ from pytrek.gui.HelpView import HelpView
 
 from pytrek.settings.SettingsCommon import SettingsCommon
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -27,7 +27,7 @@ def completeCallback():
 
 def main():
 
-    TestBase.setUpLogging()
+    ProjectTestBase.setUpLogging()
     SettingsCommon.determineSettingsLocation()
 
     arcadeWindow: Window = Window(title=SCREEN_TITLE, width=SCREEN_WIDTH, height=SCREEN_HEIGHT)

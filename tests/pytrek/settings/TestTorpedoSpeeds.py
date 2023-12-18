@@ -2,12 +2,12 @@
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
-class TestTorpedoSpeeds(TestBase):
+class TestTorpedoSpeeds(ProjectTestBase):
     """
     """
 

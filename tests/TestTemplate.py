@@ -9,13 +9,13 @@ from unittest import main as unitTestMain
 
 from pytrek.settings.SettingsCommon import SettingsCommon
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 # import the class you want to test here
 # from pytrek.tests.TestTemplate import TestTemplate
 
 
-class TestTemplate(TestBase):
+class TestTemplate(ProjectTestBase):
     """
     You need to change the name of this class to Test`XXXX`
     Where `XXXX' is the name of the class that you want to test.
@@ -26,7 +26,7 @@ class TestTemplate(TestBase):
 
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpLogging()
+        ProjectTestBase.setUpLogging()
         TestTemplate.clsLogger = getLogger(__name__)
         SettingsCommon.determineSettingsLocation()
 

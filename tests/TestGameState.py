@@ -13,12 +13,12 @@ from pytrek.engine.PlayerType import PlayerType
 
 from pytrek.model.Coordinates import Coordinates
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 from pytrek.GameState import GameState
 
 
-class TestGameState(TestBase):
+class TestGameState(ProjectTestBase):
 
     TEST_PICKLE_FILENAME: str = 'GameStats.json'
 

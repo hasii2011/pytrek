@@ -22,13 +22,13 @@ from pytrek.settings.GameSettings import GameSettings
 
 from pytrek.GameState import GameState
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 from pytrek.gui.LogMessageConsole import LogMessageConsole
 
 BASIC_DAMAGE = 4.0
 
 
-class TestEventEngine(TestBase):
+class TestEventEngine(ProjectTestBase):
     """
     """
     clsGameSettings:      GameSettings      = cast(GameSettings, None)
@@ -42,7 +42,7 @@ class TestEventEngine(TestBase):
 
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpClass()
+        ProjectTestBase.setUpClass()
         TestEventEngine._setupGame()
 
     def setUp(self):
@@ -162,7 +162,7 @@ class TestEventEngine(TestBase):
         TODO: perhaps should go in a utility class so it is always current
 
         """
-        TestBase.resetSingletons()
+        ProjectTestBase.resetSingletons()
 
         TestEventEngine.clsLogMessageConsole = LogMessageConsole()
         TestEventEngine.clsGameSettings      = GameSettings()     # Be able to read the preferences file

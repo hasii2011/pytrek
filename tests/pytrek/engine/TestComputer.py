@@ -21,10 +21,10 @@ from pytrek.model.Coordinates import Coordinates
 
 from pytrek.settings.SettingsCommon import SettingsCommon
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 
-class TestComputer(TestBase):
+class TestComputer(ProjectTestBase):
     """
     Test all of our computer math
     """
@@ -39,7 +39,7 @@ class TestComputer(TestBase):
 
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpClass()
+        ProjectTestBase.setUpClass()
         SettingsCommon.determineSettingsLocation()
 
     def setUp(self):

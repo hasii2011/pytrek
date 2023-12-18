@@ -26,12 +26,12 @@ from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 ComputeCallBack = Callable[[PlayerType], float]
 
 
-class TestIntelligence(TestBase):
+class TestIntelligence(ProjectTestBase):
 
     DEFAULT_GAME_LENGTH: float  = 210.00
     DEFAULT_AVERAGE:     float  = 7.0
@@ -63,7 +63,7 @@ class TestIntelligence(TestBase):
 
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpClass()
+        ProjectTestBase.setUpClass()
         SettingsCommon.determineSettingsLocation()
 
     def setUp(self):

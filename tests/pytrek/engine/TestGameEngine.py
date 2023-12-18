@@ -23,12 +23,12 @@ from pytrek.GameState import GameState
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 TestedDirections = NewType('TestedDirections', Dict[Direction, bool])
 
 
-class TestGameEngine(TestBase):
+class TestGameEngine(ProjectTestBase):
     """
     """
     def setUp(self):
@@ -135,7 +135,7 @@ class TestGameEngine(TestBase):
         expectedOpTime: float = 10.0
 
         self.assertEqual(expectedOpTime, updatedOpTime, 'Operation Time incorrectly calculated')
-        
+
         expectedStarDate: float = previousStarDate + updatedOpTime
         actualStarDate:   float = self._gameState.starDate
 

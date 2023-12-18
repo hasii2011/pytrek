@@ -15,10 +15,10 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.model.Galaxy import Galaxy
 
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 
-class TestGalaxy(TestBase):
+class TestGalaxy(ProjectTestBase):
 
     MAX_GET_STARBASE_COORDINATES_RETRIES:  int = 128    # TODO make runtime configurable
     MAX_GET_COMMANDER_COORDINATES_RETRIES: int = 128
@@ -29,9 +29,9 @@ class TestGalaxy(TestBase):
 
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpClass()
+        ProjectTestBase.setUpClass()
 
-        TestBase.resetSingletons()
+        ProjectTestBase.resetSingletons()
 
         TestGalaxy.clsGameSettings = GameSettings()
         TestGalaxy.clsGameSettings.debugCollectKlingonQuadrantCoordinates = True

@@ -7,7 +7,7 @@ from pytrek.gui.WarpDialog import DialogAnswer
 from pytrek.gui.WarpDialog import WarpDialog
 from pytrek.gui.WarpDialog import WarpTravelAnswer
 from pytrek.settings.SettingsCommon import SettingsCommon
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -26,7 +26,7 @@ def completeCallback(warpTravelAnswer: WarpTravelAnswer):
 
 def main():
 
-    TestBase.setUpLogging()
+    ProjectTestBase.setUpLogging()
     SettingsCommon.determineSettingsLocation()
 
     arcadeWindow: Window = Window(title=SCREEN_TITLE, width=SCREEN_WIDTH, height=SCREEN_HEIGHT)

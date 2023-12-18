@@ -35,7 +35,7 @@ from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
 from tests.SchedulerTestMessageConsole import SchedulerTestMessageConsole
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 SCREEN_WIDTH:  int = 960
 SCREEN_HEIGHT: int = 600
@@ -70,7 +70,7 @@ HELP_Y:           int = HELP_SEPARATOR_Y - 25
 GAME_STATE_Y:     int = HELP_SEPARATOR_Y + 50
 
 
-class TestEventScheduler(View):
+class AppTestEventScheduler(View):
 
     def __init__(self):
 
@@ -239,11 +239,11 @@ class TestEventScheduler(View):
 
 def main():
 
-    TestBase.setUpLogging()
+    ProjectTestBase.setUpLogging()
     SettingsCommon.determineSettingsLocation()
 
     window:    Window = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    startView: TestEventScheduler  = TestEventScheduler()
+    startView: AppTestEventScheduler  = AppTestEventScheduler()
 
     window.show_view(startView)
 

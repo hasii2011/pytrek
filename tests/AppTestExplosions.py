@@ -55,7 +55,7 @@ SCREEN_TITLE:    str = "Test Sprite Sheet"
 EXPLOSION_TITLE: str = 'Explosions'
 
 
-class TestExplosions(Window):
+class AppTestExplosions(Window):
     """
     """
     ETX_COLOR = color.WHITE
@@ -146,7 +146,7 @@ class TestExplosions(Window):
         Render the screen./////
         """
         start_render()
-        draw_text(EXPLOSION_TITLE, TITLE_X, TITLE_Y, color=TestExplosions.ETX_COLOR, font_size=16)
+        draw_text(EXPLOSION_TITLE, TITLE_X, TITLE_Y, color=AppTestExplosions.ETX_COLOR, font_size=16)
 
         self._sprites.draw()
         self._drawEnterpriseTorpedoExplosionTitle()
@@ -234,34 +234,34 @@ class TestExplosions(Window):
         msg:      str         = 'Enterprise Torpedo'
         # draw_text(msg, etxPoint.x, etxPoint.y, color=MessageConsole.CONSOLE_TEXT_COLOR,
         #           font_size=MessageConsole.CONSOLE_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-        draw_text(msg, etxPoint.x - TITLE_TORPEDO_X_OFFSET, etxPoint.y - TITLE_TORPEDO_Y_OFFSET, color=TestExplosions.ETX_COLOR)
+        draw_text(msg, etxPoint.x - TITLE_TORPEDO_X_OFFSET, etxPoint.y - TITLE_TORPEDO_Y_OFFSET, color=AppTestExplosions.ETX_COLOR)
 
     def _drawKlingonTorpedoExplosionTitle(self):
 
         ktxPoint: ArcadePoint = self.klingonTorpedoExplosionPoint
         msg:      str         = 'Klingon Torpedo'
 
-        draw_text(msg, ktxPoint.x - TITLE_TORPEDO_X_OFFSET, ktxPoint.y - TITLE_TORPEDO_Y_OFFSET, color=TestExplosions.ETX_COLOR)
+        draw_text(msg, ktxPoint.x - TITLE_TORPEDO_X_OFFSET, ktxPoint.y - TITLE_TORPEDO_Y_OFFSET, color=AppTestExplosions.ETX_COLOR)
 
     def _drawCommanderTorpedoExplosionTitle(self):
 
         ctxPoint: ArcadePoint = self.commanderTorpedoExplosionPoint
         msg:      str         = 'Commander Torpedo'
 
-        draw_text(msg, ctxPoint.x - TITLE_TORPEDO_X_OFFSET, ctxPoint.y - TITLE_TORPEDO_Y_OFFSET, color=TestExplosions.ETX_COLOR)
+        draw_text(msg, ctxPoint.x - TITLE_TORPEDO_X_OFFSET, ctxPoint.y - TITLE_TORPEDO_Y_OFFSET, color=AppTestExplosions.ETX_COLOR)
 
     def _drawSuperCommanderTorpedoExplosionTitle(self):
 
         stxPoint: ArcadePoint = self.superCommanderTorpedoExplosionPoint
         msg:      str         = 'Super Commander Torpedo'
 
-        draw_text(msg, stxPoint.x - TITLE_TORPEDO_X_OFFSET, stxPoint.y - TITLE_TORPEDO_Y_OFFSET, color=TestExplosions.ETX_COLOR)
+        draw_text(msg, stxPoint.x - TITLE_TORPEDO_X_OFFSET, stxPoint.y - TITLE_TORPEDO_Y_OFFSET, color=AppTestExplosions.ETX_COLOR)
 
     def _drawPhaserFireTitle(self):
 
         pfPoint: ArcadePoint = self.phaserFirePoint
         msg: str = 'Phaser Fire Effect'
-        draw_text(msg, pfPoint.x - 80, pfPoint.y - TITLE_TORPEDO_Y_OFFSET, color=TestExplosions.ETX_COLOR)
+        draw_text(msg, pfPoint.x - 80, pfPoint.y - TITLE_TORPEDO_Y_OFFSET, color=AppTestExplosions.ETX_COLOR)
 
 
 def main():
@@ -271,7 +271,7 @@ def main():
     LocateResources.setupSystemLogging()
     SettingsCommon.determineSettingsLocation()
 
-    window: TestExplosions = TestExplosions(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window: AppTestExplosions = AppTestExplosions(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
     arcadeRun()
 

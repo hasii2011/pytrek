@@ -6,10 +6,10 @@ from pytrek.model.Coordinates import Coordinates
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 
-class TestGameSettings(TestBase):
+class TestGameSettings(ProjectTestBase):
     """
     """
     def setUp(self):

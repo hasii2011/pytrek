@@ -9,7 +9,7 @@ from arcade import schedule
 from pytrek.gui.WarpEffect import WarpEffect
 
 from pytrek.settings.SettingsCommon import SettingsCommon
-from tests.TestBase import TestBase
+from tests.ProjectTestBase import ProjectTestBase
 
 SCREEN_WIDTH:  int = 800
 SCREEN_HEIGHT: int = 600
@@ -45,7 +45,7 @@ class WarpEffectRunner:
 
 def main():
 
-    TestBase.setUpLogging()
+    ProjectTestBase.setUpLogging()
     SettingsCommon.determineSettingsLocation()
 
     warpEffectRunner: WarpEffectRunner = WarpEffectRunner()
