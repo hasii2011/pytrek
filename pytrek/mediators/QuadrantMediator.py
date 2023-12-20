@@ -214,7 +214,7 @@ class QuadrantMediator(Singleton):
                         pass
                     elif sectorType == SectorType.COMMANDER:
                         self._cm.update(quadrant=quadrant, commander=cast(Commander, gamePiece))
-                    elif sectorType == sectorType.SUPER_COMMANDER:
+                    elif sectorType == SectorType.SUPER_COMMANDER:
                         self._scm.update(quadrant=quadrant, superCommander=cast(SuperCommander, gamePiece))
                     else:
                         assert False, 'Bad Game Piece'

@@ -204,11 +204,11 @@ class PyTrekView(View):
             os._exit(0)
         elif pressedKey == arcadeKey.G:
             galaxyView: GalaxyView = GalaxyView(viewCompleteCallback=self._switchViewBack)
-            self.window.show_view(galaxyView)   # type: ignore
+            self.window.show_view(galaxyView)
             self._gameEngine.resetOperationTime()
         elif pressedKey == arcadeKey.L:
             longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(viewCompleteCallback=self._switchViewBack)
-            self.window.show_view(longRangeSensorView)      # type: ignore
+            self.window.show_view(longRangeSensorView)
             self._gameEngine.resetOperationTime()
         elif pressedKey == arcadeKey.T:
             self._quadrantMediator.fireEnterpriseTorpedoes(self._quadrant)
@@ -262,10 +262,10 @@ class PyTrekView(View):
 
         helpView: HelpView = HelpView(completeCallback=self._switchViewBack)
 
-        self.window.show_view(helpView)     # type: ignore
+        self.window.show_view(helpView)
 
     def _switchViewBack(self):
-        self.window.show_view(self)     # type: ignore
+        self.window.show_view(self)
 
 
 def main():

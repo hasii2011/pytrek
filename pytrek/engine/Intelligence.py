@@ -400,7 +400,7 @@ class Intelligence(Singleton):
         warpFactor: float = 6.0 + 2.0 * self.rand()
         wSquared: float = warpFactor * warpFactor
         power: float = 0.75 * energy
-        if self._devices.getDevice(DeviceType.Shields).deviceStatus == DeviceStatus.Up is True:
+        if self._devices.getDevice(DeviceType.Shields).deviceStatus == DeviceStatus.Up:
             shieldFactor: float = 1.0
         else:
             shieldFactor = 0
