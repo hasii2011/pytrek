@@ -1,0 +1,26 @@
+{
+    "gameActive": true,
+    "energy": 7777.0,
+    "shieldEnergy": 6666.0,
+    "inTime": 0.0,
+    "opTime": 0.0,
+    "starDate": 66666.0,
+    "remainingGameTime": 66.0,
+    "remainingKlingons": 0,
+    "remainingCommanders": 0,
+    "remainingSuperCommanders": 0,
+    "torpedoCount": 0,
+    "starBaseCount": 0,
+    "planetCount": 0,
+    "currentQuadrantCoordinates": {
+        "x": 5,
+        "y": 5
+    },
+    "currentSectorCoordinates": {
+        "x": 7,
+        "y": 7
+    },
+    "shipCondition": "Green",
+    "playerType": "Emeritus",
+    "gameType": "Medium"
+}

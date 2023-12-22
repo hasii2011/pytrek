@@ -1,7 +1,6 @@
 
 from typing import cast
 
-
 from codeallybasic.UnitTestBase import UnitTestBase
 
 
@@ -13,6 +12,7 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.futures.EventEngine import EventEngine
+
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
@@ -24,10 +24,10 @@ from pytrek.settings.SettingsCommon import SettingsCommon
 
 
 class ProjectTestBase(UnitTestBase):
-    # noinspection SpellCheckingInspection
-    RESOURCES_TEST_CLASSES_PACKAGE_NAME: str = 'tests.resources.testclass'
+
+    RESOURCES_TEST_DATA_PACKAGE_NAME: str = f'{UnitTestBase.RESOURCES_PACKAGE_NAME}.testdata'
     """
-    A base unit test class to initialize some logging stuff we need
+    A project base unit test class to define additional items we need
     """
     @classmethod
     def setUpClass(cls):

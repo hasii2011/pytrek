@@ -142,6 +142,11 @@
         "pytrek.gui.gamepieces.base.BaseEnemyTorpedo": {
             "level":     "WARNING",
             "propagate": "False"
+        },
+        "codeallybasic.UnitTestBase": {
+            "level":     "WARNING",
+            "propagate": "False"
         }
+
     }
 }

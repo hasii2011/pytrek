@@ -88,7 +88,7 @@ class Coordinates:
 
         return coordinates
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"({self.x},{self.y})"
 
     def __str__(self) -> str:

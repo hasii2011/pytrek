@@ -122,5 +122,6 @@ setup(
         'arcade~=2.6.17',
         'shapely~=2.0.1',
         'codeallybasic~=0.5.2',
+        'dataclass-wizard==0.22.2',
     ]
 )
