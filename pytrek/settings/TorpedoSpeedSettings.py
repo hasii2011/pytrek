@@ -35,13 +35,14 @@ class TorpedoSpeedSettings(BaseSubSetting):
         EMERITUS_PLAYER: '1,2,5,5',
     })
 
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
         """
         This is a singleton based on the inheritance hierarchy
         """
         self.logger: Logger = getLogger(__name__)
 
-        BaseSubSetting.init(self, *args, **kwds)
+        BaseSubSetting.init(self, *args, **kwargs)
 
         self._settingsCommon: SettingsCommon = SettingsCommon(self._config)
 

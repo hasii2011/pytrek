@@ -2,6 +2,7 @@
 from enum import Enum
 
 
+# noinspection SpellCheckingInspection
 class FutureEventType(Enum):
 
     SPY                             = 'Spy'                     # spy event happens always (no future[] entry)    FSPY

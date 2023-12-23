@@ -61,7 +61,7 @@ class FactorsSettings(BaseSubSetting):
         PHASER_BURST_TO_TERMINATE: '20.0'
     })
 
-    # noinspection SpellCheckingInspection
+    # noinspection PyAttributeOutsideInit
     def init(self, *args, **kwds):
         """
         This is a singleton based on the inheritance hierarchy

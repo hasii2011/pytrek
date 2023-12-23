@@ -169,8 +169,8 @@ class GameEngine(Singleton):
 
         return requiredEnergy
 
-    # noinspection SpellCheckingInspection
     def computeEnergyWhenBlocked(self, startSector: Coordinates, endSector: Coordinates) -> float:
+        # noinspection SpellCheckingInspection
         """
         C code:
         Time = dist/0.095;

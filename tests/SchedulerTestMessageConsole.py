@@ -30,8 +30,8 @@ class SchedulerTestMessageConsole(AbstractMessageConsole):
 
     CONSOLE_TEXT_COLOR = WHITE
 
-    # noinspection SpellCheckingInspection
-    def init(self, *args, **kwds):
+    # noinspection PyAttributeOutsideInit
+    def init(self, *args, **kwargs):
 
         self.logger: Logger = getLogger(__name__)
 

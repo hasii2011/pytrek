@@ -29,7 +29,7 @@ class BaseEnemyMediator(MissesMediator):
 
     def _playMoveSound(self):
         """
-        Must be implemented by subclass, or you will hear nada' if enemy moves
+        Must be implemented by subclass, or you will hear nada` if enemy moves
         """
         pass
 

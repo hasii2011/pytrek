@@ -4,7 +4,7 @@ from enum import Enum
 
 class DeviceStatus(Enum):
     """
-        Describes the possible device statuses;  Or is that stati ;=)
+        Describes the possible device statuses;  Or is that stati 🤪
     """
     Down    = 0
     Up      = 1
