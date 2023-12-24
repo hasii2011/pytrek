@@ -23,6 +23,7 @@ from pytrek.Constants import APPLICATION_NAME
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.engine.GameType import GameType
+
 from pytrek.engine.PlayerType import PlayerType
 from pytrek.engine.ShipCondition import ShipCondition
 
@@ -32,6 +33,16 @@ JSON_FILENAME: str = 'GameStateV3.json'
 
 @dataclass
 class GameStateV3(JSONSerializable, LoadMixin, DumpMixin):
+    """
+    This is a Frankenstein data class that
+        * Is a singleton
+        * self loads JSON
+        * self saves JSON
+        * Initialize a default game
+
+    """
+
+    _instance = None
 
     gameActive:                 bool  = True
     energy:                     float = 0.0
@@ -54,6 +65,12 @@ class GameStateV3(JSONSerializable, LoadMixin, DumpMixin):
     playerType:         PlayerType    = PlayerType.Good
     gameType:           GameType      = GameType.Medium
 
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(GameStateV3, cls).__new__(cls, *args, **kwargs)
+            # Initialize your configuration settings here
+        return cls._instance
+
     def restore(self)  -> 'GameStateV3':
 
         with open(self._filePath(), 'r') as fd:
@@ -74,6 +91,9 @@ class GameStateV3(JSONSerializable, LoadMixin, DumpMixin):
 
     @staticmethod
     def load_to_enum(o: Union[AnyStr, N], base_type: Type[Enum]) -> Enum:
+        """
+        Get our custom saved enumeration; Human readable
+        """
         ans = base_type[o]      # type: ignore
         return ans
 
