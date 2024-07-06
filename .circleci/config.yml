@@ -31,7 +31,6 @@ jobs:
             pip install codeallybasic==1.3.2
             pip install arcade~=2.6.17
             pip install shapely~=2.0.4
-            pip install dataclass-wizard==0.22.3
       - run:
             name: run tests
             command: | 
