@@ -70,16 +70,15 @@ class DebugSettings(BaseSubSetting):
         SMOOTH_MOTION_DEBUG_INTERVAL:      '5',
     })
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         """
         This is a singleton based on the inheritance hierarchy
         """
         self.logger: Logger = getLogger(__name__)
 
-        BaseSubSetting.init(self, *args, **kwargs)
+        super().__init__(**kwargs)
 
-        self._settingsCommon: SettingsCommon = SettingsCommon(self._config)
+        self._settingsCommon: SettingsCommon = SettingsCommon()
 
     def addMissingSettings(self):
         self._settingsCommon.addMissingSettings(sectionName=DebugSettings.DEBUG_SECTION, nameValues=DebugSettings.DEBUG_SETTINGS)

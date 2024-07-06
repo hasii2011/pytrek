@@ -7,7 +7,7 @@ from logging import getLogger
 
 from enum import Enum
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from arcade import Sound
 
@@ -44,10 +44,9 @@ class SoundType(Enum):
 SoundDictionary = NewType('SoundDictionary', Dict[SoundType, Sound])
 
 
-class SoundMachine(Singleton):
+class SoundMachine(metaclass=SingletonV3):
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
         self.logger: Logger = getLogger(__name__)
 

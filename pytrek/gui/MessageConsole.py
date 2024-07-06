@@ -37,8 +37,8 @@ class MessageConsole(AbstractMessageConsole):
 
     CONSOLE_TEXT_COLOR = WHITE
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self):
+        super().__init__()
 
         self.logger:       Logger = getLogger(__name__)
         self._statusLines: List[MessageLine] = []

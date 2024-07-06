@@ -18,16 +18,14 @@ class DeveloperSettings(BaseSubSetting):
         MAX_COMMANDER_SEARCHES: '128'
     })
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         """
         This is a singleton based on the inheritance hierarchy
         """
         self.logger: Logger = getLogger(__name__)
+        super().__init__(**kwargs)
 
-        BaseSubSetting.init(self, *args, **kwargs)
-
-        self._settingsCommon: SettingsCommon = SettingsCommon(self._config)
+        self._settingsCommon: SettingsCommon = SettingsCommon()
 
     def addMissingSettings(self):
         self._settingsCommon.addMissingSettings(sectionName=DeveloperSettings.DEVELOPER_SECTION, nameValues=DeveloperSettings.DEVELOPER_SETTINGS)

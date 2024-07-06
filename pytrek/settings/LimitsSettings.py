@@ -28,14 +28,12 @@ class LimitsSettings(BaseSubSetting):
     """
     This is a singleton based on the inheritance hierarchy
     """
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, **kwargs):
 
         self.logger: Logger = getLogger(__name__)
+        super().__init__(**kwargs)
 
-        BaseSubSetting.init(self, *args, **kwargs)
-
-        self._settingsCommon: SettingsCommon = SettingsCommon(self._config)
+        self._settingsCommon: SettingsCommon = SettingsCommon()
 
     def addMissingSettings(self):
         self._settingsCommon.addMissingSettings(sectionName=LimitsSettings.LIMITS_SECTION, nameValues=LimitsSettings.LIMITS_SETTINGS)

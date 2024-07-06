@@ -1,3 +1,4 @@
+
 from logging import Logger
 from logging import getLogger
 
@@ -9,9 +10,8 @@ class LogMessageConsole(AbstractMessageConsole):
     """
     Used by the unit tests to inject it TestFutureEventHandlers
     """
-
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self):
+        super().__init__()
         self.logger: Logger = getLogger(__name__)
 
     def draw(self):

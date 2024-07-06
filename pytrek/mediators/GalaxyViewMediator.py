@@ -5,7 +5,7 @@ from logging import getLogger
 from arcade import color
 from arcade import draw_text
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
@@ -18,10 +18,9 @@ from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
 
 
-class GalaxyViewMediator(Singleton):
+class GalaxyViewMediator(metaclass=SingletonV3):
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
         self.logger: Logger = getLogger(__name__)
 

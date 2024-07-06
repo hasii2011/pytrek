@@ -1,10 +1,5 @@
 
-from typing import cast
-
 from codeallybasic.UnitTestBase import UnitTestBase
-
-
-from codeallybasic.Singleton import Singleton
 
 from pytrek.GameState import GameState
 
@@ -46,13 +41,12 @@ class ProjectTestBase(UnitTestBase):
         """
         Force stateful singletons to re-initialize
         """
-        GameSettings.__instance__     = cast(Singleton, None)
-        Intelligence.__instance__     = cast(Singleton, None)
-        GameState._instances          = {}
-        Galaxy.__instance__           = cast(Singleton, None)
-        GameEngine.__instance__       = cast(Singleton, None)
-        EventEngine.__instance__      = cast(Singleton, None)
-        Devices.__instance__          = cast(Singleton, None)
-        Galaxy.__instance__           = cast(Singleton, None)
-        GalaxyMediator.__instance__   = cast(Singleton, None)
-        QuadrantMediator.__instance__ = cast(Singleton, None)
+        GameSettings._instances     = {}
+        GameState._instances        = {}
+        GalaxyMediator._instances   = {}
+        QuadrantMediator._instances = {}
+        EventEngine._instances      = {}
+        Galaxy._instances           = {}
+        Intelligence._instances     = {}
+        GameEngine._instances       = {}
+        Devices._instances          = {}

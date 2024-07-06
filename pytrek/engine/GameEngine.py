@@ -9,7 +9,7 @@ from math import sqrt
 
 from random import choice
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction
@@ -34,7 +34,7 @@ from pytrek.settings.GameSettings import GameSettings
 from pytrek.GameState import GameState
 
 
-class GameEngine(Singleton):
+class GameEngine(metaclass=SingletonV3):
 
     REAL_TIME_CLOCK_TICK: float = 1.0
 
@@ -42,8 +42,7 @@ class GameEngine(Singleton):
     Initializes the game singletons in correct order to allow testability.  In
     general the PyTrekView class will initialize them in this order.
     """
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
 
@@ -52,7 +51,6 @@ class GameEngine(Singleton):
         self._intelligence: Intelligence = Intelligence()
         self._computer:     Computer     = Computer()
         self._devices:      Devices      = Devices()
-        # self._eventEngine:  EventEngine  = EventEngine()
 
         self._accumulatedDelta: float = 0.0
         self._gameClock:        float = 0.0

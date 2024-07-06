@@ -1,13 +1,12 @@
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
 
-class AbstractMessageConsole(Singleton):
+class AbstractMessageConsole(metaclass=SingletonV3):
 
-    # noinspection SpellCheckingInspection
-    def init(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         pass
 
     def draw(self):
@@ -19,3 +18,4 @@ class AbstractMessageConsole(Singleton):
             message:  New message to display
             messageType: How to display the message
         """
+        pass

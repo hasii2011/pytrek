@@ -6,7 +6,7 @@ from logging import getLogger
 
 from configparser import ConfigParser
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.engine.GameType import GameType
 from pytrek.engine.PlayerType import PlayerType
@@ -24,10 +24,9 @@ from pytrek.settings.DebugSettings import DebugSettings
 from pytrek.settings.DeveloperSettings import DeveloperSettings
 
 
-class GameSettings(Singleton):
+class GameSettings(metaclass=SingletonV3):
 
-    # noinspection PyAttributeOutsideInit
-    def init(self):
+    def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
 

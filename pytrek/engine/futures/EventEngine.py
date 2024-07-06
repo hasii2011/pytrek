@@ -8,7 +8,7 @@ from logging import Logger
 
 from arcade import schedule
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.devices.Device import Device
@@ -29,7 +29,7 @@ from pytrek.settings.GameSettings import GameSettings
 EventMap = NewType('EventMap', Dict[FutureEventType, FutureEvent])
 
 
-class EventEngine(Singleton):
+class EventEngine(metaclass=SingletonV3):
     """
     This event engine is tied to the arcade schedule and unschedule methods
     """
@@ -41,8 +41,7 @@ class EventEngine(Singleton):
     a check for events. It exists so the check for zero does not have to be exact.
     
     """
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """
 
         Args:

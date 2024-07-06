@@ -25,16 +25,15 @@ class GameLevelSettings(BaseSubSetting):
         SOUND_VOLUME: SoundVolume.Medium.name,
     })
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         """
         This is a singleton based on the inheritance hierarchy
         """
         self.logger: Logger = getLogger(__name__)
 
-        BaseSubSetting.init(self, *args, **kwargs)
+        super().__init__(**kwargs)
 
-        self._settingsCommon: SettingsCommon = SettingsCommon(self._config)
+        self._settingsCommon: SettingsCommon = SettingsCommon()
 
     def addMissingSettings(self):
         self._settingsCommon.addMissingSettings(sectionName=GameLevelSettings.GAME_LEVEL_SECTION, nameValues=GameLevelSettings.GAME_LEVEL_SETTINGS)

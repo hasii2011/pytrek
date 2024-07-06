@@ -26,16 +26,14 @@ class PowerSettings(BaseSubSetting):
         PHASER_FACTOR:          '2.0'
     })
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         """
         This is a singleton based on the inheritance hierarchy
         """
         self.logger: Logger = getLogger(__name__)
+        super().__init__(**kwargs)
 
-        BaseSubSetting.init(self, *args, **kwargs)
-
-        self._settingsCommon: SettingsCommon = SettingsCommon(self._config)
+        self._settingsCommon: SettingsCommon = SettingsCommon()
 
     def addMissingSettings(self):
         self._settingsCommon.addMissingSettings(sectionName=PowerSettings.POWER_SECTION, nameValues=PowerSettings.POWER_SETTINGS)

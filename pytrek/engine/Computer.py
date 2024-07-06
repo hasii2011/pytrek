@@ -2,7 +2,7 @@
 from logging import Logger
 from logging import getLogger
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from math import atan2
 from math import degrees
@@ -24,7 +24,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.model.Coordinates import Coordinates
 
 
-class Computer(Singleton):
+class Computer(metaclass=SingletonV3):
     """
     Make a computer a singleton, so we don't have to pass it around
     Makes basic computations related to converting to and from game coordinates
@@ -34,8 +34,7 @@ class Computer(Singleton):
     QUADRANT_TRAVEL_FACTOR: float = 0.1
     GALACTIC_TRAVEL_FACTOR: float = 10.0
 
-    # noinspection PyAttributeOutsideInit
-    def init(self):
+    def __init__(self):
         self.logger:        Logger       = getLogger(__name__)
         self._intelligence: Intelligence = Intelligence()
 

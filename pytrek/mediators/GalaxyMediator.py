@@ -4,7 +4,7 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.GameState import GameState
 
@@ -20,12 +20,12 @@ from pytrek.model.Sector import Sector
 from pytrek.model.SectorType import SectorType
 
 
-class GalaxyMediator(Singleton):
+class GalaxyMediator(metaclass=SingletonV3):
     """
     This class aids in updating the Galaxy model and the game state
     """
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+
+    def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
 

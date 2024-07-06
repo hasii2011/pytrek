@@ -7,7 +7,7 @@ from logging import DEBUG
 
 from arcade import SpriteList
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
@@ -46,12 +46,11 @@ from pytrek.model.SectorType import SectorType
 from pytrek.settings.GameSettings import GameSettings
 
 
-class QuadrantMediator(Singleton):
+class QuadrantMediator(metaclass=SingletonV3):
     """
-    This class avoids implementing UI logic (arcade) in the model class, Quadrant.
+    This class avoids having us implement UI logic (arcade) in the model Quadrant class.
     """
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
 

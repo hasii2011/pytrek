@@ -1,15 +1,14 @@
 
 from typing import cast
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from configparser import ConfigParser
 
 
-class BaseSubSetting(Singleton):
+class BaseSubSetting(metaclass=SingletonV3):
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, **kwargs):
 
         self._config: ConfigParser = cast(ConfigParser, None)
 

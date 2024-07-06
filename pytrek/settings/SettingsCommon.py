@@ -25,12 +25,10 @@ class SettingsCommon(BaseSubSetting):
 
     settingsFileLocationAndName: str = cast(str, None)
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, **kwargs):
 
         self.logger: Logger = getLogger(__name__)
-
-        BaseSubSetting.init(self, *args, **kwargs)
+        super().__init__(**kwargs)
 
     @classmethod
     def determineSettingsLocation(cls):

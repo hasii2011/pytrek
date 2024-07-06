@@ -8,7 +8,7 @@ from itertools import count
 from logging import Logger
 from logging import getLogger
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
@@ -27,13 +27,11 @@ QuadrantRow = NewType('QuadrantRow', List[Quadrant])
 GalaxyGrid  = NewType('GalaxyGrid', List[QuadrantRow])
 
 
-class Galaxy(Singleton):
+class Galaxy(metaclass=SingletonV3):
     """
     The Galaxy model
     """
-
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self):
         """"""
         self._gameEngine:   GameEngine    = GameEngine()
         self._intelligence: Intelligence  = Intelligence()

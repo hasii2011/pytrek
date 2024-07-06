@@ -15,7 +15,7 @@ from random import choice
 
 from math import log
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
@@ -41,7 +41,7 @@ from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 TractorBeamComputation = namedtuple('TractorBeamComputation', 'warpFactor, distance, wSquared')
 
 
-class Intelligence(Singleton):
+class Intelligence(metaclass=SingletonV3):
     """
     This is a smart piece of code;  It is essentially the game 'computer';  Keeps me
     from repeating computation code from all over the code;  Also contains Python versions
@@ -54,8 +54,7 @@ class Intelligence(Singleton):
         Direction.North, Direction.NorthEast, Direction.East
     ]
 
-    # noinspection PyAttributeOutsideInit
-    def init(self):
+    def __init__(self):
         """
         """
         self.logger:        Logger       = getLogger(__name__)

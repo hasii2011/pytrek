@@ -61,16 +61,15 @@ class FactorsSettings(BaseSubSetting):
         PHASER_BURST_TO_TERMINATE: '20.0'
     })
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwds):
+    def __init__(self, **kwargs):
         """
         This is a singleton based on the inheritance hierarchy
         """
         self.logger: Logger = getLogger(__name__)
 
-        BaseSubSetting.init(self, *args, **kwds)
+        super().__init__(**kwargs)
 
-        self._settingsCommon: SettingsCommon = SettingsCommon(self._config)
+        self._settingsCommon: SettingsCommon = SettingsCommon()
 
     def addMissingSettings(self):
         self._settingsCommon.addMissingSettings(sectionName=FactorsSettings.FACTORS_SECTION, nameValues=FactorsSettings.FACTORS_SETTINGS)

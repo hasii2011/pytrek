@@ -5,17 +5,16 @@ from logging import Logger
 from logging import getLogger
 
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 
 
-class Devices(Singleton):
+class Devices(metaclass=SingletonV3):
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
 

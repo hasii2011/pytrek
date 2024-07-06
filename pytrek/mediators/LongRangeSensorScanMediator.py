@@ -4,7 +4,7 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from arcade import View
 from arcade import color
@@ -26,17 +26,16 @@ from pytrek.model.Quadrant import Quadrant
 LR_SCAN_FONT_SIZE: int = 14
 
 
-class LongRangeSensorScanMediator(Singleton):
+class LongRangeSensorScanMediator(metaclass=SingletonV3):
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         """
         Accepts the following keyword arguments:
         * view The arcade view for the long range scan
         * graphicCenterX  The background center X position
         * graphicCenterY  The background center Y position
         Args:
-            *args:
+
             **kwargs:
 
         """
