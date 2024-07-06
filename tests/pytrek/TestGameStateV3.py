@@ -4,14 +4,12 @@ from os import environ as osEnvironment
 from pathlib import Path
 
 from subprocess import run as subProcessRun
-from subprocess import CompletedProcess
 
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
 from codeallybasic.UnitTestBase import UnitTestBase
-
-from pytrek.ConfigurationLocator import XDG_CONFIG_HOME_ENV_VAR
+from codeallybasic.ConfigurationLocator import XDG_CONFIG_HOME_ENV_VAR
 
 from pytrek.Constants import APPLICATION_NAME
 
@@ -67,8 +65,13 @@ class TestGameStateV3(ProjectTestBase):
 
         gm1: GameStateV3 = GameStateV3()
         gm2: GameStateV3 = GameStateV3()
-
         self.assertEqual(gm1, gm2, 'Singleton behavior not enforced')
+
+        gm1Id: str = f'{hex(id(gm1))}'
+        gm2Id: str = f'{hex(id(gm2))}'
+
+        self.assertEqual(gm1Id, gm2Id, 'Not the same')
+        self.logger.warning(f'{gm1Id=} {gm2Id=}')
 
     def testRestore(self):
 
@@ -95,7 +98,7 @@ class TestGameStateV3(ProjectTestBase):
         gameState.currentQuadrantCoordinates = Coordinates(9, 9)
 
         gameState.save()
-        # Change them other alues
+        # Change them other values
         gameState.energy   = 0.1
         gameState.starDate = 0.2
         gameState.gameType = GameType.Short

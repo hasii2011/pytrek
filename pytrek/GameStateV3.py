@@ -2,13 +2,14 @@
 from typing import AnyStr
 from typing import Type
 from typing import Union
+from typing import cast
 
+from logging import getLogger
 from enum import Enum
 
 from pathlib import Path
 
 from dataclasses import dataclass
-
 
 from dataclass_wizard import DumpMixin
 from dataclass_wizard import JSONSerializable
@@ -16,17 +17,17 @@ from dataclass_wizard import LoadMixin
 from dataclass_wizard.type_def import E
 from dataclass_wizard.type_def import N
 
-from pytrek.ConfigurationLocator import ConfigurationLocator
+from codeallybasic.ConfigurationLocator import ConfigurationLocator
 
 from pytrek.Constants import APPLICATION_NAME
 
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.engine.GameType import GameType
-
 from pytrek.engine.PlayerType import PlayerType
 from pytrek.engine.ShipCondition import ShipCondition
 
+from pytrek.gui.gamepieces.Enterprise import Enterprise
 
 JSON_FILENAME: str = 'GameStateV3.json'
 
@@ -65,11 +66,64 @@ class GameStateV3(JSONSerializable, LoadMixin, DumpMixin):
     playerType:         PlayerType    = PlayerType.Good
     gameType:           GameType      = GameType.Medium
 
+    # enterprise:         Enterprise    = cast(Enterprise, None)
+
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super(GameStateV3, cls).__new__(cls, *args, **kwargs)
             # Initialize your configuration settings here
         return cls._instance
+
+    def initializeGame(self):
+        """
+        Call this method to initialize the game values;  This needs to be called
+        early in the game startup so that no other component get an uninitialized
+        version
+        """
+        from pytrek.settings.GameSettings import GameSettings
+        from pytrek.engine.Intelligence import Intelligence
+
+        gameSettings: GameSettings = GameSettings()
+        intelligence: Intelligence = Intelligence()
+        playerType:   PlayerType   = gameSettings.playerType
+        gameType:     GameType     = gameSettings.gameType
+
+        self.playerType: PlayerType  = playerType
+        self.gameType:     GameType  = gameType
+        self.energy:       float     = gameSettings.initialEnergyLevel
+        self.shieldEnergy: float     = gameSettings.initialShieldEnergy
+        self.torpedoCount: int       = gameSettings.initialTorpedoCount
+        self.starDate:     float     = intelligence.generateInitialStarDate()
+        self.inTime:       float     = intelligence.generateInitialGameTime()
+        self.opTime:       float     = 0.0
+
+        self.remainingGameTime:   float = intelligence.generateInitialGameTime()
+        self.remainingKlingons:   int   = intelligence.generateInitialKlingonCount(gameType=gameType, playerType=playerType)
+        self.remainingCommanders: int   = intelligence.generateInitialCommanderCount(playerType=playerType, generatedKlingons=self.remainingKlingons)
+
+        self.starBaseCount: int = intelligence.generateInitialStarBaseCount()
+        self.planetCount:   int = intelligence.generateInitialPlanetCount()
+
+        # Adjust total Klingon counts by # of commanders
+        self.remainingKlingons = self.remainingKlingons - self.remainingCommanders
+
+        # Novice and Fair players do not get Super Commanders
+        if playerType != PlayerType.Novice and playerType != PlayerType.Fair:
+            self.remainingSuperCommanders = intelligence.generateInitialSuperCommanderCount(playerType=playerType, numberOfKlingons=self.remainingKlingons)
+            # Adjust total Klingons by # of super commanders
+            self.remainingKlingons = self.remainingKlingons - self.remainingSuperCommanders
+        else:
+            self.remainingSuperCommanders = 0
+
+        self.shipCondition:              ShipCondition  = ShipCondition.Green
+        self.currentQuadrantCoordinates: Coordinates    = cast(Coordinates, None)
+        self.currentSectorCoordinates:   Coordinates    = cast(Coordinates, None)
+
+        self.enterprise: Enterprise = Enterprise()
+
+        self.gameActive:    bool = True
+
+        getLogger(__name__).info(f'Game State singleton initialized')
 
     def restore(self)  -> 'GameStateV3':
 

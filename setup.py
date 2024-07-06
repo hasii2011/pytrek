@@ -120,8 +120,8 @@ setup(
     setup_requires=['py2app'],
     install_requires=[
         'arcade~=2.6.17',
-        'shapely~=2.0.1',
-        'codeallybasic~=0.5.2',
-        'dataclass-wizard==0.22.2',
+        'shapely~=2.0.4',
+        'codeallybasic~=1.3.2',
+        'dataclass-wizard==0.22.3',
     ]
 )
