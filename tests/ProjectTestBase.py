@@ -48,7 +48,7 @@ class ProjectTestBase(UnitTestBase):
         """
         GameSettings.__instance__     = cast(Singleton, None)
         Intelligence.__instance__     = cast(Singleton, None)
-        GameState.__instance__        = cast(Singleton, None)
+        GameState._instances          = {}
         Galaxy.__instance__           = cast(Singleton, None)
         GameEngine.__instance__       = cast(Singleton, None)
         EventEngine.__instance__      = cast(Singleton, None)

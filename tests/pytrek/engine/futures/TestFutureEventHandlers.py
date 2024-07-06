@@ -137,6 +137,8 @@ class TestFutureEventHandlers(ProjectTestBase):
 
         gameState: GameState = self._gameState
         maxSearches: int     = 0
+        saveStarBaseCount: int = self._gameState.starBaseCount
+
         while self._gameState.starBaseCount > 0:
             if maxSearches > TestFutureEventHandlers.MAX_LOOPS:
                 break
@@ -172,6 +174,8 @@ class TestFutureEventHandlers(ProjectTestBase):
             self.assertEqual(0, self._gameState.starBaseCount, 'Should be zero all StarBases destroyed')
         else:
             self.logger.warning(f'Too many starbase searches;  testSuperNovaEventStarBaseDestroyedNeverNegative did not run')
+
+        self._gameState.starBaseCount = saveStarBaseCount
 
     def testTractorBeamEventHandler(self):
         """

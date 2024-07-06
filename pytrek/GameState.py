@@ -4,7 +4,7 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from codeallybasic.Singleton import Singleton
+from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.gui.gamepieces.Enterprise import Enterprise
@@ -17,12 +17,11 @@ from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.settings.GameSettings import GameSettings
 
 
-# noinspection PyAttributeOutsideInit
-class GameState(Singleton):
+class GameState(metaclass=SingletonV3):
     """
     Keeps track of the game state
     """
-    def init(self):
+    def __init__(self):
 
         self.logger:  Logger       = getLogger(__name__)
         gameSettings: GameSettings = GameSettings()

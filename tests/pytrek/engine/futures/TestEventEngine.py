@@ -68,6 +68,9 @@ class TestEventEngine(ProjectTestBase):
         #
         # Bump the game clock so this event fires
         #
+        saveBaseCount:  int = self._gameState.starBaseCount
+        saveCommanders: int = self._gameState.remainingCommanders
+
         self._gameState.starDate = fireDate + 1.0
         self._gameState.remainingCommanders = 0    # Ensure there are none
         self._gameState.starBaseCount       = 0
@@ -81,6 +84,9 @@ class TestEventEngine(ProjectTestBase):
         fEvent = self._eventEngine.getEvent(FutureEventType.TRACTOR_BEAM)
 
         self.assertTrue(fEvent.schedulable is False, 'Game State should indicate we cannot do this')
+
+        self._gameState.starBaseCount       = saveBaseCount
+        self._gameState.remainingCommanders = saveCommanders
 
     def testCommanderAttacksBaseEventHandler(self):
 
