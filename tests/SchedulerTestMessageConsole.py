@@ -30,9 +30,9 @@ class SchedulerTestMessageConsole(AbstractMessageConsole):
 
     CONSOLE_TEXT_COLOR = WHITE
 
-    # noinspection PyAttributeOutsideInit
-    def init(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
+        super().__init__(*args, **kwargs)
         self.logger: Logger = getLogger(__name__)
 
         self._statusLines: List[str] = []

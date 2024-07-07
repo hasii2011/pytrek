@@ -33,6 +33,7 @@ from pytrek.model.Quadrant import Quadrant
 
 from pytrek.settings.GameSettings import GameSettings
 from pytrek.settings.SettingsCommon import SettingsCommon
+
 from tests.SchedulerTestMessageConsole import SchedulerTestMessageConsole
 
 from tests.ProjectTestBase import ProjectTestBase
