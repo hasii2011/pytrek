@@ -4,8 +4,15 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
+from pathlib import Path
+
+from json import dumps as jsonDumps
+from json import loads as jsonLoads
+
+from codeallybasic.ConfigurationLocator import ConfigurationLocator
 from codeallybasic.SingletonV3 import SingletonV3
 
+from pytrek.Constants import APPLICATION_NAME
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.model.Coordinates import Coordinates
@@ -15,6 +22,8 @@ from pytrek.engine.GameType import GameType
 from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.settings.GameSettings import GameSettings
+
+GAME_STATE_FILE_NAME: str = 'GameState.json'
 
 
 class GameState(metaclass=SingletonV3):
@@ -29,14 +38,14 @@ class GameState(metaclass=SingletonV3):
         playerType:   PlayerType   = gameSettings.playerType
         gameType:     GameType     = gameSettings.gameType
 
-        self._playerType: PlayerType  = playerType
-        self._gameType:     GameType  = gameType
-        self._energy:       float     = gameSettings.initialEnergyLevel
-        self._shieldEnergy: float     = gameSettings.initialShieldEnergy
-        self._torpedoCount: int       = gameSettings.initialTorpedoCount
-        self._starDate:     float     = intelligence.generateInitialStarDate()
-        self._inTime:       float     = intelligence.generateInitialGameTime()
-        self._opTime:       float     = 0.0
+        self._playerType:   PlayerType = playerType
+        self._gameType:     GameType   = gameType
+        self._energy:       float      = gameSettings.initialEnergyLevel
+        self._shieldEnergy: float      = gameSettings.initialShieldEnergy
+        self._torpedoCount: int        = gameSettings.initialTorpedoCount
+        self._starDate:     float      = intelligence.generateInitialStarDate()
+        self._inTime:       float      = intelligence.generateInitialGameTime()
+        self._opTime:       float      = 0.0
 
         self._remainingGameTime:   float = intelligence.generateInitialGameTime()
         self._remainingKlingons:   int   = intelligence.generateInitialKlingonCount(gameType=gameType, playerType=playerType)
@@ -63,6 +72,8 @@ class GameState(metaclass=SingletonV3):
         self._enterprise: Enterprise = Enterprise()
 
         self.gameActive:    bool = True
+
+        self._configurationLocator: ConfigurationLocator = ConfigurationLocator()
 
         self.logger.info(f'Game State singleton initialized')
 
@@ -209,8 +220,95 @@ class GameState(metaclass=SingletonV3):
     def planetCount(self, newValue: int):
         self._planetCount = newValue
 
+    @property
+    def gameStateFileName(self) -> Path:
+        """
+
+        Returns:  The fully qualified file name for the game state save file
+        """
+        configPath: Path = self._configurationLocator.applicationPath(applicationName=APPLICATION_NAME)
+
+        fqFileName: Path = configPath / GAME_STATE_FILE_NAME
+
+        return fqFileName
+
+    def saveState(self):
+        """
+
+        """
+
+        fqFileName: Path = self.gameStateFileName
+
+        gameStateJson: str = jsonDumps(self.toJson(), indent=4)
+
+        with fqFileName.open(mode='w') as fd:
+            fd.write(gameStateJson)
+
+    def restoreState(self):
+        """
+
+        """
+
+        fqFileName: Path = self.gameStateFileName
+        with fqFileName.open(mode='r') as fd:
+            gameStateStr: str = fd.read()
+
+            gStateDict = jsonLoads(gameStateStr)
+
+            self.fromDictionary(gStateDict=gStateDict)
+
     def resetStatistics(self):
         self.gameActive = True
+
+    def toJson(self):
+        return {
+            'energy':                     self.energy,
+            'shieldEnergy':               self.shieldEnergy,
+            'inTime':                     self.inTime,
+            'opTime':                     self.opTime,
+            'starDate':                   self.starDate,
+            'remainingGameTime':          self.remainingGameTime,
+            'remainingKlingons':          self.remainingKlingons,
+            'remainingCommanders':        self.remainingCommanders,
+            'remainingSuperCommanders':   self.remainingSuperCommanders,
+            'torpedoCount':               self.torpedoCount,
+            'shipCondition':              self.shipCondition.name,
+            'playerType':                 self.playerType.name,
+            'gameType':                   self.gameType.name,
+            'currentQuadrantCoordinates': self.currentQuadrantCoordinates.toJson(),
+            'currentSectorCoordinates':   self.currentSectorCoordinates.toJson(),
+            'starBaseCount':              self.starBaseCount,
+            'planetCount':                self.planetCount,
+        }
+
+    def fromDictionary(self, gStateDict):
+        self.energy                     = float(gStateDict['energy'])
+        self.shieldEnergy               = float(gStateDict['shieldEnergy'])
+        self.inTime                     = float(gStateDict['inTime'])
+        self.opTime                     = float(gStateDict['opTime'])
+        self.starDate                   = float(gStateDict['starDate'])
+        self.remainingGameTime          = float(gStateDict['remainingGameTime'])
+        self.remainingKlingons          = int(gStateDict['remainingKlingons'])
+        self.remainingCommanders        = int(gStateDict['remainingCommanders'])
+        self.remainingSuperCommanders   = int(gStateDict['remainingSuperCommanders'])
+        self.torpedoCount               = int(gStateDict['torpedoCount'])
+
+        self.shipCondition              = ShipCondition(gStateDict['shipCondition'])
+        self.playerType                 = PlayerType.toEnum(gStateDict['playerType'])
+        self.gameType                   = GameType.toEnum(gStateDict['gameType'])
+
+        self.currentQuadrantCoordinates = self._dictToCoordinates(gStateDict['currentQuadrantCoordinates'])
+        self.currentSectorCoordinates   = self._dictToCoordinates(gStateDict['currentSectorCoordinates'])
+
+        self.starBaseCount              = int(gStateDict['starBaseCount'])
+        self.planetCount                = int(gStateDict['planetCount'])
+
+    def _dictToCoordinates(self, coordinateDict) -> Coordinates:
+        coordinates: Coordinates = Coordinates(x=int(coordinateDict['x']),
+                                               y=int(coordinateDict['y'])
+                                               )
+
+        return coordinates
 
     def __repr__(self) -> str:
         return f'<{self.__class__.__name__} at {hex(id(self))}>'

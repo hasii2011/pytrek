@@ -67,6 +67,13 @@ class Coordinates:
 
         return newCoordinates
 
+    def toJson(self):
+
+        return {
+            'x': self.x,
+            'y': self.y,
+        }
+
     @classmethod
     def toCoordinates(cls, values: str) -> "Coordinates":
         """

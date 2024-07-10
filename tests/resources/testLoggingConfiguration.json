@@ -144,7 +144,7 @@
             "propagate": "False"
         },
         "codeallybasic.UnitTestBase": {
-            "level":     "WARNING",
+            "level":     "INFO",
             "propagate": "False"
         }
 
