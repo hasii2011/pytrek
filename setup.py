@@ -121,6 +121,6 @@ setup(
     install_requires=[
         'arcade~=2.6.17',
         'shapely~=2.0.4',
-        'codeallybasic~=1.3.2',
+        'codeallybasic~=1.4.0',
     ]
 )

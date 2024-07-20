@@ -4,8 +4,11 @@ from unittest import main as unitTestMain
 
 from codeallybasic.UnitTestBase import UnitTestBase
 
+from pytrek.engine.GameType import GameType
+from pytrek.engine.PlayerType import PlayerType
 from pytrek.model.Coordinates import Coordinates
 from pytrek.settings.GameSettingsV2 import GameSettingsV2
+from pytrek.settings.SoundVolume import SoundVolume
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
@@ -117,6 +120,39 @@ class TestGameSettingsV2(UnitTestBase):
         actualTS:   TorpedoSpeeds = gameSettings.emeritusTorpedoSpeeds
 
         self.assertEqual(expectedTS, actualTS, 'Torpedo speeds do not match')
+
+    def testGetGameLevelSettings1(self):
+
+        gameSettings: GameSettingsV2 = GameSettingsV2()
+
+        playerType: PlayerType = gameSettings.playerType
+        self.assertIsInstance(playerType, PlayerType, 'Enum getter does not work')
+
+    def testGetGameLevelSettings2(self):
+
+        gameSettings: GameSettingsV2 = GameSettingsV2()
+
+        gameType: GameType = gameSettings.gameType
+        self.assertIsInstance(gameType, GameType, 'Enum getter does not work')
+
+    def testGetGameLevelSettings3(self):
+
+        gameSettings: GameSettingsV2 = GameSettingsV2()
+
+        soundVolume: SoundVolume = gameSettings.soundVolume
+        self.assertIsInstance(soundVolume, SoundVolume, 'Enum getter does not work')
+
+    def testSetGameLevelSettings(self):
+
+        gameSettings: GameSettingsV2 = GameSettingsV2()
+
+        saveGameType: GameType = gameSettings.gameType
+
+        gameSettings.gameType = GameType.Long
+
+        self.assertEqual(GameType.Long, gameSettings.gameType, 'Setter did not work')
+
+        gameSettings.gameType = saveGameType
 
 
 def suite() -> TestSuite:

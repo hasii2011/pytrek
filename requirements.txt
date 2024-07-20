@@ -1,11 +1,13 @@
 
-setuptools==70.2.0
+# Don't upgrade past this version as 70.x.x does not work
+setuptools==70.1.1
+
 py2app==0.28.8
 html-testRunner~=1.2.1
-mypy==1.10.1
+mypy==1.11.0
 
 buildlackey==1.6.3
-codeallybasic==1.3.2
+codeallybasic==1.4.0
 
 arcade~=2.6.17
 shapely==2.0.4

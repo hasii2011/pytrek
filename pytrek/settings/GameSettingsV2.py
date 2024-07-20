@@ -15,16 +15,19 @@ from codeallybasic.ConfigurationProperties import configurationSetter
 from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.Constants import APPLICATION_NAME
+from pytrek.engine.GameType import GameType
 from pytrek.engine.PlayerType import PlayerType
 from pytrek.model.Coordinates import Coordinates
+from pytrek.settings.SoundVolume import SoundVolume
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
-LIMITS_SECTION_NAME:    SectionName = SectionName('Limits')
-POWER_SECTION_NAME:     SectionName = SectionName('Power')
-FACTORS_SECTION_NAME:   SectionName = SectionName('Factors')
-DEVELOPER_SECTION_NAME: SectionName = SectionName('Developer')
-DEBUG_SECTION_NAME:     SectionName = SectionName('Debug')
-SPEED_SECTION_NAME:     SectionName = SectionName('TorpedoSpeeds')
+LIMITS_SECTION_NAME:     SectionName = SectionName('Limits')
+POWER_SECTION_NAME:      SectionName = SectionName('Power')
+GAME_LEVEL_SECTION_NAME: SectionName = SectionName('GameLevel')
+FACTORS_SECTION_NAME:    SectionName = SectionName('Factors')
+DEVELOPER_SECTION_NAME:  SectionName = SectionName('Developer')
+DEBUG_SECTION_NAME:      SectionName = SectionName('Debug')
+SPEED_SECTION_NAME:      SectionName = SectionName('TorpedoSpeeds')
 
 SECTION_LIMITS: Section = Section(
     [
@@ -48,6 +51,14 @@ SECTION_POWER: Section = Section(
     ]
 )
 
+SECTION_GAME_LEVEL: Section = Section(
+    [
+        ConfigurationNameValue(name=PropertyName('playerType'),  defaultValue=PlayerType.Good.name),
+        ConfigurationNameValue(name=PropertyName('gameType'),    defaultValue=GameType.Short.name),
+        ConfigurationNameValue(name=PropertyName('soundVolume'), defaultValue=SoundVolume.Medium.name),
+
+    ]
+)
 
 SECTION_FACTORS: Section = Section(
     [
@@ -130,12 +141,13 @@ SECTION_SPEED_SETTINGS: Section = Section(
 
 GAME_SETTINGS_SECTIONS: Sections = Sections(
     {
-        LIMITS_SECTION_NAME:    SECTION_LIMITS,
-        POWER_SECTION_NAME:     SECTION_POWER,
-        FACTORS_SECTION_NAME:   SECTION_FACTORS,
-        SPEED_SECTION_NAME:     SECTION_SPEED_SETTINGS,
-        DEVELOPER_SECTION_NAME: SECTION_DEVELOPER,
-        DEBUG_SECTION_NAME:     SECTION_DEBUG,
+        LIMITS_SECTION_NAME:     SECTION_LIMITS,
+        POWER_SECTION_NAME:      SECTION_POWER,
+        GAME_LEVEL_SECTION_NAME: SECTION_GAME_LEVEL,
+        FACTORS_SECTION_NAME:    SECTION_FACTORS,
+        SPEED_SECTION_NAME:      SECTION_SPEED_SETTINGS,
+        DEVELOPER_SECTION_NAME:  SECTION_DEVELOPER,
+        DEBUG_SECTION_NAME:      SECTION_DEBUG,
     }
 )
 
@@ -220,6 +232,36 @@ class GameSettingsV2(ConfigurationProperties, metaclass=SingletonV3):
     @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
     def starBaseExtender(self) -> float:
         return 0.0
+
+    @property
+    @configurationGetter(sectionName=GAME_LEVEL_SECTION_NAME, deserializeFunction=PlayerType.toEnum)
+    def playerType(self) -> PlayerType:
+        return PlayerType.Novice        # value not used
+
+    @playerType.setter
+    @configurationSetter(sectionName=GAME_LEVEL_SECTION_NAME, enumUseName=True)
+    def playerType(self, newValue: PlayerType):
+        pass
+
+    @property
+    @configurationGetter(sectionName=GAME_LEVEL_SECTION_NAME, deserializeFunction=GameType.toEnum)
+    def gameType(self) -> GameType:
+        return GameType.Short       # Value never used
+
+    @gameType.setter
+    @configurationSetter(sectionName=GAME_LEVEL_SECTION_NAME, enumUseName=True)
+    def gameType(self, newValue: GameType):
+        pass
+
+    @property
+    @configurationGetter(sectionName=GAME_LEVEL_SECTION_NAME, deserializeFunction=SoundVolume.toEnum)
+    def soundVolume(self) -> SoundVolume:
+        return SoundVolume.Medium       # value never used
+
+    @soundVolume.setter
+    @configurationSetter(sectionName=GAME_LEVEL_SECTION_NAME, enumUseName=True)
+    def soundVolume(self, newValue: SoundVolume):
+        pass
 
     @property
     @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
