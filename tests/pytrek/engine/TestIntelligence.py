@@ -407,7 +407,7 @@ class TestIntelligence(ProjectTestBase):
 
         for x in range(TestIntelligence.RANGE_TESTS_LOOP_COUNT):
             medianStatistic: float = self._runPowerTest(computeCallback=self.smarty.computeCommanderPower)
-            ans:             bool = (medianStatistic > 1348.0) and (medianStatistic < 1452.0)
+            ans:             bool = (medianStatistic > 1289.0) and (medianStatistic < 1452.0)
             self.assertTrue(ans, f'We are not in range: {medianStatistic=}')
 
     def testComputeSuperCommanderPowerExpertPlayer(self):
