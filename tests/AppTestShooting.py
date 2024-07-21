@@ -387,22 +387,22 @@ class AppTestShooting(View):
 
     def __doEnemyDebugActions(self):
 
-        if self._gameSettings.debugAddKlingons is True:
-            numKlingons: int = self._gameSettings.debugKlingonCount
+        if self._gameSettings.addKlingons is True:
+            numKlingons: int = self._gameSettings.klingonCount
             for x in range(numKlingons):
                 self._quadrant.addKlingon()
 
             self._gameState.remainingKlingons += numKlingons
 
-        if self._gameSettings.debugAddCommanders is True:
-            nCommanders: int = self._gameSettings.debugCommanderCount
+        if self._gameSettings.addCommanders is True:
+            nCommanders: int = self._gameSettings.commanderCount
             for x in range(nCommanders):
                 self._quadrant.addCommander()
 
             self._gameState.remainingCommanders += nCommanders
 
-        if self._gameSettings.debugAddSuperCommanders:
-            nSuperCommanders: int = self._gameSettings.debugSuperCommanderCount
+        if self._gameSettings.addSuperCommanders:
+            nSuperCommanders: int = self._gameSettings.superCommanderCount
             for x in range(nSuperCommanders):
                 self._quadrant.addSuperCommander()
             self._gameState.remainingSuperCommanders += nSuperCommanders

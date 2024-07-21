@@ -42,11 +42,11 @@ class TestEventEngine(ProjectTestBase):
 
     @classmethod
     def setUpClass(cls):
-        ProjectTestBase.setUpClass()
-        TestEventEngine._setupGame()
+        super().setUpClass()
 
     def setUp(self):
         super().setUp()
+        TestEventEngine._setupGame()
         #
         # The game engine initializes the game state object (for better or worse)
         #
@@ -61,7 +61,6 @@ class TestEventEngine(ProjectTestBase):
 
     def testEventUnSchedulable(self):
 
-        self._setupGame()
         # currentDate: float       = self._gameState.starDate
         fEvent:      FutureEvent = self._eventEngine.getEvent(FutureEventType.TRACTOR_BEAM)
         fireDate:    float       = fEvent.starDate
@@ -89,8 +88,6 @@ class TestEventEngine(ProjectTestBase):
         self._gameState.remainingCommanders = saveCommanders
 
     def testCommanderAttacksBaseEventHandler(self):
-
-        self._setupGame()
 
         self._eventEngine.makeUnSchedulable(FutureEventType.SUPER_NOVA)
         self._eventEngine.makeUnSchedulable(FutureEventType.TRACTOR_BEAM)
@@ -158,7 +155,6 @@ class TestEventEngine(ProjectTestBase):
     @classmethod
     def _setupGame(cls):
         """
-        Assumes the game setting location has been set
 
         Since the game mechanics are run by singletons set them up once
         at the start of this test class.  Then each instance test will just

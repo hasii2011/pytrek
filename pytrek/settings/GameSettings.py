@@ -1,442 +1,651 @@
 
-from typing import cast
-
 from logging import Logger
 from logging import getLogger
 
-from configparser import ConfigParser
+from codeallybasic.SecureConversions import SecureConversions
 
+from codeallybasic.ConfigurationProperties import ConfigurationNameValue
+from codeallybasic.ConfigurationProperties import ConfigurationProperties
+from codeallybasic.ConfigurationProperties import PropertyName
+from codeallybasic.ConfigurationProperties import Section
+from codeallybasic.ConfigurationProperties import SectionName
+from codeallybasic.ConfigurationProperties import Sections
+from codeallybasic.ConfigurationProperties import configurationGetter
+from codeallybasic.ConfigurationProperties import configurationSetter
 from codeallybasic.SingletonV3 import SingletonV3
 
+from pytrek.Constants import APPLICATION_NAME
 from pytrek.engine.GameType import GameType
 from pytrek.engine.PlayerType import PlayerType
 from pytrek.model.Coordinates import Coordinates
-
-from pytrek.settings.FactorsSettings import FactorsSettings
-from pytrek.settings.GameLevelSettings import GameLevelSettings
-from pytrek.settings.LimitsSettings import LimitsSettings
-from pytrek.settings.PowerSettings import PowerSettings
-from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.SoundVolume import SoundVolume
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
-from pytrek.settings.TorpedoSpeedSettings import TorpedoSpeedSettings
-from pytrek.settings.DebugSettings import DebugSettings
-from pytrek.settings.DeveloperSettings import DeveloperSettings
+
+LIMITS_SECTION_NAME:     SectionName = SectionName('Limits')
+POWER_SECTION_NAME:      SectionName = SectionName('Power')
+GAME_LEVEL_SECTION_NAME: SectionName = SectionName('GameLevel')
+FACTORS_SECTION_NAME:    SectionName = SectionName('Factors')
+DEVELOPER_SECTION_NAME:  SectionName = SectionName('Developer')
+DEBUG_SECTION_NAME:      SectionName = SectionName('Debug')
+SPEED_SECTION_NAME:      SectionName = SectionName('TorpedoSpeeds')
+
+SECTION_LIMITS: Section = Section(
+    [
+        ConfigurationNameValue(name=PropertyName('maximumStars'),       defaultValue='4'),
+        ConfigurationNameValue(name=PropertyName('minimumStarBases'),   defaultValue='2'),
+        ConfigurationNameValue(name=PropertyName('maximumStarBases'),   defaultValue='5'),
+        ConfigurationNameValue(name=PropertyName('maximumPlanets'),     defaultValue='10'),
+        ConfigurationNameValue(name=PropertyName('defaultFullShields'), defaultValue='2500'),
+    ]
+)
 
 
-class GameSettings(metaclass=SingletonV3):
+SECTION_POWER: Section = Section(
+    [
+        ConfigurationNameValue(name=PropertyName('initialEnergyLevel'),   defaultValue='5000'),
+        ConfigurationNameValue(name=PropertyName('initialShieldEnergy'),  defaultValue='2500'),
+        ConfigurationNameValue(name=PropertyName('initialTorpedoCount'),  defaultValue='10'),
+        ConfigurationNameValue(name=PropertyName('minimumImpulseEnergy'), defaultValue='30'),
+        ConfigurationNameValue(name=PropertyName('defaultWarpFactor'),    defaultValue='5'),
+        ConfigurationNameValue(name=PropertyName('phaserFactor'),         defaultValue='2.0'),
+    ]
+)
+
+SECTION_GAME_LEVEL: Section = Section(
+    [
+        ConfigurationNameValue(name=PropertyName('playerType'),  defaultValue=PlayerType.Good.name),
+        ConfigurationNameValue(name=PropertyName('gameType'),    defaultValue=GameType.Short.name),
+        ConfigurationNameValue(name=PropertyName('soundVolume'), defaultValue=SoundVolume.Medium.name),
+
+    ]
+)
+
+SECTION_FACTORS: Section = Section(
+    [
+        ConfigurationNameValue(name=PropertyName('gameLengthFactor'),                defaultValue='64.0'),
+        ConfigurationNameValue(name=PropertyName('starBaseExtender'),                defaultValue='2.0'),
+        ConfigurationNameValue(name=PropertyName('starBaseMultiplier'),              defaultValue='3.0'),
+        ConfigurationNameValue(name=PropertyName('minKlingonFiringInterval'),        defaultValue='7'),
+        ConfigurationNameValue(name=PropertyName('maxKlingonFiringInterval'),        defaultValue='15'),
+        ConfigurationNameValue(name=PropertyName('minCommanderFiringInterval'),      defaultValue='5'),
+        ConfigurationNameValue(name=PropertyName('maxCommanderFiringInterval'),      defaultValue='10'),
+        ConfigurationNameValue(name=PropertyName('minSuperCommanderFiringInterval'), defaultValue='5'),
+        ConfigurationNameValue(name=PropertyName('maxSuperCommanderFiringInterval'), defaultValue='8'),
+        ConfigurationNameValue(name=PropertyName('minKlingonMoveInterval'),          defaultValue='5'),
+        ConfigurationNameValue(name=PropertyName('maxKlingonMoveInterval'),          defaultValue='12'),
+        ConfigurationNameValue(name=PropertyName('minCommanderMoveInterval'),        defaultValue='3'),
+        ConfigurationNameValue(name=PropertyName('maxCommanderMoveInterval'),        defaultValue='10'),
+        ConfigurationNameValue(name=PropertyName('minSuperCommanderMoveInterval'),   defaultValue='3'),
+        ConfigurationNameValue(name=PropertyName('maxSuperCommanderMoveInterval'),   defaultValue='7'),
+        ConfigurationNameValue(name=PropertyName('basicMissDisplayInterval'),        defaultValue='5'),
+        ConfigurationNameValue(name=PropertyName('photonTorpedoMisfireRate'),        defaultValue='0.2'),
+        ConfigurationNameValue(name=PropertyName('phaserBurstToTerminate'),          defaultValue='20.0'),
+    ]
+)
+
+SECTION_DEVELOPER: Section = Section(
+    [
+        ConfigurationNameValue(name=PropertyName('maxStarbaseSearches'),  defaultValue='128'),
+        ConfigurationNameValue(name=PropertyName('maxCommanderSearches'), defaultValue='128'),
+    ]
+)
+
+
+SECTION_DEBUG: Section = Section(
+    [
+        ConfigurationNameValue(name=PropertyName('manualPlaceShipInQuadrant'),                defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('manualSectorCoordinates'),                  defaultValue='0,0'),
+        ConfigurationNameValue(name=PropertyName('addKlingons'),                              defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('klingonCount'),                             defaultValue='1'),
+        ConfigurationNameValue(name=PropertyName('addCommanders'),                            defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('commanderCount'),                           defaultValue='1'),
+        ConfigurationNameValue(name=PropertyName('addSuperCommanders'),                       defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('superCommanderCount'),                      defaultValue='1'),
+        ConfigurationNameValue(name=PropertyName('printKlingonPlacement'),                    defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('addPlanet'),                                defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('addStarBase'),                              defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('noKlingons'),                               defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('noCommanders'),                             defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('noSuperCommanders'),                        defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('consoleShowInternals'),                     defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('scheduleSuperNova'),                        defaultValue='True'),
+        ConfigurationNameValue(name=PropertyName('scheduleTractorBeam'),                      defaultValue='True'),
+        ConfigurationNameValue(name=PropertyName('scheduleCommanderAttacksBase'),             defaultValue='True'),
+        ConfigurationNameValue(name=PropertyName('collectKlingonQuadrantCoordinates'),        defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('collectCommanderQuadrantCoordinates'),      defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('collectSuperCommanderQuadrantCoordinates'), defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('announceQuadrantCreation'),                 defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('debugBaseEnemyTorpedo'),                    defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('debugBaseEnemyTorpedoInterval'),            defaultValue='20'),
+        ConfigurationNameValue(name=PropertyName('debugSmoothMotion'),                        defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('debugSmoothMotionInterval'),                defaultValue='5'),
+    ]
+)
+
+NOVICE_PLAYER:   str = PlayerType.Novice.name.lower()
+FAIR_PLAYER:     str = PlayerType.Fair.name.lower()
+GOOD_PLAYER:     str = PlayerType.Good.name.lower()
+EXPERT_PLAYER:   str = PlayerType.Expert.name.lower()
+EMERITUS_PLAYER: str = PlayerType.Emeritus.name.lower()
+
+PROPERTY_NAME_SUFFIX: str = 'TorpedoSpeeds'
+
+SECTION_SPEED_SETTINGS: Section = Section(
+    [
+        ConfigurationNameValue(name=PropertyName(f'{NOVICE_PLAYER}{PROPERTY_NAME_SUFFIX}'),   defaultValue='5,2,2,1'),
+        ConfigurationNameValue(name=PropertyName(f'{FAIR_PLAYER}{PROPERTY_NAME_SUFFIX}'),     defaultValue='4,2,2,1'),
+        ConfigurationNameValue(name=PropertyName(f'{GOOD_PLAYER}{PROPERTY_NAME_SUFFIX}'),     defaultValue='3,2,3,4'),
+        ConfigurationNameValue(name=PropertyName(f'{EXPERT_PLAYER}{PROPERTY_NAME_SUFFIX}'),   defaultValue='2,2,4,4'),
+        ConfigurationNameValue(name=PropertyName(f'{EMERITUS_PLAYER}{PROPERTY_NAME_SUFFIX}'), defaultValue='1,2,5,5'),
+    ]
+)
+
+GAME_SETTINGS_SECTIONS: Sections = Sections(
+    {
+        LIMITS_SECTION_NAME:     SECTION_LIMITS,
+        POWER_SECTION_NAME:      SECTION_POWER,
+        GAME_LEVEL_SECTION_NAME: SECTION_GAME_LEVEL,
+        FACTORS_SECTION_NAME:    SECTION_FACTORS,
+        SPEED_SECTION_NAME:      SECTION_SPEED_SETTINGS,
+        DEVELOPER_SECTION_NAME:  SECTION_DEVELOPER,
+        DEBUG_SECTION_NAME:      SECTION_DEBUG,
+    }
+)
+
+
+class GameSettings(ConfigurationProperties, metaclass=SingletonV3):
+    """
+    The `getters` in this class appear to return some value.  This is just to
+    stop PyCharm and mypy from complaining.  In reality, the `getters` are never called
+    and the value is returned from the configuration file
+    """
 
     def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._config: ConfigParser = cast(ConfigParser, None)    # initialized when empty preferences created
+        super().__init__(baseFileName='pytrek.ini', moduleName=APPLICATION_NAME, sections=GAME_SETTINGS_SECTIONS)
 
-        self._settingsCommon: SettingsCommon       = SettingsCommon()
-        self._limits:         LimitsSettings       = LimitsSettings()
-        self._power:          PowerSettings        = PowerSettings()
-        self._gameLevel:      GameLevelSettings    = GameLevelSettings()
-        self._factors:        FactorsSettings      = FactorsSettings()
-        self._debug:          DebugSettings        = DebugSettings()
-        self._torpedoSpeeds:  TorpedoSpeedSettings = TorpedoSpeedSettings()
-        self._developer:      DeveloperSettings    = DeveloperSettings()
-
-        self._createEmptySettings()
-        self._loadSettings()
-
-        self.logger.info(f'Game Settings singleton initialized')
+        self._configParser.optionxform = self._toStr    # type: ignore
+        self._loadConfiguration()
 
     @property
+    @configurationGetter(sectionName=LIMITS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def maximumStars(self) -> int:
-        return self._limits.maximumStars
+        return 0        # Never used
 
     @property
+    @configurationGetter(sectionName=LIMITS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def minimumStarBases(self) -> int:
-        return self._limits.minimumStarBases
+        return 0
 
     @property
+    @configurationGetter(sectionName=LIMITS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def maximumStarBases(self) -> int:
-        return self._limits.maximumStarBases
+        return 0
 
     @property
+    @configurationGetter(sectionName=LIMITS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def maximumPlanets(self) -> int:
-        return self._limits.maximumPlanets
+        return 0
 
     @property
+    @configurationGetter(sectionName=LIMITS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def defaultFullShields(self) -> int:
-        return self._limits.defaultFullShields
+        return 0
 
     @property
+    @configurationGetter(sectionName=POWER_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def initialEnergyLevel(self) -> int:
-        return self._power.initialEnergyLevel
+        return 0
 
     @property
+    @configurationGetter(sectionName=POWER_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def initialShieldEnergy(self) -> int:
-        return self._power.initialShieldEnergy
+        return 0
 
     @property
+    @configurationGetter(sectionName=POWER_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def initialTorpedoCount(self) -> int:
-        return self._power.initialTorpedoCount
+        return 0
 
     @property
+    @configurationGetter(sectionName=POWER_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def minimumImpulseEnergy(self) -> int:
-        return self._power.minimumImpulseEnergy
+        return 0
 
     @property
+    @configurationGetter(sectionName=POWER_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def defaultWarpFactor(self) -> int:
-        return self._power.defaultWarpFactor
+        return 0
 
     @property
+    @configurationGetter(sectionName=POWER_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
     def phaserFactor(self) -> float:
-        return self._power.phaserFactor
+        return 0.0
 
     @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
+    def gameLengthFactor(self) -> float:
+        return 0.0
+
+    @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
+    def starBaseExtender(self) -> float:
+        return 0.0
+
+    @property
+    @configurationGetter(sectionName=GAME_LEVEL_SECTION_NAME, deserializeFunction=PlayerType.toEnum)
     def playerType(self) -> PlayerType:
-        return self._gameLevel.playerType
+        return PlayerType.Novice        # value not used
 
     @playerType.setter
+    @configurationSetter(sectionName=GAME_LEVEL_SECTION_NAME, enumUseName=True)
     def playerType(self, newValue: PlayerType):
-        self._gameLevel.playerType = newValue
+        pass
 
     @property
+    @configurationGetter(sectionName=GAME_LEVEL_SECTION_NAME, deserializeFunction=GameType.toEnum)
     def gameType(self) -> GameType:
-        return self._gameLevel.gameType
+        return GameType.Short       # Value never used
 
     @gameType.setter
+    @configurationSetter(sectionName=GAME_LEVEL_SECTION_NAME, enumUseName=True)
     def gameType(self, newValue: GameType):
-        self._gameLevel.gameType = newValue
+        pass
 
     @property
+    @configurationGetter(sectionName=GAME_LEVEL_SECTION_NAME, deserializeFunction=SoundVolume.toEnum)
     def soundVolume(self) -> SoundVolume:
-        return self._gameLevel.soundVolume
+        return SoundVolume.Medium       # value never used
 
     @soundVolume.setter
+    @configurationSetter(sectionName=GAME_LEVEL_SECTION_NAME, enumUseName=True)
     def soundVolume(self, newValue: SoundVolume):
-        self._gameLevel.soundVolume = newValue
+        pass
 
     @property
-    def gameLengthFactor(self) -> float:
-        return self._factors.gameLengthFactor
-
-    @property
-    def starBaseExtender(self) -> float:
-        return self._factors.starBaseExtender
-
-    @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
     def starBaseMultiplier(self) -> float:
-        return self._factors.starBaseMultiplier
+        return 0.0
 
     @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def minKlingonFiringInterval(self) -> int:
-        return self._factors.minKlingonFiringInterval
+        return 0
 
     @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def maxKlingonFiringInterval(self) -> int:
-        return self._factors.maxKlingonFiringInterval
+        return 0
 
     @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def minCommanderFiringInterval(self) -> int:
-        return self._factors.minCommanderFiringInterval
+        return 0
 
     @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def maxCommanderFiringInterval(self) -> int:
-        return self._factors.maxCommanderFiringInterval
+        return 0
 
     @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def minSuperCommanderFiringInterval(self) -> int:
-        return self._factors.minSuperCommanderFiringInterval
+        return 0
 
     @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def maxSuperCommanderFiringInterval(self) -> int:
-        return self._factors.maxSuperCommanderFiringInterval
+        return 0
 
     @property
-    def minCommanderMoveInterval(self) -> int:
-        return self._factors.minCommanderMoveInterval
-
-    @property
-    def maxCommanderMoveInterval(self) -> int:
-        return self._factors.maxCommanderMoveInterval
-
-    @property
-    def minSuperCommanderMoveInterval(self) -> int:
-        return self._factors.minSuperCommanderMoveInterval
-
-    @property
-    def maxSuperCommanderMoveInterval(self) -> int:
-        return self._factors.maxSuperCommanderMoveInterval
-
-    @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def minKlingonMoveInterval(self) -> int:
-        return self._factors.minKlingonMoveInterval
+        return 0
 
     @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def maxKlingonMoveInterval(self) -> int:
-        return self._factors.maxKlingonMoveInterval
+        return 0
 
     @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
+    def minCommanderMoveInterval(self) -> int:
+        return 0
+
+    @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
+    def maxCommanderMoveInterval(self) -> int:
+        return 0
+
+    @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
+    def minSuperCommanderMoveInterval(self) -> int:
+        return 0
+
+    @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
+    def maxSuperCommanderMoveInterval(self) -> int:
+        return 0
+
+    @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
     def basicMissDisplayInterval(self) -> int:
-        return self._factors.basicMissDisplayInterval
+        return 0
 
     @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
     def photonTorpedoMisfireRate(self) -> float:
-        return self._factors.photonTorpedoMisfireRate
+        return 0.0
 
     @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
     def phaserBurstToTerminate(self) -> float:
-        return self._factors.phaserBurstToTerminate
+        return 0.0
 
     @property
+    @configurationGetter(sectionName=SPEED_SECTION_NAME, deserializeFunction=TorpedoSpeeds.toTorpedoSpeed)
     def noviceTorpedoSpeeds(self) -> TorpedoSpeeds:
-        return self._torpedoSpeeds.noviceTorpedoSpeeds
+        return TorpedoSpeeds()
 
     @property
+    @configurationGetter(sectionName=SPEED_SECTION_NAME, deserializeFunction=TorpedoSpeeds.toTorpedoSpeed)
     def fairTorpedoSpeeds(self) -> TorpedoSpeeds:
-        return self._torpedoSpeeds.fairTorpedoSpeeds
+        return TorpedoSpeeds()
 
     @property
+    @configurationGetter(sectionName=SPEED_SECTION_NAME, deserializeFunction=TorpedoSpeeds.toTorpedoSpeed)
     def goodTorpedoSpeeds(self) -> TorpedoSpeeds:
-        return self._torpedoSpeeds.goodTorpedoSpeeds
+        return TorpedoSpeeds()
 
     @property
+    @configurationGetter(sectionName=SPEED_SECTION_NAME, deserializeFunction=TorpedoSpeeds.toTorpedoSpeed)
     def expertTorpedoSpeeds(self) -> TorpedoSpeeds:
-        return self._torpedoSpeeds.expertTorpedoSpeeds
+        return TorpedoSpeeds()
 
     @property
+    @configurationGetter(sectionName=SPEED_SECTION_NAME, deserializeFunction=TorpedoSpeeds.toTorpedoSpeed)
     def emeritusTorpedoSpeeds(self) -> TorpedoSpeeds:
-        return self._torpedoSpeeds.emeritusTorpedoSpeeds
+        return TorpedoSpeeds()
 
     @property
-    def debugManualPlaceShipInQuadrant(self) -> bool:
-        return self._debug.manualPlaceShipInQuadrant
-
-    @debugManualPlaceShipInQuadrant.setter
-    def debugManualPlaceShipInQuadrant(self, newValue: bool):
-        self._debug.manualPlaceShipInQuadrant = newValue
-
-    @property
-    def manualSectorCoordinates(self) -> Coordinates:
-        return self._debug.manualSectorCoordinates
-
-    @manualSectorCoordinates.setter
-    def manualSectorCoordinates(self, newValue: Coordinates):
-        self._debug.manualSectorCoordinates = newValue
-
-    @property
-    def debugAddKlingons(self) -> bool:
-        return self._debug.addKlingons
-
-    @debugAddKlingons.setter
-    def debugAddKlingons(self, newValue: bool):
-        self._debug.addKlingons = newValue
-
-    @property
-    def debugKlingonCount(self) -> int:
-        return self._debug.klingonCount
-
-    @debugKlingonCount.setter
-    def debugKlingonCount(self, newValue: int):
-        self._debug.klingonCount = newValue
-
-    @property
-    def debugAddCommanders(self) -> bool:
-        return self._debug.addCommanders
-
-    @property
-    def debugCommanderCount(self) -> int:
-        return self._debug.commanderCount
-
-    @property
-    def debugAddSuperCommanders(self) -> bool:
-        return self._debug.addSuperCommanders
-
-    @property
-    def debugSuperCommanderCount(self) -> int:
-        return self._debug.superCommanderCount
-
-    @property
-    def debugPrintKlingonPlacement(self) -> bool:
-        return self._debug.printKlingonPlacement
-
-    @debugPrintKlingonPlacement.setter
-    def debugPrintKlingonPlacement(self, newValue: bool):
-        self._debug.printKlingonPlacement = newValue
-
-    @property
-    def debugCollectKlingonQuadrantCoordinates(self) -> bool:
-        return self._debug.collectKlingonQuadrantCoordinates
-
-    @debugCollectKlingonQuadrantCoordinates.setter
-    def debugCollectKlingonQuadrantCoordinates(self, newValue: bool):
-        self._debug.collectKlingonQuadrantCoordinates = newValue
-
-    @property
-    def debugAnnounceQuadrantCreation(self) -> bool:
-        return self._debug.announceQuadrantCreation
-
-    @debugAnnounceQuadrantCreation.setter
-    def debugAnnounceQuadrantCreation(self, newValue: bool):
-        self._debug.announceQuadrantCreation = newValue
-
-    @property
-    def debugAddPlanet(self) -> bool:
-        return self._debug.addPlanet
-
-    @debugAddPlanet.setter
-    def debugAddPlanet(self, newValue: bool):
-        self._debug.addPlanet = newValue
-
-    @property
-    def debugAddStarBase(self) -> bool:
-        return self._debug.addStarBase
-
-    @debugAddStarBase.setter
-    def debugAddStarBase(self, newValue: bool):
-        self._debug.addStarBase = newValue
-
-    @property
-    def debugNoKlingons(self) -> bool:
-        return self._debug.noKlingons
-
-    @debugNoKlingons.setter
-    def debugNoKlingons(self, newValue: bool):
-        self._debug.noKlingons = newValue
-
-    @property
-    def debugNoCommanders(self) -> bool:
-        return self._debug.noCommanders
-
-    @debugNoCommanders.setter
-    def debugNoCommanders(self, newValue: bool):
-        self._debug.noCommanders = newValue
-
-    @property
-    def debugNoSuperCommanders(self) -> bool:
-        return self._debug.noSuperCommanders
-
-    @debugNoSuperCommanders.setter
-    def debugNoSuperCommanders(self, newValue: bool):
-        self._debug.noSuperCommanders = newValue
-
-    @property
-    def debugConsoleShowInternals(self) -> bool:
-        return self._debug.consoleShowInternals
-
-    @debugConsoleShowInternals.setter
-    def debugConsoleShowInternals(self, newValue: bool):
-        self._debug.consoleShowInternals = newValue
-
-    @property
-    def scheduleSuperNova(self) -> bool:
-        return self._debug.scheduleSuperNova
-
-    @scheduleSuperNova.setter
-    def scheduleSuperNova(self, newValue: bool):
-        self._debug.scheduleSuperNova = newValue
-
-    @property
-    def scheduleTractorBeam(self) -> bool:
-        return self._debug.scheduleTractorBeam
-
-    @scheduleTractorBeam.setter
-    def scheduleTractorBeam(self, newValue: bool):
-        self._debug.scheduleTractorBeam = newValue
-
-    @property
-    def scheduleCommanderAttacksBase(self) -> bool:
-        return self._debug.scheduleCommanderAttacksBase
-
-    @scheduleCommanderAttacksBase.setter
-    def scheduleCommanderAttacksBase(self, newValue: bool):
-        self._debug.scheduleCommanderAttacksBase = newValue
-
-    @property
-    def baseEnemyTorpedoDebug(self) -> bool:
-        return self._debug.baseEnemyTorpedoDebug
-
-    @baseEnemyTorpedoDebug.setter
-    def baseEnemyTorpedoDebug(self, newValue: bool):
-        self._debug.baseEnemyTorpedoDebug = newValue
-
-    @property
-    def baseEnemyTorpedoDebugInterval(self) -> int:
-        return self._debug.baseEnemyTorpedoDebugInterval
-
-    @baseEnemyTorpedoDebugInterval.setter
-    def baseEnemyTorpedoDebugInterval(self, newValue: int):
-        self._debug.baseEnemyTorpedoDebugInterval = newValue
-
-    @property
-    def smoothMotionDebug(self) -> bool:
-        return self._debug.smoothMotionDebug
-
-    @smoothMotionDebug.setter
-    def smoothMotionDebug(self, newValue: bool):
-        self._debug.smoothMotionDebug = newValue
-
-    @property
-    def smoothMotionDebugInterval(self) -> int:
-        return self._debug.smoothMotionDebugInterval
-
-    @smoothMotionDebugInterval.setter
-    def smoothMotionDebugInterval(self, newValue: int):
-        self._debug.smoothMotionDebugInterval = newValue
-
-    @property
+    @configurationGetter(sectionName=DEVELOPER_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
     def maxStarbaseSearches(self) -> int:
-        return self._developer.maxStarbaseSearches
+        return 0
 
     @maxStarbaseSearches.setter
+    @configurationSetter(sectionName=DEVELOPER_SECTION_NAME)
     def maxStarbaseSearches(self, newValue: int):
-        self._developer.maxStarbaseSearches = newValue
+        pass
 
     @property
+    @configurationGetter(sectionName=DEVELOPER_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
     def maxCommanderSearches(self) -> int:
-        return self._developer.maxCommanderSearches
+        return 0
 
     @maxCommanderSearches.setter
+    @configurationSetter(sectionName=DEVELOPER_SECTION_NAME)
     def maxCommanderSearches(self, newValue: int):
-        self._developer.maxCommanderSearches = newValue
+        pass
 
-    def _createEmptySettings(self):
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def manualPlaceShipInQuadrant(self) -> bool:
+        return False
 
-        self._config = ConfigParser()
+    @manualPlaceShipInQuadrant.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def manualPlaceShipInQuadrant(self, newValue: bool):
+        pass
 
-        self._settingsCommon.configParser = self._config
-        self._limits.configParser         = self._config
-        self._power.configParser          = self._config
-        self._gameLevel.configParser      = self._config
-        self._factors.configParser        = self._config
-        self._debug.configParser          = self._config
-        self._torpedoSpeeds.configParser  = self._config
-        self._developer.configParser      = self._config
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=Coordinates.toCoordinates)
+    def manualSectorCoordinates(self) -> Coordinates:
+        return Coordinates(0, 0)
 
-    def _loadSettings(self):
+    @manualSectorCoordinates.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def manualSectorCoordinates(self, newValue: Coordinates):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def addKlingons(self) -> bool:
+        return False
+
+    @addKlingons.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def addKlingons(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
+    def klingonCount(self) -> int:
+        return 0
+
+    @klingonCount.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def klingonCount(self, newValue: int):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def addCommanders(self) -> bool:
+        return True
+
+    @addCommanders.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def addCommanders(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
+    def commanderCount(self) -> int:
+        return 0
+
+    @commanderCount.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def commanderCount(self, newValue: int):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def addSuperCommanders(self) -> bool:
+        return False
+
+    @addSuperCommanders.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def addSuperCommanders(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
+    def superCommanderCount(self) -> int:
+        return 0
+
+    @superCommanderCount.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def superCommanderCount(self, newValue: int):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def printKlingonPlacement(self) -> bool:
+        return False
+
+    @printKlingonPlacement.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def printKlingonPlacement(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def addPlanet(self) -> bool:
+        return False
+
+    @addPlanet.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def addPlanet(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def addStarBase(self) -> bool:
+        return False
+
+    @addStarBase.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def addStarBase(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def noKlingons(self) -> bool:
+        return False
+
+    @noKlingons.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def noKlingons(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def noCommanders(self) -> bool:
+        return False
+
+    @noCommanders.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def noCommanders(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def noSuperCommanders(self) -> bool:
+        return False
+
+    @noSuperCommanders.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def noSuperCommanders(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def consoleShowInternals(self) -> bool:
+        return False
+
+    @consoleShowInternals.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def consoleShowInternals(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def scheduleSuperNova(self) -> bool:
+        return False
+
+    @scheduleSuperNova.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def scheduleSuperNova(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def scheduleTractorBeam(self) -> bool:
+        return False
+
+    @scheduleTractorBeam.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def scheduleTractorBeam(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def scheduleCommanderAttacksBase(self) -> bool:
+        return False
+
+    @scheduleCommanderAttacksBase.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def scheduleCommanderAttacksBase(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def collectKlingonQuadrantCoordinates(self) -> bool:
+        return False
+
+    @collectKlingonQuadrantCoordinates.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def collectKlingonQuadrantCoordinates(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def collectCommanderQuadrantCoordinates(self) -> bool:
+        return False
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def collectSuperCommanderQuadrantCoordinates(self) -> bool:
+        return False
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def announceQuadrantCreation(self) -> bool:
+        return False
+
+    @announceQuadrantCreation.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def announceQuadrantCreation(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def debugBaseEnemyTorpedo(self) -> bool:
+        return False
+
+    @debugBaseEnemyTorpedo.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def debugBaseEnemyTorpedo(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
+    def debugBaseEnemyTorpedoInterval(self) -> int:
+        return 0
+
+    @debugBaseEnemyTorpedoInterval.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def debugBaseEnemyTorpedoInterval(self, newValue: int):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def debugSmoothMotion(self) -> bool:
+        return False
+
+    @debugSmoothMotion.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def debugSmoothMotion(self, newValue: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureInteger)
+    def debugSmoothMotionInterval(self) -> int:
+        return 0
+
+    @debugSmoothMotionInterval.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def debugSmoothMotionInterval(self, newValue: int):
+        pass
+
+    def _toStr(self, optionString: str) -> str:
         """
-        Load settings from settings file
+        Override base method
+
+        Args:
+            optionString:
+
+        Returns: The option string unchanged
         """
-        # Make sure that the settings file exists
-        # noinspection PyUnusedLocal
-        try:
-            f = open(SettingsCommon.getSettingsLocation(), "r")
-            f.close()
-        except (ValueError, Exception) as e:
-            try:
-                f = open(SettingsCommon.getSettingsLocation(), "w")
-                f.write("")
-                f.close()
-                self.logger.warning(f'Game Settings File file re-created')
-            except (ValueError, Exception) as e:
-                self.logger.error(f"Error: {e}")
-                return
-
-        # Read data
-        self._config.read(SettingsCommon.getSettingsLocation())
-
-        self._limits.addMissingSettings()
-        self._power.addMissingSettings()
-        self._gameLevel.addMissingSettings()
-        self._factors.addMissingSettings()
-        self._debug.addMissingSettings()
-        self._torpedoSpeeds.addMissingSettings()
-        self._developer.addMissingSettings()
+        return optionString

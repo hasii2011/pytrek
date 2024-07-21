@@ -41,15 +41,13 @@ class EventEngine(metaclass=SingletonV3):
     a check for events. It exists so the check for zero does not have to be exact.
     
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args):
         """
 
         Args:
             *args:  Arg 0 is the message console
-            **kwargs:
 
         Returns:
-
         """
 
         self.logger: Logger = getLogger(__name__)
@@ -222,6 +220,16 @@ class EventEngine(metaclass=SingletonV3):
         return ans
 
     def _debugActions(self, futureEvent: FutureEvent) -> FutureEvent:
+        """
+        Set the appropriate flag to False to avoid scheduling certain events.  In normal mode (True)
+        we schedule events
+
+        Args:
+            futureEvent:  The current event
+
+        Returns:  Updated if we are going to unschedule it
+
+        """
 
         if futureEvent.type == FutureEventType.SUPER_NOVA and self._gameSettings.scheduleSuperNova is False:
             futureEvent.starDate = 0.0

@@ -82,6 +82,8 @@ class Intelligence(metaclass=SingletonV3):
         else:
             raise ValueError('Unknown Player Type')
 
+        retSpeed.playerType = playerType
+
         return retSpeed
 
     def generateSectorCoordinates(self) -> Coordinates:

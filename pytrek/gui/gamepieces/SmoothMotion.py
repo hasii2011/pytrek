@@ -256,8 +256,8 @@ class SmoothMotion:
 
     def _smoothMotionDebugOutput(self, msg: str):
 
-        if self._gameSettings.smoothMotionDebug is True:
+        if self._gameSettings.debugSmoothMotion is True:
             self._smoothMotionDebugInterval += 1
-            if self._smoothMotionDebugInterval > self._gameSettings.smoothMotionDebugInterval:
+            if self._smoothMotionDebugInterval > self._gameSettings.debugSmoothMotionInterval:
                 self._smLogger.debug(msg)
                 self._smoothMotionDebugInterval = 0

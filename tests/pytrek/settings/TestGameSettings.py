@@ -120,24 +120,24 @@ class TestGameSettings(ProjectTestBase):
 
     def testDebugSettingsAddKlingons(self):
 
-        saveSetting: bool = self._settings.debugAddKlingons
-        self._settings.debugAddKlingons = True
-        self.assertTrue(self._settings.debugAddKlingons, 'Supposed to change')
-        self._settings.debugAddKlingons = saveSetting
+        saveSetting: bool = self._settings.addKlingons
+        self._settings.addKlingons = True
+        self.assertTrue(self._settings.addKlingons, 'Supposed to change')
+        self._settings.addKlingons = saveSetting
 
     def testDebugSettingsDebugKlingonCount(self):
 
-        saveSetting: int = self._settings.debugKlingonCount
-        self._settings.debugKlingonCount = 22
-        self.assertEqual(22, self._settings.debugKlingonCount, 'Supposed to change')
-        self._settings.debugKlingonCount = saveSetting
+        saveSetting: int = self._settings.klingonCount
+        self._settings.klingonCount = 22
+        self.assertEqual(22, self._settings.klingonCount, 'Supposed to change')
+        self._settings.klingonCount = saveSetting
 
     def testDebugPrintKlingonPlacement(self):
 
-        saveSetting: bool = self._settings.debugPrintKlingonPlacement
-        self._settings.debugPrintKlingonPlacement = True
-        self.assertTrue(self._settings.debugPrintKlingonPlacement, 'Should have changed to non-default')
-        self._settings.debugPrintKlingonPlacement = saveSetting
+        saveSetting: bool = self._settings.printKlingonPlacement
+        self._settings.printKlingonPlacement = True
+        self.assertTrue(self._settings.printKlingonPlacement, 'Should have changed to non-default')
+        self._settings.printKlingonPlacement = saveSetting
 
     def testMaxStarbaseSearches(self):
         saveSetting: int = self._settings.maxStarbaseSearches
@@ -171,17 +171,17 @@ class TestGameSettings(ProjectTestBase):
 
     def testDebugManualPlaceShipInQuadrant(self):
 
-        saveSetting: bool = self._settings.debugManualPlaceShipInQuadrant
+        saveSetting: bool = self._settings.manualPlaceShipInQuadrant
         if saveSetting is False:
-            self._settings.debugManualPlaceShipInQuadrant = True
-            actualValue: bool = self._settings.debugManualPlaceShipInQuadrant
+            self._settings.manualPlaceShipInQuadrant = True
+            actualValue: bool = self._settings.manualPlaceShipInQuadrant
             self.assertEqual(True, actualValue, 'Value did not change to True')
         else:
-            self._settings.debugManualPlaceShipInQuadrant = False
-            actualValue = self._settings.debugManualPlaceShipInQuadrant
+            self._settings.manualPlaceShipInQuadrant = False
+            actualValue = self._settings.manualPlaceShipInQuadrant
             self.assertEqual(False, actualValue, 'Value did not change to False')
 
-        self._settings.debugManualPlaceShipInQuadrant = saveSetting
+        self._settings.manualPlaceShipInQuadrant = saveSetting
 
     def testManualSectorCoordinates(self):
         saveSetting: Coordinates = self._settings.manualSectorCoordinates

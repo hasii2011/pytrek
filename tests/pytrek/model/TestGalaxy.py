@@ -34,7 +34,7 @@ class TestGalaxy(ProjectTestBase):
         ProjectTestBase.resetSingletons()
 
         TestGalaxy.clsGameSettings = GameSettings()
-        TestGalaxy.clsGameSettings.debugCollectKlingonQuadrantCoordinates = True
+        TestGalaxy.clsGameSettings.collectKlingonQuadrantCoordinates = True
 
         TestGalaxy.clsGameState = GameState()
         TestGalaxy.clsGalaxy    = Galaxy()
@@ -48,11 +48,11 @@ class TestGalaxy(ProjectTestBase):
         self._gameState: GameState = TestGalaxy.clsGameState
         self._galaxy:    Galaxy    = TestGalaxy.clsGalaxy
 
-        self.logger.info(f'setup:  {self._gameSettings.debugCollectKlingonQuadrantCoordinates=}')
+        self.logger.info(f'setup:  {self._gameSettings.collectKlingonQuadrantCoordinates=}')
 
     def tearDown(self):
         super().tearDown()
-        self._gameSettings.debugCollectKlingonQuadrantCoordinates = False
+        self._gameSettings.collectKlingonQuadrantCoordinates = False
 
     def testPlaceKlingonsInGalaxyCount(self):
         """

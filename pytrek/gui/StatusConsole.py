@@ -188,7 +188,7 @@ class StatusConsole:
 
         currentY = currentY + INLINE_STATUS_OFFSET
 
-        if self._gameSettings.debugConsoleShowInternals is True:
+        if self._gameSettings.consoleShowInternals is True:
 
             draw_text('OpTime:', labelX, currentY, color=RED,
                       font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)

@@ -114,9 +114,9 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
 
     def _baseEnemyTorpedoDebugOutput(self, msg: str):
 
-        if self._gameSettings.baseEnemyTorpedoDebug is True:
+        if self._gameSettings.debugBaseEnemyTorpedo is True:
             self._baseEnemyTorpedoDebugInterval += 1
-            if self._baseEnemyTorpedoDebugInterval > self._gameSettings.baseEnemyTorpedoDebugInterval:
+            if self._baseEnemyTorpedoDebugInterval > self._gameSettings.debugBaseEnemyTorpedoInterval:
                 self._baseEnemyTorpedoLogger.debug(msg)
                 self._baseEnemyTorpedoDebugInterval = 0
 

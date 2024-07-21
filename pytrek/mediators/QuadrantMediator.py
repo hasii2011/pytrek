@@ -147,7 +147,7 @@ class QuadrantMediator(metaclass=SingletonV3):
 
         currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
 
-        if self._gameSettings.debugManualPlaceShipInQuadrant is True:
+        if self._gameSettings.manualPlaceShipInQuadrant is True:
             currentSectorCoordinates = self._gameSettings.manualSectorCoordinates
 
         playerList: SpriteList = SpriteList()
@@ -248,10 +248,10 @@ class QuadrantMediator(metaclass=SingletonV3):
 
         self.__doEnemyDebugActions(quadrant=quadrant)
 
-        if self._gameSettings.debugAddPlanet is True:
+        if self._gameSettings.addPlanet is True:
             quadrant.addPlanet()
 
-        if self._gameSettings.debugAddStarBase is True:
+        if self._gameSettings.addStarBase is True:
             quadrant.addStarBase()
 
     def __makeKlingonSpriteList(self, quadrant: Quadrant):
@@ -289,24 +289,24 @@ class QuadrantMediator(metaclass=SingletonV3):
 
     def __doEnemyDebugActions(self, quadrant: Quadrant):
 
-        if self._gameSettings.debugAddKlingons is True:
-            numKlingons: int = self._gameSettings.debugKlingonCount
+        if self._gameSettings.addKlingons is True:
+            numKlingons: int = self._gameSettings.klingonCount
             for x in range(numKlingons):
                 klingon: Klingon = quadrant.addKlingon()
                 self.klingonList.append(klingon)
 
             self._gameState.remainingKlingons += numKlingons
 
-        if self._gameSettings.debugAddCommanders is True:
-            nCommanders: int = self._gameSettings.debugCommanderCount
+        if self._gameSettings.addCommanders is True:
+            nCommanders: int = self._gameSettings.commanderCount
             for x in range(nCommanders):
                 commander: Commander = quadrant.addCommander()
                 self.commanderList.append(commander)
 
             self._gameState.remainingCommanders += nCommanders
 
-        if self._gameSettings.debugAddSuperCommanders:
-            nSuperCommanders: int = self._gameSettings.debugSuperCommanderCount
+        if self._gameSettings.addSuperCommanders:
+            nSuperCommanders: int = self._gameSettings.superCommanderCount
             for x in range(nSuperCommanders):
                 superCommander: SuperCommander = quadrant.addSuperCommander()
                 self.superCommanderList.append(superCommander)

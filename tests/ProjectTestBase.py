@@ -28,7 +28,6 @@ class ProjectTestBase(UnitTestBase):
     def setUpClass(cls):
         """"""
         super().setUpClass()
-        SettingsCommon.determineSettingsLocation()
 
     def setUp(self):
         super().setUp()

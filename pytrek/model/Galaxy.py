@@ -60,19 +60,19 @@ class Galaxy(metaclass=SingletonV3):
             For debugging purposes, collect a list of the coordinates where we placed Klingons;  
             There may be duplicate coordinates if we randomly picked the same quadrant
             """
-        self.logger.info(f'Galaxy: {gameSettings.debugCollectKlingonQuadrantCoordinates=}')
-        if gameSettings.debugCollectKlingonQuadrantCoordinates is True:
+        self.logger.info(f'Galaxy: {gameSettings.collectKlingonQuadrantCoordinates=}')
+        if gameSettings.collectKlingonQuadrantCoordinates is True:
             self._debugKlingonQuadrants: List[Coordinates] = []
 
-        if gameSettings.debugNoKlingons is True:
+        if gameSettings.noKlingons is True:
             self._gameState.remainingKlingons = 0
         else:
             self.__placeKlingonsInGalaxy()
-        if gameSettings.debugNoCommanders is True:
+        if gameSettings.noCommanders is True:
             self._gameState.remainingCommanders = 0
         else:
             self.__placeCommandersInGalaxy()
-        if gameSettings.debugNoSuperCommanders is True:
+        if gameSettings.noSuperCommanders is True:
             self._gameState.remainingSuperCommanders = 0
         else:
             self.__placeSuperCommandersInGalaxy()
@@ -158,7 +158,7 @@ class Galaxy(metaclass=SingletonV3):
                 coordinates = Coordinates(x, y)
                 quadrant = Quadrant(coordinates)
                 quadrantRow.append(quadrant)
-                if self._gameSettings.debugAnnounceQuadrantCreation is True:
+                if self._gameSettings.announceQuadrantCreation is True:
                     self.logger.debug(f"Created quadrant: ({x},{y})")
             self.quadrants.append(quadrantRow)
 
@@ -229,14 +229,14 @@ class Galaxy(metaclass=SingletonV3):
 
             coordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
 
-            if self._gameSettings.debugCollectKlingonQuadrantCoordinates is True:
+            if self._gameSettings.collectKlingonQuadrantCoordinates is True:
                 self._debugKlingonQuadrants.append(coordinates)
 
             quadrant: Quadrant = self.getQuadrant(coordinates)
 
             quadrant.addKlingon()
 
-        if self._gameSettings.debugPrintKlingonPlacement is True:
+        if self._gameSettings.printKlingonPlacement is True:
             self.__debugPrintKlingonPlacement()
 
     def __placeCommandersInGalaxy(self):
