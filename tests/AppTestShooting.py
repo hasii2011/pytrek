@@ -57,7 +57,6 @@ from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.settings.GameSettings import GameSettings
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
@@ -413,7 +412,6 @@ def main():
     Main method
     """
     ProjectTestBase.setUpLogging()
-    SettingsCommon.determineSettingsLocation()
 
     arcadeWindow: Window       = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     shootingView: AppTestShooting = AppTestShooting()

@@ -2,8 +2,11 @@
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from pytrek.engine.GameType import GameType
+from pytrek.engine.PlayerType import PlayerType
 from pytrek.model.Coordinates import Coordinates
 from pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.SoundVolume import SoundVolume
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 from tests.ProjectTestBase import ProjectTestBase
@@ -193,6 +196,126 @@ class TestGameSettings(ProjectTestBase):
         self.assertEqual(expectedCoordinates, actualCoordinates, 'Ship manual positioning coordinates did not change')
 
         self._settings.manualSectorCoordinates = saveSetting
+
+    def testPower(self):
+
+        gameSettings: GameSettings = GameSettings()
+
+        self.assertEqual(5000, gameSettings.initialEnergyLevel,              'Initial Energy default must have changed')
+        self.assertEqual(2.0,  gameSettings.phaserFactor,                    'Should be a float')
+
+    def testFactors(self):
+        gameSettings: GameSettings = GameSettings()
+        self.assertEqual(2.0,  gameSettings.starBaseExtender,                'Bad star base extender')
+        self.assertEqual(15,   gameSettings.maxKlingonFiringInterval,        'Bad interval')
+        self.assertEqual(10,   gameSettings.maxCommanderFiringInterval,      'Bad max commander firing interval')
+        self.assertEqual(8,    gameSettings.maxSuperCommanderFiringInterval, 'Bad max commander firing interval')
+        self.assertEqual(5,    gameSettings.minKlingonMoveInterval,          'Bad min Klingon move interval')
+        self.assertEqual(3,    gameSettings.minCommanderMoveInterval,        'Bad min Commander move interval')
+        self.assertEqual(0.2,  gameSettings.photonTorpedoMisfireRate,        'Bad misfire rate')
+
+    def testGetDeveloper(self):
+        gameSettings: GameSettings = GameSettings()
+
+        self.assertEqual(128,  gameSettings.maxStarbaseSearches)
+        self.assertEqual(128,   gameSettings.maxCommanderSearches)
+
+    def testSetDeveloper(self):
+        gameSettings: GameSettings = GameSettings()
+
+        gameSettings.maxStarbaseSearches = 500
+        self.assertEqual(500,  gameSettings.maxStarbaseSearches)
+        gameSettings.maxStarbaseSearches = 128
+
+    def testGetDebug(self):
+
+        gameSettings: GameSettings = GameSettings()
+
+        self.assertFalse(gameSettings.manualPlaceShipInQuadrant, 'This should be off')
+        self.assertEqual(Coordinates(0, 0), gameSettings.manualSectorCoordinates, 'These are wrong')
+        self.assertFalse(gameSettings.addCommanders, 'This should be off')
+        self.assertFalse(gameSettings.addKlingons, 'This should be off')
+        self.assertFalse(gameSettings.addPlanet,   'No extra planets')
+        self.assertFalse(gameSettings.debugBaseEnemyTorpedo,   'No extra planets')
+
+    def testSetDebug(self):
+        gameSettings: GameSettings = GameSettings()
+        gameSettings.manualSectorCoordinates = Coordinates(3, 3)
+        self.assertEqual(Coordinates(3, 3), gameSettings.manualSectorCoordinates, 'Debug Setting Manual Coordinates is wrong')
+        gameSettings.manualSectorCoordinates = Coordinates(0, 0)
+
+    def testSetDebug2(self):
+        gameSettings: GameSettings = GameSettings()
+        gameSettings.commanderCount = 99
+        self.assertEqual(99, gameSettings.commanderCount, 'Commander count is not correct')
+        gameSettings.commanderCount = 1
+
+    def testSetDebug5(self):
+        gameSettings: GameSettings = GameSettings()
+        gameSettings.debugBaseEnemyTorpedoInterval = 6666
+        self.assertEqual(6666, gameSettings.debugBaseEnemyTorpedoInterval, 'Temporarily evil')
+        gameSettings.debugBaseEnemyTorpedoInterval = 20
+
+    def testSetDebug3(self):
+        gameSettings: GameSettings = GameSettings()
+        gameSettings.addPlanet = True
+        self.assertTrue(gameSettings.addPlanet, 'Temporarily True')
+        gameSettings.addPlanet = False
+
+    def testSetDebug4(self):
+        gameSettings: GameSettings = GameSettings()
+        gameSettings.debugBaseEnemyTorpedo = True
+        self.assertTrue(gameSettings.debugBaseEnemyTorpedo, 'Temporarily True')
+        gameSettings.debugBaseEnemyTorpedo = False
+
+    def testGetNoviceTorpedoSpeed(self):
+        gameSettings: GameSettings = GameSettings()
+
+        expectedTS: TorpedoSpeeds = TorpedoSpeeds.toTorpedoSpeed('5,2,2,1')
+        actualTS:   TorpedoSpeeds = gameSettings.noviceTorpedoSpeeds
+
+        self.assertEqual(expectedTS, actualTS, 'Torpedo speeds do not match')
+
+    def testGetEmeritusTorpedoSpeed(self):
+        gameSettings: GameSettings = GameSettings()
+
+        expectedTS: TorpedoSpeeds = TorpedoSpeeds.toTorpedoSpeed('1,2,5,5')
+        actualTS:   TorpedoSpeeds = gameSettings.emeritusTorpedoSpeeds
+
+        self.assertEqual(expectedTS, actualTS, 'Torpedo speeds do not match')
+
+    def testGetGameLevelSettings1(self):
+
+        gameSettings: GameSettings = GameSettings()
+
+        playerType: PlayerType = gameSettings.playerType
+        self.assertIsInstance(playerType, PlayerType, 'Enum getter does not work')
+
+    def testGetGameLevelSettings2(self):
+
+        gameSettings: GameSettings = GameSettings()
+
+        gameType: GameType = gameSettings.gameType
+        self.assertIsInstance(gameType, GameType, 'Enum getter does not work')
+
+    def testGetGameLevelSettings3(self):
+
+        gameSettings: GameSettings = GameSettings()
+
+        soundVolume: SoundVolume = gameSettings.soundVolume
+        self.assertIsInstance(soundVolume, SoundVolume, 'Enum getter does not work')
+
+    def testSetGameLevelSettings(self):
+
+        gameSettings: GameSettings = GameSettings()
+
+        saveGameType: GameType = gameSettings.gameType
+
+        gameSettings.gameType = GameType.Long
+
+        self.assertEqual(GameType.Long, gameSettings.gameType, 'Setter did not work')
+
+        gameSettings.gameType = saveGameType
 
 
 def suite() -> TestSuite:

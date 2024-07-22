@@ -19,7 +19,6 @@ from pytrek.engine.Computer import Computer
 
 from pytrek.model.Coordinates import Coordinates
 
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.ProjectTestBase import ProjectTestBase
 
@@ -39,8 +38,7 @@ class TestComputer(ProjectTestBase):
 
     @classmethod
     def setUpClass(cls):
-        ProjectTestBase.setUpClass()
-        SettingsCommon.determineSettingsLocation()
+        super().setUpClass()
 
     def setUp(self):
         super().setUp()

@@ -23,7 +23,6 @@ from pytrek.gui.gamepieces.PlanetType import PlanetType
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.DataTypes import LRScanCoordinatesList
 from pytrek.settings.GameSettings import GameSettings
-from pytrek.settings.SettingsCommon import SettingsCommon
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 from tests.ProjectTestBase import ProjectTestBase
@@ -63,8 +62,7 @@ class TestIntelligence(ProjectTestBase):
 
     @classmethod
     def setUpClass(cls):
-        ProjectTestBase.setUpClass()
-        SettingsCommon.determineSettingsLocation()
+        super().setUpClass()
 
     def setUp(self):
         super().setUp()

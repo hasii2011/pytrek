@@ -6,7 +6,6 @@ from arcade import run as arcadeRun
 
 from pytrek.gui.HelpView import HelpView
 
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.ProjectTestBase import ProjectTestBase
 
@@ -28,7 +27,6 @@ def completeCallback():
 def main():
 
     ProjectTestBase.setUpLogging()
-    SettingsCommon.determineSettingsLocation()
 
     arcadeWindow: Window = Window(title=SCREEN_TITLE, width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
 

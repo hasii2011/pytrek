@@ -32,7 +32,6 @@ from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
 
 from pytrek.settings.GameSettings import GameSettings
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from tests.SchedulerTestMessageConsole import SchedulerTestMessageConsole
 
@@ -242,7 +241,6 @@ class AppTestEventScheduler(View):
 def main():
 
     ProjectTestBase.setUpLogging()
-    SettingsCommon.determineSettingsLocation()
 
     window:    Window = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     startView: AppTestEventScheduler  = AppTestEventScheduler()

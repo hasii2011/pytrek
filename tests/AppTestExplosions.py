@@ -33,7 +33,6 @@ from pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedo
 
 from pytrek.LocateResources import LocateResources
 
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 SCREEN_WIDTH:  int = 800
 SCREEN_HEIGHT: int = 600
@@ -269,7 +268,6 @@ def main():
     Main method
     """
     LocateResources.setupSystemLogging()
-    SettingsCommon.determineSettingsLocation()
 
     window: AppTestExplosions = AppTestExplosions(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()

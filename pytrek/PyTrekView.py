@@ -51,7 +51,6 @@ from pytrek.mediators.GalaxyMediator import GalaxyMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
 from pytrek.settings.GameSettings import GameSettings
-from pytrek.settings.SettingsCommon import SettingsCommon
 
 from pytrek.SoundMachine import SoundMachine
 
@@ -117,8 +116,6 @@ class PyTrekView(View):
         ImageFont.truetype(fqFileName)
 
     def setup(self):
-
-        SettingsCommon.determineSettingsLocation()
 
         # self._backgroundSprite: QuadrantBackground = QuadrantBackground()
 

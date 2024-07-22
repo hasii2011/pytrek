@@ -15,8 +15,6 @@ from pytrek.model.Galaxy import Galaxy
 
 from pytrek.settings.GameSettings import GameSettings
 
-from pytrek.settings.SettingsCommon import SettingsCommon
-
 
 class ProjectTestBase(UnitTestBase):
 
