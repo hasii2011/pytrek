@@ -238,4 +238,18 @@ class EnterpriseTorpedoMediator(MissesMediator):
             enemy.power = 0
             enemy.remove_from_sprite_lists()
 
+            self._decrementAppropriateEnemyCount(enemy)
+
+    def _decrementAppropriateEnemyCount(self, enemy):
+        from pytrek.gui.gamepieces.klingon.Klingon import Klingon
+        from pytrek.gui.gamepieces.commander.Commander import Commander
+        from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
+
+        if isinstance(enemy, Klingon) is True:
             self._gameState.remainingKlingons -= 1
+        elif isinstance(enemy, Commander) is True:
+            self._gameState.remainingCommanders -= 1
+        elif isinstance(enemy, SuperCommander) is True:
+            self._gameState.remainingSuperCommanders -= 1
+        else:
+            assert False, f'Unknown enemy type: {enemy.id}'

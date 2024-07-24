@@ -195,6 +195,8 @@ class QuadrantMediator(metaclass=SingletonV3):
         self._ptm.update(quadrant=quadrant)
         self._stm.update(quadrant=quadrant)
         self._epm.update(quadrant=quadrant)
+        if quadrant.klingonCount == 0 and quadrant.commanderCount == 0 and quadrant.commanderCount == 0:
+            self._gameState.shipCondition = ShipCondition.Green
 
     def _updateQuadrant(self, quadrant):
         for y in range(QUADRANT_ROWS):
