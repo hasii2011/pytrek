@@ -164,7 +164,7 @@ class AppTestExplosions(Window):
 
     def on_key_release(self, releasedKey: int, key_modifiers: int):
         """
-        Called whenever the user lets off a previously pressed key.
+        Called whenever the user releases a previously pressed key.
         """
         if releasedKey == arcadeKey.Q:
             import os

@@ -23,6 +23,11 @@
             "handlers":  ["consoleHandler"],
             "propagate": "False"
         },
+         "__main__": {
+            "level": "WARNING",
+            "propagate": "False"
+        },
+
         "pytrek": {
             "level":     "WARNING",
             "propagate": "False"

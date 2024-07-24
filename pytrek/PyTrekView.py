@@ -19,6 +19,7 @@ from arcade import start_render
 
 from arcade import key as arcadeKey
 from arcade import run as arcadeRun
+from arcade.gui import UIManager
 
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
@@ -39,6 +40,8 @@ from pytrek.gui.HelpView import HelpView
 from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
+from pytrek.gui.StdConfirmationDialog import OK_ANSWER
+from pytrek.gui.StdConfirmationDialog import StdConfirmationDialog
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 
@@ -82,6 +85,9 @@ class PyTrekView(View):
 
         self.logger: Logger = getLogger(PyTrekView.MADE_UP_PRETTY_MAIN_NAME)
 
+        self._uiManager: UIManager = UIManager()
+        self._uiManager.enable()
+
         self.background:  Texture    = cast(Texture, None)
         self._enterprise: Enterprise = cast(Enterprise, None)
         # If you have sprite lists, you should create them here and set them to None
@@ -114,6 +120,7 @@ class PyTrekView(View):
                                                            packageName=LocateResources.FONT_RESOURCES_PACKAGE_NAME,
                                                            )
         ImageFont.truetype(fqFileName)
+        self._freezeGamePlay: bool = False      # used to temporarily stop game while a dialog is popped up
 
     def setup(self):
 
@@ -161,6 +168,7 @@ class PyTrekView(View):
         """
         # This command should happen before we start drawing. It will clear
         # the screen to the background color, and erase what we drew last frame.
+
         start_render()
 
         # Draw the background texture
@@ -172,6 +180,8 @@ class PyTrekView(View):
         self._statusConsole.draw()
         self._messageConsole.draw()
 
+        self._uiManager.draw()
+
     def on_update(self, delta_time: float):
         """
         All the logic to move, and the game logic goes here.
@@ -181,7 +191,9 @@ class PyTrekView(View):
         Args:
             delta_time:  Time interval since the last time the function was called.
         """
-        # self.physicsEngine.update()
+        if self._freezeGamePlay is True:
+            return
+
         self._quadrantMediator.update(quadrant=self._quadrant)
         self._enterpriseMediator.update(quadrant=self._quadrant)
 
@@ -218,6 +230,9 @@ class PyTrekView(View):
             self._gameEngine.resetOperationTime()
         elif pressedKey == arcadeKey.W:
             self._enterpriseMediator.warp()
+        elif pressedKey == arcadeKey.S:
+            self._freezeGamePlay = True
+            StdConfirmationDialog.displayMessageBox(uiManager=self._uiManager, msg='Save current game progress?', callback=self._confirmGameSave)
         elif pressedKey == arcadeKey.H or pressedKey == arcadeKey.QUESTION:
             print('Asked for help!')
             self._displayHelp()
@@ -233,6 +248,9 @@ class PyTrekView(View):
         """
         Called when the user presses a mouse button.
         """
+        if self._freezeGamePlay is True:
+            return
+
         if button == MOUSE_BUTTON_LEFT:
             arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
             if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_HEIGHT:
@@ -263,6 +281,12 @@ class PyTrekView(View):
 
     def _switchViewBack(self):
         self.window.show_view(self)
+
+    def _confirmGameSave(self, ans: str):
+        self.logger.warning(f'You pressed {ans}')
+        if ans == OK_ANSWER:
+            self._gameState.saveState()
+        self._freezeGamePlay = False
 
 
 def main():
