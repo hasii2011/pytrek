@@ -19,6 +19,8 @@ from arcade import start_render
 
 from arcade import key as arcadeKey
 from arcade import run as arcadeRun
+from arcade import exit as arcadeExit
+
 from arcade.gui import UIManager
 
 from pytrek.Constants import CONSOLE_HEIGHT
@@ -34,6 +36,7 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.engine.futures.EventEngine import EventEngine
+from pytrek.gui.DeviceStatusView import DeviceStatusView
 
 from pytrek.gui.GalaxyView import GalaxyView
 from pytrek.gui.HelpView import HelpView
@@ -128,8 +131,6 @@ class PyTrekView(View):
 
         fqFileName: str = LocateResources.getImagePath(bareFileName='QuadrantBackground.png')
         self.background = load_texture(fqFileName)
-        # Create the 'physics engine'
-        # self.physicsEngine = PhysicsEngineSimple(self._enterprise, self._hardSpriteList)
 
         # These singletons are initialized for the first time
         self._gameSettings = GameSettings()     # Be able to read the preferences file
@@ -206,36 +207,38 @@ class PyTrekView(View):
         For a full list of keys, see:
         https://arcade.academy/arcade.key.html
         """
-        if pressedKey == arcadeKey.Q:
-            import os
-            # noinspection PyUnresolvedReferences
-            # noinspection PyProtectedMember
-            os._exit(0)
-        elif pressedKey == arcadeKey.G:
-            galaxyView: GalaxyView = GalaxyView(viewCompleteCallback=self._switchViewBack)
-            self.window.show_view(galaxyView)
-            self._gameEngine.resetOperationTime()
-        elif pressedKey == arcadeKey.L:
-            longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(viewCompleteCallback=self._switchViewBack)
-            self.window.show_view(longRangeSensorView)
-            self._gameEngine.resetOperationTime()
-        elif pressedKey == arcadeKey.T:
-            self._quadrantMediator.fireEnterpriseTorpedoes(self._quadrant)
-            self._gameEngine.resetOperationTime()
-        elif pressedKey == arcadeKey.P:
-            self._quadrantMediator.firePhasers(self._quadrant)
-            self._gameEngine.resetOperationTime()
-        elif pressedKey == arcadeKey.D:
-            self._quadrantMediator.dock(self._quadrant)
-            self._gameEngine.resetOperationTime()
-        elif pressedKey == arcadeKey.W:
-            self._enterpriseMediator.warp()
-        elif pressedKey == arcadeKey.S:
-            self._freezeGamePlay = True
-            StdConfirmationDialog.displayMessageBox(uiManager=self._uiManager, msg='Save current game progress?', callback=self._confirmGameSave)
-        elif pressedKey == arcadeKey.H or pressedKey == arcadeKey.QUESTION:
-            print('Asked for help!')
-            self._displayHelp()
+        match pressedKey:
+            case arcadeKey.Q:
+                arcadeExit()
+            case arcadeKey.G:
+                galaxyView: GalaxyView = GalaxyView(viewCompleteCallback=self._switchViewBack)
+                self.window.show_view(galaxyView)
+                self._gameEngine.resetOperationTime()
+            case arcadeKey.L:
+                longRangeSensorView: LongRangeSensorScanView = LongRangeSensorScanView(viewCompleteCallback=self._switchViewBack)
+                self.window.show_view(longRangeSensorView)
+                self._gameEngine.resetOperationTime()
+            case arcadeKey.T:
+                self._quadrantMediator.fireEnterpriseTorpedoes(self._quadrant)
+                self._gameEngine.resetOperationTime()
+            case arcadeKey.P:
+                self._quadrantMediator.firePhasers(self._quadrant)
+                self._gameEngine.resetOperationTime()
+            case arcadeKey.D:
+                self._quadrantMediator.dock(self._quadrant)
+                self._gameEngine.resetOperationTime()
+            case arcadeKey.W:
+                self._enterpriseMediator.warp()
+            case arcadeKey.S:
+                self._freezeGamePlay = True
+                StdConfirmationDialog.displayMessageBox(uiManager=self._uiManager, msg='Save current game progress?', callback=self._confirmGameSave)
+            case arcadeKey.R:
+                self._freezeGamePlay = True
+                deviceStatusView: DeviceStatusView = DeviceStatusView(viewCompleteCallback=self._switchViewBack)
+                self.window.show_view(deviceStatusView)
+            case arcadeKey.H | arcadeKey.QUESTION:
+                self._freezeGamePlay = True
+                self._displayHelp()
 
     def on_mouse_motion(self, x: float, y: float, delta_x: float, delta_y: float):
         """
@@ -276,10 +279,10 @@ class PyTrekView(View):
     def _displayHelp(self):
 
         helpView: HelpView = HelpView(completeCallback=self._switchViewBack)
-
         self.window.show_view(helpView)
 
     def _switchViewBack(self):
+        self._freezeGamePlay = False
         self.window.show_view(self)
 
     def _confirmGameSave(self, ans: str):

@@ -1,4 +1,4 @@
-You are Captain of the starship 'Enterprise' with a mission to seek and destroy
+You are Captain of the starship `Enterprise` with a mission to seek and destroy
 a fleet of enemy warships which are menacing the United Federation of Planets.
 
 You have a specified number of star dates in which to complete your mission.
@@ -21,5 +21,10 @@ T - Fire Torpedoes; Computer controlled
 W - Warp to another quadrant; You provide quadrant number and speed
 
 D - Dock at star base;  Only valid if you are immediately adjacent to the base
+
+S - Save current game state
+
+R - Report devices status
+
 
 Left Mouse click - invokes impulse travel within the quadrant

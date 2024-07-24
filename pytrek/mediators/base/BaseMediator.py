@@ -13,6 +13,7 @@ from shapely.geometry import LineString
 # noinspection PyPackageRequirements
 from shapely.geometry import Polygon
 
+from pytrek.GameState import GameState
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
 from pytrek.gui.gamepieces.GamePiece import GamePiece
@@ -26,8 +27,9 @@ class BaseMediator:
     Has common stuff to handle pointing and shooting pre-checks
     """
     def __init__(self):
-        self._baseMediatorLogger: Logger   = getLogger(__name__)
-        self._computer:           Computer = Computer()
+        self._baseMediatorLogger: Logger    = getLogger(__name__)
+        self._computer:           Computer  = Computer()
+        self._gameState:          GameState = GameState()
 
     def _pointAtTarget(self, shooter: Sprite, target: GamePiece, rotationAngle: int = 125):
 

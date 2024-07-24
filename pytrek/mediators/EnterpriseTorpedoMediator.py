@@ -235,5 +235,7 @@ class EnterpriseTorpedoMediator(MissesMediator):
         self._messageConsole.displayMessage(f'{enemy.id} took hit: {kHit:.2f}  remaining: {enemy.power:.2f}')
         if enemy.power <= 0:
             self._messageConsole.displayMessage(f'{enemy.id} destroyed')
-            enemy.remove_from_sprite_lists()
             enemy.power = 0
+            enemy.remove_from_sprite_lists()
+
+            self._gameState.remainingKlingons -= 1

@@ -10,6 +10,7 @@ from arcade import draw_text
 
 from arcade import run as arcadeRun
 from arcade import key as arcadeKey
+from arcade import exit as arcadeExit
 from arcade import start_render
 
 from pytrek.GameState import GameState
@@ -189,10 +190,7 @@ class AppTestEventScheduler(View):
         Called whenever the user releases a previously pressed key.
         """
         if releasedKey == arcadeKey.Q:
-            import os
-            # noinspection PyUnresolvedReferences
-            # noinspection PyProtectedMember
-            os._exit(0)
+            arcadeExit()
         elif releasedKey == arcadeKey.U:
             self._gameEngine.updateTime(elapsedTime=1.0)
         elif releasedKey == arcadeKey.A:

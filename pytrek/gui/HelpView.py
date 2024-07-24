@@ -46,8 +46,8 @@ class HelpView(View):
 
         self._uiManager.enable()
 
-        title:               UILabel        = self._createLabel(text='PyArcadeStarTrek Help', height=24, fontSize=18)
-        createTextResponse: CreateTextResponse  = self._createHelpTextArea()
+        title:               UILabel           = self._createLabel(text='PyArcadeStarTrek Help', height=24, fontSize=18)
+        createTextResponse: CreateTextResponse = self._createHelpTextArea()
 
         wrappedHelpTextArea: UITexturePane = createTextResponse.texturePane
         self._helpTextArea:  UITextArea    = createTextResponse.textArea
@@ -62,12 +62,12 @@ class HelpView(View):
                                         ])
 
         okButton: UITextureButton = self._createOkButton()
-        mainBox: UIBoxLayout = UIBoxLayout(vertical=True,
-                                           children=[
-                                               title.with_space_around(top=20),
-                                               hBox,
-                                               okButton
-                                           ])
+        mainBox:  UIBoxLayout     = UIBoxLayout(vertical=True,
+                                                children=[
+                                                    title.with_space_around(top=20),
+                                                    hBox,
+                                                    okButton
+                                                ])
 
         self._uiManager.add(
             UIAnchorWidget(

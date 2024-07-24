@@ -24,6 +24,7 @@ from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
 
 LR_SCAN_FONT_SIZE: int = 14
+TITLE_FONT_SIZE:   int = 18
 
 
 class LongRangeSensorScanMediator(metaclass=SingletonV3):
@@ -59,10 +60,10 @@ class LongRangeSensorScanMediator(metaclass=SingletonV3):
         graphicCenterX: float = self.graphicCenterX
         graphicCenterY: float = self.graphicCenterY
 
-        titleX: float = graphicCenterX - (QUADRANT_PIXEL_WIDTH * 2) - (QUADRANT_PIXEL_WIDTH / 2)
-        titleY: float = graphicCenterY + (QUADRANT_PIXEL_HEIGHT * 2) + (QUADRANT_PIXEL_HEIGHT / 2)
+        titleX: float = graphicCenterX - (QUADRANT_PIXEL_WIDTH * 2)  - (QUADRANT_PIXEL_WIDTH / 2)
+        titleY: float = graphicCenterY + ((QUADRANT_PIXEL_HEIGHT * 2) + (QUADRANT_PIXEL_HEIGHT / 2)) + TITLE_FONT_SIZE
         title:  str = f'Long Range Scan Quadrant ({centerCoordinates.x},{centerCoordinates.y})'
-        draw_text(title,  titleX, titleY, color.WHITE, 18)
+        draw_text(title,  titleX, titleY, color.WHITE, TITLE_FONT_SIZE)
 
         draw_text("E", graphicCenterX - 4, graphicCenterY - 8, color.YELLOW, LR_SCAN_FONT_SIZE)    # Adjust for font size
 
