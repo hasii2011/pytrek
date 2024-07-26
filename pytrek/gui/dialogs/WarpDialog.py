@@ -26,7 +26,7 @@ from arcade.gui import UITextureButton
 from arcade import load_texture
 from arcade import start_render
 
-from pytrek.gui.StdMsgBox import StdMsgBox
+from pytrek.gui.dialogs.StdMsgBox import StdMsgBox
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.LocateResources import LocateResources

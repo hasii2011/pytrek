@@ -36,15 +36,16 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 
 from pytrek.engine.futures.EventEngine import EventEngine
-from pytrek.gui.DeviceStatusView import DeviceStatusView
 
+from pytrek.gui.DeviceStatusView import DeviceStatusView
 from pytrek.gui.GalaxyView import GalaxyView
 from pytrek.gui.HelpView import HelpView
 from pytrek.gui.LongRangeSensorScanView import LongRangeSensorScanView
 from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.StatusConsole import StatusConsole
-from pytrek.gui.StdConfirmationDialog import OK_ANSWER
-from pytrek.gui.StdConfirmationDialog import StdConfirmationDialog
+
+from pytrek.gui.dialogs.StdConfirmationDialog import OK_ANSWER
+from pytrek.gui.dialogs.StdConfirmationDialog import StdConfirmationDialog
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 

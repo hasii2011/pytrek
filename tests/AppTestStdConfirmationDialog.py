@@ -13,7 +13,8 @@ from arcade import start_render
 from arcade.gui import UIManager
 
 from pytrek.LocateResources import LocateResources
-from pytrek.gui.StdConfirmationDialog import StdConfirmationDialog
+
+from pytrek.gui.dialogs.StdConfirmationDialog import StdConfirmationDialog
 
 SCREEN_WIDTH = 400
 SCREEN_HEIGHT = 300

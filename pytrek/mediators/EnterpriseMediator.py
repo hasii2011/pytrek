@@ -20,9 +20,10 @@ from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.gui.UITypes import WarpTravelCallback
 from pytrek.gui.WarpEffect import WarpEffect
-from pytrek.gui.WarpDialog import DialogAnswer
-from pytrek.gui.WarpDialog import WarpTravelAnswer
-from pytrek.gui.WarpDialog import WarpDialog
+
+from pytrek.gui.dialogs.WarpDialog import DialogAnswer
+from pytrek.gui.dialogs.WarpDialog import WarpTravelAnswer
+from pytrek.gui.dialogs.WarpDialog import WarpDialog
 
 from pytrek.mediators.base.MissesMediator import MissesMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse

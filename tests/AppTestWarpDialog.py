@@ -3,9 +3,10 @@ from arcade import color
 
 from arcade import run as arcadeRun
 
-from pytrek.gui.WarpDialog import DialogAnswer
-from pytrek.gui.WarpDialog import WarpDialog
-from pytrek.gui.WarpDialog import WarpTravelAnswer
+from pytrek.gui.dialogs.WarpDialog import DialogAnswer
+from pytrek.gui.dialogs.WarpDialog import WarpDialog
+from pytrek.gui.dialogs.WarpDialog import WarpTravelAnswer
+
 from tests.ProjectTestBase import ProjectTestBase
 
 SCREEN_WIDTH = 800
