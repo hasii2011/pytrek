@@ -98,6 +98,7 @@ setup(
         'pytrek.engine.devices', 'pytrek.engine.futures',
         'pytrek.exceptions',
         'pytrek.gui',
+        'pytrek.gui.dialogs',
         'pytrek.gui.gamepieces',
         'pytrek.gui.gamepieces.base', 'pytrek.gui.gamepieces.commander', 'pytrek.gui.gamepieces.klingon', 'pytrek.gui.gamepieces.supercommander',
         'pytrek.mediators',

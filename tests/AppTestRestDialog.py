@@ -1,26 +1,26 @@
+
 from arcade import Window
 from arcade import color
 
 from arcade import run as arcadeRun
 from arcade import exit as arcadeExit
 
-from pytrek.gui.dialogs.WarpDialog import DialogAnswer
-from pytrek.gui.dialogs.WarpDialog import WarpDialog
-from pytrek.gui.dialogs.WarpDialog import WarpTravelAnswer
+from pytrek.gui.dialogs.DlgConstants import DialogAnswer
+from pytrek.gui.dialogs.RestDialog import RestAnswer
+from pytrek.gui.dialogs.RestDialog import RestDialog
 
 from tests.ProjectTestBase import ProjectTestBase
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Test Warp Dialog"
+SCREEN_TITLE = "Test Rest Dialog"
 
 
-def completeCallback(warpTravelAnswer: WarpTravelAnswer):
-    import os
-    if warpTravelAnswer.dialogAnswer == DialogAnswer.Cancelled:
+def completeCallback(restAnswer: RestAnswer):
+    if restAnswer.dialogAnswer == DialogAnswer.Cancelled:
         arcadeExit()
     else:
-        print(f'{warpTravelAnswer=}')
+        print(f'{restAnswer=}')
 
 
 def main():
@@ -31,9 +31,9 @@ def main():
     arcadeWindow.background_color = color.BLACK
     arcadeWindow.clear()
 
-    warpDialog:  WarpDialog = WarpDialog(window=arcadeWindow, completeCallback=completeCallback)
+    restDialog:  RestDialog = RestDialog(completeCallback=completeCallback)
 
-    arcadeWindow.show_view(warpDialog)
+    arcadeWindow.show_view(restDialog)
 
     arcadeRun()
 

@@ -5,8 +5,6 @@ from typing import cast
 
 from dataclasses import dataclass
 
-from enum import Enum
-
 from logging import Logger
 from logging import getLogger
 
@@ -26,15 +24,12 @@ from arcade.gui import UITextureButton
 from arcade import load_texture
 from arcade import start_render
 
+from pytrek.gui.dialogs.DlgConstants import DialogAnswer
 from pytrek.gui.dialogs.StdMsgBox import StdMsgBox
+
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.LocateResources import LocateResources
-
-
-class DialogAnswer(Enum):
-    Cancelled = 'Cancelled'
-    Ok = 'Ok'
 
 
 @dataclass
