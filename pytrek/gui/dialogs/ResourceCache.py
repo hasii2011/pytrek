@@ -72,7 +72,7 @@ class ResourceCache:
         cancelFileName:        str = LocateResources.getImagePath(bareFileName='CancelButtonNormal-512.png')
         cancelPressedFileName: str = LocateResources.getImagePath(bareFileName='CancelButtonPressed-512.png')
 
-        cls.okButtonTexture:            Texture = load_texture(okFileName)
-        cls.okButtonPressedTexture:     Texture = load_texture(okPressedFileName)
-        cls.cancelButtonTexture:        Texture = load_texture(cancelFileName)
-        cls.cancelButtonPressedTexture: Texture = load_texture(cancelPressedFileName)
+        cls.okButtonTexture            = load_texture(okFileName)
+        cls.okButtonPressedTexture     = load_texture(okPressedFileName)
+        cls.cancelButtonTexture        = load_texture(cancelFileName)
+        cls.cancelButtonPressedTexture = load_texture(cancelPressedFileName)
