@@ -102,13 +102,17 @@ CommandPattern = NewType('CommandPattern', str)
 
 REST_CMD:    CommandPattern = CommandPattern('^r |^rest ')
 PHASERS_CMD: CommandPattern = CommandPattern('^p |^phasers ')
-PHOTONS_CMD: CommandPattern = CommandPattern('pho |^photons ')
+PHOTONS_CMD: CommandPattern = CommandPattern('^pho |^photons ')
+WARP_CMD:    CommandPattern = CommandPattern('w |^warp ')
+MOVE_CMD:    CommandPattern = CommandPattern('^m |^move ')
 
 
 PatternToCommandType: Dict[CommandPattern, CommandType] = {
     REST_CMD:    CommandType.Rest,
     PHASERS_CMD: CommandType.Phasers,
     PHOTONS_CMD: CommandType.Photons,
+    WARP_CMD:    CommandType.Warp,
+    MOVE_CMD:    CommandType.Move,
 }
 
 
@@ -117,7 +121,9 @@ class ParsedCommand:
     commandType: CommandType = CommandType.NoCommand
 
     restInterval:       int = 0
+    warpFactor:         int = 0
     phaserAmountToFire: int = 0
+    numberOfPhotonTorpedoesToFire: int = 0
 
 
 class CommandExtractor:
@@ -142,26 +148,68 @@ class CommandExtractor:
         parsedCommand = self._matchCommand(commandStr=self._commandStr)
         match parsedCommand.commandType:
             case CommandType.Rest:
-                try:
-                    splitCmd:  List[str] = self._commandStr.split(' ')
-                    parsedCommand.restInterval = int(splitCmd[1])
-                    self._commandStr = ''
-                except ValueError as e:
-                    self.logger.error(f'{e=}')
-                    parsedCommand.commandType = CommandType.InvalidCommand
+                parsedCommand = self._parseRestCommand(parsedCommand=parsedCommand)
             case CommandType.Phasers:
-                try:
-                    splitCmd = self._commandStr.split(' ')
-                    parsedCommand.phaserAmountToFire = int(splitCmd[1])
-                    self._commandStr = ''
-                except ValueError as e:
-                    self.logger.error(f'{e=}')
-                    parsedCommand.commandType = CommandType.InvalidCommand
+                parsedCommand = self._parsePhasersCommand(parsedCommand=parsedCommand)
             case CommandType.Photons:
-                pass        # TODO
+                parsedCommand = self._parsePhotonsCommand(parsedCommand=parsedCommand)
             case _:
                 self.logger.error(f'Invalid command: {self._commandStr}')
                 parsedCommand.commandType = CommandType.InvalidCommand
+
+        return parsedCommand
+
+    def _parseRestCommand(self, parsedCommand: ParsedCommand) -> ParsedCommand:
+        """
+        Retrieve the rest interval
+        Args:
+            parsedCommand:   command to update
+
+        Returns:  Updated command
+        """
+        try:
+            splitCmd: List[str] = self._commandStr.split(' ')
+            parsedCommand.restInterval = int(splitCmd[1])
+            self._commandStr = ''
+        except ValueError as e:
+            self.logger.error(f'{e=}')
+            parsedCommand.commandType = CommandType.InvalidCommand
+
+        return parsedCommand
+
+    def _parsePhasersCommand(self, parsedCommand: ParsedCommand) -> ParsedCommand:
+        """
+        Retrieve the amount to fire
+        Args:
+            parsedCommand:  Command to update
+
+        Returns: The updated command
+        """
+        try:
+            splitCmd = self._commandStr.split(' ')
+            parsedCommand.phaserAmountToFire = int(splitCmd[1])
+            self._commandStr = ''
+        except ValueError as e:
+            self.logger.error(f'{e=}')
+            parsedCommand.commandType = CommandType.InvalidCommand
+
+        return parsedCommand
+
+    def _parsePhotonsCommand(self, parsedCommand: ParsedCommand) -> ParsedCommand:
+        """
+        Retrieve the number of torpedoes to fire
+        Args:
+            parsedCommand:  Command to update
+
+        Returns:  The updated command
+        """
+        try:
+            splitCmd = self._commandStr.split(' ')
+            parsedCommand.numberOfPhotonTorpedoesToFire = int(splitCmd[1])
+            self._commandStr = ''
+        except ValueError as e:
+            self.logger.error(f'{e=}')
+            parsedCommand.commandType = CommandType.InvalidCommand
 
         return parsedCommand
 

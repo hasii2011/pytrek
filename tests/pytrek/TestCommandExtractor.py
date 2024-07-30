@@ -56,6 +56,27 @@ class TestCommandExtractor(UnitTestBase):
         self.assertEqual(CommandType.Phasers, parseCommand.commandType, 'Invalid command')
         self.assertEqual(250, parseCommand.phaserAmountToFire, 'Invalid phaser power')
 
+    def testPhotonsCommand(self):
+
+        keyStrokes: KeyStrokes = KeyStrokes([
+            arcadeKey.P, arcadeKey.H, arcadeKey.O, arcadeKey.T, arcadeKey.O, arcadeKey.N, arcadeKey.S, arcadeKey.SPACE,
+            arcadeKey.NUM_3,
+            arcadeKey.RETURN,
+        ])
+
+        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
+
+        self.assertEqual(CommandType.Photons, parseCommand.commandType, 'Invalid photon command')
+        self.assertEqual(3, parseCommand.numberOfPhotonTorpedoesToFire, 'Invalid photon count')
+
+    def testWarpCommand(self):
+
+        keyStrokes: KeyStrokes = KeyStrokes([
+            arcadeKey.W, arcadeKey.A, arcadeKey.R, arcadeKey.P, arcadeKey.SPACE,
+            arcadeKey.NUM_3,
+            arcadeKey.RETURN,
+        ])
+
     def testInvalidCommand(self):
         pressedKeys: KeyStrokes = KeyStrokes([
             arcadeKey.R, arcadeKey.E, arcadeKey.S, arcadeKey.T, arcadeKey.SPACE, arcadeKey.RETURN
