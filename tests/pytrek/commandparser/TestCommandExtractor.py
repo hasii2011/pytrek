@@ -1,8 +1,10 @@
-from logging import Logger
-from logging import getLogger
+
 from typing import List
 from typing import NewType
 from typing import cast
+
+from logging import Logger
+from logging import getLogger
 
 from unittest import TestSuite
 from unittest import main as unitTestMain
@@ -11,9 +13,11 @@ from codeallybasic.UnitTestBase import UnitTestBase
 
 from arcade import key as arcadeKey
 
-from pytrek.commandparser.CommandExtractor import CommandType
-from pytrek.commandparser.CommandExtractor import ParsedCommand
 from pytrek.commandparser.CommandExtractor import CommandExtractor
+from pytrek.commandparser.CommandType import CommandType
+from pytrek.commandparser.ManualMoveData import ManualMoveData
+from pytrek.commandparser.ParsedCommand import ParsedCommand
+
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
 from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
 
@@ -102,6 +106,24 @@ class TestCommandExtractor(UnitTestBase):
         ])
 
         self.assertRaises(InvalidCommandValueException, lambda: self._simulateKeyStrokes(keyStrokes=pressedKeys))
+
+    def testMoveManualPositiveDisplacement(self):
+
+        # move manual 5 5
+        keyStrokes: KeyStrokes = KeyStrokes([
+            arcadeKey.M, arcadeKey.O, arcadeKey.V, arcadeKey.E, arcadeKey.SPACE,
+            arcadeKey.M, arcadeKey.A, arcadeKey.N, arcadeKey.U, arcadeKey.A, arcadeKey.L, arcadeKey.SPACE,
+            arcadeKey.NUM_5, arcadeKey.SPACE, arcadeKey.NUM_5, arcadeKey.SPACE,
+            arcadeKey.RETURN
+        ])
+
+        parsedCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
+
+        self.assertEqual(CommandType.Move, parsedCommand.commandType, 'Should be a `move` command')
+
+        expectedMoveData: ManualMoveData = ManualMoveData(deltaX=5, deltaY=5)
+
+        self.assertEqual(expectedMoveData, parsedCommand.manualMoveData, '')
 
     def _simulateKeyStrokes(self, keyStrokes: KeyStrokes) -> ParsedCommand:
 

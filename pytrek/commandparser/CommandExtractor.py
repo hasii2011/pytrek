@@ -8,55 +8,17 @@ from logging import getLogger
 from re import Match as regExMatch
 from re import search as regExSearch
 
-from dataclasses import dataclass
-
-from enum import Enum
 from typing import NewType
 from typing import cast
 
 from arcade import key as arcadeKey
 
+from pytrek.commandparser.CommandType import CommandType
+from pytrek.commandparser.ManualMoveData import ManualMoveData
+from pytrek.commandparser.ParsedCommand import ParsedCommand
+
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
 from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
-
-
-class CommandType(Enum):
-    Abandon   = 'Abandon'
-    Chart     = 'Chart'
-    Capture   = 'Capture'
-    Call      = 'Call'      # (for help)
-    Cloak     = 'Cloak'
-    Computer  = 'Computer'
-    Crystals  = 'Crystals'
-    Damages   = 'Damages'
-    DeathRay  = 'DeathRay'
-    Destruct  = 'Destruct'
-    Dock      = 'Dock'
-    Freeze    = 'Freeze'
-    Impulse   = 'Impulse'
-    Mine      = 'Mine'
-    Move      = 'Move'
-    Orbit     = 'Orbit'
-    Phasers   = 'Phasers'
-    Photons   = 'Photons'
-    Planets   = 'Planets'
-    Probe     = 'Probe'
-    Report    = 'Report'
-    Request   = 'Request'
-    Rest      = 'Rest'
-    Quit      = 'Quit'
-    Score     = 'Score'
-    Sensors   = 'Sensors'
-    Shields   = 'Shields'
-    Shuttle   = 'Shuttle'
-    Status    = 'Status'
-    Warp      = 'Warp'
-    Transport      = 'Transport'
-    ShortScan      = 'ShortRangeScan'
-    LongRangeScan  = 'LongRangeScan'
-    EmergencyExit  = 'EmergencyExit'
-    NoCommand      = 'NoCommand'
-
 
 PressedKeyToCharacter: Dict[int, str] = {
     arcadeKey.A: 'a',
@@ -108,6 +70,10 @@ PHOTONS_CMD: CommandPattern = CommandPattern('^pho |^photons ')
 WARP_CMD:    CommandPattern = CommandPattern('w |^warp ')
 MOVE_CMD:    CommandPattern = CommandPattern('^m |^move ')
 
+# These are 'move' subcommands
+MOVE_MANUAL_MODE_PATTERN:    str = '^m|^manual'
+MOVE_AUTOMATIC_MODE_PATTERN: str = 'a|^auto|^automatic'
+
 
 PatternToCommandType: Dict[CommandPattern, CommandType] = {
     REST_CMD:    CommandType.Rest,
@@ -118,18 +84,10 @@ PatternToCommandType: Dict[CommandPattern, CommandType] = {
 }
 
 
-@dataclass
-class ParsedCommand:
-    commandType: CommandType = CommandType.NoCommand
-
-    restInterval:       int = 0
-    warpFactor:         int = 0
-    phaserAmountToFire: int = 0
-    numberOfPhotonTorpedoesToFire: int = 0
-
-
 class CommandExtractor:
+    """
 
+    """
     def __init__(self):
         self.logger:      Logger = getLogger(__name__)
         self._commandStr: str    = ''
@@ -157,10 +115,29 @@ class CommandExtractor:
                 parsedCommand = self._parsePhotonsCommand(parsedCommand=parsedCommand)
             case CommandType.Warp:
                 parsedCommand = self._parseWarpCommand(parsedCommand=parsedCommand)
+            case CommandType.Move:
+                parsedCommand = self._parseMoveCommand(parsedCommand=parsedCommand)
             case _:
                 self.logger.error(f'Invalid command: {self._commandStr}')
-                # parsedCommand.commandType = CommandType.InvalidCommand
                 raise InvalidCommandException(message=f'Invalid command: {self._commandStr}')
+
+        return parsedCommand
+
+    def _parseMoveCommand(self, parsedCommand: ParsedCommand):
+
+        splitCmd: List[str] = self._commandStr.split(' ')
+
+        modeStr: str = splitCmd[1]
+        match: regExMatch | None = regExSearch(MOVE_MANUAL_MODE_PATTERN, modeStr)
+        if match is None:
+            match = regExSearch(MOVE_AUTOMATIC_MODE_PATTERN, modeStr)
+            if match is None:
+                raise InvalidCommandException(message='Move subcommand must be manual or auto')
+            else:
+                pass
+        else:
+            manualMoveData: ManualMoveData = self._parseManualMoveSubcommand(splitCmd)
+            parsedCommand.manualMoveData = manualMoveData
 
         return parsedCommand
 
@@ -228,3 +205,15 @@ class CommandExtractor:
             raise InvalidCommandValueException(message=errorMessage)
 
         return integerValue
+
+    def _parseManualMoveSubcommand(self, splitCmd: List[str]) -> ManualMoveData:
+
+        manualMoveData: ManualMoveData = ManualMoveData()
+        try:
+            manualMoveData.deltaX = int(splitCmd[2])
+            manualMoveData.deltaY = int(splitCmd[3])
+        except ValueError as e:
+            self.logger.error(f'{e=}')
+            raise InvalidCommandValueException(message=f'Invalid manual move values: {e}')
+
+        return manualMoveData
