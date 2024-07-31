@@ -70,7 +70,8 @@ class TestGameState(ProjectTestBase):
 
         saveFile: Path = Path(f'{fqFileName}.SAVE')
 
-        saveFile.rename(fqFileName)
+        if Path.exists(saveFile) is True:
+            saveFile.rename(fqFileName)
 
     def setUp(self):
         super().setUp()
@@ -119,7 +120,7 @@ class TestGameState(ProjectTestBase):
         newGState: GameState = GameState()
         newGState.restoreState()
 
-        self.assertEquals(saveKlingonCount, newGState.remainingKlingons, 'Not restored correctly')
+        self.assertEqual(saveKlingonCount, newGState.remainingKlingons, 'Not restored correctly')
 
     def testDeSerialize(self):
 
@@ -131,13 +132,13 @@ class TestGameState(ProjectTestBase):
 
         gState.fromDictionary(gStateDict)
 
-        self.assertEquals(7777, gState.energy,       'Energy not restored')
-        self.assertEquals(8888, gState.torpedoCount, 'Torpedo count not accurate')
-        self.assertEquals(ShipCondition.Docked, gState.shipCondition, 'Ship condition enumeration not correct')
-        self.assertEquals(GameType.Short,       gState.gameType,      'Game type enumeration not correct')
+        self.assertEqual(7777, gState.energy,       'Energy not restored')
+        self.assertEqual(8888, gState.torpedoCount, 'Torpedo count not accurate')
+        self.assertEqual(ShipCondition.Docked, gState.shipCondition, 'Ship condition enumeration not correct')
+        self.assertEqual(GameType.Short,       gState.gameType,      'Game type enumeration not correct')
 
-        self.assertEquals(Coordinates(x=6, y=6), gState.currentQuadrantCoordinates, 'Quadrant coordinates not correct')
-        self.assertEquals(Coordinates(x=7, y=7), gState.currentSectorCoordinates,   'Sector coordinates not correct')
+        self.assertEqual(Coordinates(x=6, y=6), gState.currentQuadrantCoordinates, 'Quadrant coordinates not correct')
+        self.assertEqual(Coordinates(x=7, y=7), gState.currentSectorCoordinates,   'Sector coordinates not correct')
 
     def testSaveState(self):
 
