@@ -24,7 +24,7 @@ from pytrek.settings.GameSettings import GameSettings
 from pytrek.GameState import GameState
 
 QuadrantRow = NewType('QuadrantRow', List[Quadrant])
-GalaxyGrid  = NewType('GalaxyGrid', List[QuadrantRow])
+GalaxyGrid  = NewType('GalaxyGrid',  List[QuadrantRow])
 
 
 class Galaxy(metaclass=SingletonV3):

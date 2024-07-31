@@ -13,12 +13,16 @@ from typing import cast
 
 from arcade import key as arcadeKey
 
+from pytrek.Constants import MAXIMUM_COORDINATE
+from pytrek.Constants import MINIMUM_COORDINATE
+
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.ManualMoveData import ManualMoveData
 from pytrek.commandparser.ParsedCommand import ParsedCommand
 
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
 from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
+from pytrek.model.Coordinates import Coordinates
 
 PressedKeyToCharacter: Dict[int, str] = {
     arcadeKey.A: 'a',
@@ -124,6 +128,16 @@ class CommandExtractor:
         return parsedCommand
 
     def _parseMoveCommand(self, parsedCommand: ParsedCommand):
+        """
+        move manual <deltaX> <deltaY>
+
+        move automatic <qRow> <qColumn> <sRow> <sColumn>
+
+        For moving within a quadrant, <qRow> and <qColumn> may be omitted
+
+        Args:
+            parsedCommand:
+        """
 
         splitCmd: List[str] = self._commandStr.split(' ')
 
@@ -134,7 +148,13 @@ class CommandExtractor:
             if match is None:
                 raise InvalidCommandException(message='Move subcommand must be manual or auto')
             else:
-                pass
+
+                if len(splitCmd) == 6:      # full auto command
+                    pass
+                elif len(splitCmd) == 4:    # sector coordinates only
+                    parsedCommand.automaticMoveData.sectorCoordinates = self._parseSectorCoordinates(sRow=splitCmd[2], sColumn=splitCmd[3])
+                else:
+                    raise InvalidCommandException(message='Move automatic command improperly specified')
         else:
             manualMoveData: ManualMoveData = self._parseManualMoveSubcommand(splitCmd)
             parsedCommand.manualMoveData = manualMoveData
@@ -217,3 +237,37 @@ class CommandExtractor:
             raise InvalidCommandValueException(message=f'Invalid manual move values: {e}')
 
         return manualMoveData
+
+    def _parseSectorCoordinates(self, sRow: str, sColumn: str) -> Coordinates:
+
+        xCoordinate: int = -1
+        yCoordinate: int = -1
+        if (self._validCoordinate(coordinate=sRow, errorMsg='Invalid X sector') is True and
+                self._validCoordinate(coordinate=sColumn, errorMsg='Invalid Y Sector') is True):
+            xCoordinate = int(sRow)
+            yCoordinate = int(sColumn)
+
+        return Coordinates(x=xCoordinate, y=yCoordinate)
+
+    def _validCoordinate(self, coordinate: str, errorMsg: str):
+        """
+
+        Args:
+            coordinate:  String coordinate
+            errorMsg:    Error message to put in exception if not valid
+
+        Returns:  True if coordinate is value;  Else raises exception
+
+        """
+        valid: bool = True
+
+        try:
+            intCoordinate: int = int(coordinate)
+            if intCoordinate < MINIMUM_COORDINATE or intCoordinate > MAXIMUM_COORDINATE:
+                raise InvalidCommandValueException(message=f'{errorMsg} {MINIMUM_COORDINATE=} {MAXIMUM_COORDINATE=}')
+
+        except ValueError as e:
+            self.logger.error(f'{e}')
+            raise InvalidCommandValueException(message=errorMsg)
+
+        return valid

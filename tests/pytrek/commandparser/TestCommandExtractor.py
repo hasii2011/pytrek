@@ -20,6 +20,7 @@ from pytrek.commandparser.ParsedCommand import ParsedCommand
 
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
 from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
+from pytrek.model.Coordinates import Coordinates
 
 KeyStrokes = NewType('KeyStrokes', List[int])
 
@@ -124,6 +125,22 @@ class TestCommandExtractor(UnitTestBase):
         expectedMoveData: ManualMoveData = ManualMoveData(deltaX=5, deltaY=5)
 
         self.assertEqual(expectedMoveData, parsedCommand.manualMoveData, '')
+
+    def testMoveAutomaticInQuadrant(self):
+
+        # move auto 4 4
+        keyStrokes: KeyStrokes = KeyStrokes([
+            arcadeKey.M, arcadeKey.O, arcadeKey.V, arcadeKey.E, arcadeKey.SPACE,
+            arcadeKey.A, arcadeKey.U, arcadeKey.T, arcadeKey.O, arcadeKey.SPACE,
+            arcadeKey.NUM_4, arcadeKey.SPACE, arcadeKey.NUM_4,
+            arcadeKey.RETURN
+        ])
+
+        parsedCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
+
+        expectedSectorCoordinates: Coordinates = Coordinates(x=4, y=4)
+
+        self.assertEqual(expectedSectorCoordinates, parsedCommand.automaticMoveData.sectorCoordinates, 'Invalid quadrant move')
 
     def _simulateKeyStrokes(self, keyStrokes: KeyStrokes) -> ParsedCommand:
 

@@ -1,6 +1,7 @@
 
-from dataclasses import dataclass
 from typing import List
+
+from dataclasses import dataclass
 
 from pytrek.Constants import MAXIMUM_COORDINATE
 from pytrek.Constants import MINIMUM_COORDINATE
