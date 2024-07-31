@@ -153,6 +153,8 @@ class CommandExtractor:
                 parsedCommand = self._parsePhasersCommand(parsedCommand=parsedCommand)
             case CommandType.Photons:
                 parsedCommand = self._parsePhotonsCommand(parsedCommand=parsedCommand)
+            case CommandType.Warp:
+                pass
             case _:
                 self.logger.error(f'Invalid command: {self._commandStr}')
                 parsedCommand.commandType = CommandType.InvalidCommand
@@ -172,7 +174,7 @@ class CommandExtractor:
             parsedCommand.restInterval = int(splitCmd[1])
             self._commandStr = ''
         except ValueError as e:
-            self.logger.error(f'{e=}')
+            self.logger.error(f'Bad rest value: {e=}')
             parsedCommand.commandType = CommandType.InvalidCommand
 
         return parsedCommand
@@ -190,7 +192,7 @@ class CommandExtractor:
             parsedCommand.phaserAmountToFire = int(splitCmd[1])
             self._commandStr = ''
         except ValueError as e:
-            self.logger.error(f'{e=}')
+            self.logger.error(f'Bad phaser power value: {e=}')
             parsedCommand.commandType = CommandType.InvalidCommand
 
         return parsedCommand
@@ -208,7 +210,7 @@ class CommandExtractor:
             parsedCommand.numberOfPhotonTorpedoesToFire = int(splitCmd[1])
             self._commandStr = ''
         except ValueError as e:
-            self.logger.error(f'{e=}')
+            self.logger.error(f'Bad photon count: {e=}')
             parsedCommand.commandType = CommandType.InvalidCommand
 
         return parsedCommand

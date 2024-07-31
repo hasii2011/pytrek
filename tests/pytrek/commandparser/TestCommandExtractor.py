@@ -1,4 +1,5 @@
-
+from logging import Logger
+from logging import getLogger
 from typing import List
 from typing import NewType
 from typing import cast
@@ -10,9 +11,9 @@ from codeallybasic.UnitTestBase import UnitTestBase
 
 from arcade import key as arcadeKey
 
-from pytrek.CommandExtractor import CommandType
-from pytrek.CommandExtractor import ParsedCommand
-from pytrek.CommandExtractor import CommandExtractor
+from pytrek.commandparser.CommandExtractor import CommandType
+from pytrek.commandparser.CommandExtractor import ParsedCommand
+from pytrek.commandparser.CommandExtractor import CommandExtractor
 
 KeyStrokes = NewType('KeyStrokes', List[int])
 
@@ -23,10 +24,12 @@ class TestCommandExtractor(UnitTestBase):
         Gato Malo – Humberto A. Sanchez II
         Generated: 27 July 2024
     """
+    clsLogger: Logger
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        TestCommandExtractor.clsLogger = getLogger(__name__)
 
     def setUp(self):
         super().setUp()
@@ -76,6 +79,10 @@ class TestCommandExtractor(UnitTestBase):
             arcadeKey.NUM_3,
             arcadeKey.RETURN,
         ])
+
+        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
+
+        self.assertEqual(CommandType.Warp, parseCommand.commandType, 'Should be a warp command')
 
     def testInvalidCommand(self):
         pressedKeys: KeyStrokes = KeyStrokes([

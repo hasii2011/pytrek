@@ -83,6 +83,10 @@
             "level": "WARNING",
             "propagate": "False"
         },
+        "tests.pytrek.commandparser.TestCommandExtractor": {
+            "level": "INFO",
+            "propagate": "False"
+        },
         "pytrek.gui.LogMessageConsole": {
             "level": "ERROR",
             "propagate": "False"
@@ -144,7 +148,7 @@
             "propagate": "False"
         },
         "codeallybasic.UnitTestBase": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         }
 
