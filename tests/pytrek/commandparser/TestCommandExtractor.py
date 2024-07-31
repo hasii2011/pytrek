@@ -14,6 +14,8 @@ from arcade import key as arcadeKey
 from pytrek.commandparser.CommandExtractor import CommandType
 from pytrek.commandparser.CommandExtractor import ParsedCommand
 from pytrek.commandparser.CommandExtractor import CommandExtractor
+from pytrek.commandparser.InvalidCommandException import InvalidCommandException
+from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
 
 KeyStrokes = NewType('KeyStrokes', List[int])
 
@@ -83,14 +85,23 @@ class TestCommandExtractor(UnitTestBase):
         parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
 
         self.assertEqual(CommandType.Warp, parseCommand.commandType, 'Should be a warp command')
+        self.assertEqual(3, parseCommand.warpFactor, 'Did not get a value')
 
     def testInvalidCommand(self):
         pressedKeys: KeyStrokes = KeyStrokes([
-            arcadeKey.R, arcadeKey.E, arcadeKey.S, arcadeKey.T, arcadeKey.SPACE, arcadeKey.RETURN
+            arcadeKey.B, arcadeKey.A, arcadeKey.D, arcadeKey.C, arcadeKey.O, arcadeKey.M, arcadeKey.M, arcadeKey.A, arcadeKey.N, arcadeKey.D,
+            arcadeKey.SPACE, arcadeKey.RETURN
         ])
-        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=pressedKeys)
 
-        self.assertEqual(CommandType.InvalidCommand, parseCommand.commandType, 'Should be invalid')
+        self.assertRaises(InvalidCommandException, lambda: self._simulateKeyStrokes(keyStrokes=pressedKeys))
+
+    def testInvalidCommandValue(self):
+
+        pressedKeys: KeyStrokes = KeyStrokes([
+            arcadeKey.R, arcadeKey.E, arcadeKey.S, arcadeKey.T, arcadeKey.SPACE, arcadeKey.Q, arcadeKey.RETURN
+        ])
+
+        self.assertRaises(InvalidCommandValueException, lambda: self._simulateKeyStrokes(keyStrokes=pressedKeys))
 
     def _simulateKeyStrokes(self, keyStrokes: KeyStrokes) -> ParsedCommand:
 

@@ -16,6 +16,9 @@ from typing import cast
 
 from arcade import key as arcadeKey
 
+from pytrek.commandparser.InvalidCommandException import InvalidCommandException
+from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
+
 
 class CommandType(Enum):
     Abandon   = 'Abandon'
@@ -53,7 +56,6 @@ class CommandType(Enum):
     LongRangeScan  = 'LongRangeScan'
     EmergencyExit  = 'EmergencyExit'
     NoCommand      = 'NoCommand'
-    InvalidCommand = 'InvalidCommand'
 
 
 PressedKeyToCharacter: Dict[int, str] = {
@@ -154,10 +156,11 @@ class CommandExtractor:
             case CommandType.Photons:
                 parsedCommand = self._parsePhotonsCommand(parsedCommand=parsedCommand)
             case CommandType.Warp:
-                pass
+                parsedCommand = self._parseWarpCommand(parsedCommand=parsedCommand)
             case _:
                 self.logger.error(f'Invalid command: {self._commandStr}')
-                parsedCommand.commandType = CommandType.InvalidCommand
+                # parsedCommand.commandType = CommandType.InvalidCommand
+                raise InvalidCommandException(message=f'Invalid command: {self._commandStr}')
 
         return parsedCommand
 
@@ -169,14 +172,7 @@ class CommandExtractor:
 
         Returns:  Updated command
         """
-        try:
-            splitCmd: List[str] = self._commandStr.split(' ')
-            parsedCommand.restInterval = int(splitCmd[1])
-            self._commandStr = ''
-        except ValueError as e:
-            self.logger.error(f'Bad rest value: {e=}')
-            parsedCommand.commandType = CommandType.InvalidCommand
-
+        parsedCommand.restInterval = self._getSingleIntegerValue(self._commandStr, errorMessage='Bad rest value')
         return parsedCommand
 
     def _parsePhasersCommand(self, parsedCommand: ParsedCommand) -> ParsedCommand:
@@ -187,14 +183,7 @@ class CommandExtractor:
 
         Returns: The updated command
         """
-        try:
-            splitCmd = self._commandStr.split(' ')
-            parsedCommand.phaserAmountToFire = int(splitCmd[1])
-            self._commandStr = ''
-        except ValueError as e:
-            self.logger.error(f'Bad phaser power value: {e=}')
-            parsedCommand.commandType = CommandType.InvalidCommand
-
+        parsedCommand.phaserAmountToFire = self._getSingleIntegerValue(self._commandStr, errorMessage='Bad phaser power value')
         return parsedCommand
 
     def _parsePhotonsCommand(self, parsedCommand: ParsedCommand) -> ParsedCommand:
@@ -205,13 +194,12 @@ class CommandExtractor:
 
         Returns:  The updated command
         """
-        try:
-            splitCmd = self._commandStr.split(' ')
-            parsedCommand.numberOfPhotonTorpedoesToFire = int(splitCmd[1])
-            self._commandStr = ''
-        except ValueError as e:
-            self.logger.error(f'Bad photon count: {e=}')
-            parsedCommand.commandType = CommandType.InvalidCommand
+        parsedCommand.numberOfPhotonTorpedoesToFire = self._getSingleIntegerValue(self._commandStr, errorMessage='Bad photon count')
+        return parsedCommand
+
+    def _parseWarpCommand(self, parsedCommand: ParsedCommand) -> ParsedCommand:
+
+        parsedCommand.warpFactor = self._getSingleIntegerValue(self._commandStr, errorMessage='Invalid warp factor')
 
         return parsedCommand
 
@@ -228,3 +216,15 @@ class CommandExtractor:
                 break
 
         return parsedCommand
+
+    def _getSingleIntegerValue(self, commandStr: str, errorMessage: str) -> int:
+
+        try:
+            splitCmd:     List[str] = commandStr.split(' ')
+            integerValue: int       = int(splitCmd[1])
+            self._commandStr = ''
+        except ValueError as e:
+            self.logger.error(f'{errorMessage}: {e=}')
+            raise InvalidCommandValueException(message=errorMessage)
+
+        return integerValue
