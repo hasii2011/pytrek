@@ -150,9 +150,11 @@ class CommandExtractor:
             else:
 
                 if len(splitCmd) == 6:      # full auto command
-                    pass
+                    parsedCommand.automaticMoveData.quadrantCoordinates = self._parseCoordinates(sRow=splitCmd[2], sColumn=splitCmd[3])
+                    parsedCommand.automaticMoveData.sectorCoordinates   = self._parseCoordinates(sRow=splitCmd[4], sColumn=splitCmd[5])
+                    parsedCommand.automaticMoveData.sectorMove = False
                 elif len(splitCmd) == 4:    # sector coordinates only
-                    parsedCommand.automaticMoveData.sectorCoordinates = self._parseSectorCoordinates(sRow=splitCmd[2], sColumn=splitCmd[3])
+                    parsedCommand.automaticMoveData.sectorCoordinates = self._parseCoordinates(sRow=splitCmd[2], sColumn=splitCmd[3])
                 else:
                     raise InvalidCommandException(message='Move automatic command improperly specified')
         else:
@@ -238,12 +240,12 @@ class CommandExtractor:
 
         return manualMoveData
 
-    def _parseSectorCoordinates(self, sRow: str, sColumn: str) -> Coordinates:
+    def _parseCoordinates(self, sRow: str, sColumn: str) -> Coordinates:
 
         xCoordinate: int = -1
         yCoordinate: int = -1
-        if (self._validCoordinate(coordinate=sRow, errorMsg='Invalid X sector') is True and
-                self._validCoordinate(coordinate=sColumn, errorMsg='Invalid Y Sector') is True):
+        if (self._validCoordinate(coordinate=sRow, errorMsg='Invalid X Coordinate') is True and
+                self._validCoordinate(coordinate=sColumn, errorMsg='Invalid Y Coordinate') is True):
             xCoordinate = int(sRow)
             yCoordinate = int(sColumn)
 

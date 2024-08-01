@@ -142,6 +142,24 @@ class TestCommandExtractor(UnitTestBase):
 
         self.assertEqual(expectedSectorCoordinates, parsedCommand.automaticMoveData.sectorCoordinates, 'Invalid quadrant move')
 
+    def testMoveAutomaticToQuadrant(self):
+
+        # move automatic 3 7 5 8
+        keyStrokes: KeyStrokes = KeyStrokes([
+            arcadeKey.M, arcadeKey.O, arcadeKey.V, arcadeKey.E, arcadeKey.SPACE,
+            arcadeKey.A, arcadeKey.U, arcadeKey.T, arcadeKey.O, arcadeKey.M, arcadeKey.A, arcadeKey.T, arcadeKey.I, arcadeKey.C, arcadeKey.SPACE,
+            arcadeKey.NUM_3, arcadeKey.SPACE, arcadeKey.NUM_7, arcadeKey.SPACE, arcadeKey.NUM_5, arcadeKey.SPACE, arcadeKey.NUM_8,
+            arcadeKey.RETURN
+        ])
+
+        parsedCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
+
+        expectedQuadrantCoordinates: Coordinates = Coordinates(x=3, y=7)
+        expectedSectorCoordinates:   Coordinates = Coordinates(x=5, y=8)
+
+        self.assertEqual(expectedQuadrantCoordinates, parsedCommand.automaticMoveData.quadrantCoordinates, 'Invalid Quadrant')
+        self.assertEqual(expectedSectorCoordinates,   parsedCommand.automaticMoveData.sectorCoordinates, 'Invalid sectors')
+
     def _simulateKeyStrokes(self, keyStrokes: KeyStrokes) -> ParsedCommand:
 
         extractor: CommandExtractor = CommandExtractor()
