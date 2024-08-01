@@ -73,6 +73,9 @@ PHASERS_CMD: CommandPattern = CommandPattern('^p |^phasers ')
 PHOTONS_CMD: CommandPattern = CommandPattern('^pho |^photons ')
 WARP_CMD:    CommandPattern = CommandPattern('w |^warp ')
 MOVE_CMD:    CommandPattern = CommandPattern('^m |^move ')
+LRSCAN_CMD:  CommandPattern = CommandPattern('^l|^lrscan')
+DAMAGES_CMD: CommandPattern = CommandPattern('^da|^damages')
+CHART_CMD:   CommandPattern = CommandPattern('^c|^chart')
 
 # These are 'move' subcommands
 MOVE_MANUAL_MODE_PATTERN:    str = '^m|^manual'
@@ -85,11 +88,24 @@ PatternToCommandType: Dict[CommandPattern, CommandType] = {
     PHOTONS_CMD: CommandType.Photons,
     WARP_CMD:    CommandType.Warp,
     MOVE_CMD:    CommandType.Move,
+    LRSCAN_CMD:  CommandType.LongRangeScan,
+    DAMAGES_CMD: CommandType.Damages,
+    CHART_CMD:   CommandType.Chart,
 }
 
 
 class CommandExtractor:
     """
+    This classes processes (eats) keystrokes until the player presses the `Enter` key.  These are
+    cached in `_commandStr`.  At that point, `_parseCommand` runs a series of regular expressions
+    to determine which command the player input.  If it cannot find a matching command `_parsedCommand`
+    throws an `InvalidCommandException`.
+
+    The various `_parseXXXCommand` methods may throw an `InvalidCommandValueException` if the command values
+    are invalid.  For example, inputting non-numeric input to the `rest` command or inputting an
+    invalid coordinate pair to the `move`
+
+    The `move` may also throw an `InvalidCommandException` if its subcommand is not valid.
 
     """
     def __init__(self):
@@ -121,6 +137,12 @@ class CommandExtractor:
                 parsedCommand = self._parseWarpCommand(parsedCommand=parsedCommand)
             case CommandType.Move:
                 parsedCommand = self._parseMoveCommand(parsedCommand=parsedCommand)
+            case CommandType.Chart:
+                pass            # nothing else to do
+            case CommandType.LongRangeScan:
+                pass            # nothing else to do
+            case CommandType.Damages:
+                pass            # nothing else to do
             case _:
                 self.logger.error(f'Invalid command: {self._commandStr}')
                 raise InvalidCommandException(message=f'Invalid command: {self._commandStr}')
@@ -203,6 +225,13 @@ class CommandExtractor:
         return parsedCommand
 
     def _matchCommand(self, commandStr: str) -> ParsedCommand:
+        """
+        Loop through the regular expression dictionary attempting to find a match
+        Args:
+            commandStr: The full captured command text
+
+        Returns:  The parsed command with the correct command type or a pass through exception
+        """
 
         parsedCommand: ParsedCommand = ParsedCommand(commandType=CommandType.NoCommand)
 

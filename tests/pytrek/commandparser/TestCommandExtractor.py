@@ -54,6 +54,34 @@ class TestCommandExtractor(UnitTestBase):
         self.assertEqual(CommandType.Rest, parseCommand.commandType, 'Invalid command')
         self.assertEqual(6, parseCommand.restInterval, 'Invalid interval')
 
+    def testChartCommand(self):
+
+        pressedKeys: KeyStrokes = KeyStrokes([
+            arcadeKey.C, arcadeKey.H, arcadeKey.A, arcadeKey.R, arcadeKey.T, arcadeKey.RETURN,
+        ])
+
+        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=pressedKeys)
+
+        self.assertEqual(CommandType.Chart, parseCommand.commandType, 'Invalid chart command')
+
+    def testLongRangeScanCommand(self):
+        pressedKeys: KeyStrokes = KeyStrokes([
+            arcadeKey.L, arcadeKey.RETURN,
+        ])
+
+        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=pressedKeys)
+
+        self.assertEqual(CommandType.LongRangeScan, parseCommand.commandType, 'Invalid long range scan command')
+
+    def testDamagesCommand(self):
+        pressedKeys: KeyStrokes = KeyStrokes([
+            arcadeKey.D, arcadeKey.A, arcadeKey.RETURN,
+        ])
+
+        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=pressedKeys)
+
+        self.assertEqual(CommandType.Damages, parseCommand.commandType, 'Invalid damages command')
+
     def testPhasersCommand(self):
         keyStrokes: KeyStrokes = KeyStrokes([
             arcadeKey.P, arcadeKey.H, arcadeKey.A, arcadeKey.S, arcadeKey.E, arcadeKey.R, arcadeKey.S, arcadeKey.SPACE,
@@ -158,7 +186,7 @@ class TestCommandExtractor(UnitTestBase):
         expectedSectorCoordinates:   Coordinates = Coordinates(x=5, y=8)
 
         self.assertEqual(expectedQuadrantCoordinates, parsedCommand.automaticMoveData.quadrantCoordinates, 'Invalid Quadrant')
-        self.assertEqual(expectedSectorCoordinates,   parsedCommand.automaticMoveData.sectorCoordinates, 'Invalid sectors')
+        self.assertEqual(expectedSectorCoordinates,   parsedCommand.automaticMoveData.sectorCoordinates, 'Invalid Sector')
 
     def _simulateKeyStrokes(self, keyStrokes: KeyStrokes) -> ParsedCommand:
 
