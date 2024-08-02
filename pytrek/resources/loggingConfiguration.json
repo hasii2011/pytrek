@@ -40,6 +40,10 @@
             "level":     "INFO",
             "propagate": "False"
         },
+        "pytrek.guiv2.StatusConsoleSection": {
+            "level":     "INFO",
+            "propagate": "False"
+        },
         "pytrek.mediators.QuadrantMediator": {
             "level":     "WARNING",
             "propagate": "False"
