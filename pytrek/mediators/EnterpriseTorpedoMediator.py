@@ -13,6 +13,9 @@ from arcade import load_spritesheet
 
 from pytrek.SoundMachine import SoundMachine
 from pytrek.SoundMachine import SoundType
+
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.PhotonTorpedoExplosion import PhotonTorpedoExplosion
@@ -20,7 +23,6 @@ from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.PhotonTorpedo import PhotonTorpedo
 from pytrek.gui.gamepieces.PhotonTorpedoMiss import PhotonTorpedoMiss
-from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse
 from pytrek.mediators.base.MissesMediator import MissesMediator

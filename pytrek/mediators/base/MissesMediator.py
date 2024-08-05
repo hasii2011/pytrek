@@ -9,7 +9,6 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 
-from pytrek.gui.MessageConsole import MessageConsole
 from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 
 from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
@@ -18,6 +17,7 @@ from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
 from pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant
@@ -50,7 +50,9 @@ class MissesMediator(BaseMediator):
         self._intelligence:   Intelligence = Intelligence()
         self._gameSettings:   GameSettings = GameSettings()
 
-        self._messageConsole: MessageConsole = MessageConsole()
+        # self._messageConsole: MessageConsole = MessageConsole()
+        assert MessageConsoleProxy().initialized is True, 'Console proxy needs to be already initialized'
+        self._messageConsole: MessageConsoleProxy = MessageConsoleProxy()
 
     def _findTorpedoMisses(self, torpedoes: Torpedoes) -> List[BaseEnemyTorpedo]:
 

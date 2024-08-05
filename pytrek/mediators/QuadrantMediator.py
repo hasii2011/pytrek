@@ -21,13 +21,14 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShipCondition import ShipCondition
-from pytrek.gui.MessageConsole import MessageConsole
+
 from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
 
 from pytrek.gui.gamepieces.commander.Commander import Commander
 
 from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.mediators.CommanderMediator import CommanderMediator
 from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
@@ -71,7 +72,9 @@ class QuadrantMediator(metaclass=SingletonV3):
 
         self._epm: EnterprisePhaserMediator      = EnterprisePhaserMediator()
 
-        self._messageConsole: MessageConsole = MessageConsole()
+        self._messageConsole: MessageConsoleProxy = MessageConsoleProxy()
+        assert self._messageConsole.initialized is True, 'Console proxy needs to be already initialized'
+
         self._soundMachine:   SoundMachine   = SoundMachine()
 
         self._playerList:         SpriteList = SpriteList()

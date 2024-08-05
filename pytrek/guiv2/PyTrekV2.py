@@ -2,33 +2,32 @@
 from logging import Logger
 from logging import getLogger
 
-from arcade import Texture
+# noinspection PyPackageRequirements
+from PIL import ImageFont
+
 from arcade import View
 from arcade import Window
-from arcade import draw_lrwh_rectangle_textured
-from arcade import load_texture
 
 from arcade import run as arcadeRun
 from arcade import start_render
 
 from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import STATUS_VIEW_WIDTH
-from pytrek.GameState import GameState
 
 from pytrek.LocateResources import LocateResources
-from pytrek.PyTrekView import SCREEN_TITLE
-from pytrek.engine.Computer import Computer
-from pytrek.engine.GameEngine import GameEngine
-from pytrek.engine.Intelligence import Intelligence
-from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
+
+from pytrek.guiv2.QuadrantSection import QuadrantSection
 from pytrek.guiv2.StatusConsoleSection import StatusConsoleSection
-from pytrek.mediators.QuadrantMediator import QuadrantMediator
-from pytrek.model.Galaxy import Galaxy
-from pytrek.settings.GameSettings import GameSettings
+
+
+SCREEN_TITLE:  str = "PyTrekV2"
 
 
 class PyTrekV2(View):
@@ -40,42 +39,43 @@ class PyTrekV2(View):
         self.logger: Logger = getLogger(__name__)
         super().__init__()
 
-        fqFileName:      str     = LocateResources.getImagePath(bareFileName='QuadrantBackground.png')
-        self.background: Texture = load_texture(fqFileName)
+        #
+        # I am cheating here because I know arcade uses PIL under the covers
+        #
+        fqFileName: str = LocateResources.getResourcesPath(bareFileName=FIXED_WIDTH_FONT_FILENAME,
+                                                           resourcePath=LocateResources.FONT_RESOURCES_PATH,
+                                                           packageName=LocateResources.FONT_RESOURCES_PACKAGE_NAME,
+                                                           )
+        ImageFont.truetype(fqFileName)
 
-        self._gameSettings: GameSettings = GameSettings()     # Be able to read the preferences file
-        self._gameState:    GameState    = GameState()        # Set up the game parameters which uses the above
-        self._gameEngine:   GameEngine   = GameEngine()       # Then the engine needs to be initialized
-        self._intelligence: Intelligence = Intelligence()
-        self._computer:     Computer     = Computer()
-        self._galaxy:       Galaxy       = Galaxy()           # This essentially finishes initializing most of the game
-
-        self._quadrantMediator: QuadrantMediator   = QuadrantMediator()
-
-        self._quadrant           = self._galaxy.currentQuadrant
+        # Create proxy and inject the console
 
         left:   int = QUADRANT_GRID_WIDTH
         bottom: int = QUADRANT_GRID_HEIGHT
         height: int = QUADRANT_GRID_HEIGHT + CONSOLE_HEIGHT
         width:  int = STATUS_VIEW_WIDTH
-        self._statusConsole: StatusConsoleSection = StatusConsoleSection(left=left, bottom=bottom, height=height, width=width)
+
+        self._messageConsoleSection: MessageConsoleSection = MessageConsoleSection(left=0, bottom=0,
+                                                                                   height=CONSOLE_HEIGHT, width=SCREEN_WIDTH,
+                                                                                   accept_keyboard_events=False
+                                                                                   )
+
+        self._messageConsoleProxy: MessageConsoleProxy = MessageConsoleProxy()
+        self._messageConsoleProxy.console = self._messageConsoleSection
+
+        self._statusConsole:   StatusConsoleSection = StatusConsoleSection(left=left, bottom=bottom, height=height, width=width,
+                                                                           accept_keyboard_events=False)
+
+        self._quadrantSection: QuadrantSection      = QuadrantSection(left=0, bottom=CONSOLE_HEIGHT, height=QUADRANT_GRID_HEIGHT, width=QUADRANT_GRID_WIDTH,
+                                                                      accept_keyboard_events=True)
 
         # add the sections
+        self.section_manager.add_section(self._quadrantSection)
         self.section_manager.add_section(self._statusConsole)
-
-        self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
-
-        self._enterprise: Enterprise = self._gameState.enterprise
-
-        # And finally the rest of the UI elements
-        self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
+        self.section_manager.add_section(self._messageConsoleSection)
 
     def on_draw(self):
         start_render()
-        # Draw the background texture
-        draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_HEIGHT,
-                                     width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
-
 
 
 def main():

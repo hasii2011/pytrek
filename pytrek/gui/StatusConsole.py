@@ -39,13 +39,13 @@ SECTION_LABEL_FONT_SIZE: int = 16
 STATUS_LABEL_FONT_SIZE: int = 11
 STATUS_TEXT_COLOR = WHITE           # has no type
 
-TITLE_MARGIN_X: int = 20
+TITLE_MARGIN_X: int = 10
 TITLE_MARGIN_Y: int = 10
 TITLE_FONT_OFFSET_Y: int = 24
 
 START_STATUS_OFFSET:   int = -30  # Because arcade 0,0 is at bottom left
 INLINE_STATUS_OFFSET:  int = -20
-STATUS_VALUE_X_OFFSET: int = 110
+STATUS_VALUE_X_OFFSET: int = 100
 
 PropertyName  = NewType('PropertyName', str)
 PropertyNames = NewType('PropertyNames', List[PropertyName])

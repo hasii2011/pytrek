@@ -231,12 +231,13 @@ class TestGameSettings(ProjectTestBase):
 
         gameSettings: GameSettings = GameSettings()
 
-        self.assertFalse(gameSettings.manualPlaceShipInQuadrant, 'This should be off')
+        self.assertFalse(gameSettings.manualPlaceShipInQuadrant,                  'Manual ship placement should be off')
         self.assertEqual(Coordinates(0, 0), gameSettings.manualSectorCoordinates, 'These are wrong')
-        self.assertFalse(gameSettings.addCommanders, 'This should be off')
-        self.assertFalse(gameSettings.addKlingons, 'This should be off')
-        self.assertFalse(gameSettings.addPlanet,   'No extra planets')
-        self.assertFalse(gameSettings.debugBaseEnemyTorpedo,   'No extra planets')
+
+        self.assertFalse(gameSettings.addCommanders,         'addCommanders should be off')
+        self.assertFalse(gameSettings.addKlingons,           'addKlingons should be off')
+        self.assertFalse(gameSettings.addPlanet,             'No extra planets')
+        self.assertFalse(gameSettings.debugBaseEnemyTorpedo, 'We do not want debug on for enemy torpedoes')
 
     def testSetDebug(self):
         gameSettings: GameSettings = GameSettings()

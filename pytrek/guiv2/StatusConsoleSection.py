@@ -20,13 +20,14 @@ from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_WIDTH
 from pytrek.GameState import GameState
+
 from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 
-from pytrek.gui.LogMessageConsole import LogMessageConsole
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.settings.GameSettings import GameSettings
@@ -36,13 +37,13 @@ SECTION_LABEL_FONT_SIZE: int = 16
 STATUS_LABEL_FONT_SIZE: int = 11
 STATUS_TEXT_COLOR = WHITE           # has no type
 
-TITLE_MARGIN_X: int = 20
+TITLE_MARGIN_X: int = 10
 TITLE_MARGIN_Y: int = 10
 TITLE_FONT_OFFSET_Y: int = 24
 
 START_STATUS_OFFSET:   int = -30  # Because arcade 0,0 is at bottom left
 INLINE_STATUS_OFFSET:  int = -20
-STATUS_VALUE_X_OFFSET: int = 110
+STATUS_VALUE_X_OFFSET: int = 100
 
 PropertyName  = NewType('PropertyName', str)
 PropertyNames = NewType('PropertyNames', List[PropertyName])
@@ -70,7 +71,9 @@ class StatusConsoleSection(Section):
 
         self._gameSettings: GameSettings = GameSettings()
         self._gameState:    GameState    = GameState()
-        self._eventEngine:  EventEngine  = EventEngine(LogMessageConsole())
+
+        assert MessageConsoleProxy().initialized is True, 'The console proxy should have set up at game startup'
+        self._eventEngine:  EventEngine  = EventEngine(MessageConsoleProxy())
 
         self._statusProperties: PropertyNames = PropertyNames([])
 

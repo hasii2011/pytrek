@@ -48,6 +48,7 @@ from pytrek.gui.dialogs.StdConfirmationDialog import OK_ANSWER
 from pytrek.gui.dialogs.StdConfirmationDialog import StdConfirmationDialog
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -116,6 +117,9 @@ class PyTrekView(View):
         self._soundMachine:     SoundMachine     = cast(SoundMachine, None)
 
         self._eventEngine: EventEngine = cast(EventEngine, None)
+
+        self._messageConsoleProxy: MessageConsoleProxy = cast(MessageConsoleProxy, None)
+
         #
         # I am cheating here because I know arcade use PIL under the covers
         #
@@ -142,9 +146,13 @@ class PyTrekView(View):
         self._galaxy       = Galaxy()           # This essentially finishes initializing most of the game
 
         self._messageConsole = MessageConsole()
-        self._eventEngine    = EventEngine(self._messageConsole)
+        self._messageConsoleProxy = MessageConsoleProxy()
+        self._messageConsoleProxy.console = self._messageConsole
+
+        self._eventEngine    = EventEngine(self._messageConsoleProxy)
 
         self._statusConsole = StatusConsole(gameView=self)       # UI elements
+
         self._soundMachine  = SoundMachine()
 
         self._enterprise = self._gameState.enterprise

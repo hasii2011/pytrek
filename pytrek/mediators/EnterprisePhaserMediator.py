@@ -15,13 +15,15 @@ from pytrek.SoundMachine import SoundMachine
 from pytrek.SoundMachine import SoundType
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
-from pytrek.gui.MessageConsole import MessageConsole
-from pytrek.gui.gamepieces.Enterprise import Enterprise
 
+# from pytrek.gui.MessageConsole import MessageConsole
+
+from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.PhaserBolt import PhaserBolt
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.model.Coordinates import Coordinates
@@ -42,8 +44,11 @@ class EnterprisePhaserMediator(BaseMediator):
         self._gameSettings:   GameSettings   = GameSettings()
         self._gameEngine:     GameEngine     = GameEngine()
         self._gameState:      GameState      = GameState()
-        self._messageConsole: MessageConsole = MessageConsole()
+        # self._messageConsole: MessageConsole = MessageConsole()
         self._soundMachine:   SoundMachine   = SoundMachine()
+
+        assert MessageConsoleProxy().initialized is True, 'Console proxy needs to be already initialized'
+        self._messageConsole: MessageConsoleProxy = MessageConsoleProxy()
 
         self._phaserBolts: SpriteList = SpriteList()
         self._phaserFireTextures: TextureList = self._loadFirePhaserTextures()
