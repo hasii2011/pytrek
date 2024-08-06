@@ -15,6 +15,7 @@ from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.model.Galaxy import Galaxy
 
@@ -39,6 +40,8 @@ class TestEventEngine(ProjectTestBase):
     clsDevices:           Devices           = cast(Devices, None)
     clsIntelligence:      Intelligence      = cast(Intelligence, None)
     clsGalaxy:            Galaxy            = cast(Galaxy, None)
+
+    clsMessageConsoleProxy:  MessageConsoleProxy = cast(MessageConsoleProxy, None)
 
     @classmethod
     def setUpClass(cls):
@@ -175,9 +178,13 @@ class TestEventEngine(ProjectTestBase):
 
         TestEventEngine.clsGameEngine        = GameEngine()       # Then the engine needs to be initialized
 
-        TestEventEngine.clsEventEngine       = EventEngine(TestEventEngine.clsLogMessageConsole)
         TestEventEngine.clsDevices           = Devices()
         TestEventEngine.clsGalaxy            = Galaxy()
+
+        TestEventEngine.clsMessageConsoleProxy = MessageConsoleProxy()
+        TestEventEngine.clsMessageConsoleProxy.console = TestEventEngine.clsLogMessageConsole
+
+        TestEventEngine.clsEventEngine       = EventEngine(TestEventEngine.clsMessageConsoleProxy)
 
 
 def suite() -> TestSuite:
