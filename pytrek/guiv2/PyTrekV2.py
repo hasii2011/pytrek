@@ -9,6 +9,7 @@ from arcade import View
 from arcade import Window
 
 from arcade import run as arcadeRun
+
 from arcade import start_render
 
 from pytrek.Constants import CONSOLE_HEIGHT
@@ -20,6 +21,8 @@ from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import STATUS_VIEW_WIDTH
 
 from pytrek.LocateResources import LocateResources
+from pytrek.guiv2.GalaxySection import GalaxySection
+from pytrek.guiv2.LongRangeSensorScanSection import LongRangeSensorScanSection
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
 
@@ -48,8 +51,6 @@ class PyTrekV2(View):
                                                            )
         ImageFont.truetype(fqFileName)
 
-        # Create proxy and inject the console
-
         left:   int = QUADRANT_GRID_WIDTH
         bottom: int = QUADRANT_GRID_HEIGHT
         height: int = QUADRANT_GRID_HEIGHT + CONSOLE_HEIGHT
@@ -60,6 +61,7 @@ class PyTrekV2(View):
                                                                                    accept_keyboard_events=False
                                                                                    )
 
+        # Create proxy and inject the console
         self._messageConsoleProxy: MessageConsoleProxy = MessageConsoleProxy()
         self._messageConsoleProxy.console = self._messageConsoleSection
 
@@ -69,10 +71,22 @@ class PyTrekV2(View):
         self._quadrantSection: QuadrantSection      = QuadrantSection(left=0, bottom=CONSOLE_HEIGHT, height=QUADRANT_GRID_HEIGHT, width=QUADRANT_GRID_WIDTH,
                                                                       accept_keyboard_events=True)
 
+        # These sections are not enabled by default and disabled externally to here;  So make them public
+        self.galaxySection: GalaxySection = GalaxySection(left=0,
+                                                          bottom=SCREEN_HEIGHT - CONSOLE_HEIGHT,
+                                                          height=QUADRANT_GRID_HEIGHT,
+                                                          width=QUADRANT_GRID_WIDTH)
+
+        self.longRangeSensorScanSection: LongRangeSensorScanSection = LongRangeSensorScanSection(left=SCREEN_WIDTH // 2,
+                                                                                                 bottom=(QUADRANT_GRID_HEIGHT // 2) + CONSOLE_HEIGHT,
+                                                                                                 width=LongRangeSensorScanSection.BACKGROUND_WIDTH,
+                                                                                                 height=LongRangeSensorScanSection.BACKGROUND_HEIGHT)
         # add the sections
         self.section_manager.add_section(self._quadrantSection)
         self.section_manager.add_section(self._statusConsole)
         self.section_manager.add_section(self._messageConsoleSection)
+        self.section_manager.add_section(self.galaxySection)
+        self.section_manager.add_section(self.longRangeSensorScanSection)
 
     def on_draw(self):
         start_render()

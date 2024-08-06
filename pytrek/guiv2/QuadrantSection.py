@@ -64,22 +64,20 @@ class QuadrantSection(Section):
         self._enterpriseMediator: EnterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
         self._quadrantMediator:   QuadrantMediator   = QuadrantMediator()
 
-        assert MessageConsoleProxy().initialized is True, 'The console proxy should have set up at game startup'
-        self._eventEngine:  EventEngine  = EventEngine(MessageConsoleProxy())
+        self._messageConsoleProxy: MessageConsoleProxy = MessageConsoleProxy()
+        assert self._messageConsoleProxy.initialized is True, 'The console proxy should have set up at game startup'
+
+        self._eventEngine:  EventEngine  = EventEngine(self._messageConsoleProxy)
         self._soundMachine: SoundMachine = SoundMachine()
 
         self._enterprise: Enterprise = self._gameState.enterprise
 
-        # Important mediators
         self._galaxyMediator: GalaxyMediator = GalaxyMediator()
         self._quadrant:       Quadrant       = self._galaxy.currentQuadrant
 
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
-        # And finally the rest of the UI elements
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
-
-        self._freezeGamePlay: bool = False      # used to temporarily stop game while a dialog is popped up
 
     def on_draw(self):
         """
@@ -107,8 +105,6 @@ class QuadrantSection(Section):
         Args:
             delta_time:  Time interval since the last time the function was called.
         """
-        if self._freezeGamePlay is True:
-            return
 
         self._quadrantMediator.update(quadrant=self._quadrant)
         self._enterpriseMediator.update(quadrant=self._quadrant)
@@ -119,8 +115,6 @@ class QuadrantSection(Section):
         """
         Called when the user presses a mouse button.
         """
-        if self._freezeGamePlay is True:
-            return
 
         if button == MOUSE_BUTTON_LEFT:
             arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
@@ -141,6 +135,12 @@ class QuadrantSection(Section):
                 self._gameEngine.resetOperationTime()
             case arcadeKey.W:
                 self._enterpriseMediator.warp()
+            case arcadeKey.L:
+                self.view.longRangeSensorScanSection.enabled = True
+                self._gameEngine.resetOperationTime()
+            case arcadeKey.G:
+                self.view.galaxySection.enabled = True
+                self._gameEngine.resetOperationTime()
 
     def _enterpriseHasWarped(self, warpSpeed: float, destinationCoordinates: Coordinates):
 
@@ -150,4 +150,4 @@ class QuadrantSection(Section):
         self._quadrant = self._galaxy.getQuadrant(quadrantCoordinates=destinationCoordinates)
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
-        # self._messageConsole.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
+        self._messageConsoleProxy.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
