@@ -108,15 +108,20 @@ class CommandExtractor:
     The `move` may also throw an `InvalidCommandException` if its subcommand is not valid.
 
     """
-    def __init__(self):
+    def __init__(self, asciiMode: bool = False):
         self.logger:      Logger = getLogger(__name__)
+
+        self._asciiMode:  bool   = asciiMode
         self._commandStr: str    = ''
 
-    def processKeyPress(self, pressedKey: int) -> ParsedCommand:
+    def processKeyPress(self, pressedKey: int | str) -> ParsedCommand:
 
-        self._commandStr = f'{self._commandStr}{PressedKeyToCharacter[pressedKey]}'
+        if self._asciiMode is True:
+            self._commandStr = f'{self._commandStr}{pressedKey}'
+        else:
+            self._commandStr = f'{self._commandStr}{PressedKeyToCharacter[pressedKey]}'
 
-        if pressedKey == arcadeKey.ENTER or pressedKey == arcadeKey.RETURN:
+        if pressedKey == arcadeKey.ENTER or pressedKey == arcadeKey.RETURN or pressedKey == '\r':
             parsedCommand: ParsedCommand = self._parseCommand()
         else:
             parsedCommand = ParsedCommand(commandType=CommandType.NoCommand)

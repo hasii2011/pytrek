@@ -118,7 +118,7 @@ class QuadrantSection(Section):
 
         if button == MOUSE_BUTTON_LEFT:
             arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
-            self.logger.warning(f'{arcadePoint=}')
+            self.logger.debug(f'{arcadePoint=}')
             if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_HEIGHT:
                 self._enterpriseMediator.impulse(quadrant=self._quadrant, arcadePoint=arcadePoint)
 
@@ -140,6 +140,9 @@ class QuadrantSection(Section):
                 self._gameEngine.resetOperationTime()
             case arcadeKey.G:
                 self.view.galaxySection.enabled = True
+                self._gameEngine.resetOperationTime()
+            case arcadeKey.P:
+                self._quadrantMediator.firePhasers(self._quadrant)
                 self._gameEngine.resetOperationTime()
 
     def _enterpriseHasWarped(self, warpSpeed: float, destinationCoordinates: Coordinates):

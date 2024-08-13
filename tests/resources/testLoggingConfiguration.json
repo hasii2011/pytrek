@@ -147,6 +147,10 @@
             "level":     "WARNING",
             "propagate": "False"
         },
+        "pytrek.guiV2.CommandInputSection": {
+            "level":     "INFO",
+            "propagate": "False"
+        },
         "codeallybasic.UnitTestBase": {
             "level":     "WARNING",
             "propagate": "False"

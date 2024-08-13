@@ -6,7 +6,7 @@ __pycache__/
 /build/
 /dist/
 /pyenv-3.10.13/
-/pyenv-3.9.16/
+/pre-release-arcade/
 /archive/
 /PyTrek.egg-info
 /.eggs

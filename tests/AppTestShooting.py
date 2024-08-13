@@ -413,7 +413,7 @@ def main():
     """
     ProjectTestBase.setUpLogging()
 
-    arcadeWindow: Window       = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    arcadeWindow: Window          = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     shootingView: AppTestShooting = AppTestShooting()
 
     arcadeWindow.set_exclusive_keyboard(exclusive=True)

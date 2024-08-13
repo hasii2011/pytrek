@@ -16,7 +16,7 @@ SCREEN_TITLE = "Test Warp Dialog"
 
 
 def completeCallback(warpTravelAnswer: WarpTravelAnswer):
-    import os
+
     if warpTravelAnswer.dialogAnswer == DialogAnswer.Cancelled:
         arcadeExit()
     else:

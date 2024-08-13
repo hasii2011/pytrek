@@ -12,6 +12,7 @@ from arcade import run as arcadeRun
 
 from arcade import start_render
 
+# from pytrek.Constants import COMMAND_INPUT_HEIGHT
 from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
@@ -21,6 +22,7 @@ from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import STATUS_VIEW_WIDTH
 
 from pytrek.LocateResources import LocateResources
+from pytrek.guiv2.CommandInputSection import CommandInputSection
 from pytrek.guiv2.GalaxySection import GalaxySection
 from pytrek.guiv2.LongRangeSensorScanSection import LongRangeSensorScanSection
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
@@ -28,7 +30,7 @@ from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
 
 from pytrek.guiv2.QuadrantSection import QuadrantSection
 from pytrek.guiv2.StatusConsoleSection import StatusConsoleSection
-
+from pytrek.guiv2.WarpEffectSection import WarpEffectSection
 
 SCREEN_TITLE:  str = "PyTrekV2"
 
@@ -68,7 +70,8 @@ class PyTrekV2(View):
         self._statusConsole:   StatusConsoleSection = StatusConsoleSection(left=left, bottom=bottom, height=height, width=width,
                                                                            accept_keyboard_events=False)
 
-        self._quadrantSection: QuadrantSection      = QuadrantSection(left=0, bottom=CONSOLE_HEIGHT, height=QUADRANT_GRID_HEIGHT, width=QUADRANT_GRID_WIDTH,
+        self._quadrantSection: QuadrantSection      = QuadrantSection(left=0, bottom=CONSOLE_HEIGHT,
+                                                                      height=QUADRANT_GRID_HEIGHT, width=QUADRANT_GRID_WIDTH,
                                                                       accept_keyboard_events=True)
 
         # These sections are not enabled by default and disabled externally to here;  So make them public
@@ -81,18 +84,29 @@ class PyTrekV2(View):
                                                                                                  bottom=(QUADRANT_GRID_HEIGHT // 2) + CONSOLE_HEIGHT,
                                                                                                  width=LongRangeSensorScanSection.BACKGROUND_WIDTH,
                                                                                                  height=LongRangeSensorScanSection.BACKGROUND_HEIGHT)
+
+        viewWindow: Window = self.window
+        viewWidth:  int = viewWindow.width
+        viewHeight: int = viewWindow.height
+        self.warpEffectSection: WarpEffectSection = WarpEffectSection(width=viewWidth, height=viewHeight)
+
+        # self._commandInputSection:   CommandInputSection   = CommandInputSection(left=0, bottom=20, accept_keyboard_events=True)
+
         # add the sections
+        # self.section_manager.add_section(self._commandInputSection)
         self.section_manager.add_section(self._quadrantSection)
         self.section_manager.add_section(self._statusConsole)
         self.section_manager.add_section(self._messageConsoleSection)
         self.section_manager.add_section(self.galaxySection)
         self.section_manager.add_section(self.longRangeSensorScanSection)
+        self.section_manager.add_section(self.warpEffectSection)
 
     def on_draw(self):
         start_render()
 
 
 def main():
+
     arcadeWindow: Window   = Window(title=SCREEN_TITLE, width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
     game:         PyTrekV2 = PyTrekV2()
 
