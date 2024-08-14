@@ -11,7 +11,8 @@ from arcade.color import GREEN
 class BaseSection(Section):
 
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
-        super().__init__(left, bottom, width, height, **kwargs)
+
+        super().__init__(left, bottom, width, height, prevent_dispatch=False, prevent_dispatch_view=False, **kwargs)
 
         self.logger: Logger = getLogger(__name__)
 

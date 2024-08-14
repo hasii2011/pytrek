@@ -101,14 +101,20 @@ class CommandInputSection(BaseSection):
 
         self._commandInput.setTextEventCallback(self._handleCommandInput)
 
-        self._uiManager.add(
-            UIAnchorWidget(
-                anchor_x='center_x',
-                anchor_y='center_y',
-                child=commandInputLayout)
-        )
+        # self._uiManager.add(
+        #     UIAnchorWidget(
+        #         # anchor_x='center_x',
+        #         # anchor_y='center_y',
+        #         align_x=0,
+        #         align_y=0,
+        #         child=commandInputLayout)
+        # )
+        self._uiManager.add(commandInputLayout)
 
         self._commandExtractor: CommandExtractor = CommandExtractor(asciiMode=True)
+
+    def on_update(self, delta_time: float):
+        self._commandInput.on_update(delta_time)
 
     def on_draw(self):
         start_render()
@@ -122,7 +128,8 @@ class CommandInputSection(BaseSection):
         Returns:  A box layout widget
         """
 
-        layout:       UIBoxLayout  = UIBoxLayout(vertical=False, color=color.WHITE, align='x:left, y:center')
+        layout:       UIBoxLayout  = UIBoxLayout(x=self.left + 10, y=self.top,
+                                                 vertical=False, color=color.WHITE)
         commandLabel: UILabel      = self._createLabel(text='Enter Command: ')
         commandInput: CommandInput = CommandInput(text='aaaa', height=18, width=200, font_size=12, text_color=color.BLACK)
 

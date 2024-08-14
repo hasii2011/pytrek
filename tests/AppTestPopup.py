@@ -2,8 +2,10 @@
 import arcade
 import arcade.gui
 
+from pytrek.guiv2.BaseSection import BaseSection
 
-class Popup(arcade.Section):
+
+class Popup(BaseSection):
 
     def __init__(self, left, bottom, width, height):
         super().__init__(left, bottom, width, height)
@@ -11,8 +13,8 @@ class Popup(arcade.Section):
         self.manager.enable()
         box = arcade.gui.UIBoxLayout()
         button = arcade.gui.UITextureButton(x=0, y=0,
-                                            texture=arcade.load_texture('button.png'),
-                                            texture_pressed=arcade.load_texture('button_pressed.png'),
+                                            texture=arcade.load_texture('tests/button.png'),
+                                            texture_pressed=arcade.load_texture('tests/button_pressed.png'),
                                             )
         box.add(button)
         button.on_click = self.on_click_button
@@ -26,6 +28,7 @@ class Popup(arcade.Section):
 
     def on_draw(self):
         self.manager.draw()
+        super().on_draw()
         if self.clicked:
             arcade.draw_text(text='Clicked!', start_x=window.width/2, start_y=window.height-40, color=arcade.color.RED, anchor_x='center', font_size=20)
 

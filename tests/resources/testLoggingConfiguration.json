@@ -147,7 +147,7 @@
             "level":     "WARNING",
             "propagate": "False"
         },
-        "pytrek.guiV2.CommandInputSection": {
+        "pytrek.guiv2.VatoLocoTextInput": {
             "level":     "INFO",
             "propagate": "False"
         },

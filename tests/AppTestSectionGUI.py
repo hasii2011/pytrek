@@ -49,6 +49,15 @@ class MainView(View):
         self.section_manager.add_section(self.drawTextSection)
         self.section_manager.add_section(self.inputSection)
 
+        section: BaseSection = self.inputSection
+        ecLeft   = section.ec_left
+        ecRight  = section.ec_right
+        ecTop    = section.ec_top
+        ecBottom = section.ec_bottom
+        overLaps: bool = self.inputSection.overlaps_with(self.drawTextSection)
+
+        print(f'{ecLeft=} {ecRight=} {ecTop=} {ecBottom=} {overLaps=}')
+
     def on_draw(self):
         start_render()
 
