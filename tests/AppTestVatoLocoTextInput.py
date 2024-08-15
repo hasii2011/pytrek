@@ -21,11 +21,12 @@ class TestView(View):
     def __init__(self):
         super().__init__()
 
-        width: int = self.window.width
-
-        self._textInputSection: VatoLocoTextInput = VatoLocoTextInput(left=0, bottom=0, width=width)
+        self._textInputSection: VatoLocoTextInput = VatoLocoTextInput(left=0, bottom=0, callback=self._returnPressedCallback)
 
         self.section_manager.add_section(self._textInputSection)
+
+    def _returnPressedCallback(self, value: str):
+        print(f'{value=}')
 
     def on_draw(self):
         start_render()

@@ -119,7 +119,7 @@ class CommandExtractor:
         if self._asciiMode is True:
             self._commandStr = f'{self._commandStr}{pressedKey}'
         else:
-            self._commandStr = f'{self._commandStr}{PressedKeyToCharacter[pressedKey]}'
+            self._commandStr = f'{self._commandStr}{PressedKeyToCharacter[pressedKey]}'     # type: ignore
 
         if pressedKey == arcadeKey.ENTER or pressedKey == arcadeKey.RETURN or pressedKey == '\r':
             parsedCommand: ParsedCommand = self._parseCommand()

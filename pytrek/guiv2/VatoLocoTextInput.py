@@ -1,10 +1,12 @@
 
+from typing import Callable
 from typing import Dict
 
 from logging import Logger
 from logging import getLogger
 
 from arcade import SpriteSolidColor
+from arcade import Text
 
 from arcade import draw_text
 from arcade import start_render
@@ -23,12 +25,16 @@ DEFAULT_INPUT_HEIGHT:   int = 20
 DEFAULT_SECTION_HEIGHT: int = DEFAULT_INPUT_HEIGHT * 2
 DEFAULT_SECTION_WIDTH:  int = 200
 
-
+# Section Margins
 LEFT_MARGIN:   int = 10
 RIGHT_MARGIN:  int = 10
 BOTTOM_MARGIN: int = 10
-TOP_MARGIN:    int = 0
+# TOP_MARGIN:    int = 0
 
+TEXT_TOP_MARGIN:  int = 5
+TEXT_LEFT_MARGIN: int = 2
+
+LABEL_LEFT_MARGIN: int = 10
 
 PressedKeyToCharacter: Dict[int, str] = {
     arcadeKey.A: 'a',
@@ -82,8 +88,10 @@ PressedKeyToCharacter: Dict[int, str] = {
     arcadeKey.RETURN: '',
 }
 
-TEXT_TOP_MARGIN:  int = 5
-TEXT_LEFT_MARGIN: int = 2
+ReturnKeyPressedCallback = Callable[[str], None]
+
+DEBUG:      bool = True
+LABEL_TEXT: str  = 'Enter Command: '
 
 
 class VatoLocoTextInput(BaseSection):
@@ -92,30 +100,43 @@ class VatoLocoTextInput(BaseSection):
 
     See https://stackoverflow.com/questions/75944415/why-my-button-in-python-arcade-section-seems-inactive/78872518#78872518
 
-    This limited text input does not support a text input caret;  It does not support inline editting
+    This limited text input does not support a text input caret;  It does not support inline editing.
+
+    You can retrieve the current input by accessing the value property
+    If you supply a `returnCallback`, that methods gets called when the user presses the `enter/return` key and passes
+    it the supplied text.  It resets the text input value
 
     """
-    def __init__(self, left: int, bottom: int, width: int = DEFAULT_SECTION_WIDTH, height: int = DEFAULT_SECTION_HEIGHT, **kwargs):
+    def __init__(self, left: int, bottom: int, callback: ReturnKeyPressedCallback, **kwargs):
 
+        self._callback: ReturnKeyPressedCallback = callback
+        #
+        # Set up the section size and location (opinionated)
+        #
         sectionLeft:   int = left + LEFT_MARGIN
         sectionBottom: int = bottom + BOTTOM_MARGIN
-        sectionWidth:  int = width - LEFT_MARGIN - RIGHT_MARGIN
+        sectionWidth:  int = self.window.width - LEFT_MARGIN - RIGHT_MARGIN - left
+        sectionHeight: int = DEFAULT_SECTION_HEIGHT
 
-        super().__init__(left=sectionLeft, bottom=sectionBottom, width=sectionWidth, height=height, **kwargs)
+        super().__init__(left=sectionLeft, bottom=sectionBottom, width=sectionWidth, height=sectionHeight, **kwargs)
 
-        self.logger: Logger = getLogger(__name__)
-
+        self.logger:     Logger    = getLogger(__name__)
         self._uiManager: UIManager = UIManager()
+        self._hasFocus:  bool      = False
+        self._value:     str       = ''
 
-        self._hasFocus: bool = False
-        self._value:    str  = ''
+        labelAndTextY: float = self.bottom + self.height / 2
 
-        inputWidth  = self.width // 2
-        inputHeight = DEFAULT_INPUT_HEIGHT
+        labelX: float = self.left + LABEL_LEFT_MARGIN
+        labelY: float = labelAndTextY - TEXT_TOP_MARGIN
 
-        self._inputText: SpriteSolidColor = SpriteSolidColor(width=inputWidth, height=inputHeight, color=WHITE)
+        self._label: Text = Text(text=LABEL_TEXT, start_x=labelX, start_y=labelY, color=WHITE)
 
-        self._inputText.position = self.left + self.width / 2, self.bottom + self.height / 2
+        self.logger.info(f'{self._label.right=} {labelX=} {self._label.content_width=}')
+        detectorX: float = self._label.right + labelX + self._label.content_width
+
+        self._collisionDetector: SpriteSolidColor = self._setupTheCollisionDetector()
+        self._collisionDetector.position = detectorX, labelAndTextY
 
     @property
     def value(self) -> str:
@@ -128,33 +149,45 @@ class VatoLocoTextInput(BaseSection):
     def on_draw(self):
         start_render()
         self._uiManager.draw()
-        super().on_draw()
 
-        # self._drawInputArea()
-        self._inputText.draw()
+        if DEBUG is True:
+            super().on_draw()
+            self._label.draw_debug()
+
+        self._label.draw()
+        self._collisionDetector.draw()
         if self._hasFocus is True:
-            self._inputText.draw_hit_box(color=RED)
+            self._collisionDetector.draw_hit_box(color=RED)
 
+        # Draw the input value on top of the sprite
         draw_text(self._value,
-                  start_x=self._inputText.left + TEXT_LEFT_MARGIN,
-                  start_y=(self._inputText.bottom - TEXT_TOP_MARGIN) + self._inputText.height / 2,
-                  width=int(self._inputText.width),
+                  start_x=self._collisionDetector.left + TEXT_LEFT_MARGIN,
+                  start_y=(self._collisionDetector.bottom - TEXT_TOP_MARGIN) + self._collisionDetector.height / 2,
+                  width=int(self._collisionDetector.width),
                   color=BLACK)
 
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
         """
         Check if the button is pressed
          """
-        if self._inputText.collides_with_point((x, y)):
+        if self._collisionDetector.collides_with_point((x, y)):
             self.logger.info(f'Pressed inside text')
             self._hasFocus = True
         else:
+            self.logger.info(f'Pressed outside text')
             self._hasFocus = False
+
+    def on_mouse_leave(self, x: int, y: int):
+        self._hasFocus = False
 
     def on_key_press(self, symbol: int, modifiers: int):
         if self._hasFocus:
             if symbol == arcadeKey.BACKSPACE:
                 self._value = self._value[:-1]
+            elif symbol == arcadeKey.ENTER or symbol == arcadeKey.RETURN:
+                self.logger.info(f'Return pressed')
+                self._callback(self._value)
+                self._value = ''
             else:
                 try:
                     letter: str = PressedKeyToCharacter[symbol]
@@ -162,6 +195,19 @@ class VatoLocoTextInput(BaseSection):
                         letter = letter.upper()
                     self._value = f'{self._value}{letter}'
                 except KeyError:
-                    pass    # Only handle letters
+                    self.logger.debug('Only handle letters')    # eat it
 
         self.logger.info(f'{self._value=}')
+
+    def _setupTheCollisionDetector(self) -> SpriteSolidColor:
+        """
+        Use a sprite for easy hit collision computation with mouse click
+
+        Returns: Our collision detecting immovable sprite
+        """
+
+        inputWidth  = self.width // 3
+        inputHeight = DEFAULT_INPUT_HEIGHT
+        collisionDetector: SpriteSolidColor = SpriteSolidColor(width=inputWidth, height=inputHeight, color=WHITE)
+
+        return collisionDetector

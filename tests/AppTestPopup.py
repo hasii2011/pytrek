@@ -17,7 +17,7 @@ class Popup(BaseSection):
                                             texture_pressed=arcade.load_texture('tests/button_pressed.png'),
                                             )
         box.add(button)
-        button.on_click = self.on_click_button
+        button.on_click = self.on_click_button   # type: ignore
         anchored_box = arcade.gui.UIAnchorWidget(anchor_x='center_x', anchor_y='center_y', child=box)
         self.manager.add(anchored_box)
         self.clicked = False
