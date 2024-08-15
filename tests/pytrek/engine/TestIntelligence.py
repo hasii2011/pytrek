@@ -506,7 +506,7 @@ class TestIntelligence(ProjectTestBase):
     def testExponentialRandomFiftySix(self):
         for x in range(0, TestIntelligence.EXPONENTIAL_RANDOM_MAX_CALLS):
             ans2: float = self.smarty.exponentialRandom(56.0)
-            self.assertGreater(902.00, ans2, '56 failed upper bound')
+            self.assertGreater(903.00, ans2, 'Random 56 failed upper bound')
 
     def testExponentialRandomLongerGameTime(self):
 
