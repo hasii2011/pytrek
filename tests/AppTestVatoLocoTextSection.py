@@ -7,7 +7,7 @@ from arcade import start_render
 
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
-from pytrek.guiv2.VatoLocoTextInput import VatoLocoTextInput
+from pytrek.guiv2.VatoLocoTextSection import VatoLocoTextSection
 from tests.ProjectTestBase import ProjectTestBase
 
 # SCREEN_WIDTH:  int = 400
@@ -23,7 +23,7 @@ class TestView(View):
     def __init__(self):
         super().__init__()
 
-        self._textInputSection: VatoLocoTextInput = VatoLocoTextInput(left=0, bottom=0, callback=self._returnPressedCallback)
+        self._textInputSection: VatoLocoTextSection = VatoLocoTextSection(left=0, bottom=0, callback=self._returnPressedCallback)
 
         self.section_manager.add_section(self._textInputSection)
 

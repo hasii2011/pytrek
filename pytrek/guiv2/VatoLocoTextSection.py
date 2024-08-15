@@ -96,7 +96,7 @@ LABEL_FONT_SIZE: int = 12
 DEBUG:      bool = False
 
 
-class VatoLocoTextInput(BaseSection):
+class VatoLocoTextSection(BaseSection):
     """
     Super simple simulated text input.  I can't get UIInputText to work correctly in a section.
 
