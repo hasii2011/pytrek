@@ -90,8 +90,10 @@ PressedKeyToCharacter: Dict[int, str] = {
 
 ReturnKeyPressedCallback = Callable[[str], None]
 
-DEBUG:      bool = True
-LABEL_TEXT: str  = 'Enter Command: '
+LABEL_TEXT:      str  = 'Enter Command: '
+LABEL_FONT_SIZE: int = 12
+
+DEBUG:      bool = False
 
 
 class VatoLocoTextInput(BaseSection):
@@ -125,17 +127,14 @@ class VatoLocoTextInput(BaseSection):
         self._hasFocus:  bool      = False
         self._value:     str       = ''
 
+        labelX:        float = self.left + LABEL_LEFT_MARGIN
         labelAndTextY: float = self.bottom + self.height / 2
 
-        labelX: float = self.left + LABEL_LEFT_MARGIN
-        labelY: float = labelAndTextY - TEXT_TOP_MARGIN
-
-        self._label: Text = Text(text=LABEL_TEXT, start_x=labelX, start_y=labelY, color=WHITE)
-
-        self.logger.info(f'{self._label.right=} {labelX=} {self._label.content_width=}')
-        detectorX: float = self._label.right + labelX + self._label.content_width
-
+        self._label:             Text             = self._setupLabel(labelX=labelX, labelAndTextY=labelAndTextY)
         self._collisionDetector: SpriteSolidColor = self._setupTheCollisionDetector()
+
+        detectorX: float = self._label.right + labelX + self._label.content_width
+        self.logger.info(f'{self._label.right=}  {self._label.content_width=}   {labelX=}  {detectorX=}')
         self._collisionDetector.position = detectorX, labelAndTextY
 
     @property
@@ -211,3 +210,11 @@ class VatoLocoTextInput(BaseSection):
         collisionDetector: SpriteSolidColor = SpriteSolidColor(width=inputWidth, height=inputHeight, color=WHITE)
 
         return collisionDetector
+
+    def _setupLabel(self, labelX: float, labelAndTextY: float) -> Text:
+
+        labelY: float = labelAndTextY - TEXT_TOP_MARGIN
+        width:  int   = LABEL_FONT_SIZE * len(LABEL_TEXT)
+        label: Text = Text(text=LABEL_TEXT, start_x=labelX, start_y=labelY, width=width, color=WHITE)
+
+        return label
