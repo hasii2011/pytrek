@@ -11,7 +11,7 @@ from arcade import draw_text
 from arcade.color import WHITE
 from arcade.color import RED
 
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 
 from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
@@ -31,7 +31,7 @@ class MessageConsole(AbstractMessageConsole):
     CONSOLE_FONT_SIZE:         int = 10
     BETWEEN_LINE_MARGIN:       int = 3
     EXTRA_FIRST_LINE_Y_OFFSET: int = 5
-    FIRST_LINE_Y:              int = CONSOLE_HEIGHT - CONSOLE_FONT_SIZE - BETWEEN_LINE_MARGIN - EXTRA_FIRST_LINE_Y_OFFSET
+    FIRST_LINE_Y:              int = CONSOLE_SECTION_HEIGHT - CONSOLE_FONT_SIZE - BETWEEN_LINE_MARGIN - EXTRA_FIRST_LINE_Y_OFFSET
     X_FIXED:                   int = 5
     Y_DECREMENT:               int = CONSOLE_FONT_SIZE + BETWEEN_LINE_MARGIN
 

@@ -3,7 +3,6 @@ from logging import Logger
 from logging import getLogger
 
 from arcade import MOUSE_BUTTON_LEFT
-from arcade import Section
 from arcade import Texture
 
 from arcade import draw_lrwh_rectangle_textured
@@ -13,7 +12,8 @@ from arcade import start_render
 from arcade import key as arcadeKey
 from arcade import exit as arcadeExit
 
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_WIDTH
 from pytrek.Constants import SCREEN_WIDTH
@@ -31,6 +31,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.futures.EventEngine import EventEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.guiv2.BaseSection import BaseSection
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
@@ -44,7 +45,7 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.settings.GameSettings import GameSettings
 
 
-class QuadrantSection(Section):
+class QuadrantSection(BaseSection):
 
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
         self.logger: Logger = getLogger(__name__)
@@ -91,10 +92,11 @@ class QuadrantSection(Section):
         start_render()
 
         # Draw the background texture
-        draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_HEIGHT,
+        draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_SECTION_HEIGHT + COMMAND_SECTION_HEIGHT,
                                      width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
 
         self._quadrantMediator.draw(quadrant=self._quadrant)
+        # super().on_draw()
 
     def on_update(self, delta_time: float):
         """
@@ -119,7 +121,7 @@ class QuadrantSection(Section):
         if button == MOUSE_BUTTON_LEFT:
             arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
             self.logger.debug(f'{arcadePoint=}')
-            if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_HEIGHT:
+            if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_SECTION_HEIGHT:
                 self._enterpriseMediator.impulse(quadrant=self._quadrant, arcadePoint=arcadePoint)
 
     def on_key_press(self, pressedKey: int, modifiers: int):

@@ -1,12 +1,14 @@
-from enum import Enum
+
+from typing import Union
 from typing import List
 from typing import NewType
 
 from logging import Logger
 from logging import getLogger
-from typing import Union
 
-from arcade import Section
+from enum import Enum
+
+
 from arcade import draw_text
 from arcade.color import BLUE
 from arcade.color import GREEN
@@ -15,7 +17,8 @@ from arcade.color import RED
 from arcade.color import WHITE
 from arcade.color import YELLOW
 
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_WIDTH
@@ -26,6 +29,8 @@ from pytrek.engine.ShipCondition import ShipCondition
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
+
+from pytrek.guiv2.BaseSection import BaseSection
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.model.Coordinates import Coordinates
@@ -49,7 +54,7 @@ PropertyName  = NewType('PropertyName', str)
 PropertyNames = NewType('PropertyNames', List[PropertyName])
 
 
-class StatusConsoleSection(Section):
+class StatusConsoleSection(BaseSection):
 
     statusLabels: List[str] = [
         'Condition:',
@@ -94,7 +99,7 @@ class StatusConsoleSection(Section):
         """
 
         statusConsoleLabelX = self.left + TITLE_MARGIN_X
-        statusConsoleLabelY = (QUADRANT_GRID_HEIGHT + CONSOLE_HEIGHT) - TITLE_FONT_OFFSET_Y - TITLE_MARGIN_Y
+        statusConsoleLabelY = (QUADRANT_GRID_HEIGHT + CONSOLE_SECTION_HEIGHT + COMMAND_SECTION_HEIGHT) - TITLE_FONT_OFFSET_Y - TITLE_MARGIN_Y
 
         draw_text("Status Console", statusConsoleLabelX, statusConsoleLabelY, color=STATUS_TEXT_COLOR,
                   font_size=SECTION_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
@@ -108,6 +113,8 @@ class StatusConsoleSection(Section):
         statusX: int = labelX + STATUS_VALUE_X_OFFSET
 
         self.drawStatusValues(statusX=statusX, runningY=runningY)
+
+        # super().on_draw()
 
     def drawStatusLabels(self, labelX: int, runningY: int):
         """

@@ -60,7 +60,7 @@ from pytrek.settings.GameSettings import GameSettings
 
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import SCREEN_HEIGHT
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 
 from pytrek.LocateResources import LocateResources
@@ -161,7 +161,7 @@ class AppTestShooting(View):
         """
         start_render()
         # Draw the background texture
-        draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_HEIGHT, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
+        draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_SECTION_HEIGHT, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
 
         self._quadrantMediator.draw(quadrant=self._quadrant)
         self._statusConsole.draw()

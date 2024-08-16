@@ -1,11 +1,10 @@
 
-
-from pytrek.Constants import CONSOLE_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_ROWS
+from pytrek.Constants import QUADRANT_Y_ADJUSTMENT
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 
@@ -57,7 +56,7 @@ class GamePiece(BaseGamePiece):
         adjustSectorY: int = (QUADRANT_ROWS - sectorY) - 1
 
         x = (adjustSectorX * QUADRANT_PIXEL_WIDTH) + HALF_QUADRANT_PIXEL_WIDTH
-        y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + CONSOLE_HEIGHT
+        y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + QUADRANT_Y_ADJUSTMENT
 
         arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
         return arcadePoint

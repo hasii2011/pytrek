@@ -20,7 +20,7 @@ class TestGamePiece(ProjectTestBase):
 
         self.logger.info(f'{arcadePoint=}')
 
-        expectedPoint: ArcadePoint = ArcadePoint(x=32.0, y=798.0)
+        expectedPoint: ArcadePoint = ArcadePoint(x=32.0, y=838.0)
         self.assertEqual(expectedPoint, arcadePoint, 'Calculation must have changed')
 
     def testGamePositionToScreenPositionOneZero(self):
@@ -30,7 +30,7 @@ class TestGamePiece(ProjectTestBase):
 
         self.logger.info(f'{arcadePoint=}')
 
-        expectedPoint: ArcadePoint = ArcadePoint(x=96.0, y=798.0)
+        expectedPoint: ArcadePoint = ArcadePoint(x=96.0, y=838.0)
         self.assertEqual(expectedPoint, arcadePoint, 'Calculation must have changed')
 
     def testGamePositionToScreenPositionZeroNine(self):
@@ -40,7 +40,7 @@ class TestGamePiece(ProjectTestBase):
 
         self.logger.info(f'{arcadePoint=}')
 
-        expectedPoint: ArcadePoint = ArcadePoint(x=32.0, y=222.0)
+        expectedPoint: ArcadePoint = ArcadePoint(x=32.0, y=262.0)
         self.assertEqual(expectedPoint, arcadePoint, 'Calculation must have changed')
 
 

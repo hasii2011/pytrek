@@ -23,7 +23,7 @@ from arcade import exit as arcadeExit
 
 from arcade.gui import UIManager
 
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_WIDTH
@@ -182,7 +182,7 @@ class PyTrekView(View):
         start_render()
 
         # Draw the background texture
-        draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_HEIGHT,
+        draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_SECTION_HEIGHT,
                                      width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
 
         # Call draw() on all our sprite lists
@@ -265,7 +265,7 @@ class PyTrekView(View):
 
         if button == MOUSE_BUTTON_LEFT:
             arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
-            if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_HEIGHT:
+            if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_SECTION_HEIGHT:
                 self._enterpriseMediator.impulse(quadrant=self._quadrant, arcadePoint=arcadePoint)
 
     def on_mouse_release(self, x, y, button, key_modifiers):

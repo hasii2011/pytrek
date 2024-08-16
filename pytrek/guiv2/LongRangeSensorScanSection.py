@@ -7,7 +7,7 @@ from arcade import Texture
 from arcade import load_texture
 from arcade import start_render
 
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.GameState import GameState
@@ -35,7 +35,7 @@ class LongRangeSensorScanSection(Section):
         self._texture: Texture = load_texture(fqFileName)
 
         self._graphicCenterX: float = SCREEN_WIDTH / 2
-        self._graphicCenterY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_HEIGHT
+        self._graphicCenterY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_SECTION_HEIGHT
 
         self._mediator: LongRangeSensorScanMediator = LongRangeSensorScanMediator(view=self,
                                                                                   graphicCenterX=self._graphicCenterX,

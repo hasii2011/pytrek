@@ -3,7 +3,7 @@ from typing import Callable
 
 from arcade import start_render
 
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 
@@ -40,7 +40,7 @@ class GalaxyView(View):
         """
         start_render()
         centerX: float = SCREEN_WIDTH / 2
-        centerY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_HEIGHT
+        centerY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_SECTION_HEIGHT
 
         self.texture.draw_sized(center_x=centerX, center_y=centerY, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT)
 

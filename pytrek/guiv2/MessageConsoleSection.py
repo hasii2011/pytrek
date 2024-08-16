@@ -1,3 +1,4 @@
+
 from typing import List
 from typing import NewType
 from typing import Tuple
@@ -7,16 +8,17 @@ from logging import getLogger
 
 from dataclasses import dataclass
 
-from arcade import Section
 from arcade.color import RED
 from arcade.color import WHITE
 
 from arcade import draw_text
 
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 
 from pytrek.gui.ConsoleMessageType import ConsoleMessageType
+from pytrek.guiv2.BaseSection import BaseSection
 
 
 @dataclass
@@ -28,14 +30,14 @@ class MessageLine:
 MessageLines = NewType('MessageLines', List[MessageLine])
 
 
-class MessageConsoleSection(Section):
+class MessageConsoleSection(BaseSection):
 
     MAX_LINES:                 int = 13
 
     CONSOLE_FONT_SIZE:         int = 10
     BETWEEN_LINE_MARGIN:       int = 3
     EXTRA_FIRST_LINE_Y_OFFSET: int = 5
-    FIRST_LINE_Y:              int = (CONSOLE_HEIGHT) - CONSOLE_FONT_SIZE - BETWEEN_LINE_MARGIN - EXTRA_FIRST_LINE_Y_OFFSET
+    FIRST_LINE_Y:              int = (CONSOLE_SECTION_HEIGHT + COMMAND_SECTION_HEIGHT) - CONSOLE_FONT_SIZE - BETWEEN_LINE_MARGIN - EXTRA_FIRST_LINE_Y_OFFSET
     X_FIXED:                   int = 5
     Y_DECREMENT:               int = CONSOLE_FONT_SIZE + BETWEEN_LINE_MARGIN
 
@@ -67,6 +69,7 @@ class MessageConsoleSection(Section):
 
     def on_draw(self):
 
+        # super().on_draw()
         runningY: int = MessageConsoleSection.FIRST_LINE_Y
         for msg in self._statusLines:
             draw_text(msg.message, MessageConsoleSection.X_FIXED, runningY,

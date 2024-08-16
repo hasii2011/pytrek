@@ -6,7 +6,7 @@ from arcade import Section
 from arcade import Texture
 from arcade import load_texture
 
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 
@@ -33,7 +33,7 @@ class GalaxySection(Section):
 
     def on_draw(self):
         centerX: float = SCREEN_WIDTH / 2
-        centerY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_HEIGHT
+        centerY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_SECTION_HEIGHT
 
         self._texture.draw_sized(center_x=centerX, center_y=centerY, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT)
 

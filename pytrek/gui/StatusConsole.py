@@ -17,7 +17,7 @@ from arcade.color import YELLOW
 from arcade import View
 from arcade import draw_text
 
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_WIDTH
@@ -99,7 +99,7 @@ class StatusConsole:
     def draw(self):
 
         statusConsoleLabelX = QUADRANT_GRID_WIDTH + TITLE_MARGIN_X
-        statusConsoleLabelY = (QUADRANT_GRID_HEIGHT + CONSOLE_HEIGHT) - TITLE_FONT_OFFSET_Y - TITLE_MARGIN_Y
+        statusConsoleLabelY = (QUADRANT_GRID_HEIGHT + CONSOLE_SECTION_HEIGHT) - TITLE_FONT_OFFSET_Y - TITLE_MARGIN_Y
         draw_text("Status Console", statusConsoleLabelX, statusConsoleLabelY, color=STATUS_TEXT_COLOR,
                   font_size=SECTION_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
 

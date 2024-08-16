@@ -5,7 +5,7 @@ from arcade import View
 from arcade import load_texture
 from arcade import start_render
 
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 
@@ -40,7 +40,7 @@ class LongRangeSensorScanView(View):
         # to reset the viewport back to the start, so we can see what we draw.
         # set_viewport(0, QUADRANT_GRID_WIDTH - 1, 0, QUADRANT_GRID_HEIGHT - 1)
         self._graphicCenterX: float = SCREEN_WIDTH / 2
-        self._graphicCenterY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_HEIGHT
+        self._graphicCenterY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_SECTION_HEIGHT
 
         self._mediator: LongRangeSensorScanMediator = LongRangeSensorScanMediator(view=self,
                                                                                   graphicCenterX=self._graphicCenterX,

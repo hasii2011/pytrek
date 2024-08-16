@@ -280,7 +280,7 @@ class TestComputer(ProjectTestBase):
 
         self.logger.debug(f'{startPoint=} {endPoint=} {midPoint=}')
 
-        expectedPoint: ArcadePoint = ArcadePoint(x=415, y=320)
+        expectedPoint: ArcadePoint = ArcadePoint(x=435, y=320)
         self.assertEqual(expectedPoint, midPoint, 'Long Center point does not match')
 
     def testComputeCenterPointShort(self):

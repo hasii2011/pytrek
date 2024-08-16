@@ -9,7 +9,6 @@ from arcade import SpriteSolidColor
 from arcade import Text
 
 from arcade import draw_text
-from arcade import start_render
 
 from arcade.color import BLACK
 from arcade.color import RED
@@ -19,11 +18,9 @@ from arcade import key as arcadeKey
 
 from arcade.gui import UIManager
 
+from pytrek.Constants import COMMAND_INPUT_HEIGHT
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
 from pytrek.guiv2.BaseSection import BaseSection
-
-DEFAULT_INPUT_HEIGHT:   int = 20
-DEFAULT_SECTION_HEIGHT: int = DEFAULT_INPUT_HEIGHT * 2
-DEFAULT_SECTION_WIDTH:  int = 200
 
 # Section Margins
 LEFT_MARGIN:   int = 10
@@ -93,7 +90,7 @@ ReturnKeyPressedCallback = Callable[[str], None]
 LABEL_TEXT:      str  = 'Enter Command: '
 LABEL_FONT_SIZE: int = 12
 
-DEBUG:      bool = False
+DEBUG:      bool = True
 
 
 class VatoLocoTextSection(BaseSection):
@@ -116,9 +113,9 @@ class VatoLocoTextSection(BaseSection):
         # Set up the section size and location (opinionated)
         #
         sectionLeft:   int = left + LEFT_MARGIN
-        sectionBottom: int = bottom + BOTTOM_MARGIN
+        sectionBottom: int = bottom
         sectionWidth:  int = self.window.width - LEFT_MARGIN - RIGHT_MARGIN - left
-        sectionHeight: int = DEFAULT_SECTION_HEIGHT
+        sectionHeight: int = COMMAND_SECTION_HEIGHT
 
         super().__init__(left=sectionLeft, bottom=sectionBottom, width=sectionWidth, height=sectionHeight, **kwargs)
 
@@ -146,12 +143,10 @@ class VatoLocoTextSection(BaseSection):
         self._value = value
 
     def on_draw(self):
-        start_render()
-        self._uiManager.draw()
 
         if DEBUG is True:
             super().on_draw()
-            self._label.draw_debug()
+            # self._label.draw_debug()
 
         self._label.draw()
         self._collisionDetector.draw()
@@ -206,7 +201,7 @@ class VatoLocoTextSection(BaseSection):
         """
 
         inputWidth  = self.width // 3
-        inputHeight = DEFAULT_INPUT_HEIGHT
+        inputHeight = COMMAND_INPUT_HEIGHT
         collisionDetector: SpriteSolidColor = SpriteSolidColor(width=inputWidth, height=inputHeight, color=WHITE)
 
         return collisionDetector

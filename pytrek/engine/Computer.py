@@ -10,7 +10,7 @@ from math import floor
 from math import sqrt
 
 
-from pytrek.Constants import CONSOLE_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
 
@@ -62,7 +62,7 @@ class Computer(metaclass=SingletonV3):
         yMargins = -12  # Font Fudge Factor
 
         x = (adjustSectorX * QUADRANT_PIXEL_WIDTH) + HALF_QUADRANT_PIXEL_WIDTH + xMargins
-        y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + yMargins + CONSOLE_HEIGHT
+        y = (adjustSectorY * QUADRANT_PIXEL_HEIGHT) + HALF_QUADRANT_PIXEL_HEIGHT + yMargins + CONSOLE_SECTION_HEIGHT
 
         return ArcadePoint(x=x, y=y)
 
@@ -96,7 +96,7 @@ class Computer(metaclass=SingletonV3):
 
     def computeCoordinates(self, x: float, y: float) -> Coordinates:
 
-        adjustY: float = y - CONSOLE_HEIGHT
+        adjustY: float = y - CONSOLE_SECTION_HEIGHT
 
         gameX = int(floor(x // QUADRANT_PIXEL_WIDTH))
         gameY = int(floor(adjustY // QUADRANT_PIXEL_HEIGHT))
