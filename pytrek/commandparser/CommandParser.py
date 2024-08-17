@@ -94,7 +94,7 @@ PatternToCommandType: Dict[CommandPattern, CommandType] = {
 }
 
 
-class CommandExtractor:
+class CommandParser:
     """
     This classes processes (eats) keystrokes until the player presses the `Enter` key.  These are
     cached in `_commandStr`.  At that point, `_parseCommand` runs a series of regular expressions

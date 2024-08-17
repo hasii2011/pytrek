@@ -13,7 +13,7 @@ from codeallybasic.UnitTestBase import UnitTestBase
 
 from arcade import key as arcadeKey
 
-from pytrek.commandparser.CommandExtractor import CommandExtractor
+from pytrek.commandparser.CommandParser import CommandParser
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.ManualMoveData import ManualMoveData
 from pytrek.commandparser.ParsedCommand import ParsedCommand
@@ -190,7 +190,7 @@ class TestCommandExtractor(UnitTestBase):
 
     def _simulateKeyStrokes(self, keyStrokes: KeyStrokes) -> ParsedCommand:
 
-        extractor: CommandExtractor = CommandExtractor()
+        extractor: CommandParser = CommandParser()
 
         parsedCommand: ParsedCommand = cast(ParsedCommand, None)
         for key in keyStrokes:

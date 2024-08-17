@@ -25,7 +25,7 @@ from pytrek.LocateResources import LocateResources
 
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.ParsedCommand import ParsedCommand
-from pytrek.commandparser.CommandExtractor import CommandExtractor
+from pytrek.commandparser.CommandParser import CommandParser
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
 from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
 
@@ -111,7 +111,7 @@ class CommandInputSection(BaseSection):
         # )
         self._uiManager.add(commandInputLayout)
 
-        self._commandExtractor: CommandExtractor = CommandExtractor(asciiMode=True)
+        self._commandExtractor: CommandParser = CommandParser(asciiMode=True)
 
     def on_update(self, delta_time: float):
         self._commandInput.on_update(delta_time)
