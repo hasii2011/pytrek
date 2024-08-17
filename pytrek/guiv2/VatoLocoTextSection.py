@@ -21,6 +21,7 @@ from arcade.gui import UIManager
 from pytrek.Constants import COMMAND_INPUT_HEIGHT
 from pytrek.Constants import COMMAND_SECTION_HEIGHT
 from pytrek.guiv2.BaseSection import BaseSection
+from pytrek.settings.GameSettings import GameSettings
 
 # Section Margins
 LEFT_MARGIN:   int = 10
@@ -90,8 +91,6 @@ ReturnKeyPressedCallback = Callable[[str], None]
 LABEL_TEXT:      str  = 'Enter Command: '
 LABEL_FONT_SIZE: int = 12
 
-DEBUG:      bool = True
-
 
 class VatoLocoTextSection(BaseSection):
     """
@@ -144,9 +143,9 @@ class VatoLocoTextSection(BaseSection):
 
     def on_draw(self):
 
-        if DEBUG is True:
+        if GameSettings().drawSectionBoundaries is True:
             super().on_draw()
-            # self._label.draw_debug()
+            self._label.draw_debug()
 
         self._label.draw()
         self._collisionDetector.draw()

@@ -96,7 +96,7 @@ class QuadrantSection(BaseSection):
                                      width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
 
         self._quadrantMediator.draw(quadrant=self._quadrant)
-        # super().on_draw()
+        self.drawDebug()
 
     def on_update(self, delta_time: float):
         """

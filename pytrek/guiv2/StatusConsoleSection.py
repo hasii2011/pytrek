@@ -114,7 +114,7 @@ class StatusConsoleSection(BaseSection):
 
         self.drawStatusValues(statusX=statusX, runningY=runningY)
 
-        # super().on_draw()
+        self.drawDebug()
 
     def drawStatusLabels(self, labelX: int, runningY: int):
         """

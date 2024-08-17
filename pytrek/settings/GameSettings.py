@@ -119,6 +119,7 @@ SECTION_DEBUG: Section = Section(
         ConfigurationNameValue(name=PropertyName('debugBaseEnemyTorpedoInterval'),            defaultValue='20'),
         ConfigurationNameValue(name=PropertyName('debugSmoothMotion'),                        defaultValue='False'),
         ConfigurationNameValue(name=PropertyName('debugSmoothMotionInterval'),                defaultValue='5'),
+        ConfigurationNameValue(name=PropertyName('drawSectionBoundaries'),                    defaultValue='False'),
     ]
 )
 
@@ -637,6 +638,16 @@ class GameSettings(ConfigurationProperties, metaclass=SingletonV3):
     @debugSmoothMotionInterval.setter
     @configurationSetter(sectionName=DEBUG_SECTION_NAME)
     def debugSmoothMotionInterval(self, newValue: int):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def drawSectionBoundaries(self) -> bool:
+        return False        # never used
+
+    @drawSectionBoundaries.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def drawSectionBoundaries(self, value: bool):
         pass
 
     def _toStr(self, optionString: str) -> str:

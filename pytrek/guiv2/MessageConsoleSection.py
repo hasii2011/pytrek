@@ -77,3 +77,5 @@ class MessageConsoleSection(BaseSection):
                       font_size=MessageConsoleSection.CONSOLE_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
 
             runningY -= MessageConsoleSection.Y_DECREMENT
+
+        self.drawDebug()
