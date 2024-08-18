@@ -12,6 +12,9 @@ from arcade import run as arcadeRun
 
 from arcade import start_render
 
+from pytrek.CommandHandler import CommandHandler
+from pytrek.LocateResources import LocateResources
+
 from pytrek.Constants import COMMAND_SECTION_HEIGHT
 from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
@@ -21,7 +24,10 @@ from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.Constants import STATUS_VIEW_WIDTH
 
-from pytrek.LocateResources import LocateResources
+from pytrek.commandparser.InvalidCommandException import InvalidCommandException
+from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
+
+from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
 from pytrek.guiv2.GalaxySection import GalaxySection
 from pytrek.guiv2.LongRangeSensorScanSection import LongRangeSensorScanSection
@@ -54,18 +60,16 @@ class PyTrekV2(View):
                                                            )
         ImageFont.truetype(fqFileName)
 
-        # width:  int =
-
-        self._messageConsoleSection: MessageConsoleSection = MessageConsoleSection(left=0,
-                                                                                   bottom=COMMAND_SECTION_HEIGHT,
-                                                                                   height=CONSOLE_SECTION_HEIGHT,
-                                                                                   width=SCREEN_WIDTH,
-                                                                                   accept_keyboard_events=False
-                                                                                   )
+        self.messageConsoleSection: MessageConsoleSection = MessageConsoleSection(left=0,
+                                                                                  bottom=COMMAND_SECTION_HEIGHT,
+                                                                                  height=CONSOLE_SECTION_HEIGHT,
+                                                                                  width=SCREEN_WIDTH,
+                                                                                  accept_keyboard_events=False
+                                                                                  )
 
         # Create proxy and inject the console
         self._messageConsoleProxy: MessageConsoleProxy = MessageConsoleProxy()
-        self._messageConsoleProxy.console = self._messageConsoleSection
+        self._messageConsoleProxy.console = self.messageConsoleSection
 
         self._statusConsole:   StatusConsoleSection = StatusConsoleSection(left=QUADRANT_GRID_WIDTH, bottom=SCREEN_HEIGHT - QUADRANT_GRID_HEIGHT,
                                                                            height=QUADRANT_GRID_HEIGHT + CONSOLE_SECTION_HEIGHT, width=STATUS_VIEW_WIDTH,
@@ -75,7 +79,7 @@ class PyTrekV2(View):
                                                                       height=QUADRANT_GRID_HEIGHT, width=QUADRANT_GRID_WIDTH,
                                                                       accept_keyboard_events=False)
 
-        self._commandInputSection: VatoLocoTextSection = VatoLocoTextSection(left=0, bottom=0, callback=self._commandHandler, accept_keyboard_events=True)
+        self._commandInputSection: VatoLocoTextSection = VatoLocoTextSection(left=0, bottom=0, callback=self._handleCommands, accept_keyboard_events=True)
 
         # These sections are not enabled by default and disabled externally to here;  So make them public
         self.galaxySection: GalaxySection = GalaxySection(left=0,
@@ -96,17 +100,28 @@ class PyTrekV2(View):
         # add the sections
         self.section_manager.add_section(self._quadrantSection)
         self.section_manager.add_section(self._statusConsole)
-        self.section_manager.add_section(self._messageConsoleSection)
+        self.section_manager.add_section(self.messageConsoleSection)
         self.section_manager.add_section(self.galaxySection)
         self.section_manager.add_section(self.longRangeSensorScanSection)
         self.section_manager.add_section(self.warpEffectSection)
         self.section_manager.add_section(self._commandInputSection)
 
+        #
+        # TODO: fix this later
+        # The quadrant section initialized the various singletons in the correct order
+        #
+        self._commandHandler: CommandHandler = CommandHandler(view=self)
+
     def on_draw(self):
         start_render()
 
-    def _commandHandler(self, command: str):
-        pass
+    def _handleCommands(self, commandStr: str):
+        try:
+            self._commandHandler.doCommand(commandStr=commandStr)
+        except InvalidCommandException as ice:
+            self.messageConsoleSection.displayMessage(message=str(ice), messageType=ConsoleMessageType.Warning)
+        except InvalidCommandValueException as e:
+            self.messageConsoleSection.displayMessage(message=str(e), messageType=ConsoleMessageType.Warning)
 
 
 def main():

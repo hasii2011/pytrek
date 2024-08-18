@@ -1,4 +1,5 @@
 
+from typing import Tuple
 from typing import cast
 
 from logging import Logger
@@ -12,7 +13,7 @@ import pyglet.media as media
 from arcade import Emitter
 from arcade import EmitterIntervalWithTime
 from arcade import LifetimeParticle
-from arcade import Section
+
 from arcade import color
 from arcade import draw_text
 from arcade import load_spritesheet
@@ -21,10 +22,13 @@ from arcade import set_background_color
 from arcade import start_render
 
 from pytrek.LocateResources import LocateResources
+
 from pytrek.SoundMachine import SoundMachine
 from pytrek.SoundMachine import SoundType
-from pytrek.gui.gamepieces.base.BaseAnimator import TextureList
 
+from pytrek.gui.UITypes import TextureList
+
+from pytrek.guiv2.BaseSection import BaseSection
 
 PARTICLE_SPEED_FAST:       float = 1.0
 DEFAULT_EMIT_INTERVAL:     float = 0.003
@@ -35,20 +39,17 @@ DEFAULT_PARTICLE_LIFETIME: float = 3.0
 DEFAULT_ALPHA: int = 32
 
 
-class WarpEffectSection(Section):
+class WarpEffectSection(BaseSection):
 
     def __init__(self, width: int, height: int):
         self.logger: Logger = getLogger(__name__)
 
         super().__init__(left=0, bottom=0, width=width, height=height, modal=True, enabled=False)
 
-        self._soundMachine: SoundMachine = SoundMachine()
+        self._soundMachine:       SoundMachine        = SoundMachine()
+        self._centerPosition:     Tuple[float, float] = (width / 2, height / 2)
+        self._warpEffectTextures: TextureList         = self._loadWarpEffectTextures()
 
-        self._centerPosition: tuple[float, float] = (width / 2, height / 2)
-
-        self._warpEffectTextures: TextureList = self._loadWarpEffectTextures()
-        # If you have sprite lists, you should create them here,
-        # and set them to None
         self._emitter: Emitter      = cast(Emitter, None)
         self._media:   media.Player = cast(media.Player, None)
 
@@ -57,10 +58,14 @@ class WarpEffectSection(Section):
         set_background_color(color.BLACK)
 
     def setup(self):
-        """ Set up the game variables. Call to re-start the game. """
-        # Create your sprites and sprite lists here
+        """
+        Call this to restart the emitter
+        """
         self._emitter = self._createWarpEffectEmitter()
         self._playing = False
+
+    def isEffectComplete(self) -> bool:
+        return self._emitter.can_reap()
 
     def on_draw(self):
         """
@@ -70,9 +75,9 @@ class WarpEffectSection(Section):
         # the screen to the background color, and erase what we drew last frame.
         start_render()
         self._emitter.draw()
-        draw_text("Warping: " + str(self._emitter.get_count()), 10, 30, color.PALE_GOLD, 12)
-
-        # Call draw() on all your sprite lists below
+        if self.isEffectComplete() is False:
+            draw_text("Warping: " + str(self._emitter.get_count()), 10, 30, color.PALE_GOLD, 12)
+        self.drawDebug()
 
     def on_update(self, delta_time: float):
         """

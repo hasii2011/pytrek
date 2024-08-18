@@ -1,17 +1,14 @@
 
 from typing import Dict
 from typing import List
+from typing import NewType
+from typing import cast
 
 from logging import Logger
 from logging import getLogger
 
 from re import Match as regExMatch
 from re import search as regExSearch
-
-from typing import NewType
-from typing import cast
-
-from arcade import key as arcadeKey
 
 from pytrek.Constants import MAXIMUM_COORDINATE
 from pytrek.Constants import MINIMUM_COORDINATE
@@ -23,48 +20,6 @@ from pytrek.commandparser.ParsedCommand import ParsedCommand
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
 from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
 from pytrek.model.Coordinates import Coordinates
-
-PressedKeyToCharacter: Dict[int, str] = {
-    arcadeKey.A: 'a',
-    arcadeKey.B: 'b',
-    arcadeKey.C: 'c',
-    arcadeKey.D: 'd',
-    arcadeKey.E: 'e',
-    arcadeKey.F: 'f',
-    arcadeKey.G: 'g',
-    arcadeKey.H: 'h',
-    arcadeKey.I: 'i',
-    arcadeKey.J: 'j',
-    arcadeKey.K: 'k',
-    arcadeKey.L: 'l',
-    arcadeKey.M: 'm',
-    arcadeKey.N: 'n',
-    arcadeKey.O: 'o',
-    arcadeKey.P: 'p',
-    arcadeKey.Q: 'q',
-    arcadeKey.R: 'r',
-    arcadeKey.S: 's',
-    arcadeKey.T: 't',
-    arcadeKey.U: 'u',
-    arcadeKey.V: 'v',
-    arcadeKey.W: 'w',
-    arcadeKey.X: 'x',
-    arcadeKey.Y: 'y',
-    arcadeKey.Z: 'z',
-    arcadeKey.NUM_0: '0',
-    arcadeKey.NUM_1: '1',
-    arcadeKey.NUM_2: '2',
-    arcadeKey.NUM_3: '3',
-    arcadeKey.NUM_4: '4',
-    arcadeKey.NUM_5: '5',
-    arcadeKey.NUM_6: '6',
-    arcadeKey.NUM_7: '7',
-    arcadeKey.NUM_8: '8',
-    arcadeKey.NUM_9: '9',
-    arcadeKey.SPACE:  ' ',
-    arcadeKey.ENTER:  '',
-    arcadeKey.RETURN: '',
-}
 
 CommandPattern = NewType('CommandPattern', str)
 
@@ -114,22 +69,9 @@ class CommandParser:
         self._asciiMode:  bool   = asciiMode
         self._commandStr: str    = ''
 
-    def processKeyPress(self, pressedKey: int | str) -> ParsedCommand:
+    def parseCommand(self, commandStr: str) -> ParsedCommand:
 
-        if self._asciiMode is True:
-            self._commandStr = f'{self._commandStr}{pressedKey}'
-        else:
-            self._commandStr = f'{self._commandStr}{PressedKeyToCharacter[pressedKey]}'     # type: ignore
-
-        if pressedKey == arcadeKey.ENTER or pressedKey == arcadeKey.RETURN or pressedKey == '\r':
-            parsedCommand: ParsedCommand = self._parseCommand()
-        else:
-            parsedCommand = ParsedCommand(commandType=CommandType.NoCommand)
-
-        return parsedCommand
-
-    def _parseCommand(self) -> ParsedCommand:
-
+        self._commandStr = commandStr.lower()
         parsedCommand = self._matchCommand(commandStr=self._commandStr)
         match parsedCommand.commandType:
             case CommandType.Rest:
@@ -187,6 +129,7 @@ class CommandParser:
         else:
             manualMoveData: ManualMoveData = self._parseManualMoveSubcommand(splitCmd)
             parsedCommand.manualMoveData = manualMoveData
+            parsedCommand.manualMove     = True
 
         return parsedCommand
 
@@ -266,8 +209,9 @@ class CommandParser:
 
         manualMoveData: ManualMoveData = ManualMoveData()
         try:
-            manualMoveData.deltaX = int(splitCmd[2])
-            manualMoveData.deltaY = int(splitCmd[3])
+            manualMoveData.deltaX = float(splitCmd[2])
+            if len(splitCmd) == 4:
+                manualMoveData.deltaY = float(splitCmd[3])
         except ValueError as e:
             self.logger.error(f'{e=}')
             raise InvalidCommandValueException(message=f'Invalid manual move values: {e}')
@@ -287,6 +231,7 @@ class CommandParser:
 
     def _validCoordinate(self, coordinate: str, errorMsg: str):
         """
+        TODO:  This is duplicated in the EnterpriseMediator
 
         Args:
             coordinate:  String coordinate

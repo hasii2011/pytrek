@@ -5,5 +5,5 @@ from dataclasses import dataclass
 @dataclass
 class ManualMoveData:
 
-    deltaX: int = 0
-    deltaY: int = 0
+    deltaX: float = 0.0
+    deltaY: float = 0.0

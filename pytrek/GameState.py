@@ -43,6 +43,7 @@ class GameState(metaclass=SingletonV3):
         self._energy:       float      = gameSettings.initialEnergyLevel
         self._shieldEnergy: float      = gameSettings.initialShieldEnergy
         self._torpedoCount: int        = gameSettings.initialTorpedoCount
+        self._warpFactor:   int        = gameSettings.defaultWarpFactor
         self._starDate:     float      = intelligence.generateInitialStarDate()
         self._inTime:       float      = intelligence.generateInitialGameTime()
         self._opTime:       float      = 0.0
@@ -76,6 +77,14 @@ class GameState(metaclass=SingletonV3):
         self._configurationLocator: ConfigurationLocator = ConfigurationLocator()
 
         self.logger.info(f'Game State singleton initialized')
+
+    @property
+    def warpFactor(self) -> int:
+        return self._warpFactor
+
+    @warpFactor.setter
+    def warpFactor(self, newValue: int):
+        self._warpFactor = newValue
 
     @property
     def enterprise(self) -> Enterprise:

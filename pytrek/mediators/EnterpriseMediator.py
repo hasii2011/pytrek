@@ -12,18 +12,32 @@ from arcade import color
 from arcade import schedule
 from arcade import unschedule
 
+from pytrek.Constants import MAX_QUADRANT_X_COORDINATE
+from pytrek.Constants import MAX_QUADRANT_Y_COORDINATE
+from pytrek.Constants import MAX_SECTOR_X_COORDINATE
+from pytrek.Constants import MAX_SECTOR_Y_COORDINATE
+from pytrek.Constants import MIN_QUADRANT_X_COORDINATE
+from pytrek.Constants import MIN_QUADRANT_Y_COORDINATE
+from pytrek.Constants import MIN_SECTOR_X_COORDINATE
+from pytrek.Constants import MIN_SECTOR_Y_COORDINATE
+
 from pytrek.SoundMachine import SoundMachine
 from pytrek.SoundMachine import SoundType
+
+from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
+
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.DirectionData import DirectionData
 from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.gui.UITypes import WarpTravelCallback
+from pytrek.gui.UITypes import WarpTravelCallbackV2
 from pytrek.gui.WarpEffect import WarpEffect
 
 from pytrek.gui.dialogs.WarpDialog import DialogAnswer
 from pytrek.gui.dialogs.WarpDialog import WarpTravelAnswer
 from pytrek.gui.dialogs.WarpDialog import WarpDialog
+from pytrek.guiv2.WarpEffectSection import WarpEffectSection
 
 from pytrek.mediators.base.MissesMediator import MissesMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse
@@ -40,7 +54,7 @@ from pytrek.model.SectorType import SectorType
 
 class EnterpriseMediator(MissesMediator):
 
-    def __init__(self, view: View, warpTravelCallback: WarpTravelCallback):
+    def __init__(self, view: View, warpTravelCallback: WarpTravelCallback | WarpTravelCallbackV2):
         """
 
         Args:
@@ -51,13 +65,22 @@ class EnterpriseMediator(MissesMediator):
         super().__init__()
 
         self._view:               View = view
-        self._warpTravelCallback: WarpTravelCallback = warpTravelCallback
+        self._warpTravelCallback: WarpTravelCallback | WarpTravelCallbackV2 = warpTravelCallback
 
         self.logger:                  Logger       = getLogger(__name__)
         self._soundMachine:           SoundMachine = SoundMachine()
         self._warpSpeed:              float        = 0.0
         self._warpEffect:             WarpEffect   = cast(WarpEffect, None)
-        self._destinationCoordinates: Coordinates = cast(Coordinates, None)
+        self._destinationCoordinates: Coordinates  = cast(Coordinates, None)
+
+        # This should be injected, until we get rid of the V1 UI
+        self._warpEffectSection:       WarpEffectSection   = cast(WarpEffectSection, None)
+
+    def _setWarpEffectSection(self, newValue: WarpEffectSection):
+        self._warpEffectSection = newValue
+
+    # noinspection PyTypeChecker
+    warpEffectSection = property(fget=None, fset=_setWarpEffectSection, doc='Set by the section UI')
 
     def update(self, quadrant: Quadrant):
 
@@ -104,6 +127,62 @@ class EnterpriseMediator(MissesMediator):
 
         self._view.window.show_view(warpTravelDialog)
 
+    def manualMove(self, quadrant: Quadrant, deltaX: float, deltaY: float):
+
+        # Impulse move ?
+        if deltaX < 1.0:
+            self._doManualImpulseMove(deltaX, deltaY, quadrant)
+        else:
+            self._doManualWarpMove(int(deltaX), int(deltaY), quadrant)
+            pass
+
+    def automaticMove(self, quadrant: Quadrant, quadrantCoordinates: Coordinates, sectorCoordinates: Coordinates):
+        pass
+
+    def _doManualImpulseMove(self, deltaX, deltaY, quadrant):
+
+        enterpriseSectorCoordinates: Coordinates = self._gameState.currentSectorCoordinates
+        targetSector: Coordinates = Coordinates()
+        targetSector.x = enterpriseSectorCoordinates.x + int(deltaX * 10)
+        targetSector.y = enterpriseSectorCoordinates.y + int(deltaY * 10)
+        self._validateCoordinates(coordinate=targetSector,
+                                  minX=MIN_SECTOR_X_COORDINATE,
+                                  maxX=MAX_SECTOR_X_COORDINATE,
+                                  minY=MIN_SECTOR_Y_COORDINATE,
+                                  maxY=MAX_SECTOR_Y_COORDINATE)
+        if targetSector == enterpriseSectorCoordinates:
+            self._messageConsole.displayMessage("WTF.  You are already here!")
+            self._soundMachine.playSound(SoundType.UnableToComply)
+        else:
+            arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(gameCoordinates=targetSector)
+            startingPoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(enterpriseSectorCoordinates)
+            endPoint: ArcadePoint = arcadePoint
+
+            results: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant=quadrant, startingPoint=startingPoint, endPoint=endPoint)
+            if results.answer is True:
+                self._doImpulseMove(quadrant=quadrant, enterpriseCoordinates=enterpriseSectorCoordinates, targetCoordinates=targetSector)
+            else:
+                self._doBlockedImpulseMove(quadrant=quadrant, enterpriseCoordinates=enterpriseSectorCoordinates, results=results)
+
+    def _doManualWarpMove(self, deltaX: int, deltaY: int, quadrant: Quadrant):
+
+        enterpriseQuadrantCoordinates: Coordinates = self._gameState.currentQuadrantCoordinates
+        targetQuadrantCoordinates:   Coordinates = Coordinates()
+        targetQuadrantCoordinates.x = enterpriseQuadrantCoordinates.x + deltaX
+        targetQuadrantCoordinates.y = enterpriseQuadrantCoordinates.y + deltaY
+
+        self._validateCoordinates(coordinate=targetQuadrantCoordinates,
+                                  minX=MIN_QUADRANT_X_COORDINATE,
+                                  maxX=MAX_QUADRANT_X_COORDINATE,
+                                  minY=MIN_QUADRANT_Y_COORDINATE,
+                                  maxY=MAX_QUADRANT_Y_COORDINATE)
+
+        self._destinationCoordinates = targetQuadrantCoordinates
+        self._warpEffectSection.setup()
+        self._warpEffectSection.enabled = True
+
+        schedule(function_pointer=self._checkEffectComplete, interval=1.0)  # type: ignore
+
     def _warpTravelDialogComplete(self, warpTravelAnswer: WarpTravelAnswer):
         """
         The callback when we get an answer on whether we are traveling to
@@ -145,7 +224,7 @@ class EnterpriseMediator(MissesMediator):
             # Callback to someone (presumably top level view) to let them know
             # it is time to warp;
             #
-            self._warpTravelCallback(self._warpSpeed, self._destinationCoordinates)
+            self._warpTravelCallback(self._warpSpeed, self._destinationCoordinates)     # type: ignore
 
     def _doImpulseMove(self, quadrant: Quadrant, enterpriseCoordinates: Coordinates, targetCoordinates: Coordinates):
         """
@@ -233,6 +312,48 @@ class EnterpriseMediator(MissesMediator):
             self.logger.info(f'Try again: {directionData=}')
 
         return directionData
+
+    # noinspection PyUnusedLocal
+    def _checkEffectComplete(self, deltaTime: float):
+        """
+        This method is scheduled to periodically query to see if the warp effect is done;
+        If so the disables the warp effect section and calls the warp travel callback which
+        does the actual work of warping the enterprise
+
+        Args:
+            deltaTime:
+        """
+        effectComplete: bool = self._warpEffectSection.isEffectComplete()
+        if effectComplete is True:
+            print('Warp effect is done')
+            unschedule(self._checkEffectComplete)
+            self._warpEffectSection.enabled = False
+            self._warpTravelCallback(self._destinationCoordinates)      # type: ignore
+
+    def _validateCoordinates(self, coordinate: Coordinates, minX: int, maxX: int, minY: int, maxY: int):
+        """
+
+        Args:
+            coordinate:  The coordinate
+            minX:
+            maxX:
+            minY:
+            maxY:
+
+        Returns:  True if coordinate is value;  Else raises exception
+
+        """
+        valid: bool = True
+
+        intXCoordinate: int = coordinate.x
+        intYCoordinate: int = coordinate.y
+        if intXCoordinate < minX or intXCoordinate > maxX:
+            raise InvalidCommandValueException(message=f'Invalid X coordinate must be in range {minX},{maxX}')
+
+        if intYCoordinate < minY or intYCoordinate > maxY:
+            raise InvalidCommandValueException(message=f'Invalid Y coordinate must be in range {minY},{maxY}')
+
+        return valid
 
     def __updateQuadrant(self, quadrant: Quadrant, currentCoordinates: Coordinates, targetCoordinates: Coordinates) -> Quadrant:
         """

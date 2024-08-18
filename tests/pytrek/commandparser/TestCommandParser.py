@@ -1,7 +1,6 @@
 
 from typing import List
 from typing import NewType
-from typing import cast
 
 from logging import Logger
 from logging import getLogger
@@ -10,8 +9,6 @@ from unittest import TestSuite
 from unittest import main as unitTestMain
 
 from codeallybasic.UnitTestBase import UnitTestBase
-
-from arcade import key as arcadeKey
 
 from pytrek.commandparser.CommandParser import CommandParser
 from pytrek.commandparser.CommandType import CommandType
@@ -45,126 +42,71 @@ class TestCommandParser(UnitTestBase):
         super().tearDown()
 
     def testRestCommand(self):
-        pressedKeys: KeyStrokes = KeyStrokes([
-            arcadeKey.R, arcadeKey.E, arcadeKey.S, arcadeKey.T, arcadeKey.SPACE, arcadeKey.NUM_6, arcadeKey.RETURN
-        ])
 
-        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=pressedKeys)
+        parseCommand: ParsedCommand = self._processCommand('rest 6')
 
         self.assertEqual(CommandType.Rest, parseCommand.commandType, 'Invalid command')
         self.assertEqual(6, parseCommand.restInterval, 'Invalid interval')
 
     def testChartCommand(self):
 
-        pressedKeys: KeyStrokes = KeyStrokes([
-            arcadeKey.C, arcadeKey.H, arcadeKey.A, arcadeKey.R, arcadeKey.T, arcadeKey.RETURN,
-        ])
-
-        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=pressedKeys)
+        parseCommand: ParsedCommand = self._processCommand('chart')
 
         self.assertEqual(CommandType.Chart, parseCommand.commandType, 'Invalid chart command')
 
     def testLongRangeScanCommand(self):
-        pressedKeys: KeyStrokes = KeyStrokes([
-            arcadeKey.L, arcadeKey.RETURN,
-        ])
-
-        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=pressedKeys)
+        parseCommand: ParsedCommand = self._processCommand('L')
 
         self.assertEqual(CommandType.LongRangeScan, parseCommand.commandType, 'Invalid long range scan command')
 
     def testDamagesCommand(self):
-        pressedKeys: KeyStrokes = KeyStrokes([
-            arcadeKey.D, arcadeKey.A, arcadeKey.RETURN,
-        ])
-
-        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=pressedKeys)
+        parseCommand: ParsedCommand = self._processCommand('da')
 
         self.assertEqual(CommandType.Damages, parseCommand.commandType, 'Invalid damages command')
 
     def testPhasersCommand(self):
-        keyStrokes: KeyStrokes = KeyStrokes([
-            arcadeKey.P, arcadeKey.H, arcadeKey.A, arcadeKey.S, arcadeKey.E, arcadeKey.R, arcadeKey.S, arcadeKey.SPACE,
-            arcadeKey.NUM_2, arcadeKey.NUM_5, arcadeKey.NUM_0,
-            arcadeKey.RETURN
-        ])
-
-        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
+        parseCommand: ParsedCommand = self._processCommand('phasers 250')
 
         self.assertEqual(CommandType.Phasers, parseCommand.commandType, 'Invalid command')
         self.assertEqual(250, parseCommand.phaserAmountToFire, 'Invalid phaser power')
 
     def testPhotonsCommand(self):
 
-        keyStrokes: KeyStrokes = KeyStrokes([
-            arcadeKey.P, arcadeKey.H, arcadeKey.O, arcadeKey.T, arcadeKey.O, arcadeKey.N, arcadeKey.S, arcadeKey.SPACE,
-            arcadeKey.NUM_3,
-            arcadeKey.RETURN,
-        ])
-
-        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
+        parseCommand: ParsedCommand = self._processCommand('photons 3')
 
         self.assertEqual(CommandType.Photons, parseCommand.commandType, 'Invalid photon command')
         self.assertEqual(3, parseCommand.numberOfPhotonTorpedoesToFire, 'Invalid photon count')
 
     def testWarpCommand(self):
-
-        keyStrokes: KeyStrokes = KeyStrokes([
-            arcadeKey.W, arcadeKey.A, arcadeKey.R, arcadeKey.P, arcadeKey.SPACE,
-            arcadeKey.NUM_3,
-            arcadeKey.RETURN,
-        ])
-
-        parseCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
+        parseCommand: ParsedCommand = self._processCommand('warp 3')
 
         self.assertEqual(CommandType.Warp, parseCommand.commandType, 'Should be a warp command')
         self.assertEqual(3, parseCommand.warpFactor, 'Did not get a value')
 
     def testInvalidCommand(self):
-        pressedKeys: KeyStrokes = KeyStrokes([
-            arcadeKey.B, arcadeKey.A, arcadeKey.D, arcadeKey.C, arcadeKey.O, arcadeKey.M, arcadeKey.M, arcadeKey.A, arcadeKey.N, arcadeKey.D,
-            arcadeKey.SPACE, arcadeKey.RETURN
-        ])
-
-        self.assertRaises(InvalidCommandException, lambda: self._simulateKeyStrokes(keyStrokes=pressedKeys))
+        self.assertRaises(InvalidCommandException, lambda: self._processCommand('BadCommand'))
 
     def testInvalidCommandValue(self):
-
-        pressedKeys: KeyStrokes = KeyStrokes([
-            arcadeKey.R, arcadeKey.E, arcadeKey.S, arcadeKey.T, arcadeKey.SPACE, arcadeKey.Q, arcadeKey.RETURN
-        ])
-
-        self.assertRaises(InvalidCommandValueException, lambda: self._simulateKeyStrokes(keyStrokes=pressedKeys))
+        self.assertRaises(InvalidCommandValueException, lambda: self._processCommand('rest q'))
 
     def testMoveManualPositiveDisplacement(self):
-
-        # move manual 5 5
-        keyStrokes: KeyStrokes = KeyStrokes([
-            arcadeKey.M, arcadeKey.O, arcadeKey.V, arcadeKey.E, arcadeKey.SPACE,
-            arcadeKey.M, arcadeKey.A, arcadeKey.N, arcadeKey.U, arcadeKey.A, arcadeKey.L, arcadeKey.SPACE,
-            arcadeKey.NUM_5, arcadeKey.SPACE, arcadeKey.NUM_5, arcadeKey.SPACE,
-            arcadeKey.RETURN
-        ])
-
-        parsedCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
+        parsedCommand: ParsedCommand = self._processCommand('MovE manual 5 5')
 
         self.assertEqual(CommandType.Move, parsedCommand.commandType, 'Should be a `move` command')
 
         expectedMoveData: ManualMoveData = ManualMoveData(deltaX=5, deltaY=5)
 
         self.assertEqual(expectedMoveData, parsedCommand.manualMoveData, '')
+        self.assertTrue(parsedCommand.manualMove, 'Should be a manual move')
+
+    def testSimplestManualMove(self):
+        parsedCommand: ParsedCommand = self._processCommand('m m .1')
+
+        self.assertEqual(CommandType.Move, parsedCommand.commandType, 'Should be a `move` command')
+        self.assertTrue(parsedCommand.manualMove, 'Should be a manual move')
 
     def testMoveAutomaticInQuadrant(self):
-
-        # move auto 4 4
-        keyStrokes: KeyStrokes = KeyStrokes([
-            arcadeKey.M, arcadeKey.O, arcadeKey.V, arcadeKey.E, arcadeKey.SPACE,
-            arcadeKey.A, arcadeKey.U, arcadeKey.T, arcadeKey.O, arcadeKey.SPACE,
-            arcadeKey.NUM_4, arcadeKey.SPACE, arcadeKey.NUM_4,
-            arcadeKey.RETURN
-        ])
-
-        parsedCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
+        parsedCommand: ParsedCommand = self._processCommand('move auto 4 4')
 
         expectedSectorCoordinates: Coordinates = Coordinates(x=4, y=4)
 
@@ -172,15 +114,7 @@ class TestCommandParser(UnitTestBase):
 
     def testMoveAutomaticToQuadrant(self):
 
-        # move automatic 3 7 5 8
-        keyStrokes: KeyStrokes = KeyStrokes([
-            arcadeKey.M, arcadeKey.O, arcadeKey.V, arcadeKey.E, arcadeKey.SPACE,
-            arcadeKey.A, arcadeKey.U, arcadeKey.T, arcadeKey.O, arcadeKey.M, arcadeKey.A, arcadeKey.T, arcadeKey.I, arcadeKey.C, arcadeKey.SPACE,
-            arcadeKey.NUM_3, arcadeKey.SPACE, arcadeKey.NUM_7, arcadeKey.SPACE, arcadeKey.NUM_5, arcadeKey.SPACE, arcadeKey.NUM_8,
-            arcadeKey.RETURN
-        ])
-
-        parsedCommand: ParsedCommand = self._simulateKeyStrokes(keyStrokes=keyStrokes)
+        parsedCommand: ParsedCommand = self._processCommand('move automatic 3 7 5 8')
 
         expectedQuadrantCoordinates: Coordinates = Coordinates(x=3, y=7)
         expectedSectorCoordinates:   Coordinates = Coordinates(x=5, y=8)
@@ -188,17 +122,10 @@ class TestCommandParser(UnitTestBase):
         self.assertEqual(expectedQuadrantCoordinates, parsedCommand.automaticMoveData.quadrantCoordinates, 'Invalid Quadrant')
         self.assertEqual(expectedSectorCoordinates,   parsedCommand.automaticMoveData.sectorCoordinates, 'Invalid Sector')
 
-    def _simulateKeyStrokes(self, keyStrokes: KeyStrokes) -> ParsedCommand:
+    def _processCommand(self, commandStr: str) -> ParsedCommand:
 
-        extractor: CommandParser = CommandParser()
-
-        parsedCommand: ParsedCommand = cast(ParsedCommand, None)
-        for key in keyStrokes:
-            parsedCommand = extractor.processKeyPress(key)
-            if parsedCommand.commandType != CommandType.NoCommand:
-                break
-
-        return parsedCommand
+        commandParser: CommandParser = CommandParser()
+        return commandParser.parseCommand(commandStr)
 
 
 def suite() -> TestSuite:

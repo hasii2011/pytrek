@@ -1,11 +1,7 @@
 
-from typing import List
-from typing import NewType
-
 from arcade import Sprite
-from arcade import Texture
 
-TextureList = NewType('TextureList', List[Texture])
+from pytrek.gui.UITypes import TextureList
 
 
 class BaseAnimator(Sprite):

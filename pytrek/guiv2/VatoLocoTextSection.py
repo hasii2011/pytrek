@@ -81,6 +81,8 @@ PressedKeyToCharacter: Dict[int, str] = {
     arcadeKey.KEY_7: '7',
     arcadeKey.KEY_8: '8',
     arcadeKey.KEY_9: '9',
+    arcadeKey.PERIOD: '.',
+    arcadeKey.MINUS:  '-',
     arcadeKey.SPACE:  ' ',
     arcadeKey.ENTER:  '',
     arcadeKey.RETURN: '',

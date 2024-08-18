@@ -62,7 +62,7 @@ class QuadrantSection(BaseSection):
         self._computer:     Computer     = Computer()
         self._galaxy:       Galaxy       = Galaxy()           # This essentially finishes initializing most of the game
 
-        self._enterpriseMediator: EnterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)
+        self._enterpriseMediator: EnterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)  # type: ignore
         self._quadrantMediator:   QuadrantMediator   = QuadrantMediator()
 
         self._messageConsoleProxy: MessageConsoleProxy = MessageConsoleProxy()
