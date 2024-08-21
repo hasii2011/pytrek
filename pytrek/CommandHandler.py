@@ -1,26 +1,27 @@
 
+from typing import TYPE_CHECKING
+
 from logging import Logger
 from logging import getLogger
-from typing import TYPE_CHECKING
-from typing import cast
 
-from pytrek.GameState import GameState
 from pytrek.commandparser.CommandParser import CommandParser
 from pytrek.commandparser.ManualMoveData import ManualMoveData
 from pytrek.commandparser.ParsedCommand import ParsedCommand
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
 
-from pytrek.engine.GameEngine import GameEngine
-from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
-
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
+
+from pytrek.engine.GameEngine import GameEngine
+
 from pytrek.model.Coordinates import Coordinates
 
 from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
+
+from pytrek.GameState import GameState
 
 if TYPE_CHECKING:
     from pytrek.guiv2.PyTrekV2 import PyTrekV2
@@ -69,8 +70,8 @@ class CommandHandler:
             case CommandType.LongRangeScan:
                 self._view.longRangeSensorScanSection.enabled = True
                 self._gameEngine.resetOperationTime()
-            # case CommandType.Damages:
-            #     pass            # nothing else to do
+            case CommandType.Damages:
+                self._view.deviceStatusSection.enabled = True
             case _:
                 self.logger.error(f'Invalid command: {commandStr}')
                 raise InvalidCommandException(message=f'Invalid command: {commandStr}')
@@ -83,7 +84,7 @@ class CommandHandler:
         else:
             pass
 
-    def _enterpriseHasWarped(self,destinationCoordinates: Coordinates):
+    def _enterpriseHasWarped(self, destinationCoordinates: Coordinates):
 
         quadrant: Quadrant = self._galaxy.currentQuadrant
 

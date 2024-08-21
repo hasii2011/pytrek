@@ -20,8 +20,7 @@ class DeviceType(Enum):
     ShieldControl     = 'Shield Control'
     DeathRay          = 'Death Ray'
     SpaceProbe        = 'Space Probe'
-    CAD               = 'Collision Avoidance Device'
+    CAD               = 'Collision Avoidance'
 
     def __str__(self):
         return self.value
-

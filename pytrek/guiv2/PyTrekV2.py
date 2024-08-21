@@ -28,6 +28,7 @@ from pytrek.commandparser.InvalidCommandException import InvalidCommandException
 from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
 
 from pytrek.gui.ConsoleMessageType import ConsoleMessageType
+from pytrek.guiv2.DeviceStatusSection import DeviceStatusSection
 
 from pytrek.guiv2.GalaxySection import GalaxySection
 from pytrek.guiv2.LongRangeSensorScanSection import LongRangeSensorScanSection
@@ -95,7 +96,8 @@ class PyTrekV2(View):
         viewWindow: Window = self.window
         viewWidth:  int = viewWindow.width
         viewHeight: int = viewWindow.height
-        self.warpEffectSection: WarpEffectSection = WarpEffectSection(width=viewWidth, height=viewHeight)
+        self.warpEffectSection:    WarpEffectSection   = WarpEffectSection(width=viewWidth, height=viewHeight)
+        self.deviceStatusSection: DeviceStatusSection = DeviceStatusSection(enabled=False)
 
         # add the sections
         self.section_manager.add_section(self._quadrantSection)
@@ -105,6 +107,7 @@ class PyTrekV2(View):
         self.section_manager.add_section(self.longRangeSensorScanSection)
         self.section_manager.add_section(self.warpEffectSection)
         self.section_manager.add_section(self._commandInputSection)
+        self.section_manager.add_section(self.deviceStatusSection)
 
         #
         # TODO: fix this later

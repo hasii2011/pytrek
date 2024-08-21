@@ -1,46 +1,24 @@
 
 from arcade import View
 from arcade import Window
-from arcade import draw_text
-from arcade import schedule
-from arcade import unschedule
 
 from arcade.color import BLACK
 
-
 from arcade import run as arcadeRun
-from arcade.color import WHITE
 
-from pytrek.Constants import FIXED_WIDTH_FONT_NAME
+from arcade import schedule
+from arcade import unschedule
+
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
-from pytrek.guiv2.BaseSection import BaseSection
 
 from pytrek.guiv2.WarpEffectSection import WarpEffectSection
+
+from tests.AppTestWarpDialogSection import DrawTextSection
 
 from tests.ProjectTestBase import ProjectTestBase
 
 SCREEN_TITLE: str = 'Test Warp Effect Section'
-
-
-class DrawTextSection(BaseSection):
-    def __init__(self, **kwargs):
-
-        window = self.window
-
-        w: int = window.width  // 4
-        h: int = window.height // 10
-
-        super().__init__(left=30, bottom=530, width=w, height=h, **kwargs)
-
-    def on_draw(self):
-        """
-        Remember arcade's 0,0 origin is lower left corner
-        """
-        x: int = self.left + 5
-        y: int = self.bottom + 10
-        super().on_draw()
-        draw_text('Drawn Text', x, y, color=WHITE, font_size=18, font_name=FIXED_WIDTH_FONT_NAME)
 
 
 class TestView(View):
@@ -61,14 +39,6 @@ class TestView(View):
         schedule(function_pointer=self.checkEffectComplete, interval=1.0)  # type:ignore
 
         self._warpEffectSection.enabled = True
-
-    def checkEffectComplete(self, deltaTime: float):
-
-        effectComplete: bool = self._warpEffectSection.isEffectComplete()
-        if effectComplete is True:
-            print('Warp effect is done')
-            unschedule(self.checkEffectComplete)
-            self._warpEffectSection.enabled = False
 
     def on_draw(self):
         pass
