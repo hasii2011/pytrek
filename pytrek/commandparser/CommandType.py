@@ -33,6 +33,7 @@ class CommandType(Enum):
     Shuttle   = 'Shuttle'
     Status    = 'Status'
     Warp      = 'Warp'
+    Help      = 'Help'
     Transport      = 'Transport'
     ShortScan      = 'ShortRangeScan'
     LongRangeScan  = 'LongRangeScan'

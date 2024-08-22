@@ -4,7 +4,7 @@ setuptools==70.1.1
 
 py2app==0.28.8
 html-testRunner~=1.2.1
-mypy==1.11.0
+mypy==1.11.1
 
 buildlackey==1.6.3
 codeallybasic==1.4.0

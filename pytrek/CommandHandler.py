@@ -9,6 +9,7 @@ from pytrek.commandparser.ManualMoveData import ManualMoveData
 from pytrek.commandparser.ParsedCommand import ParsedCommand
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
+from pytrek.gui.HelpView import HelpView
 
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
@@ -72,6 +73,8 @@ class CommandHandler:
                 self._gameEngine.resetOperationTime()
             case CommandType.Damages:
                 self._view.deviceStatusSection.enabled = True
+            case CommandType.Help:
+                self._displayHelp()
             case _:
                 self.logger.error(f'Invalid command: {commandStr}')
                 raise InvalidCommandException(message=f'Invalid command: {commandStr}')
@@ -96,3 +99,15 @@ class CommandHandler:
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._gameState.enterprise)
 
         self._view.messageConsoleSection.displayMessage(f"Warped to: {destinationCoordinates} at warp: {self._gameState.warpFactor}")
+
+    def _displayHelp(self):
+        """
+        We are not using a section for help.  Because in arcade 2.6.17 sections and the GUI
+        widgets are incompatible.   3.0.0
+        """
+
+        helpView: HelpView = HelpView(completeCallback=self._switchViewBack)
+        self._view.window.show_view(helpView)
+
+    def _switchViewBack(self):
+        self._view.window.show_view(self._view)

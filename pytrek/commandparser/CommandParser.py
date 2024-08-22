@@ -31,6 +31,7 @@ MOVE_CMD:    CommandPattern = CommandPattern('^m |^move ')
 LRSCAN_CMD:  CommandPattern = CommandPattern('^l|^lrscan')
 DAMAGES_CMD: CommandPattern = CommandPattern('^da|^damages')
 CHART_CMD:   CommandPattern = CommandPattern('^c|^chart')
+HELP_CMD:    CommandPattern = CommandPattern('^help')
 
 # These are 'move' subcommands
 MOVE_MANUAL_MODE_PATTERN:    str = '^m|^manual'
@@ -46,6 +47,7 @@ PatternToCommandType: Dict[CommandPattern, CommandType] = {
     LRSCAN_CMD:  CommandType.LongRangeScan,
     DAMAGES_CMD: CommandType.Damages,
     CHART_CMD:   CommandType.Chart,
+    HELP_CMD:    CommandType.Help,
 }
 
 
@@ -89,6 +91,8 @@ class CommandParser:
             case CommandType.LongRangeScan:
                 pass            # nothing else to do
             case CommandType.Damages:
+                pass            # nothing else to do
+            case CommandType.Help:
                 pass            # nothing else to do
             case _:
                 self.logger.error(f'Invalid command: {self._commandStr}')
