@@ -1,5 +1,4 @@
 
-from typing import Union
 from typing import cast
 
 from logging import Logger
@@ -7,13 +6,9 @@ from logging import getLogger
 
 from codeallybasic.SingletonV3 import SingletonV3
 
-from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
 from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
 from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
-
-
-Console = Union[AbstractMessageConsole, MessageConsoleSection]
 
 
 class MessageConsoleProxy(metaclass=SingletonV3):
@@ -23,15 +18,11 @@ class MessageConsoleProxy(metaclass=SingletonV3):
     the major game areas to sections as a way to isolate code.  This proxy
     is a singleton and early in game start up needs to be initialized
     with the actual MessageConsole section.
-
-    Additionally, I want the old code that is still using
-    A better way to do this would be for the various components to send
-    a message.  The current version of arcade
     """
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._console: Console = cast(Console, None)
+        self._console: MessageConsoleSection = cast(MessageConsoleSection, None)
 
     @property
     def initialized(self) -> bool:
@@ -39,7 +30,7 @@ class MessageConsoleProxy(metaclass=SingletonV3):
             return False
         return True
 
-    def _consoleDisplay(self, console: Console):
+    def _consoleDisplay(self, console: MessageConsoleSection):
         self._console = console
 
     # noinspection PyTypeChecker

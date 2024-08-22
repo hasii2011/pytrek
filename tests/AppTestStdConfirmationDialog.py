@@ -1,16 +1,20 @@
+
 from logging import Logger
 from logging import getLogger
 
 from arcade import View
 from arcade import Window
-from arcade import color
-
-from arcade import run as arcadeRun
-from arcade import key as arcadeKey
 
 from arcade import set_background_color
 from arcade import start_render
+from arcade.color import BLACK
+from arcade.color import WHITE
+
 from arcade.gui import UIManager
+
+from arcade import run as arcadeRun
+from arcade import key as arcadeKey
+from arcade import exit as arcadeExit
 
 from pytrek.LocateResources import LocateResources
 
@@ -25,7 +29,7 @@ class AppTestStdConfirmationDialog(View):
     """
     Use this as a template when setting up application test programs
     """
-    ETX_COLOR = color.WHITE
+    ETX_COLOR = WHITE
 
     def __init__(self):
 
@@ -33,7 +37,7 @@ class AppTestStdConfirmationDialog(View):
 
         self.logger: Logger = getLogger(__name__)
 
-        set_background_color(color.BLACK)
+        set_background_color(BLACK)
         self._uiManager: UIManager = UIManager()
         self._uiManager.enable()
 
@@ -46,10 +50,7 @@ class AppTestStdConfirmationDialog(View):
         Called whenever the user releases a previously pressed key.
         """
         if releasedKey == arcadeKey.Q:
-            import os
-            # noinspection PyUnresolvedReferences
-            # noinspection PyProtectedMember
-            os._exit(0)
+            arcadeExit()
         elif releasedKey == arcadeKey.C:
             StdConfirmationDialog.displayMessageBox(uiManager=self._uiManager, msg='Save current game progress?', callback=self._confirmationCallback)
 
