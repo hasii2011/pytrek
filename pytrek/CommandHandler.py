@@ -9,6 +9,7 @@ from pytrek.commandparser.ManualMoveData import ManualMoveData
 from pytrek.commandparser.ParsedCommand import ParsedCommand
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
+
 from pytrek.gui.HelpView import HelpView
 
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
@@ -75,6 +76,11 @@ class CommandHandler:
                 self._view.deviceStatusSection.enabled = True
             case CommandType.Help:
                 self._displayHelp()
+            case CommandType.Dock:
+                self._quadrantMediator.dock(quadrant)
+                self._gameEngine.resetOperationTime()
+            case CommandType.Save:
+                self._saveGame()
             case _:
                 self.logger.error(f'Invalid command: {commandStr}')
                 raise InvalidCommandException(message=f'Invalid command: {commandStr}')
@@ -108,6 +114,10 @@ class CommandHandler:
 
         helpView: HelpView = HelpView(completeCallback=self._switchViewBack)
         self._view.window.show_view(helpView)
+
+    def _saveGame(self):
+        self._gameState.saveState()
+        self._view.messageConsoleSection.displayMessage('Game saved !!')
 
     def _switchViewBack(self):
         self._view.window.show_view(self._view)

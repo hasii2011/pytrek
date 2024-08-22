@@ -14,7 +14,7 @@ class CommandType(Enum):
     DeathRay  = 'DeathRay'
     Destruct  = 'Destruct'
     Dock      = 'Dock'
-    Freeze    = 'Freeze'
+    Freeze    = 'Freeze'        # Changed to save and load
     Impulse   = 'Impulse'
     Mine      = 'Mine'
     Move      = 'Move'
@@ -34,6 +34,8 @@ class CommandType(Enum):
     Status    = 'Status'
     Warp      = 'Warp'
     Help      = 'Help'
+    Save      = 'Save'
+    Load      = 'Load'
     Transport      = 'Transport'
     ShortScan      = 'ShortRangeScan'
     LongRangeScan  = 'LongRangeScan'
