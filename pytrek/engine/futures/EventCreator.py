@@ -1,3 +1,4 @@
+
 from logging import Logger
 from logging import getLogger
 
@@ -11,6 +12,7 @@ from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
 from pytrek.engine.futures.FutureEventType import FutureEventType
 
 from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
@@ -18,7 +20,7 @@ from pytrek.model.Galaxy import Galaxy
 
 class EventCreator:
 
-    def __init__(self, messageConsole: AbstractMessageConsole):
+    def __init__(self, messageConsole: MessageConsoleProxy):
 
         self.logger: Logger = getLogger(__name__)
 
@@ -26,8 +28,8 @@ class EventCreator:
         self._gameState:    GameState    = GameState()
         self._galaxy:       Galaxy       = Galaxy()
 
-        self._messageConsole:      AbstractMessageConsole = messageConsole
-        self._futureEventHandlers: FutureEventHandlers    = FutureEventHandlers(self._messageConsole)
+        self._messageConsole:      MessageConsoleProxy = messageConsole
+        self._futureEventHandlers: FutureEventHandlers = FutureEventHandlers(self._messageConsole)
 
     def createSuperNovaEvent(self) -> FutureEvent:
         # noinspection SpellCheckingInspection

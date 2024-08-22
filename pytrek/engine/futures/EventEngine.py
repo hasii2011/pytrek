@@ -22,8 +22,10 @@ from pytrek.engine.futures.FutureEventType import FutureEventType
 
 from pytrek.GameState import GameState
 
-from pytrek.gui.MessageConsole import MessageConsole
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+
 from pytrek.model.Coordinates import Coordinates
+
 from pytrek.settings.GameSettings import GameSettings
 
 EventMap = NewType('EventMap', Dict[FutureEventType, FutureEvent])
@@ -60,8 +62,8 @@ class EventEngine(metaclass=SingletonV3):
         self._eventMap:     EventMap = cast(EventMap, None)
         self._setupEventMap()
 
-        self._messageConsole: MessageConsole = args[0]
-        self._eventCreator: EventCreator = EventCreator(self._messageConsole)
+        self._messageConsole: MessageConsoleProxy = args[0]
+        self._eventCreator:   EventCreator = EventCreator(self._messageConsole)
 
         self.logger.debug(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
 

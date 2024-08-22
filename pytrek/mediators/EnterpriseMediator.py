@@ -29,7 +29,6 @@ from pytrek.engine.DirectionData import DirectionData
 from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.gui.UITypes import WarpTravelCallbackV2
-from pytrek.gui.WarpEffect import WarpEffect
 
 from pytrek.guiv2.WarpEffectSection import WarpEffectSection
 
@@ -64,7 +63,6 @@ class EnterpriseMediator(MissesMediator):
         self.logger:                  Logger       = getLogger(__name__)
         self._soundMachine:           SoundMachine = SoundMachine()
         self._warpSpeed:              float        = 0.0
-        self._warpEffect:             WarpEffect   = cast(WarpEffect, None)
         self._destinationCoordinates: Coordinates  = cast(Coordinates, None)
 
         # This should be injected, until we get rid of the V1 UI
@@ -177,20 +175,20 @@ class EnterpriseMediator(MissesMediator):
 
         schedule(function_pointer=self._checkEffectComplete, interval=1.0)  # type: ignore
 
-    def doWarpWhenEffectComplete(self, deltaTime: float):
-
-        effectComplete: bool = self._warpEffect.isEffectComplete()
-
-        self.logger.info(f'Is warp effect complete {deltaTime} {effectComplete=}')
-
-        if effectComplete is True:
-            unschedule(self.doWarpWhenEffectComplete)
-            self._view.window.show_view(self._view)
-            #
-            # Callback to someone (presumably top level view) to let them know
-            # it is time to warp;
-            #
-            self._warpTravelCallback(self._warpSpeed, self._destinationCoordinates)     # type: ignore
+    # def doWarpWhenEffectComplete(self, deltaTime: float):
+    #
+    #     effectComplete: bool = self._warpEffect.isEffectComplete()
+    #
+    #     self.logger.info(f'Is warp effect complete {deltaTime} {effectComplete=}')
+    #
+    #     if effectComplete is True:
+    #         # unschedule(self.doWarpWhenEffectComplete)
+    #         self._view.window.show_view(self._view)
+    #         #
+    #         # Callback to someone (presumably top level view) to let them know
+    #         # it is time to warp;
+    #         #
+    #         self._warpTravelCallback(self._warpSpeed, self._destinationCoordinates)     # type: ignore
 
     def _doImpulseMove(self, quadrant: Quadrant, enterpriseCoordinates: Coordinates, targetCoordinates: Coordinates):
         """

@@ -44,31 +44,31 @@ class TestComputer(ProjectTestBase):
         super().setUp()
         self.smarty: Computer = Computer()
 
-    def testKnownCoordinates_2_0(self):
+    def testKnownCoordinates_2_1(self):
 
         actualCoordinates:   Coordinates = self.smarty.computeSectorCoordinates(x=163, y=775)
-        expectedCoordinates: Coordinates = Coordinates(x=2, y=0)
+        expectedCoordinates: Coordinates = Coordinates(x=2, y=1)
 
         self.assertEqual(expectedCoordinates, actualCoordinates, 'Computer is broken')
 
-    def testKnownCoordinates_4_8(self):
+    def testKnownCoordinates_4_9(self):
 
         actualCoordinates:   Coordinates = self.smarty.computeSectorCoordinates(x=293, y=272)
-        expectedCoordinates: Coordinates = Coordinates(x=4, y=8)
+        expectedCoordinates: Coordinates = Coordinates(x=4, y=9)
 
         self.assertEqual(expectedCoordinates, actualCoordinates, 'Computer is broken')
 
-    def testKnownCoordinates_8_8(self):
+    def testKnownCoordinates_8_9(self):
 
         actualCoordinates:   Coordinates = self.smarty.computeSectorCoordinates(x=553, y=272)
-        expectedCoordinates: Coordinates = Coordinates(x=8, y=8)
+        expectedCoordinates: Coordinates = Coordinates(x=8, y=9)
 
         self.assertEqual(expectedCoordinates, actualCoordinates, 'Computer is broken')
 
-    def testKnownCoordinates_8_2(self):
+    def testKnownCoordinates_8_3(self):
 
         actualCoordinates:   Coordinates = self.smarty.computeSectorCoordinates(x=553, y=650)
-        expectedCoordinates: Coordinates = Coordinates(x=8, y=2)
+        expectedCoordinates: Coordinates = Coordinates(x=8, y=3)
 
         self.assertEqual(expectedCoordinates, actualCoordinates, 'Computer is broken')
 

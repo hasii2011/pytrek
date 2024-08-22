@@ -7,14 +7,12 @@ from arcade.color import BLACK
 from arcade import run as arcadeRun
 
 from arcade import schedule
-from arcade import unschedule
 
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 
 from pytrek.guiv2.WarpEffectSection import WarpEffectSection
-
-from tests.AppTestWarpDialogSection import DrawTextSection
+from tests.DrawTextSection import DrawTextSection
 
 from tests.ProjectTestBase import ProjectTestBase
 

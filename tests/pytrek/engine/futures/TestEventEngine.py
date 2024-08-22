@@ -16,6 +16,7 @@ from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
 
 from pytrek.model.Galaxy import Galaxy
 
@@ -24,7 +25,7 @@ from pytrek.settings.GameSettings import GameSettings
 from pytrek.GameState import GameState
 
 from tests.ProjectTestBase import ProjectTestBase
-from pytrek.gui.LogMessageConsole import LogMessageConsole
+
 
 BASIC_DAMAGE = 4.0
 
@@ -35,13 +36,13 @@ class TestEventEngine(ProjectTestBase):
     clsGameSettings:      GameSettings      = cast(GameSettings, None)
     clsGameState:         GameState         = cast(GameState, None)
     clsGameEngine:        GameEngine        = cast(GameEngine, None)
-    clsLogMessageConsole: LogMessageConsole = cast(LogMessageConsole, None)
     clsEventEngine:       EventEngine       = cast(EventEngine, None)
     clsDevices:           Devices           = cast(Devices, None)
     clsIntelligence:      Intelligence      = cast(Intelligence, None)
     clsGalaxy:            Galaxy            = cast(Galaxy, None)
 
-    clsMessageConsoleProxy:  MessageConsoleProxy = cast(MessageConsoleProxy, None)
+    clsMessageConsoleProxy:   MessageConsoleProxy   = cast(MessageConsoleProxy, None)
+    clsMessageConsoleSection: MessageConsoleSection = cast(MessageConsoleSection, None)
 
     @classmethod
     def setUpClass(cls):
@@ -53,7 +54,6 @@ class TestEventEngine(ProjectTestBase):
         #
         # The game engine initializes the game state object (for better or worse)
         #
-        self._logMessageConsole: LogMessageConsole = TestEventEngine.clsLogMessageConsole
         self._gameSettings:      GameSettings      = TestEventEngine.clsGameSettings
         self._intelligence:      Intelligence      = TestEventEngine.clsIntelligence
         self._gameEngine:        GameEngine        = TestEventEngine.clsGameEngine
@@ -61,6 +61,9 @@ class TestEventEngine(ProjectTestBase):
         self._eventEngine:       EventEngine       = TestEventEngine.clsEventEngine
         self._devices:           Devices           = TestEventEngine.clsDevices
         self._galaxy:            Galaxy            = TestEventEngine.clsGalaxy
+
+        self._messageConsoleProxy:   MessageConsoleProxy   = TestEventEngine.clsMessageConsoleProxy
+        self._messageConsoleSection: MessageConsoleSection = TestEventEngine.clsMessageConsoleSection
 
     def testEventUnSchedulable(self):
 
@@ -169,7 +172,6 @@ class TestEventEngine(ProjectTestBase):
         """
         ProjectTestBase.resetSingletons()
 
-        TestEventEngine.clsLogMessageConsole = LogMessageConsole()
         TestEventEngine.clsGameSettings      = GameSettings()     # Be able to read the preferences file
         TestEventEngine.clsIntelligence      = Intelligence()
 
@@ -181,8 +183,10 @@ class TestEventEngine(ProjectTestBase):
         TestEventEngine.clsDevices           = Devices()
         TestEventEngine.clsGalaxy            = Galaxy()
 
-        TestEventEngine.clsMessageConsoleProxy = MessageConsoleProxy()
-        TestEventEngine.clsMessageConsoleProxy.console = TestEventEngine.clsLogMessageConsole
+        TestEventEngine.clsMessageConsoleSection = MessageConsoleSection(left=0, bottom=0, width=100, height=100)
+        TestEventEngine.clsMessageConsoleProxy   = MessageConsoleProxy()
+
+        TestEventEngine.clsMessageConsoleProxy.console = TestEventEngine.clsMessageConsoleSection
 
         TestEventEngine.clsEventEngine       = EventEngine(TestEventEngine.clsMessageConsoleProxy)
 

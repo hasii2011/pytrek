@@ -12,8 +12,7 @@ from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.Devices import Devices
 
 from pytrek.guiv2.DeviceStatusSection import DeviceStatusSection
-
-from tests.AppTestWarpDialogSection import DrawTextSection
+from tests.DrawTextSection import DrawTextSection
 
 from tests.ProjectTestBase import ProjectTestBase
 

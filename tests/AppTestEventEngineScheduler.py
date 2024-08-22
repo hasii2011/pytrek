@@ -13,6 +13,10 @@ from arcade import key as arcadeKey
 from arcade import exit as arcadeExit
 from arcade import start_render
 
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import SCREEN_HEIGHT
+from pytrek.Constants import SCREEN_WIDTH
 from pytrek.GameState import GameState
 
 from pytrek.engine.Computer import Computer
@@ -27,6 +31,8 @@ from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
 from pytrek.model.Galaxy import Galaxy
@@ -34,12 +40,8 @@ from pytrek.model.Quadrant import Quadrant
 
 from pytrek.settings.GameSettings import GameSettings
 
-from tests.SchedulerTestMessageConsole import SchedulerTestMessageConsole
 
 from tests.ProjectTestBase import ProjectTestBase
-
-SCREEN_WIDTH:  int = 960
-SCREEN_HEIGHT: int = 600
 
 SCREEN_TITLE: str = 'Test Event Scheduler'
 
@@ -67,7 +69,7 @@ EVENT_HEADER_FONT_SIZE: int = 12
 EVENT_DETAIL_COLOR:     tuple[int, int, int] = color.WHITE
 EVENT_DETAIL_FONT_SIZE: int = 10
 
-HELP_SEPARATOR_Y: int = 135
+HELP_SEPARATOR_Y: int = 300
 HELP_Y:           int = HELP_SEPARATOR_Y - 25
 GAME_STATE_Y:     int = HELP_SEPARATOR_Y + 50
 
@@ -87,8 +89,16 @@ class AppTestEventScheduler(View):
         self._galaxy:       Galaxy       = Galaxy()
         self._devices:      Devices      = Devices()
 
-        self._messageConsole:   SchedulerTestMessageConsole = SchedulerTestMessageConsole()
-        self._eventEngine:      EventEngine                 = EventEngine(self._messageConsole)
+        self._messageConsole:   MessageConsoleSection = MessageConsoleSection(left=0,
+                                                                              bottom=COMMAND_SECTION_HEIGHT,
+                                                                              height=CONSOLE_SECTION_HEIGHT,
+                                                                              width=SCREEN_WIDTH,
+                                                                              accept_keyboard_events=False
+                                                                              )
+        self._messageConsoleProxy: MessageConsoleProxy = MessageConsoleProxy()
+        self._messageConsoleProxy.console = self._messageConsole
+
+        self._eventEngine:      EventEngine                 = EventEngine(self._messageConsoleProxy)
         self._quadrantMediator: QuadrantMediator            = QuadrantMediator()
 
         self._quadrant: Quadrant = self._galaxy.currentQuadrant
@@ -98,6 +108,8 @@ class AppTestEventScheduler(View):
         enterprise: Enterprise = self._gameState.enterprise
 
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=enterprise)
+
+        self.section_manager.add_section(self._messageConsole)
 
         self._createInitialEvents()
 
@@ -112,7 +124,6 @@ class AppTestEventScheduler(View):
         self._drawEventStatus()
         self._drawGameState()
         self._drawHelpText()
-        self._messageConsole.draw()
 
     def _drawHeader(self):
         # Header
@@ -202,7 +213,7 @@ class AppTestEventScheduler(View):
 
     def _createInitialEvents(self):
 
-        eventCreator: EventCreator = EventCreator(self._messageConsole)
+        eventCreator: EventCreator = EventCreator(self._messageConsoleProxy)
         superNovaEvent:           FutureEvent = eventCreator.createSuperNovaEvent()
         commanderAttackBaseEvent: FutureEvent = eventCreator.createCommanderAttacksBaseEvent()
         tractorBeamEvent:         FutureEvent = eventCreator.createTractorBeamEvent()

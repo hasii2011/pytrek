@@ -5,7 +5,6 @@ from logging import getLogger
 from arcade import MOUSE_BUTTON_LEFT
 from arcade import Texture
 
-from arcade import draw_lrwh_rectangle_textured
 from arcade import load_texture
 from arcade import start_render
 
@@ -29,6 +28,7 @@ from pytrek.engine.futures.EventEngine import EventEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.guiv2.BaseSection import BaseSection
+from pytrek.guiv2.Common import drawQuadrantGrid
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
@@ -88,10 +88,7 @@ class QuadrantSection(BaseSection):
 
         start_render()
 
-        # Draw the background texture
-        draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_SECTION_HEIGHT + COMMAND_SECTION_HEIGHT,
-                                     width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
-
+        drawQuadrantGrid(background=self.background)
         self._quadrantMediator.draw(quadrant=self._quadrant)
         self.drawDebug()
 

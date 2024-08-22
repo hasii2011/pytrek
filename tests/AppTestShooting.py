@@ -16,8 +16,8 @@ from arcade import Texture
 from arcade import View
 from arcade import Window
 from arcade import color
+from arcade import draw_text
 
-from arcade import draw_lrwh_rectangle_textured
 from arcade import get_sprites_at_point
 from arcade import load_texture
 from arcade import set_background_color
@@ -25,6 +25,15 @@ from arcade import start_render
 
 from arcade import run as arcadeRun
 from arcade import key as arcadeKey
+from arcade import exit as arcadeExit
+
+from arcade.color import GRAY
+from arcade.color import WHITE
+
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import FIXED_WIDTH_FONT_NAME
+from pytrek.Constants import QUADRANT_GRID_WIDTH
+from pytrek.Constants import STATUS_VIEW_WIDTH
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
@@ -32,10 +41,8 @@ from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShipCondition import ShipCondition
 
-from pytrek.gui.MessageConsole import MessageConsole
-from pytrek.gui.StatusConsole import StatusConsole
-from pytrek.gui.gamepieces.GamePiece import GamePiece
 
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
@@ -43,10 +50,17 @@ from pytrek.gui.gamepieces.commander.Commander import Commander
 from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
+
+from pytrek.guiv2.Common import drawQuadrantGrid
+
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
+from pytrek.guiv2.QuadrantSection import QuadrantSection
+from pytrek.guiv2.StatusConsoleSection import StatusConsoleSection
+
 from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.EnterprisePhaserMediator import EnterprisePhaserMediator
-
 from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
 from pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedoMediator
@@ -66,7 +80,17 @@ from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.LocateResources import LocateResources
 
 from pytrek.GameState import GameState
+
 from tests.ProjectTestBase import ProjectTestBase
+
+HELP_TEXT1: str = 'Click on sprite to select enemy'
+HELP_TEXT2: str = 'Click on quadrant to place'
+# noinspection SpellCheckingInspection
+HELP_TEXT3: str = 'Q - Fire Torpedo (K)lingon, (C)Commander, (S)uper Commander'
+
+PALETTE_GAME_PIECE_Y: int = 150
+HELP_TEXT_X:          int = 16
+HELP_TEXT_Y:          int = PALETTE_GAME_PIECE_Y - 48
 
 SCREEN_TITLE:  str = "Test Shooting"
 
@@ -96,9 +120,11 @@ class AppTestShooting(View):
         self._galaxy:       Galaxy       = cast(Galaxy, None)
         self._quadrant:     Quadrant     = cast(Quadrant, None)
 
-        self._quadrantMediator: QuadrantMediator = cast(QuadrantMediator, None)
-        self._statusConsole:    StatusConsole    = cast(StatusConsole, None)
-        self._messageConsole:   MessageConsole   = cast(MessageConsole, None)
+        self._quadrantMediator:     QuadrantMediator       = cast(QuadrantMediator, None)
+        self._statusConsole:        StatusConsoleSection   = cast(StatusConsoleSection, None)
+        self._messageConsoleSection: MessageConsoleSection = cast(MessageConsoleSection, None)
+        self._messageConsoleProxy:  MessageConsoleProxy    = cast(MessageConsoleProxy, None)
+        self._quadrantSection:      QuadrantSection        = cast(QuadrantSection, None)
 
         self._gameState:    GameState    = cast(GameState, None)
         self._gameSettings: GameSettings = cast(GameSettings, None)
@@ -118,7 +144,6 @@ class AppTestShooting(View):
         """
         Set up the game here. Call this function to restart the game.
         """
-
         fqFileName: str = LocateResources.getImagePath(bareFileName='QuadrantBackground.png')
         self.background = load_texture(fqFileName)
 
@@ -128,8 +153,6 @@ class AppTestShooting(View):
         self._intelligence = Intelligence()
         self._computer     = Computer()
         self._galaxy       = Galaxy()
-
-        self._quadrantMediator   = QuadrantMediator()
 
         self._enterprise = self._gameState.enterprise
         self._quadrant   = self._galaxy.currentQuadrant
@@ -143,12 +166,35 @@ class AppTestShooting(View):
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
         self._gameState.currentSectorCoordinates   = currentSectorCoordinates
 
+        self._messageConsoleSection = MessageConsoleSection(left=0,
+                                                            bottom=COMMAND_SECTION_HEIGHT,
+                                                            height=CONSOLE_SECTION_HEIGHT,
+                                                            width=SCREEN_WIDTH,
+                                                            accept_keyboard_events=True
+                                                            )
+
+        self._messageConsoleProxy = MessageConsoleProxy()
+        self._messageConsoleProxy.console = self._messageConsoleSection
+
+        self._statusConsole = StatusConsoleSection(left=QUADRANT_GRID_WIDTH,
+                                                   bottom=SCREEN_HEIGHT - QUADRANT_GRID_HEIGHT,
+                                                   height=QUADRANT_GRID_HEIGHT + CONSOLE_SECTION_HEIGHT, width=STATUS_VIEW_WIDTH,
+                                                   accept_keyboard_events=True)
+
+        self._quadrantSection = QuadrantSection(left=0,
+                                                bottom=SCREEN_HEIGHT - QUADRANT_GRID_HEIGHT,
+                                                height=QUADRANT_GRID_HEIGHT, width=QUADRANT_GRID_WIDTH,
+                                                accept_keyboard_events=True)
+
+        self.section_manager.add_section(self._quadrantSection)
+        self.section_manager.add_section(self._statusConsole)
+        self.section_manager.add_section(self._messageConsoleSection)
+
+        self._quadrantMediator   = QuadrantMediator()
+
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
         self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._noOp)
-
-        self._statusConsole    = StatusConsole(gameView=self)
-        self._messageConsole   = MessageConsole()
 
         self._makeEnemySpriteLists()
 
@@ -160,14 +206,11 @@ class AppTestShooting(View):
         Render the screen.
         """
         start_render()
-        # Draw the background texture
-        draw_lrwh_rectangle_textured(bottom_left_x=1, bottom_left_y=CONSOLE_SECTION_HEIGHT, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT, texture=self.background)
+        drawQuadrantGrid(background=self.background)
 
         self._quadrantMediator.draw(quadrant=self._quadrant)
-        self._statusConsole.draw()
-        self._messageConsole.draw()
-
         self._staticSprites.draw()
+        self._drawInstructions()
 
     def on_update(self, delta_time):
         """
@@ -183,10 +226,7 @@ class AppTestShooting(View):
         Called whenever the user lets off a previously pressed key.
         """
         if releasedKey == arcadeKey.Q:
-            import os
-            # noinspection PyUnresolvedReferences
-            # noinspection PyProtectedMember
-            os._exit(0)
+            arcadeExit()
         elif releasedKey == arcadeKey.A:
             self.setup()
         elif releasedKey == arcadeKey.K:
@@ -319,21 +359,27 @@ class AppTestShooting(View):
         paletteKlingon: Klingon = Klingon(coordinates=bogusCoordinates)
         paletteKlingon.id = AppTestShooting.PALETTE_KLINGON_ID
         paletteKlingon.center_x = 32
-        paletteKlingon.center_y = 150
+        paletteKlingon.center_y = PALETTE_GAME_PIECE_Y
 
         paletteCommander: Commander = Commander(coordinates=bogusCoordinates, moveInterval=-1)
         paletteCommander.id = AppTestShooting.PALETTE_COMMANDER_ID
         paletteCommander.center_x = paletteKlingon.center_x + 64
-        paletteCommander.center_y = 150
+        paletteCommander.center_y = PALETTE_GAME_PIECE_Y
 
         paletteSuperCommander: SuperCommander = SuperCommander(coordinates=bogusCoordinates, moveInterval=-1)
         paletteSuperCommander.id = AppTestShooting.PALETTE_SUPER_COMMANDER_ID
         paletteSuperCommander.center_x = paletteCommander.center_x + 64
-        paletteSuperCommander.center_y = 150
+        paletteSuperCommander.center_y = PALETTE_GAME_PIECE_Y
 
         self._staticSprites.append(paletteKlingon)
         self._staticSprites.append(paletteCommander)
         self._staticSprites.append(paletteSuperCommander)
+
+    def _drawInstructions(self):
+
+        draw_text(HELP_TEXT1, HELP_TEXT_X, HELP_TEXT_Y,      color=WHITE, font_size=12, font_name=FIXED_WIDTH_FONT_NAME)
+        draw_text(HELP_TEXT2, HELP_TEXT_X, HELP_TEXT_Y - 16, color=WHITE, font_size=12, font_name=FIXED_WIDTH_FONT_NAME)
+        draw_text(HELP_TEXT3, HELP_TEXT_X, HELP_TEXT_Y - 32, color=WHITE, font_size=12, font_name=FIXED_WIDTH_FONT_NAME)
 
     def _addEnemyToTestGrid(self, enemy: BaseEnemy, x: float, y: float,) -> bool:
 
@@ -416,6 +462,7 @@ def main():
     arcadeWindow: Window          = Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     shootingView: AppTestShooting = AppTestShooting()
 
+    arcadeWindow.background_color = GRAY
     arcadeWindow.set_exclusive_keyboard(exclusive=True)
     arcadeWindow.show_view(shootingView)
 

@@ -3,20 +3,23 @@ from logging import Logger
 from logging import getLogger
 
 from pytrek.GameState import GameState
+
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.Intelligence import TractorBeamComputation
 
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
-from pytrek.gui.AbstractMessageConsole import AbstractMessageConsole
-from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
+from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
+
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
-
 from pytrek.model.Quadrant import Quadrant
 
 
@@ -24,16 +27,16 @@ class FutureEventHandlers:
     """
 
     """
-    def __init__(self, messageConsole: AbstractMessageConsole):
+    def __init__(self, messageConsole: MessageConsoleProxy):
 
-        self.logger:          Logger         = getLogger(__name__)
-        self._gameState:      GameState      = GameState()
-        self._galaxy:         Galaxy         = Galaxy()
-        self._intelligence:   Intelligence   = Intelligence()
+        self.logger:            Logger           = getLogger(__name__)
+        self._gameState:        GameState        = GameState()
+        self._galaxy:           Galaxy           = Galaxy()
+        self._intelligence:     Intelligence     = Intelligence()
         self._galaxyMediator:   GalaxyMediator   = GalaxyMediator()
         self._quadrantMediator: QuadrantMediator = QuadrantMediator()
 
-        self._messageConsole: AbstractMessageConsole = messageConsole
+        self._messageConsole: MessageConsoleProxy = messageConsole
 
         self.logger.debug(f'FutureEventHandlers.__init__ - {self._gameState=}')
 

@@ -104,7 +104,7 @@ class CommandParser:
             case CommandType.Save:
                 pass            # nothing else to do
             case _:
-                self.logger.error(f'Invalid command: {self._commandStr}')
+                # self.logger.error(f'Invalid command: {self._commandStr}')
                 raise InvalidCommandException(message=f'Invalid command: {self._commandStr}')
 
         return parsedCommand
@@ -212,8 +212,8 @@ class CommandParser:
             splitCmd:     List[str] = commandStr.split(' ')
             integerValue: int       = int(splitCmd[1])
             self._commandStr = ''
-        except ValueError as e:
-            self.logger.error(f'{errorMessage}: {e=}')
+        except ValueError:
+            # self.logger.error(f'{errorMessage}: {e=}')
             raise InvalidCommandValueException(message=errorMessage)
 
         return integerValue

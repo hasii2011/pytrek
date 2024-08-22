@@ -13,6 +13,8 @@ from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
@@ -25,7 +27,6 @@ from pytrek.settings.GameSettings import GameSettings
 from tests.ProjectTestBase import ProjectTestBase
 
 from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
-from pytrek.gui.LogMessageConsole import LogMessageConsole
 
 
 class TestFutureEventHandlers(ProjectTestBase):
@@ -44,6 +45,9 @@ class TestFutureEventHandlers(ProjectTestBase):
     clsQuadrantMediator: QuadrantMediator = cast(QuadrantMediator, None)
     clsGalaxyMediator:   GalaxyMediator   = cast(GalaxyMediator, None)
 
+    clsMessageConsoleProxy:   MessageConsoleProxy   = cast(MessageConsoleProxy, None)
+    clsMessageConsoleSection: MessageConsoleSection = cast(MessageConsoleSection, None)
+
     @classmethod
     def setUpClass(cls):
         ProjectTestBase.setUpClass()
@@ -61,10 +65,13 @@ class TestFutureEventHandlers(ProjectTestBase):
         self._computer:     Computer     = TestFutureEventHandlers.clsComputer
         self._galaxy:       Galaxy       = TestFutureEventHandlers.clsGalaxy
 
-        self._eventEngine:      EventEngine        = TestFutureEventHandlers.clsEventEngine
-        self._quadrantMediator: QuadrantMediator   = TestFutureEventHandlers.clsQuadrantMediator
-        self._galaxyMediator:   GalaxyMediator     = TestFutureEventHandlers.clsGalaxyMediator
-        self._eventHandlers:    FutureEventHandlers = FutureEventHandlers(LogMessageConsole())
+        self._eventEngine:      EventEngine         = TestFutureEventHandlers.clsEventEngine
+        self._quadrantMediator: QuadrantMediator    = TestFutureEventHandlers.clsQuadrantMediator
+        self._galaxyMediator:   GalaxyMediator      = TestFutureEventHandlers.clsGalaxyMediator
+
+        self._messageConsoleProxy:   MessageConsoleProxy   = TestFutureEventHandlers.clsMessageConsoleProxy
+        self._messageConsoleSection: MessageConsoleSection = TestFutureEventHandlers.clsMessageConsoleSection
+        self._eventHandlers:         FutureEventHandlers   = FutureEventHandlers(self._messageConsoleProxy)
 
     def testSuperNovaEventHandlerKlingonsAreDead(self):
 
@@ -191,7 +198,7 @@ class TestFutureEventHandlers(ProjectTestBase):
 
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=enterprise)
 
-        eventHandlers: FutureEventHandlers = FutureEventHandlers(LogMessageConsole())
+        eventHandlers: FutureEventHandlers = FutureEventHandlers(self._messageConsoleProxy)
 
         coordinates: Coordinates = self._galaxy.currentQuadrant.coordinates
 
@@ -308,9 +315,16 @@ class TestFutureEventHandlers(ProjectTestBase):
         TestFutureEventHandlers.clsIntelligence = Intelligence()
         TestFutureEventHandlers.clsComputer     = Computer()
         TestFutureEventHandlers.clsGalaxy       = Galaxy()
-        TestFutureEventHandlers.clsEventEngine  = EventEngine(LogMessageConsole())
+
         TestFutureEventHandlers.clsQuadrantMediator = QuadrantMediator()
         TestFutureEventHandlers.clsGalaxyMediator   = GalaxyMediator()      # This essentially finishes initializing most of the game
+
+        TestFutureEventHandlers.clsMessageConsoleSection = MessageConsoleSection(left=0, bottom=0, width=100, height=100)
+        TestFutureEventHandlers.clsMessageConsoleProxy   = MessageConsoleProxy()
+
+        TestFutureEventHandlers.clsMessageConsoleProxy.console = TestFutureEventHandlers.clsMessageConsoleSection
+
+        TestFutureEventHandlers.clsEventEngine  = EventEngine(TestFutureEventHandlers.clsMessageConsoleProxy)
 
 
 def suite() -> TestSuite:
