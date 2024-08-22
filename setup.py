@@ -12,7 +12,7 @@ import pathlib
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
 
-APP = ['pytrek/PyTrekView.py']
+APP = ['pytrek/PyTrekV2.py']
 
 README = (HERE / "README.md").read_text()
 LICENSE = (HERE / 'LICENSE').read_text()
@@ -101,6 +101,7 @@ setup(
         'pytrek.gui.dialogs',
         'pytrek.gui.gamepieces',
         'pytrek.gui.gamepieces.base', 'pytrek.gui.gamepieces.commander', 'pytrek.gui.gamepieces.klingon', 'pytrek.gui.gamepieces.supercommander',
+        'pytrek.guiv2',
         'pytrek.mediators',
         'pytrek.mediators.base',
         'pytrek.model',

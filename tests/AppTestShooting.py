@@ -290,7 +290,7 @@ class AppTestShooting(View):
         epm.firePhasers(quadrant=self._quadrant)
 
     # noinspection PyUnusedLocal
-    def _noOp(self, warpSpeed: float, destinationCoordinates: Coordinates) -> None:
+    def _noOp(self, destinationCoordinates: Coordinates) -> None:
         self.logger.warning(f'******** How did we warp? *************')
 
     def __fireEnemyTorpedo(self, torpedoMediator: BaseTorpedoMediator, enemySprites: SpriteList, rotationAngle: int = 0):

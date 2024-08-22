@@ -9,9 +9,6 @@ from arcade import draw_lrwh_rectangle_textured
 from arcade import load_texture
 from arcade import start_render
 
-from arcade import key as arcadeKey
-from arcade import exit as arcadeExit
-
 from pytrek.Constants import COMMAND_SECTION_HEIGHT
 from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
@@ -122,30 +119,7 @@ class QuadrantSection(BaseSection):
             arcadePoint: ArcadePoint = ArcadePoint(x=x, y=y)
             self.logger.debug(f'{arcadePoint=}')
             if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_SECTION_HEIGHT:
-                self._enterpriseMediator.impulse(quadrant=self._quadrant, arcadePoint=arcadePoint)
-
-    def on_key_press(self, pressedKey: int, modifiers: int):
-
-        match pressedKey:
-            case arcadeKey.Q:
-                arcadeExit()
-            case arcadeKey.P:
-                self._quadrantMediator.firePhasers(self._quadrant)
-                self._gameEngine.resetOperationTime()
-            case arcadeKey.T:
-                self._quadrantMediator.fireEnterpriseTorpedoes(self._quadrant)
-                self._gameEngine.resetOperationTime()
-            case arcadeKey.W:
-                self._enterpriseMediator.warp()
-            case arcadeKey.L:
-                self.view.longRangeSensorScanSection.enabled = True
-                self._gameEngine.resetOperationTime()
-            case arcadeKey.G:
-                self.view.galaxySection.enabled = True
-                self._gameEngine.resetOperationTime()
-            case arcadeKey.P:
-                self._quadrantMediator.firePhasers(self._quadrant)
-                self._gameEngine.resetOperationTime()
+                self._enterpriseMediator.doDeveloperImpulseMove(quadrant=self._quadrant, arcadePoint=arcadePoint)
 
     def _enterpriseHasWarped(self, warpSpeed: float, destinationCoordinates: Coordinates):
 

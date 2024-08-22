@@ -26,7 +26,7 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.GameState import GameState
 
 if TYPE_CHECKING:
-    from pytrek.guiv2.PyTrekV2 import PyTrekV2
+    from pytrek.PyTrekV2 import PyTrekV2
 
 
 class CommandHandler:

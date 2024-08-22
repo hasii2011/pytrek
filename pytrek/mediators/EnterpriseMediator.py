@@ -6,8 +6,6 @@ from logging import getLogger
 
 from arcade import SpriteList
 from arcade import View
-from arcade import Window
-from arcade import color
 
 from arcade import schedule
 from arcade import unschedule
@@ -30,13 +28,9 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.DirectionData import DirectionData
 from pytrek.engine.ShipCondition import ShipCondition
 
-from pytrek.gui.UITypes import WarpTravelCallback
 from pytrek.gui.UITypes import WarpTravelCallbackV2
 from pytrek.gui.WarpEffect import WarpEffect
 
-from pytrek.gui.dialogs.WarpDialog import DialogAnswer
-from pytrek.gui.dialogs.WarpDialog import WarpTravelAnswer
-from pytrek.gui.dialogs.WarpDialog import WarpDialog
 from pytrek.guiv2.WarpEffectSection import WarpEffectSection
 
 from pytrek.mediators.base.MissesMediator import MissesMediator
@@ -54,7 +48,7 @@ from pytrek.model.SectorType import SectorType
 
 class EnterpriseMediator(MissesMediator):
 
-    def __init__(self, view: View, warpTravelCallback: WarpTravelCallback | WarpTravelCallbackV2):
+    def __init__(self, view: View, warpTravelCallback: WarpTravelCallbackV2):
         """
 
         Args:
@@ -65,7 +59,7 @@ class EnterpriseMediator(MissesMediator):
         super().__init__()
 
         self._view:               View = view
-        self._warpTravelCallback: WarpTravelCallback | WarpTravelCallbackV2 = warpTravelCallback
+        self._warpTravelCallback: WarpTravelCallbackV2 = warpTravelCallback
 
         self.logger:                  Logger       = getLogger(__name__)
         self._soundMachine:           SoundMachine = SoundMachine()
@@ -98,7 +92,15 @@ class EnterpriseMediator(MissesMediator):
             enterprise.center_x = arcadeX
             enterprise.center_y = arcadeY
 
-    def impulse(self, quadrant: Quadrant, arcadePoint: ArcadePoint):
+    def doDeveloperImpulseMove(self, quadrant: Quadrant, arcadePoint: ArcadePoint):
+        """
+        TODO:   Make a debug option
+        Keep this around for developer use;  So I can click on the board to move
+        the Enterprise
+        Args:
+            quadrant:
+            arcadePoint:
+        """
 
         targetCoordinates:     Coordinates = self._computer.computeSectorCoordinates(x=arcadePoint.x, y=arcadePoint.y)
         enterpriseCoordinates: Coordinates = self._gameState.currentSectorCoordinates
@@ -119,21 +121,13 @@ class EnterpriseMediator(MissesMediator):
         # StarTrekScreen.quitIfTimeExpired()
         # self._dockIfAdjacentToStarBase()
 
-    def warp(self):
-        #
-        # Get warp speed and target quadrant coordinates from user
-        # Stub out for now
-        warpTravelDialog: WarpDialog = WarpDialog(window=self._view.window, completeCallback=self._warpTravelDialogComplete)
-
-        self._view.window.show_view(warpTravelDialog)
-
     def manualMove(self, quadrant: Quadrant, deltaX: float, deltaY: float):
 
         # Impulse move ?
         if deltaX < 1.0:
             self._doManualImpulseMove(deltaX, deltaY, quadrant)
         else:
-            self._doManualWarpMove(int(deltaX), int(deltaY), quadrant)
+            self._doManualWarpMove(int(deltaX), int(deltaY))
             pass
 
     def automaticMove(self, quadrant: Quadrant, quadrantCoordinates: Coordinates, sectorCoordinates: Coordinates):
@@ -164,7 +158,7 @@ class EnterpriseMediator(MissesMediator):
             else:
                 self._doBlockedImpulseMove(quadrant=quadrant, enterpriseCoordinates=enterpriseSectorCoordinates, results=results)
 
-    def _doManualWarpMove(self, deltaX: int, deltaY: int, quadrant: Quadrant):
+    def _doManualWarpMove(self, deltaX: int, deltaY: int):
 
         enterpriseQuadrantCoordinates: Coordinates = self._gameState.currentQuadrantCoordinates
         targetQuadrantCoordinates:   Coordinates = Coordinates()
@@ -182,34 +176,6 @@ class EnterpriseMediator(MissesMediator):
         self._warpEffectSection.enabled = True
 
         schedule(function_pointer=self._checkEffectComplete, interval=1.0)  # type: ignore
-
-    def _warpTravelDialogComplete(self, warpTravelAnswer: WarpTravelAnswer):
-        """
-        The callback when we get an answer on whether we are traveling to
-        another quadrant
-
-        Args:
-            warpTravelAnswer:  The answer with data if answered `Ok`
-        """
-        if warpTravelAnswer.dialogAnswer == DialogAnswer.Ok:
-            self._warpSpeed              = warpTravelAnswer.warpFactor
-            self._destinationCoordinates = warpTravelAnswer.coordinates
-
-            viewWindow:   Window = self._view.window
-            screenWidth:  int    = viewWindow.width
-            screenHeight: int    = viewWindow.height
-            warpEffect: WarpEffect = WarpEffect(screenWidth=screenWidth, screenHeight=screenHeight)
-
-            viewWindow.show_view(warpEffect)
-
-            warpEffect.setup()
-            self._warpEffect = warpEffect
-            # I do not know what a Number is  tell mypy so
-            schedule(function_pointer=self.doWarpWhenEffectComplete, interval=1.0)  # type: ignore
-        else:
-            self._view.window.show_view(self._view)
-
-        self._view.window.background_color = color.BLACK
 
     def doWarpWhenEffectComplete(self, deltaTime: float):
 
@@ -328,7 +294,7 @@ class EnterpriseMediator(MissesMediator):
             print('Warp effect is done')
             unschedule(self._checkEffectComplete)
             self._warpEffectSection.enabled = False
-            self._warpTravelCallback(self._destinationCoordinates)      # type: ignore
+            self._warpTravelCallback(self._destinationCoordinates)
 
     def _validateCoordinates(self, coordinate: Coordinates, minX: int, maxX: int, minY: int, maxY: int):
         """
