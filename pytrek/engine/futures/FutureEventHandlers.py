@@ -13,7 +13,7 @@ from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 
-from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator

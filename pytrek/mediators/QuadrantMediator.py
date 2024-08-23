@@ -28,7 +28,7 @@ from pytrek.gui.gamepieces.commander.Commander import Commander
 
 from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
-from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.mediators.CommanderMediator import CommanderMediator
 from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator

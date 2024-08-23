@@ -22,7 +22,7 @@ from pytrek.engine.futures.FutureEventType import FutureEventType
 
 from pytrek.GameState import GameState
 
-from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.model.Coordinates import Coordinates
 

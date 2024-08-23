@@ -32,10 +32,10 @@ from pytrek.gui.DeviceStatusSection import DeviceStatusSection
 
 from pytrek.gui.GalaxySection import GalaxySection
 from pytrek.gui.LongRangeSensorScanSection import LongRangeSensorScanSection
-from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 from pytrek.gui.MessageConsoleSection import MessageConsoleSection
 
-from pytrek.guiv2.QuadrantSection import QuadrantSection
+from pytrek.gui.QuadrantSection import QuadrantSection
 from pytrek.gui.StatusConsoleSection import StatusConsoleSection
 from pytrek.gui.VatoLocoTextSection import VatoLocoTextSection
 from pytrek.gui.WarpEffectSection import WarpEffectSection

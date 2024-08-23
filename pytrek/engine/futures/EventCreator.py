@@ -11,7 +11,7 @@ from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
 from pytrek.engine.futures.FutureEventType import FutureEventType
 
-from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy

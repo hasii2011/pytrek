@@ -15,7 +15,7 @@ from pytrek.engine.devices.Devices import Devices
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
-from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 from pytrek.gui.MessageConsoleSection import MessageConsoleSection
 
 from pytrek.model.Galaxy import Galaxy

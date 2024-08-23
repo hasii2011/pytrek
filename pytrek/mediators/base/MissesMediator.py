@@ -17,7 +17,7 @@ from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
 from pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
-from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Quadrant import Quadrant

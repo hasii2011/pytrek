@@ -23,7 +23,7 @@ from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 from pytrek.gui.gamepieces.PhaserBolt import PhaserBolt
 from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
-from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.mediators.base.BaseMediator import BaseMediator
 from pytrek.model.Coordinates import Coordinates

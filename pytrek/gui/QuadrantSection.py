@@ -26,7 +26,7 @@ from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.BaseSection import BaseSection
 from pytrek.gui.Common import drawQuadrantGrid
-from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.GalaxyMediator import GalaxyMediator

@@ -53,9 +53,9 @@ from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
 from pytrek.gui.Common import drawQuadrantGrid
 
-from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 from pytrek.gui.MessageConsoleSection import MessageConsoleSection
-from pytrek.guiv2.QuadrantSection import QuadrantSection
+from pytrek.gui.QuadrantSection import QuadrantSection
 from pytrek.gui.StatusConsoleSection import StatusConsoleSection
 
 from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
