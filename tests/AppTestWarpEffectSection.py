@@ -11,7 +11,7 @@ from arcade import schedule
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 
-from pytrek.guiv2.WarpEffectSection import WarpEffectSection
+from pytrek.gui.WarpEffectSection import WarpEffectSection
 from tests.DrawTextSection import DrawTextSection
 
 from tests.ProjectTestBase import ProjectTestBase

@@ -30,7 +30,7 @@ from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.gui.UITypes import WarpTravelCallbackV2
 
-from pytrek.guiv2.WarpEffectSection import WarpEffectSection
+from pytrek.gui.WarpEffectSection import WarpEffectSection
 
 from pytrek.mediators.base.MissesMediator import MissesMediator
 from pytrek.mediators.base.BaseMediator import LineOfSightResponse

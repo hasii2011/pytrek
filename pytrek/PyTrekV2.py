@@ -30,15 +30,15 @@ from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValu
 from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 from pytrek.guiv2.DeviceStatusSection import DeviceStatusSection
 
-from pytrek.guiv2.GalaxySection import GalaxySection
-from pytrek.guiv2.LongRangeSensorScanSection import LongRangeSensorScanSection
+from pytrek.gui.GalaxySection import GalaxySection
+from pytrek.gui.LongRangeSensorScanSection import LongRangeSensorScanSection
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
 
 from pytrek.guiv2.QuadrantSection import QuadrantSection
 from pytrek.guiv2.StatusConsoleSection import StatusConsoleSection
 from pytrek.guiv2.VatoLocoTextSection import VatoLocoTextSection
-from pytrek.guiv2.WarpEffectSection import WarpEffectSection
+from pytrek.gui.WarpEffectSection import WarpEffectSection
 
 SCREEN_TITLE:  str = "PyTrekV2"
 
