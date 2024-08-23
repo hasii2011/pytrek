@@ -7,7 +7,7 @@ from arcade import start_render
 
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
-from pytrek.guiv2.VatoLocoTextSection import VatoLocoTextSection
+from pytrek.gui.VatoLocoTextSection import VatoLocoTextSection
 from tests.ProjectTestBase import ProjectTestBase
 
 SCREEN_TITLE:  str = "Test Vato Loco"

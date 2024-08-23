@@ -14,7 +14,7 @@ from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
-from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
+from pytrek.gui.MessageConsoleSection import MessageConsoleSection
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
 

@@ -8,7 +8,7 @@ from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
-from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
+from pytrek.gui.MessageConsoleSection import MessageConsoleSection
 
 
 class MessageConsoleProxy(metaclass=SingletonV3):

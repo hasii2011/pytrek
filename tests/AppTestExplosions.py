@@ -32,7 +32,7 @@ from pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderT
 from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosion import KlingonTorpedoExplosion
 from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedoExplosion import SuperCommanderTorpedoExplosion
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
-from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
+from pytrek.gui.MessageConsoleSection import MessageConsoleSection
 
 from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
 from pytrek.mediators.EnterprisePhaserMediator import EnterprisePhaserMediator

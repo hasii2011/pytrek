@@ -51,12 +51,12 @@ from pytrek.gui.gamepieces.klingon.Klingon import Klingon
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
-from pytrek.guiv2.Common import drawQuadrantGrid
+from pytrek.gui.Common import drawQuadrantGrid
 
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
-from pytrek.guiv2.MessageConsoleSection import MessageConsoleSection
+from pytrek.gui.MessageConsoleSection import MessageConsoleSection
 from pytrek.guiv2.QuadrantSection import QuadrantSection
-from pytrek.guiv2.StatusConsoleSection import StatusConsoleSection
+from pytrek.gui.StatusConsoleSection import StatusConsoleSection
 
 from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
