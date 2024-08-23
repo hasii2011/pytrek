@@ -18,7 +18,7 @@ from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 
 from pytrek.gui.ConsoleMessageType import ConsoleMessageType
-from pytrek.guiv2.BaseSection import BaseSection
+from pytrek.gui.BaseSection import BaseSection
 
 
 @dataclass

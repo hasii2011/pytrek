@@ -20,7 +20,7 @@ from arcade.gui import UIManager
 
 from pytrek.Constants import COMMAND_INPUT_HEIGHT
 from pytrek.Constants import COMMAND_SECTION_HEIGHT
-from pytrek.guiv2.BaseSection import BaseSection
+from pytrek.gui.BaseSection import BaseSection
 from pytrek.settings.GameSettings import GameSettings
 
 # Section Margins

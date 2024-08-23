@@ -30,7 +30,7 @@ from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
 
-from pytrek.guiv2.BaseSection import BaseSection
+from pytrek.gui.BaseSection import BaseSection
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 
 from pytrek.model.Coordinates import Coordinates

@@ -8,11 +8,8 @@ from arcade import Texture
 from arcade import load_texture
 from arcade import start_render
 
-from pytrek.Constants import COMMAND_SECTION_HEIGHT
 from pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_WIDTH
-from pytrek.Constants import SCREEN_WIDTH
 from pytrek.GameState import GameState
 
 from pytrek.LocateResources import LocateResources
@@ -27,7 +24,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.futures.EventEngine import EventEngine
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.guiv2.BaseSection import BaseSection
+from pytrek.gui.BaseSection import BaseSection
 from pytrek.guiv2.Common import drawQuadrantGrid
 from pytrek.guiv2.MessageConsoleProxy import MessageConsoleProxy
 

@@ -28,7 +28,7 @@ from pytrek.SoundMachine import SoundType
 
 from pytrek.gui.UITypes import TextureList
 
-from pytrek.guiv2.BaseSection import BaseSection
+from pytrek.gui.BaseSection import BaseSection
 
 PARTICLE_SPEED_FAST:       float = 1.0
 DEFAULT_EMIT_INTERVAL:     float = 0.003

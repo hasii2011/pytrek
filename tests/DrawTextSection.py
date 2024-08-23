@@ -6,7 +6,7 @@ from arcade import draw_text
 
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 
-from pytrek.guiv2.BaseSection import BaseSection
+from pytrek.gui.BaseSection import BaseSection
 
 
 class DrawTextSection(BaseSection):
