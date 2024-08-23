@@ -10,8 +10,6 @@ from pytrek.Constants import SCREEN_WIDTH
 from pytrek.guiv2.VatoLocoTextSection import VatoLocoTextSection
 from tests.ProjectTestBase import ProjectTestBase
 
-# SCREEN_WIDTH:  int = 400
-# SCREEN_HEIGHT: int = 300
 SCREEN_TITLE:  str = "Test Vato Loco"
 
 
