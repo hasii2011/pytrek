@@ -179,31 +179,6 @@ class Intelligence(metaclass=SingletonV3):
             self.logger.info(f'Manually generated a single commander')
         return commanderCount
 
-    def generateInitialSuperCommanderCount(self, playerType: PlayerType, numberOfKlingons: int):
-        """
-        We will generate no more than
-        * 1 super commander per 10 Klingons (Novice, Fair, Good)
-        * 1 super commander per 5 Klingons (Expert)
-        * 1 super commander per 3 Klingons (Emeritus)
-
-        Args:
-            playerType:         We need the skill level
-            numberOfKlingons:  The current number of Klingons
-
-
-        Returns An appropriate number for generating Super Commanders:
-        """
-        if playerType == PlayerType.Novice or playerType == PlayerType.Fair or playerType == PlayerType.Good:
-            nSCount: int = numberOfKlingons // 10
-        elif playerType == PlayerType.Expert:
-            nSCount = numberOfKlingons // 5
-        elif playerType == PlayerType.Emeritus:
-            nSCount = numberOfKlingons // 3
-        else:
-            raise ValueError('Unknown Player Type')
-
-        return nSCount
-
     def generateInitialStarDate(self) -> int:
         # noinspection SpellCheckingInspection
         """

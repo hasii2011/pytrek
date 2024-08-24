@@ -116,22 +116,6 @@ class TestIntelligence(ProjectTestBase):
 
         self.assertTrue(ans, f'We are not in range: {medianCount=}')
 
-    def testGenerateInitialSuperCommanderCountPlayerTypeNovice(self):
-
-        self._runSuperCommanderCountTest(playerType=PlayerType.Novice, klingonCount=101, expectedSuperCommanderCount=10, assertionMsg='Novice Formula Changed')
-
-    def testGenerateInitialSuperCommanderCountPlayerTypeGood(self):
-
-        self._runSuperCommanderCountTest(playerType=PlayerType.Good, klingonCount=101, expectedSuperCommanderCount=10, assertionMsg='Good Formula Changed')
-
-    def testGenerateInitialSuperCommanderCountPlayerTypeExpert(self):
-
-        self._runSuperCommanderCountTest(playerType=PlayerType.Expert, klingonCount=100, expectedSuperCommanderCount=20, assertionMsg='Expert Formula Changed')
-
-    def testGenerateInitialSuperCommanderCountPlayerTypeEmeritus(self):
-
-        self._runSuperCommanderCountTest(playerType=PlayerType.Emeritus, klingonCount=100, expectedSuperCommanderCount=33, assertionMsg='Emeritus Changed')
-
     def testGetGameInitialTimeShort(self):
         """"""
         settings: GameSettings = self._gameSettings
@@ -614,11 +598,11 @@ class TestIntelligence(ProjectTestBase):
 
         return medianStatistic
 
-    def _runSuperCommanderCountTest(self, playerType: PlayerType, klingonCount: int, expectedSuperCommanderCount: int, assertionMsg: str):
-
-        actualSuperCommanderCount: int = self.smarty.generateInitialSuperCommanderCount(playerType=playerType, numberOfKlingons=klingonCount)
-
-        self.assertEqual(expectedSuperCommanderCount, actualSuperCommanderCount, assertionMsg)
+    # def _runSuperCommanderCountTest(self, playerType: PlayerType, klingonCount: int, expectedSuperCommanderCount: int, assertionMsg: str):
+    #
+    #     actualSuperCommanderCount: int = self.smarty.generateInitialSuperCommanderCount(playerType=playerType, numberOfKlingons=klingonCount)
+    #
+    #     self.assertEqual(expectedSuperCommanderCount, actualSuperCommanderCount, assertionMsg)
 
     def _toInt(self, floatValue: float) -> int:
         return round(floatValue)

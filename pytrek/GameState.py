@@ -25,6 +25,8 @@ from pytrek.settings.GameSettings import GameSettings
 
 GAME_STATE_FILE_NAME: str = 'GameState.json'
 
+SINGLE_SUPER_COMMANDER_COUNT: int = 1
+
 
 class GameState(metaclass=SingletonV3):
     """
@@ -58,11 +60,11 @@ class GameState(metaclass=SingletonV3):
         # Adjust total Klingon counts by # of commanders
         self._remainingKlingons = self._remainingKlingons - self._remainingCommanders
 
-        # Novice and Fair players do not get Super Commanders
+        # Novice and Fair players do not get A Super Commander
         if playerType != PlayerType.Novice and playerType != PlayerType.Fair:
-            self._remainingSuperCommanders = intelligence.generateInitialSuperCommanderCount(playerType=playerType, numberOfKlingons=self._remainingKlingons)
+            self._remainingSuperCommanders = SINGLE_SUPER_COMMANDER_COUNT
             # Adjust total Klingons by # of super commanders
-            self._remainingKlingons = self._remainingKlingons - self._remainingSuperCommanders
+            self._remainingKlingons = self._remainingKlingons - SINGLE_SUPER_COMMANDER_COUNT
         else:
             self._remainingSuperCommanders = 0
 
