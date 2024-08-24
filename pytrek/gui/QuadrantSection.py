@@ -1,4 +1,6 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
 
@@ -56,7 +58,6 @@ class QuadrantSection(BaseSection):
         self._computer:     Computer     = Computer()
         self._galaxy:       Galaxy       = Galaxy()           # This essentially finishes initializing most of the game
 
-        self._enterpriseMediator: EnterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._enterpriseHasWarped)  # type: ignore
         self._quadrantMediator:   QuadrantMediator   = QuadrantMediator()
 
         self._messageConsoleProxy: MessageConsoleProxy = MessageConsoleProxy()
@@ -73,6 +74,15 @@ class QuadrantSection(BaseSection):
         self._gameState.currentQuadrantCoordinates = self._galaxy.currentQuadrant.coordinates
 
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
+
+        self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
+
+    def _setEnterpriseMediator(self, newValue: EnterpriseMediator):
+        self._enterpriseMediator = newValue
+        self._enterpriseMediator.warpTravelCallback = self._enterpriseHasWarped
+
+    # noinspection PyTypeChecker
+    enterpriseMediator = property(fget=None, fset=_setEnterpriseMediator, doc='Set by the section UI')
 
     def on_draw(self):
         """
@@ -115,12 +125,12 @@ class QuadrantSection(BaseSection):
             if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_SECTION_HEIGHT:
                 self._enterpriseMediator.doDeveloperImpulseMove(quadrant=self._quadrant, arcadePoint=arcadePoint)
 
-    def _enterpriseHasWarped(self, warpSpeed: float, destinationCoordinates: Coordinates):
+    def _enterpriseHasWarped(self, destinationCoordinates: Coordinates):
 
         currentCoordinates: Coordinates = self._quadrant.coordinates
 
-        self._galaxyMediator.doWarp(currentCoordinates=currentCoordinates, destinationCoordinates=destinationCoordinates, warpSpeed=warpSpeed)
+        self._galaxyMediator.doWarp(currentCoordinates=currentCoordinates, destinationCoordinates=destinationCoordinates, warpSpeed=self._gameState.warpFactor)
         self._quadrant = self._galaxy.getQuadrant(quadrantCoordinates=destinationCoordinates)
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
-        self._messageConsoleProxy.displayMessage(f"Warped to: {destinationCoordinates} at warp: {warpSpeed}")
+        self._messageConsoleProxy.displayMessage(f"Warped to: {destinationCoordinates} at warp: {self._gameState.warpFactor}")

@@ -194,7 +194,8 @@ class AppTestShooting(View):
 
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
-        self._enterpriseMediator = EnterpriseMediator(view=self, warpTravelCallback=self._noOp)
+        self._enterpriseMediator = EnterpriseMediator()
+        self._enterpriseMediator.warpTravelCallback = self._noOp
 
         self._makeEnemySpriteLists()
 

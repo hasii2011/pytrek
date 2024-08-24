@@ -1,4 +1,5 @@
 
+from typing import cast
 from typing import TYPE_CHECKING
 
 from logging import Logger
@@ -39,13 +40,16 @@ class CommandHandler:
         self._quadrantMediator:   QuadrantMediator   = QuadrantMediator()
         self._gameState:          GameState          = GameState()
         self._gameEngine:         GameEngine         = GameEngine()
-        self._enterpriseMediator: EnterpriseMediator = EnterpriseMediator(view=self._view, warpTravelCallback=self._enterpriseHasWarped)
+        self._galaxyMediator:     GalaxyMediator     = GalaxyMediator()
+        self._galaxy:             Galaxy             = Galaxy()
 
-        self._enterpriseMediator.warpEffectSection = view.warpEffectSection
+        self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
 
-        self._galaxyMediator: GalaxyMediator = GalaxyMediator()
+    def _setEnterpriseMediator(self, newValue: EnterpriseMediator):
+        self._enterpriseMediator = newValue
 
-        self._galaxy:       Galaxy       = Galaxy()
+    # noinspection PyTypeChecker
+    enterpriseMediator = property(fget=None, fset=_setEnterpriseMediator, doc='Set by the section UI')
 
     def doCommand(self, commandStr: str):
 
@@ -92,19 +96,6 @@ class CommandHandler:
             self._enterpriseMediator.manualMove(quadrant=quadrant, deltaX=manualMoveData.deltaX, deltaY=manualMoveData.deltaY)
         else:
             pass
-
-    def _enterpriseHasWarped(self, destinationCoordinates: Coordinates):
-
-        quadrant: Quadrant = self._galaxy.currentQuadrant
-
-        currentCoordinates: Coordinates = quadrant.coordinates
-
-        self._galaxyMediator.doWarp(currentCoordinates=currentCoordinates, destinationCoordinates=destinationCoordinates,
-                                    warpSpeed=self._gameState.warpFactor)
-        self._quadrant = self._galaxy.getQuadrant(quadrantCoordinates=destinationCoordinates)
-        self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._gameState.enterprise)
-
-        self._view.messageConsoleSection.displayMessage(f"Warped to: {destinationCoordinates} at warp: {self._gameState.warpFactor}")
 
     def _displayHelp(self):
         """

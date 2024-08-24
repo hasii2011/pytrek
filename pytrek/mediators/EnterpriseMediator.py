@@ -5,7 +5,7 @@ from logging import Logger
 from logging import getLogger
 
 from arcade import SpriteList
-from arcade import View
+# from arcade import View
 
 from arcade import schedule
 from arcade import unschedule
@@ -46,33 +46,37 @@ from pytrek.model.SectorType import SectorType
 
 
 class EnterpriseMediator(MissesMediator):
+    """
+    This is not a singleton.
+    It requires 2 properties to be injected at appropriate times
+    """
 
-    def __init__(self, view: View, warpTravelCallback: WarpTravelCallbackV2):
+    def __init__(self):
         """
-
-        Args:
-            view:   The view to restore
-            warpTravelCallback:
         """
-
         super().__init__()
 
-        self._view:               View = view
-        self._warpTravelCallback: WarpTravelCallbackV2 = warpTravelCallback
+        self._warpTravelCallback: WarpTravelCallbackV2 = cast(WarpTravelCallbackV2, None)
+        self._warpEffectSection:  WarpEffectSection    = cast(WarpEffectSection,    None)
 
         self.logger:                  Logger       = getLogger(__name__)
         self._soundMachine:           SoundMachine = SoundMachine()
         self._warpSpeed:              float        = 0.0
         self._destinationCoordinates: Coordinates  = cast(Coordinates, None)
-
-        # This should be injected, until we get rid of the V1 UI
-        self._warpEffectSection:       WarpEffectSection   = cast(WarpEffectSection, None)
+        """
+        Use to store the warp coordinates use after the warp effect is compete
+        """
 
     def _setWarpEffectSection(self, newValue: WarpEffectSection):
         self._warpEffectSection = newValue
 
+    def _setWarpTravelCallback(self, newValue: WarpTravelCallbackV2):
+        self._warpTravelCallback = newValue
+
     # noinspection PyTypeChecker
-    warpEffectSection = property(fget=None, fset=_setWarpEffectSection, doc='Set by the section UI')
+    warpEffectSection = property(fget=None,  fset=_setWarpEffectSection,  doc='Set by the section UI')
+    # noinspection PyTypeChecker
+    warpTravelCallback = property(fget=None, fset=_setWarpTravelCallback, doc='Set by the section UI')
 
     def update(self, quadrant: Quadrant):
 

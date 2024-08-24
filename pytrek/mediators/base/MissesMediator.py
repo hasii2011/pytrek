@@ -50,7 +50,6 @@ class MissesMediator(BaseMediator):
         self._intelligence:   Intelligence = Intelligence()
         self._gameSettings:   GameSettings = GameSettings()
 
-        # self._messageConsole: MessageConsole = MessageConsole()
         assert MessageConsoleProxy().initialized is True, 'Console proxy needs to be already initialized'
         self._messageConsole: MessageConsoleProxy = MessageConsoleProxy()
 
