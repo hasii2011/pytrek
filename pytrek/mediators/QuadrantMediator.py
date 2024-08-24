@@ -260,6 +260,8 @@ class QuadrantMediator(metaclass=SingletonV3):
             quadrant.addStarBase()
 
     def __makeKlingonSpriteList(self, quadrant: Quadrant):
+
+        self.klingonList.clear()
         if quadrant.klingonCount > 0:
             self._gameState.shipCondition = ShipCondition.Red
             klingonSprites: SpriteList = SpriteList()
@@ -271,6 +273,8 @@ class QuadrantMediator(metaclass=SingletonV3):
             self.klingonList = SpriteList()
 
     def __makeCommanderSpriteList(self, quadrant: Quadrant):
+
+        self.commanderList.clear()
         if quadrant.commanderCount > 0:
             self._gameState.shipCondition = ShipCondition.Red
             commanderSprites: SpriteList = SpriteList()
@@ -282,6 +286,8 @@ class QuadrantMediator(metaclass=SingletonV3):
             self.commanderList = SpriteList()
 
     def __makeSuperCommanderSpriteList(self, quadrant: Quadrant):
+
+        self.superCommanderList.clear()
         if quadrant.superCommanderCount > 0:
             self._gameState.shipCondition = ShipCondition.Red
             superCommanderSprites: SpriteList = SpriteList()

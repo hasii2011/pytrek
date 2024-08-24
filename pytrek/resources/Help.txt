@@ -9,22 +9,178 @@ Commands
 ---------
 Q - Quit You will have the option of saving your game.
 
-L - Long Range Sensor Scan - 9 Quadrants; Left mouse click to dismiss
 
-G - Galaxy Scan;  You can only see what has been "long range scanned";
 Left mouse click to dismiss
 
 P - Fire Phasers; Computer controlled
 
-T - Fire Torpedoes; Computer controlled
-
-W - Warp to another quadrant; You provide quadrant number and speed
-
-D - Dock at star base;  Only valid if you are immediately adjacent to the base
 
 S - Save current game state
 
-R - Report devices status
+ABBREV    FULL COMMAND                           DEVICE USED
+------    ------------                           -----------
+ABANDON   ABANDON                                shuttle craft
+C         CHART                                  (none)
+CALL      CALL (for help)                        subspace radio
+D         DOCK                                   (none)
+L         LRSCAN                                 long-range sensors
+M         MOVE <MANUAL> <DISPLACEMENT>           warp engines
+          MOVE AUTOMATIC <DESTINATION>           warp engines and computer
+P         PHASERS <TOTAL AMOUNT>                 phasers and computer
+          PHASERS AUTOMATIC <TOTAL AMOUNT>       phasers, computer, sr
+                                                 sensors
+          PHASERS MANUAL <AMT1> <AMT2> ...       phasers
+PHO       PHOTONS <NUMBER> <TARGETS>             torpedo tubes
+R         REST <NUMBER OF STAR DATES>            (none)
+QUIT      QUIT                                   (none)
+SH        SHIELDS <UP, DOWN, or TRANSFER>        deflector shields
+W         WARP <FACTOR>                          (none)
+
+*****************
+* DAMAGE REPORT *
+*****************
+Mnemonic:  DAMAGES
+Shortest abbreviation:  DA
+
+  At any time you may ask for a damage report to find out what devices
+  are damaged and how long it will take to repair them.  Naturally,
+  repairs proceed faster at a starbase.
+
+  Damage reports are free.  They use no energy or time, and can be done
+  safely even in the midst of battle.
+
+
+********************
+* DOCK AT STARBASE *
+********************
+Mnemonic:  DOCK
+Shortest abbreviation:  D
+
+  You may dock your starship whenever you are in one of the eight
+  sector positions immediately adjacent to a starbase.  When you dock,
+  your starship is resupplied with energy, shield energy, photon
+  torpedoes, and life support reserves.  Repairs also proceed faster at
+  starbase, so if some of your devices are damaged, you may wish to
+  stay at base (by using the "REST" command) until they are fixed.  If
+  your ship has more than its normal maximum energy (which can happen
+  if you've loaded crystals) the ship's energy is not changed.
+
+  You may not dock while in standard orbit around a planet.
+
+  Star-bases have their own deflector shields, so you are completely
+  safe from phaser attack while docked.  You are also safe from
+  long-range tractor beams.
+
+  Star-bases also have both short and long range sensors, which you can
+  use if yours are broken. There's also a subspace radio to get
+  information about happenings in the galaxy. Mr. Spock will update the
+  star chart if your ask for it while docked and your own radio is dead.
+
+ ***************
+ * WARP FACTOR *
+ ***************
+ Mnemonic:  WARP
+ Shortest abbreviation:  W
+ Full command:  WARP <number>
+
+  Your warp factor controls the speed of your starship.  The larger the
+  warp factor, the faster you go and the more energy you use.
+
+  Your minimum warp factor is 1.0 and your maximum warp factor is 10.0
+  (which is 100 times as fast and uses 1000 times as much energy).  At
+  speeds above warp 6 there is some danger of causing damage to your
+  warp engines; this damage is larger at higher warp factors and also
+  depends on how far you go at that warp factor.
+
+  At exactly warp 10 there is some probability of entering a so-called
+  "time warp" and being thrown forward or backward in time.  The farther
+  you go at warp 10, the greater is the probability of entering the
+  time warp.
+
+**************
+* STAR CHART *
+**************
+Mnemonic:  CHART
+Shortest abbreviation:  C
+
+  As you proceed in the game, you learn more and more about what things
+  are where in the galaxy. When ever you first do a scan in a quadrant,
+  telemetry sensors are ejected which will report any changes in the
+  quadrant(s) back to your ship, providing the sub-space radio is
+  working. Spock will enter this information in the chart. If the radio
+  is not working, Spock can only enter new information discovered from
+  scans, and information in other quadrants may be obsolete.
+
+  The chart looks like an 8 by 8 array of numbers.  These numbers are
+  interpreted exactly as they are on a long-range scan. A period (.) in
+  place of a digit means you do not know that information yet.  For
+  example, ... means you know nothing about the quadrant, while .1.
+  means you know it contains a base, but an unknown number of Klingons
+  and stars.
+
+  Looking at the star chart is a free operation.  It costs neither time
+  nor energy, and can be done safely whether in or out of battle.
+
+*******************
+* LONG-RANGE SCAN *
+*******************
+Mnemonic:  LRSCAN
+Shortest abbreviation:  L
+
+  A long-range scan gives you general information about where you are
+  and what is around you.  Here is an example output.
+
+      Long-range scan for Quadrant 5 - 1
+         -1  107  103
+         -1  316    5
+         -1  105 1000
+
+  This scan says that you are in row 5, column 1 of the 8 by 8 galaxy.
+  The numbers in the scan indicate how many of each kind of thing there
+  is in your quadrant and all adjacent quadrants.  The digits are
+  interpreted as follows.
+
+      Thousands digit:  1000 indicates a supernova (only)
+      Hundreds digit:   number of Klingons present
+      Tens digit:       number of star-bases present
+      Ones digit:       number of stars present
+
+  For example, in your quadrant (5 - 1) the number is 316, which
+  indicates 3 Klingons, 1 starbase, and 6 stars.  The long-range
+  scanner does not distinguish between ordinary Klingons and Klingon
+  command ships.  If there is a supernova, as in the quadrant below and
+  to your right (quadrant 6 - 2), there is nothing else in the
+  quadrant.
+
+  Romulans possess a "cloaking device" which prevents their detection
+  by long-range scan.  Because of this fact, Starfleet Command is never
+  sure how many Romulans are "out there".  When you kill the last
+  Klingon, the remaining Romulans surrender to the Federation.
+
+  Planets are also undetectable by long-range scan.  The only way to
+  detect a planet is to find it in your current quadrant with the
+  short-range sensors.
+
+  Since you are in column 1, there are no quadrants to your left. The
+  minus ones indicate the negative energy barrier at the edge of the
+  galaxy, which you are not permitted to cross.
+
+  Long-range scans are free.  They use up no energy or time, and can be
+  done safely regardless of battle conditions.
+
+********
+* REST *
+********
+Mnemonic:  REST
+Shortest abbreviation:  R
+Full command:  REST <NUMBER OF STAR DATES>
+
+  This command simply allows the specified number of star dates to go
+  by.  This is useful if you have suffered damages and wish to wait
+  until repairs are made before you go back into battle.
+
+  It is not generally advisable to rest while you are under attack by
+  Klingons.
 
 
 Left Mouse click - invokes impulse travel within the quadrant

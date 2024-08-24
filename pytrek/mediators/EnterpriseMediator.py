@@ -122,11 +122,10 @@ class EnterpriseMediator(MissesMediator):
     def manualMove(self, quadrant: Quadrant, deltaX: float, deltaY: float):
 
         # Impulse move ?
-        if deltaX < 1.0:
+        if 0.0 < deltaX < 1.0:
             self._doManualImpulseMove(deltaX, deltaY, quadrant)
         else:
             self._doManualWarpMove(int(deltaX), int(deltaY))
-            pass
 
     def automaticMove(self, quadrant: Quadrant, quadrantCoordinates: Coordinates, sectorCoordinates: Coordinates):
         pass
@@ -174,21 +173,6 @@ class EnterpriseMediator(MissesMediator):
         self._warpEffectSection.enabled = True
 
         schedule(function_pointer=self._checkEffectComplete, interval=1.0)  # type: ignore
-
-    # def doWarpWhenEffectComplete(self, deltaTime: float):
-    #
-    #     effectComplete: bool = self._warpEffect.isEffectComplete()
-    #
-    #     self.logger.info(f'Is warp effect complete {deltaTime} {effectComplete=}')
-    #
-    #     if effectComplete is True:
-    #         # unschedule(self.doWarpWhenEffectComplete)
-    #         self._view.window.show_view(self._view)
-    #         #
-    #         # Callback to someone (presumably top level view) to let them know
-    #         # it is time to warp;
-    #         #
-    #         self._warpTravelCallback(self._warpSpeed, self._destinationCoordinates)     # type: ignore
 
     def _doImpulseMove(self, quadrant: Quadrant, enterpriseCoordinates: Coordinates, targetCoordinates: Coordinates):
         """
@@ -312,10 +296,10 @@ class EnterpriseMediator(MissesMediator):
         intXCoordinate: int = coordinate.x
         intYCoordinate: int = coordinate.y
         if intXCoordinate < minX or intXCoordinate > maxX:
-            raise InvalidCommandValueException(message=f'Invalid X coordinate must be in range {minX},{maxX}')
+            raise InvalidCommandValueException(message=f'Invalid X coordinate: {intXCoordinate}. Must be in range {minX},{maxX}')
 
         if intYCoordinate < minY or intYCoordinate > maxY:
-            raise InvalidCommandValueException(message=f'Invalid Y coordinate must be in range {minY},{maxY}')
+            raise InvalidCommandValueException(message=f'Invalid Y coordinate: {intYCoordinate}. Must be in range {minY},{maxY}')
 
         return valid
 

@@ -258,7 +258,7 @@ class CommandParser:
         try:
             intCoordinate: int = int(coordinate)
             if intCoordinate < MINIMUM_COORDINATE or intCoordinate > MAXIMUM_COORDINATE:
-                raise InvalidCommandValueException(message=f'{errorMsg} {MINIMUM_COORDINATE=} {MAXIMUM_COORDINATE=}')
+                raise InvalidCommandValueException(message=f'{errorMsg} bad coordinate {intCoordinate} {MINIMUM_COORDINATE=} {MAXIMUM_COORDINATE=}')
 
         except ValueError as e:
             self.logger.error(f'{e}')

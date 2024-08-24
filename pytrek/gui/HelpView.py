@@ -33,7 +33,8 @@ CreateTextResponse = namedtuple('CreateTextResponse', 'textArea, texturePane')
 
 class HelpView(View):
 
-    FONT_NAME: str = 'UniverseCondensed'
+    # noinspection SpellCheckingInspection
+    FONT_NAME: str = 'MonoFonto'
 
     def __init__(self, completeCallback: Callable):
 
@@ -46,7 +47,7 @@ class HelpView(View):
 
         self._uiManager.enable()
 
-        title:               UILabel           = self._createLabel(text='PyArcadeStarTrek Help', height=24, fontSize=18)
+        title:              UILabel            = self._createLabel(text='PyArcadeStarTrek Help', height=24, fontSize=18)
         createTextResponse: CreateTextResponse = self._createHelpTextArea()
 
         wrappedHelpTextArea: UITexturePane = createTextResponse.texturePane
@@ -120,7 +121,7 @@ class HelpView(View):
                                                            packageName=LocateResources.RESOURCES_PACKAGE_NAME)
         with open(fqFileName) as fd:
             lines: str = fd.read()
-        textArea: UITextArea = UITextArea(width=550, height=360,
+        textArea: UITextArea = UITextArea(width=600, height=360,
                                           text=lines,
                                           text_color=color.BLACK,
                                           font_name=HelpView.FONT_NAME)
@@ -183,10 +184,10 @@ class HelpView(View):
         return okButton
 
     def _onClickUp(self, event: UIOnClickEvent):
-        self.__scrollHelp(event, -2)
+        self.__scrollHelp(event, -5)                # TODO: make this increment configurable
 
     def _onClickDown(self, event: UIOnClickEvent):
-        self.__scrollHelp(event, 2)
+        self.__scrollHelp(event, 5)                 # TODO: make this increment configurable
 
     # noinspection PyUnusedLocal
     def _onClickOk(self, event: UIOnClickEvent):
