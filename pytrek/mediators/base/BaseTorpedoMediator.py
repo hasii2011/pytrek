@@ -1,4 +1,4 @@
-from abc import abstractmethod
+
 from typing import List
 from typing import cast
 
@@ -6,16 +6,19 @@ from logging import Logger
 from logging import getLogger
 
 from abc import ABCMeta
+from abc import abstractmethod
 
 from arcade import Sprite
 from arcade import SpriteList
 from arcade import check_for_collision_with_list
 
+from pytrek.GameState import GameState
 from pytrek.SoundMachine import SoundMachine
 from pytrek.SoundMachine import SoundType
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.ShieldHitData import ShieldHitData
+from pytrek.engine.ShipCondition import ShipCondition
 
 from pytrek.engine.devices.Devices import Devices
 
@@ -57,6 +60,7 @@ class BaseTorpedoMediator(MissesMediator):
         self._baseTorpedoMediatorLogger: Logger       = getLogger(__name__)
         self._soundMachine:              SoundMachine = SoundMachine()
         self._devices:                   Devices      = Devices()
+        self._gameState:                 GameState    = GameState()
 
         self._torpedoes:        SpriteList = SpriteList()
         self._explosions:       SpriteList = SpriteList()
@@ -331,25 +335,28 @@ class BaseTorpedoMediator(MissesMediator):
 
     def _computeDamage(self, quadrant: Quadrant, shooter: BaseEnemy):
 
-        hitValue: float = self._gameEngine.computeHit(shooterPosition=shooter.gameCoordinates,
-                                                      targetPosition=quadrant.enterpriseCoordinates,
-                                                      klingonPower=shooter.power)
+        if self._gameState.shipCondition == ShipCondition.Docked:
+            self._messageConsole.displayMessage('Starbase shields project the Enterprise. No damage')
+        else:
+            hitValue: float = self._gameEngine.computeHit(shooterPosition=shooter.gameCoordinates,
+                                                          targetPosition=quadrant.enterpriseCoordinates,
+                                                          klingonPower=shooter.power)
 
-        self._baseTorpedoMediatorLogger.info(f"Original Hit Value: {hitValue:.4f} {shooter=}")
-        shieldHitData: ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=hitValue, currentShieldPower=self._gameState.shieldEnergy)
+            self._baseTorpedoMediatorLogger.info(f"Original Hit Value: {hitValue:.4f} {shooter=}")
+            shieldHitData: ShieldHitData = self._gameEngine.computeShieldHit(torpedoHit=hitValue, currentShieldPower=self._gameState.shieldEnergy)
 
-        self._baseTorpedoMediatorLogger.info(f'{shieldHitData=}')
-        shieldAbsorptionValue   = shieldHitData.shieldAbsorptionValue
-        degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
+            self._baseTorpedoMediatorLogger.info(f'{shieldHitData=}')
+            shieldAbsorptionValue   = shieldHitData.shieldAbsorptionValue
+            degradedTorpedoHitValue = shieldHitData.degradedTorpedoHitValue
 
-        self._soundMachine.playSound(SoundType.ShieldHit)
-        self._gameEngine.degradeShields(shieldAbsorptionValue)
+            self._soundMachine.playSound(SoundType.ShieldHit)
+            self._gameEngine.degradeShields(shieldAbsorptionValue)
 
-        shieldPercentage: int = round((self._gameState.shieldEnergy / self._gameSettings.defaultFullShields) * 100)
-        shieldMsg:        str = f"Shields at {shieldPercentage} percent.  Enterprise energy degraded by: {degradedTorpedoHitValue:.2f}"
+            shieldPercentage: int = round((self._gameState.shieldEnergy / self._gameSettings.defaultFullShields) * 100)
+            shieldMsg:        str = f"Shields at {shieldPercentage} percent.  Enterprise energy degraded by: {degradedTorpedoHitValue:.2f}"
 
-        self._messageConsole.displayMessage(shieldMsg)
-        self._gameEngine.degradeEnergyLevel(shieldHitData.degradedTorpedoHitValue)
+            self._messageConsole.displayMessage(shieldMsg)
+            self._gameEngine.degradeEnergyLevel(shieldHitData.degradedTorpedoHitValue)
 
     def _pointAtEnterprise(self, enemy: Enemy, enterprise: Enterprise, rotationAngle: int = 125):
 
