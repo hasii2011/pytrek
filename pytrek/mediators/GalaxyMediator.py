@@ -6,6 +6,7 @@ from logging import getLogger
 
 from codeallybasic.SingletonV3 import SingletonV3
 
+from pytrek.Constants import MAXIMUM_DAMAGED_WARP_FACTOR
 from pytrek.Constants import MINIMUM_SAFE_WARP_FACTOR
 from pytrek.GameState import GameState
 
@@ -73,12 +74,6 @@ class GalaxyMediator(metaclass=SingletonV3):
                 #
                 travelDistance = damagedTravelDistance
 
-                self._messageConsoleProxy.displayMessage(f'Engineering to bridge - -')
-                self._messageConsoleProxy.displayMessage(f'  Scott here.  The warp engines were damaged.')
-                self._messageConsoleProxy.displayMessage(f'  We`ll have to reduce speed to warp 4.')
-                self._gameState.warpFactor = 4
-
-        #
         energyConsumed: float = self._gameEngine.computeEnergyForWarpTravel(travelDistance=travelDistance, warpFactor=warpFactor)
         self._gameState.energy -= energyConsumed
         self._gameEngine.updateTimeAfterWarpTravel(travelDistance=travelDistance, warpFactor=warpFactor)
@@ -120,3 +115,9 @@ class GalaxyMediator(metaclass=SingletonV3):
         devices: Devices = Devices()
 
         devices.setDeviceDamage(deviceType=DeviceType.WarpEngines, damageValue=warpEngineDamageValue)
+
+        self._messageConsoleProxy.displayMessage(f'Engineering to bridge - -')
+        self._messageConsoleProxy.displayMessage(f'  Scott here.  The warp engines were damaged.')
+        self._messageConsoleProxy.displayMessage(f'  We`ll have to reduce speed to warp {MAXIMUM_DAMAGED_WARP_FACTOR}.')
+        self._gameState.warpFactor = MAXIMUM_DAMAGED_WARP_FACTOR
+

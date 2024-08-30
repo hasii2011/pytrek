@@ -5,11 +5,16 @@ from typing import TYPE_CHECKING
 from logging import Logger
 from logging import getLogger
 
+from pytrek.Constants import CRITICAL_WARP_ENGINE_DAMAGE
+from pytrek.Constants import MAXIMUM_DAMAGED_WARP_FACTOR
 from pytrek.commandparser.CommandParser import CommandParser
 from pytrek.commandparser.ManualMoveData import ManualMoveData
 from pytrek.commandparser.ParsedCommand import ParsedCommand
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
+from pytrek.engine.devices.DeviceType import DeviceType
+
+from pytrek.engine.devices.Devices import Devices
 
 from pytrek.gui.HelpView import HelpView
 
@@ -18,8 +23,6 @@ from pytrek.mediators.GalaxyMediator import GalaxyMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
 from pytrek.engine.GameEngine import GameEngine
-
-from pytrek.model.Coordinates import Coordinates
 
 from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
@@ -42,6 +45,7 @@ class CommandHandler:
         self._gameEngine:         GameEngine         = GameEngine()
         self._galaxyMediator:     GalaxyMediator     = GalaxyMediator()
         self._galaxy:             Galaxy             = Galaxy()
+        self._devices:            Devices            = Devices()
 
         self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
 
@@ -66,8 +70,7 @@ class CommandHandler:
                 self._quadrantMediator.firePhasers(quadrant)
                 self._gameEngine.resetOperationTime()
             case CommandType.Warp:
-                self._gameState.warpFactor = parsedCommand.warpFactor
-                self._view.messageConsoleSection.displayMessage(f'Warp factor set to: {self._gameState.warpFactor}')
+                self._setWarpFactor(parsedCommand=parsedCommand)
             case CommandType.Move:
                 self._doMove(quadrant, parsedCommand)
             case CommandType.Chart:
@@ -88,6 +91,20 @@ class CommandHandler:
             case _:
                 self.logger.error(f'Invalid command: {commandStr}')
                 raise InvalidCommandException(message=f'Invalid command: {commandStr}')
+
+    def _setWarpFactor(self, parsedCommand: ParsedCommand):
+
+        warpEngineDamage: float = self._devices.getDeviceDamage(deviceType=DeviceType.WarpEngines)
+        warpFactor:       int   = parsedCommand.warpFactor
+
+        if warpEngineDamage > CRITICAL_WARP_ENGINE_DAMAGE:
+            self._view.messageConsoleSection.displayMessage("Engineer Scott- \"The warp engines are damaged, Sir.\"")
+        elif warpEngineDamage > 0.0 and warpFactor > MAXIMUM_DAMAGED_WARP_FACTOR:
+            self._view.messageConsoleSection.displayMessage("Engineer Scott- \"Sorry, Captain. Until this damage")
+            self._view.messageConsoleSection.displayMessage("  is repaired, I can only give you warp 4.\"")
+        else:
+            self._gameState.warpFactor = warpFactor
+            self._view.messageConsoleSection.displayMessage(f'Warp factor set to: {self._gameState.warpFactor}')
 
     def _doMove(self, quadrant: Quadrant, parsedCommand: ParsedCommand):
 
