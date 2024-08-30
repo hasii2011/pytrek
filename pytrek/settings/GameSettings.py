@@ -80,6 +80,7 @@ SECTION_FACTORS: Section = Section(
         ConfigurationNameValue(name=PropertyName('basicMissDisplayInterval'),        defaultValue='5'),
         ConfigurationNameValue(name=PropertyName('photonTorpedoMisfireRate'),        defaultValue='0.2'),
         ConfigurationNameValue(name=PropertyName('phaserBurstToTerminate'),          defaultValue='20.0'),
+        ConfigurationNameValue(name=PropertyName('damageAdjuster'),                  defaultValue='0.5'),
     ]
 )
 
@@ -344,6 +345,16 @@ class GameSettings(ConfigurationProperties, metaclass=SingletonV3):
     @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
     def phaserBurstToTerminate(self) -> float:
         return 0.0
+
+    @property
+    @configurationGetter(sectionName=FACTORS_SECTION_NAME, deserializeFunction=SecureConversions.secureFloat)
+    def damageAdjuster(self) -> float:
+        return 0.0
+
+    @damageAdjuster.setter
+    @configurationSetter(sectionName=FACTORS_SECTION_NAME)
+    def damageAdjuster(self, newValue: int):
+        pass
 
     @property
     @configurationGetter(sectionName=SPEED_SECTION_NAME, deserializeFunction=TorpedoSpeeds.toTorpedoSpeed)

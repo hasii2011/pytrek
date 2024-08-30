@@ -129,8 +129,7 @@ class QuadrantSection(BaseSection):
 
         currentCoordinates: Coordinates = self._quadrant.coordinates
 
-        self._galaxyMediator.doWarp(currentCoordinates=currentCoordinates, destinationCoordinates=destinationCoordinates, warpSpeed=self._gameState.warpFactor)
+        self._galaxyMediator.doWarp(currentCoordinates=currentCoordinates, destinationCoordinates=destinationCoordinates)
         self._quadrant = self._galaxy.getQuadrant(quadrantCoordinates=destinationCoordinates)
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
 
-        self._messageConsoleProxy.displayMessage(f"Warped to: {destinationCoordinates} at warp: {self._gameState.warpFactor}")

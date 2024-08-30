@@ -82,6 +82,24 @@ class TestIntelligence(ProjectTestBase):
         self._gameSettings.playerType = self._savePlayerType
         self._gameSettings.gameType   = self._saveGameType
 
+    def testDetermineIfWarpEngineAreDamaged(self):
+        """
+        At warp 8 moving 8 quadrants, 48% probability that your engines will be damaged
+
+        """
+        fudgeFactor:         int   = 100
+        probability:         float = 0.48
+        loopCount:           int = 10000
+        minExpectedFailures: int = round(loopCount * probability) - fudgeFactor
+
+        damagedCounter: int = 0
+        for x in range(10000):
+            damaged: bool = self.smarty.determineIfWarpEngineAreDamaged(warpFactor=8, distance=8)
+            if damaged is True:
+                damagedCounter += 1
+
+        self.assertGreaterEqual(damagedCounter, minExpectedFailures, '48% chance')
+
     def testGetRandomSectorCoordinates(self):
         """"""
         coordinates: Coordinates = self.smarty.generateSectorCoordinates()
@@ -260,7 +278,9 @@ class TestIntelligence(ProjectTestBase):
 
         for x in range(0, 100):
             ans = self.smarty.rand()
+
             self.logger.debug(f"testRand - Iteration {x}, answer is {ans}")
+            self.assertTrue(0 < ans < 0.999999)
 
     def testRandomFloat(self):
 

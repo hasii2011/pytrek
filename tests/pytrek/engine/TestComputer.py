@@ -1,4 +1,4 @@
-
+from math import degrees
 from math import floor
 
 from unittest import TestSuite
@@ -43,6 +43,60 @@ class TestComputer(ProjectTestBase):
     def setUp(self):
         super().setUp()
         self.smarty: Computer = Computer()
+
+    def testComputerDirectionDown(self):
+
+        startCoordinates: Coordinates = Coordinates(x=5, y=0)
+        endCoordinates:   Coordinates = Coordinates(x=5, y=5)
+
+        radianDirection: float = self.smarty.computeGameTravelDirection(startCoordinates=startCoordinates, endCoordinates=endCoordinates)
+
+        degreeDirection = degrees(radianDirection)
+
+        self.assertEqual(0.0, degreeDirection, 'Invalid direction')
+
+    def testComputerDirectionLeftToRightAngle(self):
+
+        startCoordinates: Coordinates = Coordinates(x=0, y=0)
+        endCoordinates:   Coordinates = Coordinates(x=5, y=5)
+
+        radianDirection: float = self.smarty.computeGameTravelDirection(startCoordinates=startCoordinates, endCoordinates=endCoordinates)
+
+        degreeDirection = degrees(radianDirection)
+
+        self.assertAlmostEqual(85.94, degreeDirection, 2, 'Incorrect left to right direction')
+
+    def testComputerDirectionUp(self):
+
+        startCoordinates: Coordinates = Coordinates(x=5, y=5)
+        endCoordinates:   Coordinates = Coordinates(x=5, y=0)
+
+        radianDirection: float = self.smarty.computeGameTravelDirection(startCoordinates=startCoordinates, endCoordinates=endCoordinates)
+
+        degreeDirection = degrees(radianDirection)
+
+        self.assertAlmostEqual(343.77, degreeDirection, 2, 'Incorrect left to right direction')
+
+    def testComputerDirectionRightToLeftAngle(self):
+
+        startCoordinates: Coordinates = Coordinates(x=5, y=5)
+        endCoordinates:   Coordinates = Coordinates(x=0, y=0)
+
+        radianDirection: float = self.smarty.computeGameTravelDirection(startCoordinates=startCoordinates, endCoordinates=endCoordinates)
+
+        degreeDirection = degrees(radianDirection)
+
+        self.assertAlmostEqual(-257.83, degreeDirection, 2, 'Incorrect left to right direction')
+
+    def testComputeDestinationCoordinates(self):
+
+        startCoordinates: Coordinates = Coordinates(x=5, y=5)
+
+        destinationCoordinates: Coordinates = self.smarty.computeDestinationCoordinates(startCoordinates=startCoordinates, distance=0.5, angle=6.0)
+
+        expectedCoordinates: Coordinates = Coordinates(x=5, y=5)
+
+        self.assertEqual(expectedCoordinates, destinationCoordinates, 'Computer is broken')
 
     def testKnownCoordinates_2_1(self):
 
@@ -147,7 +201,17 @@ class TestComputer(ProjectTestBase):
         self.logger.info(f"Galactic West/East distance is: {distance}")
 
         self.assertGreater(distance, TestComputer.MIN_GALACTIC_DISTANCE, "East/West calculation failed less than zero")
-        self.assertEqual(distance,   TestComputer.MAX_GALACTIC_DISTANCE, "Incorrect East/West distance")
+        self.assertEqual(distance,   TestComputer.MAX_GALACTIC_DISTANCE, "Incorrect West/East distance")
+
+    def testComputeGalacticDistanceModerateUp(self):
+
+        startCoordinates = Coordinates(x=5, y=5)
+        endCoordinates   = Coordinates(x=5, y=0)
+
+        distance       = self.smarty.computeGalacticDistance(startQuadrantCoordinates=startCoordinates, endQuadrantCoordinates=endCoordinates)
+        # sectorDistance = self.smarty.computeQuadrantDistance(startSector=startCoordinates, endSector=endCoordinates)
+
+        self.assertEqual(distance, 50.0, "Incorrect West/East distance")
 
     def testValueStringEmptyQuadrant(self):
 

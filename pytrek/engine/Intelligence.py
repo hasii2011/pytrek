@@ -3,7 +3,6 @@ from typing import List
 
 from logging import Logger
 from logging import getLogger
-
 from logging import DEBUG
 
 from collections import namedtuple
@@ -19,6 +18,7 @@ from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
+from pytrek.Constants import MINIMUM_SAFE_WARP_FACTOR
 from pytrek.Constants import QUADRANT_COLUMNS
 from pytrek.Constants import QUADRANT_ROWS
 
@@ -48,7 +48,8 @@ class Intelligence(metaclass=SingletonV3):
     of some the original 'C' code's built-in math functions
     """
 
-    RAND_MAX: int = 32767
+    # RAND_MAX: int = maxsize
+    # RAND_MAX: int = 32767
 
     ADJACENT_DIRECTIONS: List[Direction] = [
         Direction.North, Direction.NorthEast, Direction.East
@@ -389,6 +390,27 @@ class Intelligence(metaclass=SingletonV3):
 
         return tractorBeamComputation
 
+    # noinspection SpellCheckingInspection
+    def determineIfWarpEngineAreDamaged(self, warpFactor: float, distance: float) -> bool:
+        """
+        double prob = dist*(6.0-warpfac)*(6.0-warpfac)/66.666666666;
+
+        Args:
+            warpFactor:
+            distance:
+
+        Returns: `True` if this trip with this warp factor caused warp engine damage, else `False`
+        """
+        assert warpFactor > MINIMUM_SAFE_WARP_FACTOR, 'Should only be called when warp Factor is greater an 6'
+
+        damagedEngine:   bool  = False
+        probability:     float = distance * (MINIMUM_SAFE_WARP_FACTOR - warpFactor) * (MINIMUM_SAFE_WARP_FACTOR - warpFactor) / 66.666666666
+
+        if probability > self.rand():
+            damagedEngine = True
+
+        return damagedEngine
+
     def rand(self) -> float:
         """
 
@@ -399,8 +421,7 @@ class Intelligence(metaclass=SingletonV3):
         Returns: Random float in range 0.0 - 0.99999
 
         """
-        intermediateAns = randrange(start=0, stop=Intelligence.RAND_MAX)
-        ans: float = intermediateAns / (1.0 + Intelligence.RAND_MAX)
+        ans: float = random()
 
         return ans
 
@@ -410,7 +431,6 @@ class Intelligence(metaclass=SingletonV3):
         Returns:  0.0 .. 0.9999
 
         """
-
         weeNumber: float = random()
         return weeNumber
 
@@ -435,6 +455,7 @@ class Intelligence(metaclass=SingletonV3):
         double expran(double avrage) {
             return -avrage * log(1e-7 + Rand());
         }
+
         Returns:
         """
         return -average * log(1e-7 + self.rand())

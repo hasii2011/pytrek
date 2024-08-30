@@ -2,18 +2,22 @@
 from logging import Logger
 from logging import getLogger
 
-from codeallybasic.SingletonV3 import SingletonV3
-
+from math import cos
+from math import pi
+from math import sin
 from math import atan2
 from math import degrees
 from math import floor
 from math import sqrt
 
+from dataclasses import dataclass
+
+from codeallybasic.SingletonV3 import SingletonV3
+
 from pytrek.Constants import COMMAND_SECTION_HEIGHT
 from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
-
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
 from pytrek.Constants import QUADRANT_ROWS
@@ -24,15 +28,26 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.model.Coordinates import Coordinates
 
 
+@dataclass
+class Deltas:
+    deltaX: int = 0
+    deltaY: int = 0
+
+
 class Computer(metaclass=SingletonV3):
     """
     Make a computer a singleton, so we don't have to pass it around
     Makes basic computations related to converting to and from game coordinates
     and the underlying PyArcade point system;
+
+    Does other game related computations around the quadrant and section coordinates
+
     This unrelated to the game 'computer'
     """
     QUADRANT_TRAVEL_FACTOR: float = 0.1
     GALACTIC_TRAVEL_FACTOR: float = 10.0
+
+    SCALE_DOWN_FACTOR:      float = 100     # Convert Galactic distance back to nominal values
 
     def __init__(self):
         self.logger:        Logger       = getLogger(__name__)
@@ -122,6 +137,30 @@ class Computer(metaclass=SingletonV3):
         """"""
         return self._computeDistance(startQuadrantCoordinates, endQuadrantCoordinates, Computer.GALACTIC_TRAVEL_FACTOR)
 
+    def computeGameTravelDirection(self, startCoordinates: Coordinates, endCoordinates: Coordinates) -> float:
+        # noinspection SpellCheckingInspection
+        """
+        Can be used for both quadrant and sector directions
+
+        direc = atan2(deltax, deltay)*1.90985932;
+            if (direc < 0.0) direc += 12.0;
+
+        Args:
+            startCoordinates:
+            endCoordinates:
+
+        Returns:  Then angel in radians
+        """
+        deltas: Deltas = self._computeDeltaXDeltaY(startCoordinates=startCoordinates, endCoordinates=endCoordinates)
+        deltaX: int = deltas.deltaX
+        deltaY: int = deltas.deltaY
+
+        pi6: float = 6 / pi
+
+        direction: float = atan2(deltaX, deltaY) * pi6
+
+        return direction
+
     def createValueString(self, klingonCount: int, commanderCount: int, hasStarBase: bool) -> str:
         """
         Turn the input parameters into a numeric string that can be used to display
@@ -142,6 +181,26 @@ class Computer(metaclass=SingletonV3):
         strValue = str(quadrantValue).rjust(3, '0')
 
         return strValue
+
+    def computeDestinationCoordinates(self, startCoordinates: Coordinates, distance: float, angle: float) -> Coordinates:
+        """
+        xx = x + (d * cos(alpha))
+        yy = y + (d * sin(alpha))
+
+        Args:
+            startCoordinates:
+
+            distance:       For distance use the sector computed distance as that is not up-scaled by the game
+            angle:          In radians
+
+        Returns:  Destination coordinates
+        """
+        destinationCoordinates: Coordinates = Coordinates()
+
+        destinationCoordinates.x = round(startCoordinates.x + (distance * cos(angle)))
+        destinationCoordinates.y = round(startCoordinates.y + (distance * sin(angle)))
+
+        return destinationCoordinates
 
     def computeAngleToTarget(self, shooter: ArcadePoint, deadMeat: ArcadePoint) -> float:
         """
@@ -187,6 +246,18 @@ class Computer(metaclass=SingletonV3):
         Returns:    The game distance between the above
         """
 
+        deltas: Deltas = self._computeDeltaXDeltaY(startCoordinates=startCoordinates, endCoordinates=endCoordinates)
+        deltaX: int = deltas.deltaX
+        deltaY: int = deltas.deltaY
+
+        distance: float = travelFactor * sqrt((deltaX * deltaX) + (deltaY * deltaY))
+
+        self.logger.debug(f"{distance=}")
+
+        return distance
+
+    def _computeDeltaXDeltaY(self, startCoordinates: Coordinates, endCoordinates: Coordinates) -> Deltas:
+
         x1: int = startCoordinates.x
         y1: int = startCoordinates.y
         x2: int = endCoordinates.x
@@ -198,8 +269,4 @@ class Computer(metaclass=SingletonV3):
         deltaY: int = y2 - y1
         self.logger.debug(f"{deltaX=} {deltaY=}")
 
-        distance: float = travelFactor * sqrt((deltaX * deltaX) + (deltaY * deltaY))
-
-        self.logger.debug(f"{distance=}")
-
-        return distance
+        return Deltas(deltaX=deltaX, deltaY=deltaY)

@@ -318,6 +318,28 @@ class TestGameSettings(ProjectTestBase):
 
         gameSettings.gameType = saveGameType
 
+    def testGetDamageAdjuster(self):
+        gameSettings: GameSettings = GameSettings()
+
+        damageAdjusterValue: float = gameSettings.damageAdjuster
+
+        self.assertTrue(0.0 < damageAdjusterValue, 'Should be a positive value')
+
+    def testSetDamageAdjuster(self):
+
+        gameSettings: GameSettings = GameSettings()
+
+        expectedValue: float = 0.75
+        saveValue:     float = gameSettings.damageAdjuster  # Save it
+
+        gameSettings.damageAdjuster = expectedValue
+
+        setValue: float = gameSettings.damageAdjuster
+
+        gameSettings.damageAdjuster = saveValue         # Restore it before we assert it
+
+        self.assertEqual(0.75, setValue, 'Not correctly set')
+
 
 def suite() -> TestSuite:
     """You need to change the name of the test class here also."""

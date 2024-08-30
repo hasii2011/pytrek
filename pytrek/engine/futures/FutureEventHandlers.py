@@ -89,8 +89,7 @@ class FutureEventHandlers:
             self._messageConsole.displayMessage(f'Warp factor set to {tractorBeamComputation.warpFactor:.2f}',
                                                 messageType=ConsoleMessageType.Warning)
             quadrant: Quadrant = self._galaxy.currentQuadrant
-            self._galaxyMediator.doWarp(currentCoordinates=quadrant.coordinates, destinationCoordinates=cmdrCoordinates,
-                                        warpSpeed=tractorBeamComputation.warpFactor)
+            self._galaxyMediator.doWarp(currentCoordinates=quadrant.coordinates, destinationCoordinates=cmdrCoordinates)
 
             self._quadrantMediator.enterQuadrant(quadrant=quadrant, enterprise=self._gameState.enterprise)
 
