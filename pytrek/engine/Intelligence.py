@@ -47,10 +47,6 @@ class Intelligence(metaclass=SingletonV3):
     from repeating computation code from all over the code;  Also contains Python versions
     of some the original 'C' code's built-in math functions
     """
-
-    # RAND_MAX: int = maxsize
-    # RAND_MAX: int = 32767
-
     ADJACENT_DIRECTIONS: List[Direction] = [
         Direction.North, Direction.NorthEast, Direction.East
     ]

@@ -27,9 +27,6 @@ from pytrek.GameState import GameState
 from tests.ProjectTestBase import ProjectTestBase
 
 
-BASIC_DAMAGE = 4.0
-
-
 class TestEventEngine(ProjectTestBase):
     """
     """
@@ -59,7 +56,7 @@ class TestEventEngine(ProjectTestBase):
         self._gameEngine:        GameEngine        = TestEventEngine.clsGameEngine
         self._gameState:         GameState         = TestEventEngine.clsGameState
         self._eventEngine:       EventEngine       = TestEventEngine.clsEventEngine
-        self._devices:           DeviceManager           = TestEventEngine.clsDevices
+        self._devices:           DeviceManager     = TestEventEngine.clsDevices
         self._galaxy:            Galaxy            = TestEventEngine.clsGalaxy
 
         self._messageConsoleProxy:   MessageConsoleProxy   = TestEventEngine.clsMessageConsoleProxy
@@ -121,42 +118,6 @@ class TestEventEngine(ProjectTestBase):
             self.logger.error(f'newFireDate: {newFireDate:.2f}   fireDate: {fireDate:.2f}')
             self.logger.error(f'{self._eventEngine=}')
         self.assertTrue(newFireDate > fireDate, 'It was supposed to be rescheduled')
-
-    # def testFixDevices(self):
-    #
-    #     self._devices.getDevice(DeviceType.Phasers).damage       = BASIC_DAMAGE
-    #     self._devices.getDevice(DeviceType.Phasers).deviceStatus = DeviceStatus.Damaged
-    #
-    #     travelDistance: float = 3.162222
-    #     warpFactor:     float = 5.0
-    #     warpSquared: float = warpFactor ** 2
-    #     elapsedTime: float = 10.0 * travelDistance / warpSquared
-    #     self._gameState.opTime = elapsedTime
-    #
-    #     # self._eventEngine.fixDevices()
-    #
-    #     repairedValue: float = BASIC_DAMAGE - elapsedTime
-    #
-    #     repairedDevice: Device = self._devices.getDevice(DeviceType.Phasers)
-    #     updatedFix:     float  = repairedDevice.damage
-    #
-    #     self.assertAlmostEqual(first=repairedValue, second=updatedFix, msg="Not enough repair")
-    #
-    #     self.logger.info(f"{repairedValue=} {updatedFix=}")
-    #
-    # def testFixDevicesNoOpTime(self):
-    #
-    #     self._gameState.opTime = 0.0
-    #     self._devices.getDevice(DeviceType.PhotonTubes).damage       = BASIC_DAMAGE
-    #     self._devices.getDevice(DeviceType.PhotonTubes).deviceStatus = DeviceStatus.Damaged
-    #
-    #     # self._eventEngine.fixDevices()
-    #
-    #     repairedDevice: Device = self._devices.getDevice(DeviceType.PhotonTubes)
-    #     updatedFix:     float  = repairedDevice.damage
-    #
-    #     self.assertEqual(first=BASIC_DAMAGE, second=updatedFix, msg="Should not have been repaired")
-    #     self.logger.info(f"updatedFix: {updatedFix} {BASIC_DAMAGE=}")
 
     @classmethod
     def _setupGame(cls):

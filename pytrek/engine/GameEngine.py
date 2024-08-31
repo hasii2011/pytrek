@@ -46,11 +46,11 @@ class GameEngine(metaclass=SingletonV3):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._gameSettings: GameSettings = GameSettings()
-        self._gameState:    GameState    = GameState()
-        self._intelligence: Intelligence = Intelligence()
-        self._computer:     Computer     = Computer()
-        self._devices:      DeviceManager      = DeviceManager()
+        self._gameSettings:  GameSettings  = GameSettings()
+        self._gameState:     GameState     = GameState()
+        self._intelligence:  Intelligence  = Intelligence()
+        self._computer:      Computer      = Computer()
+        self._deviceManager: DeviceManager = DeviceManager()
 
         self._accumulatedDelta: float = 0.0
         self._gameClock:        float = 0.0
@@ -103,7 +103,7 @@ class GameEngine(metaclass=SingletonV3):
         """
         elapsedTime = travelDistance / 0.095
         self._gameState.opTime = elapsedTime
-        self._devices.fixDevices(starDate=self._gameState.starDate, opTime=self._gameState.opTime)
+        self._deviceManager.fixDevices(starDate=self._gameState.starDate, opTime=self._gameState.opTime)
         self.updateTime(elapsedTime=elapsedTime)
 
     def updateTimeAfterWarpTravel(self, travelDistance: float, warpFactor: float):
@@ -122,7 +122,7 @@ class GameEngine(metaclass=SingletonV3):
             self._gameState.opTime = 0
         else:
             self._gameState.opTime = elapsedTime
-        # self._eventEngine.fixDevices()
+        self._deviceManager.fixDevices(opTime=self._gameState.opTime, starDate=self._gameState.starDate)
         self.updateTime(elapsedTime=elapsedTime)
 
     def updateTime(self, elapsedTime: float):
@@ -162,7 +162,7 @@ class GameEngine(metaclass=SingletonV3):
         Returns:    The energy need to travel this far.
         """
         wCube:          float = warpFactor ** 3
-        shieldValue:    int   = self._devices.getDevice(DeviceType.Shields).deviceStatus.value
+        shieldValue:    int   = self._deviceManager.getDevice(DeviceType.Shields).deviceStatus.value
         requiredEnergy: float = (travelDistance + 0.05) + wCube * (shieldValue + 1)
 
         return requiredEnergy
@@ -206,7 +206,7 @@ class GameEngine(metaclass=SingletonV3):
         Returns: Computed shield hit data
 
         """
-        if self._devices.getDeviceStatus(DeviceType.Shields) == DeviceStatus.Up:
+        if self._deviceManager.getDeviceStatus(DeviceType.Shields) == DeviceStatus.Up:
 
             shieldAbsorptionPercentage: float = currentShieldPower / self._gameSettings.defaultFullShields
 
@@ -344,7 +344,7 @@ class GameEngine(metaclass=SingletonV3):
         self._gameState.shieldEnergy -= shieldAbsorptionValue
         if self._gameState.shieldEnergy < 0:
             self._gameState.shieldEnergy = 0
-            self._devices.getDevice(DeviceType.Shields).setDeviceStatus(DeviceStatus.Down)
+            self._deviceManager.getDevice(DeviceType.Shields).setDeviceStatus(DeviceStatus.Down)
 
     # noinspection PyAttributeOutsideInit
     def updateRealTimeClock(self, deltaTime: float):
