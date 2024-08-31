@@ -9,7 +9,7 @@ from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
 from pytrek.gui.DeviceStatusSection import DeviceStatusSection
 from tests.DrawTextSection import DrawTextSection
@@ -35,7 +35,7 @@ class TestView(View):
         #
         # Set these to test status colors:
         #
-        self._devices: Devices = Devices()
+        self._devices: DeviceManager = DeviceManager()
 
         self._devices.setDeviceStatus(deviceType=DeviceType.ImpulseEngines, deviceStatus=DeviceStatus.Damaged)
         self._devices.setDeviceDamage(deviceType=DeviceType.ImpulseEngines, damageValue=20)

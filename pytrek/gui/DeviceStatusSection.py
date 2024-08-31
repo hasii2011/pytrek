@@ -13,7 +13,7 @@ from arcade import start_render
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
 from pytrek.gui.BaseSection import BaseSection
 
@@ -63,7 +63,7 @@ class DeviceStatusSection(BaseSection):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._devices:   Devices   = Devices()
+        self._devices:   DeviceManager   = DeviceManager()
 
         self._deviceTypeHeaderX:   int = self.left + HEADER_MARGIN_LEFT
         self._deviceTypeHeaderY:   int = self.bottom + self.height - TEXT_TOP_OFFSET

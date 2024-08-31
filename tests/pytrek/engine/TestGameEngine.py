@@ -12,7 +12,7 @@ from pytrek.engine.ShieldHitData import ShieldHitData
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
 from pytrek.model.Coordinates import Coordinates
 
@@ -38,7 +38,7 @@ class TestGameEngine(ProjectTestBase):
         self._gameState:    GameState    = GameState()
         self._computer:     Computer     = Computer()
 
-        self._devices:      Devices    = Devices()
+        self._devices:      DeviceManager    = DeviceManager()
 
     def testComputeHitValueOnKlingon(self):
 

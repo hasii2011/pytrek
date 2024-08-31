@@ -106,13 +106,13 @@ class GalaxyMediator(metaclass=SingletonV3):
         damage[DWARPEN] = damfac*(3.0*Rand()+1.0);
 
         """
-        from pytrek.engine.devices.Devices import Devices
+        from pytrek.engine.devices.DeviceManager import DeviceManager
         from pytrek.engine.devices.DeviceType import DeviceType
 
         damageFactor: float = self._gameSettings.damageAdjuster * self._gameState.playerType.value
 
         warpEngineDamageValue: float = damageFactor * (3.0 * self._intelligence.rand() + 1.0)
-        devices: Devices = Devices()
+        devices: DeviceManager = DeviceManager()
 
         devices.setDeviceDamage(deviceType=DeviceType.WarpEngines, damageValue=warpEngineDamageValue)
 

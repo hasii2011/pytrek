@@ -5,7 +5,7 @@ from pytrek.GameState import GameState
 
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
-from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.devices.DeviceManager import DeviceManager
 from pytrek.engine.futures.EventEngine import EventEngine
 
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
@@ -46,4 +46,4 @@ class ProjectTestBase(UnitTestBase):
         Galaxy._instances           = {}
         Intelligence._instances     = {}
         GameEngine._instances       = {}
-        Devices._instances          = {}
+        DeviceManager._instances          = {}

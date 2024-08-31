@@ -8,16 +8,16 @@ from pytrek.engine.devices.DeviceType import DeviceType
 
 from tests.ProjectTestBase import ProjectTestBase
 
-from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
 
-class TestDevices(ProjectTestBase):
+class TestDeviceManager(ProjectTestBase):
     """
     """
 
     def testGetDevice(self):
 
-        devices: Devices = Devices()
+        devices: DeviceManager = DeviceManager()
 
         testDevice: Device = devices.getDevice(DeviceType.DeathRay)
 
@@ -25,7 +25,7 @@ class TestDevices(ProjectTestBase):
 
     def testSetDeviceStatus(self):
 
-        devices: Devices = Devices()
+        devices: DeviceManager = DeviceManager()
         devices.setDeviceStatus(deviceType=DeviceType.LifeSupport, deviceStatus=DeviceStatus.Damaged)
 
         lifeSupport: Device = devices.getDevice(DeviceType.LifeSupport)
@@ -43,7 +43,7 @@ class TestDevices(ProjectTestBase):
         # device:  Device  = Device(deviceType=DeviceType.DeathRay, deviceStatus=DeviceStatus.Damaged, initialDamage=42.42)
         # self.logger.info(f"device: {device}")
 
-        devices: Devices = Devices()
+        devices: DeviceManager = DeviceManager()
         self.logger.info(f"devices: {devices}")
 
 
@@ -52,7 +52,7 @@ def suite() -> TestSuite:
 
     testSuite: TestSuite = TestSuite()
     # noinspection PyUnresolvedReferences
-    testSuite.addTest(unittest.makeSuite(TestDevices))
+    testSuite.addTest(unittest.makeSuite(TestDeviceManager))
 
     return testSuite
 

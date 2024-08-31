@@ -16,7 +16,7 @@ from pytrek.engine.Direction import Direction
 from pytrek.engine.DirectionData import DirectionData
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.devices.DeviceManager import DeviceManager
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShieldHitData import ShieldHitData
 
@@ -50,7 +50,7 @@ class GameEngine(metaclass=SingletonV3):
         self._gameState:    GameState    = GameState()
         self._intelligence: Intelligence = Intelligence()
         self._computer:     Computer     = Computer()
-        self._devices:      Devices      = Devices()
+        self._devices:      DeviceManager      = DeviceManager()
 
         self._accumulatedDelta: float = 0.0
         self._gameClock:        float = 0.0
@@ -103,7 +103,7 @@ class GameEngine(metaclass=SingletonV3):
         """
         elapsedTime = travelDistance / 0.095
         self._gameState.opTime = elapsedTime
-        # self._eventEngine.fixDevices()        TODO  This moves to async event engine who check to make sure star date has advance
+        self._devices.fixDevices(starDate=self._gameState.starDate, opTime=self._gameState.opTime)
         self.updateTime(elapsedTime=elapsedTime)
 
     def updateTimeAfterWarpTravel(self, travelDistance: float, warpFactor: float):
@@ -122,7 +122,7 @@ class GameEngine(metaclass=SingletonV3):
             self._gameState.opTime = 0
         else:
             self._gameState.opTime = elapsedTime
-        # self._eventEngine.fixDevices()        TODO  Probably does not belong here
+        # self._eventEngine.fixDevices()
         self.updateTime(elapsedTime=elapsedTime)
 
     def updateTime(self, elapsedTime: float):

@@ -20,7 +20,7 @@ from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.ShieldHitData import ShieldHitData
 from pytrek.engine.ShipCondition import ShipCondition
 
-from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
 from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
 from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
@@ -59,7 +59,7 @@ class BaseTorpedoMediator(MissesMediator):
 
         self._baseTorpedoMediatorLogger: Logger       = getLogger(__name__)
         self._soundMachine:              SoundMachine = SoundMachine()
-        self._devices:                   Devices      = Devices()
+        self._devices:                   DeviceManager      = DeviceManager()
         self._gameState:                 GameState    = GameState()
 
         self._torpedoes:        SpriteList = SpriteList()

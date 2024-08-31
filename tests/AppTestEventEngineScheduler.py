@@ -25,7 +25,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.devices.DeviceManager import DeviceManager
 from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
@@ -87,7 +87,7 @@ class AppTestEventScheduler(View):
         self._intelligence: Intelligence = Intelligence()
         self._computer:     Computer     = Computer()
         self._galaxy:       Galaxy       = Galaxy()
-        self._devices:      Devices      = Devices()
+        self._devices:      DeviceManager      = DeviceManager()
 
         self._messageConsole:   MessageConsoleSection = MessageConsoleSection(left=0,
                                                                               bottom=COMMAND_SECTION_HEIGHT,

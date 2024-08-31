@@ -14,7 +14,7 @@ from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
 from pytrek.engine.devices.DeviceType import DeviceType
 
-from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
 from pytrek.gui.HelpView import HelpView
 
@@ -45,7 +45,7 @@ class CommandHandler:
         self._gameEngine:         GameEngine         = GameEngine()
         self._galaxyMediator:     GalaxyMediator     = GalaxyMediator()
         self._galaxy:             Galaxy             = Galaxy()
-        self._devices:            Devices            = Devices()
+        self._devices:            DeviceManager            = DeviceManager()
 
         self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
 

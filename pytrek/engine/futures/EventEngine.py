@@ -14,7 +14,7 @@ from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.devices.DeviceManager import DeviceManager
 from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.FutureEvent import EventCallback
 from pytrek.engine.futures.FutureEvent import FutureEvent
@@ -57,7 +57,7 @@ class EventEngine(metaclass=SingletonV3):
         self._intelligence: Intelligence = Intelligence()
         self._gameState:    GameState    = GameState()
         self._gameSettings: GameSettings = GameSettings()
-        self._devices:      Devices      = Devices()
+        self._devices:      DeviceManager      = DeviceManager()
 
         self._eventMap:     EventMap = cast(EventMap, None)
         self._setupEventMap()
@@ -72,7 +72,7 @@ class EventEngine(metaclass=SingletonV3):
         self._scheduleRecurringEvents(eventType=FutureEventType.TRACTOR_BEAM)
         self._scheduleRecurringEvents(eventType=FutureEventType.SUPER_NOVA)
 
-        # I do not know what a Number is tell mypy so
+        # I do not know what a Number is; Tell mypy so
         schedule(function_pointer=self._doEventChecking, interval=EventEngine.EVENT_CHECK_INTERVAL)  # type: ignore
 
     def getEvent(self, eventType: FutureEventType) -> FutureEvent:
@@ -106,47 +106,6 @@ class EventEngine(metaclass=SingletonV3):
         futureEvent.schedulable = False
 
         self._eventMap[eventType] = futureEvent
-
-    def fixDevices(self):
-        # noinspection SpellCheckingInspection
-        """
-        // time taken by current operation
-        double fintim = d.date + Time
-        datemin = fintim;
-
-        // d.date is current stardate
-
-        xtime = datemin-d.date;
-
-        repair = xtime;
-
-        /* Don't fix Deathray here */
-        for (l=1; l<=ndevice; l++)
-            if (damage[l] > 0.0 && l != DDRAY)
-                damage[l] -= (damage[l]-repair > 0.0 ? repair : damage[l]);
-
-        /* Fix Deathray if docked */
-        if (damage[DDRAY] > 0.0 && condit == IHDOCKED)
-            damage[DDRAY] -= (damage[l] - xtime > 0.0 ? xtime : damage[DDRAY]);
-
-        /* If radio repaired, update star chart and attack reports */
-
-        """
-        self.logger.debug(f"Attempting to repair devices")
-        finishTime:  float = self._gameState.starDate + self._gameState.opTime
-        dateMinimum: float = finishTime
-        extraTime:   float = dateMinimum - self._gameState.starDate
-        repair:      float = extraTime
-
-        for devType in DeviceType:
-            device: Device = self._devices.getDevice(devType)
-            if device.deviceType != DeviceType.DeathRay:
-                if device.damage > 0.0:
-                    device.damage = device.damage - repair
-                    if device.damage <= 0:
-                        device.damage = 0
-                        device.deviceStatus = DeviceStatus.Up
-                        self.logger.info(f"Device: {device.deviceType.name} repaired")
 
     def _doEventChecking(self, deltaTime: float):
         """

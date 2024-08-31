@@ -108,7 +108,7 @@
             "propagate": "False"
         },
         "pytrek.engine.futures.EventEngine": {
-            "level": "WARNING",
+            "level": "INFO",
             "propagate": "False"
         },
         "pytrek.engine.futures.FutureEventHandlers": {

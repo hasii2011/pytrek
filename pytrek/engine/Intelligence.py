@@ -28,7 +28,7 @@ from pytrek.engine.LRScanCoordinates import LRScanCoordinates
 from pytrek.engine.PlayerType import PlayerType
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.devices.Devices import Devices
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
 from pytrek.gui.gamepieces.PlanetType import PlanetType
 
@@ -60,7 +60,7 @@ class Intelligence(metaclass=SingletonV3):
         """
         self.logger:        Logger       = getLogger(__name__)
         self._gameSettings: GameSettings = GameSettings()
-        self._devices:      Devices      = Devices()
+        self._devices:      DeviceManager      = DeviceManager()
 
     def getTorpedoSpeeds(self, playerType: PlayerType) -> TorpedoSpeeds:
         """
