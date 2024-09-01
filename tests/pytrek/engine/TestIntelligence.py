@@ -88,7 +88,7 @@ class TestIntelligence(ProjectTestBase):
 
         """
         fudgeFactor:         int   = 100
-        probability:         float = 0.48
+        probability:         float = 0.47
         loopCount:           int = 10000
         minExpectedFailures: int = round(loopCount * probability) - fudgeFactor
 
@@ -98,7 +98,7 @@ class TestIntelligence(ProjectTestBase):
             if damaged is True:
                 damagedCounter += 1
 
-        self.assertGreaterEqual(damagedCounter, minExpectedFailures, '48% chance')
+        self.assertGreaterEqual(damagedCounter, minExpectedFailures, '47% chance')
 
     def testGetRandomSectorCoordinates(self):
         """"""

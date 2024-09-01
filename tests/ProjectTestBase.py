@@ -46,4 +46,4 @@ class ProjectTestBase(UnitTestBase):
         Galaxy._instances           = {}
         Intelligence._instances     = {}
         GameEngine._instances       = {}
-        DeviceManager._instances          = {}
+        DeviceManager._instances    = {}

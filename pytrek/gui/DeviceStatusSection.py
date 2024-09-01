@@ -53,13 +53,14 @@ class DeviceStatusSection(BaseSection):
     """
     Self sizing and positioning within the game window
     """
-    def __init__(self, **kwargs):
+    def __init__(self, modal: bool = True, **kwargs):
+
         left:   int = self.window.width * 0.40
         bottom: int = SECTION_HEIGHT
         width:  int = self.window.width * 0.60
         height: int = SECTION_HEIGHT
 
-        super().__init__(left=left, bottom=bottom, width=width, height=height, modal=True, **kwargs)
+        super().__init__(left=left, bottom=bottom, width=width, height=height, modal=modal, **kwargs)
 
         self.logger: Logger = getLogger(__name__)
 
@@ -78,8 +79,6 @@ class DeviceStatusSection(BaseSection):
         self._lineEndY:   int = self._lineStartY
 
     def on_draw(self):
-        start_render()
-
         self._drawHeader()
         self._drawDevicesStatus()
 

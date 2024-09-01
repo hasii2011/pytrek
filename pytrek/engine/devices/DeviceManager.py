@@ -7,9 +7,13 @@ from logging import getLogger
 
 from codeallybasic.SingletonV3 import SingletonV3
 
+from pytrek.engine.ShipCondition import ShipCondition
+
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
+
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
 
 class DeviceManager(metaclass=SingletonV3):
@@ -27,7 +31,9 @@ class DeviceManager(metaclass=SingletonV3):
 
         self.logger.debug(f"Created {len(self.deviceMap):3} devices")
 
-    def fixDevices(self, starDate: float, opTime: float):
+        self._messageConsole: MessageConsoleProxy = MessageConsoleProxy()
+
+    def fixDevices(self, starDate: float, opTime: float, shipCondition: ShipCondition):
         # noinspection SpellCheckingInspection
         """
         // time taken by current operation
@@ -60,13 +66,22 @@ class DeviceManager(metaclass=SingletonV3):
 
         for devType in DeviceType:
             device: Device = self.getDevice(devType)
-            if device.deviceType != DeviceType.DeathRay:
-                if device.damage > 0.0:
-                    device.damage = device.damage - repair
-                    if device.damage <= 0:
-                        device.damage = 0
-                        device.deviceStatus = DeviceStatus.Up
-                        self.logger.info(f"Device: {device.deviceType.name} repaired")
+            if device.deviceType != DeviceType.DeathRay and device.damage > 0.0:
+                device.damage = device.damage - repair
+            elif device.deviceType == DeviceType.DeathRay and shipCondition == ShipCondition.Docked:
+                device.damage = device.damage - repair
+
+            if device.damage <= 0:
+                device.damage = 0
+                device.deviceStatus = DeviceStatus.Up
+                msg: str = f'Device: {device.deviceType.name} repaired'
+                #
+                # Simplify unit testing
+                if self._messageConsole.initialized is False:
+                    self.logger.warning(f'Message console not initialized')
+                else:
+                    self._messageConsole.displayMessage(msg)
+                self.logger.info(msg)
 
     def getDevice(self, deviceType: DeviceType):
 

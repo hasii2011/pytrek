@@ -1,15 +1,18 @@
 
 from unittest import TestSuite
+
 from unittest import main as unitTestMain
 
 from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.ShipCondition import ShipCondition
+
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
 from tests.ProjectTestBase import ProjectTestBase
 
-from pytrek.engine.devices.DeviceManager import DeviceManager
 
 BASIC_DAMAGE = 4.0
 
@@ -17,10 +20,17 @@ BASIC_DAMAGE = 4.0
 class TestDeviceManager(ProjectTestBase):
     """
     """
+    @classmethod
+    def setUpClass(cls):
+        """"""
+        super().setUpClass()
+        ProjectTestBase.resetSingletons()
+
     def setUp(self):
         super().setUp()
-        self._devices:     DeviceManager = DeviceManager()
-        self._intelligence: Intelligence = Intelligence()
+
+        self._deviceManager: DeviceManager = DeviceManager()
+        self._intelligence:  Intelligence  = Intelligence()
 
     def testGetDevice(self):
 
@@ -46,17 +56,12 @@ class TestDeviceManager(ProjectTestBase):
         self.assertEqual(first=lf2.deviceStatus, second=DeviceStatus.Down, msg='Status did not change')
 
     def testDevicesRepr(self):
-
-        # device:  Device  = Device(deviceType=DeviceType.DeathRay, deviceStatus=DeviceStatus.Damaged, initialDamage=42.42)
-        # self.logger.info(f"device: {device}")
-
-        devices: DeviceManager = DeviceManager()
-        self.logger.info(f"devices: {devices}")
+        self.logger.info(f"Device Manager: {self._deviceManager}")
 
     def testFixDevices(self):
 
-        self._devices.getDevice(DeviceType.Phasers).damage       = BASIC_DAMAGE
-        self._devices.getDevice(DeviceType.Phasers).deviceStatus = DeviceStatus.Damaged
+        self._deviceManager.getDevice(DeviceType.Phasers).damage       = BASIC_DAMAGE
+        self._deviceManager.getDevice(DeviceType.Phasers).deviceStatus = DeviceStatus.Damaged
 
         travelDistance: float = 3.162222
         warpFactor:     float = 5.0
@@ -65,11 +70,11 @@ class TestDeviceManager(ProjectTestBase):
         opTime:         float = elapsedTime
         starDate:       float = self._intelligence.generateInitialStarDate()
 
-        self._devices.fixDevices(opTime=opTime, starDate=starDate)
+        self._deviceManager.fixDevices(opTime=opTime, starDate=starDate, shipCondition=ShipCondition.Green)
 
         repairedValue: float = BASIC_DAMAGE - elapsedTime
 
-        repairedDevice: Device = self._devices.getDevice(DeviceType.Phasers)
+        repairedDevice: Device = self._deviceManager.getDevice(DeviceType.Phasers)
         updatedFix:     float  = repairedDevice.damage
 
         self.assertAlmostEqual(first=repairedValue, second=updatedFix, msg="Not enough repair")
@@ -81,16 +86,40 @@ class TestDeviceManager(ProjectTestBase):
         opTime:   float = 0.0
         starDate: float = self._intelligence.generateInitialStarDate()
 
-        self._devices.getDevice(DeviceType.PhotonTubes).damage       = BASIC_DAMAGE
-        self._devices.getDevice(DeviceType.PhotonTubes).deviceStatus = DeviceStatus.Damaged
+        self._deviceManager.getDevice(DeviceType.PhotonTubes).damage       = BASIC_DAMAGE
+        self._deviceManager.getDevice(DeviceType.PhotonTubes).deviceStatus = DeviceStatus.Damaged
 
-        self._devices.fixDevices(opTime=opTime, starDate=starDate)
+        self._deviceManager.fixDevices(opTime=opTime, starDate=starDate, shipCondition=ShipCondition.Green)
 
-        repairedDevice: Device = self._devices.getDevice(DeviceType.PhotonTubes)
+        repairedDevice: Device = self._deviceManager.getDevice(DeviceType.PhotonTubes)
         updatedFix:     float  = repairedDevice.damage
 
         self.assertEqual(first=BASIC_DAMAGE, second=updatedFix, msg="Should not have been repaired")
         self.logger.info(f"updatedFix: {updatedFix} {BASIC_DAMAGE=}")
+
+    def testFixDeathRayNotDockedNotFixed(self):
+
+        self._deviceManager.getDevice(DeviceType.DeathRay).damage       = BASIC_DAMAGE
+        self._deviceManager.getDevice(DeviceType.DeathRay).deviceStatus = DeviceStatus.Damaged
+
+        opTime:   float = 2
+        starDate: float = self._intelligence.generateInitialStarDate()
+
+        self._deviceManager.fixDevices(opTime=opTime, starDate=starDate, shipCondition=ShipCondition.Green)
+
+        self.assertEqual(BASIC_DAMAGE, self._deviceManager.getDevice(DeviceType.DeathRay).damage, 'Should not be fixable')
+
+    def testFixDeathRayDockedAndFixed(self):
+
+        self._deviceManager.getDevice(DeviceType.DeathRay).damage       = BASIC_DAMAGE
+        self._deviceManager.getDevice(DeviceType.DeathRay).deviceStatus = DeviceStatus.Damaged
+
+        opTime:   float = 2
+        starDate: float = self._intelligence.generateInitialStarDate()
+
+        self._deviceManager.fixDevices(opTime=opTime, starDate=starDate, shipCondition=ShipCondition.Docked)
+
+        self.assertEqual(BASIC_DAMAGE - opTime, self._deviceManager.getDevice(DeviceType.DeathRay).damage, 'Should be fixable')
 
 
 def suite() -> TestSuite:

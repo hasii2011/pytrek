@@ -103,7 +103,7 @@ class GameEngine(metaclass=SingletonV3):
         """
         elapsedTime = travelDistance / 0.095
         self._gameState.opTime = elapsedTime
-        self._deviceManager.fixDevices(starDate=self._gameState.starDate, opTime=self._gameState.opTime)
+        self._deviceManager.fixDevices(starDate=self._gameState.starDate, opTime=self._gameState.opTime, shipCondition=self._gameState.shipCondition)
         self.updateTime(elapsedTime=elapsedTime)
 
     def updateTimeAfterWarpTravel(self, travelDistance: float, warpFactor: float):
@@ -122,7 +122,7 @@ class GameEngine(metaclass=SingletonV3):
             self._gameState.opTime = 0
         else:
             self._gameState.opTime = elapsedTime
-        self._deviceManager.fixDevices(opTime=self._gameState.opTime, starDate=self._gameState.starDate)
+        self._deviceManager.fixDevices(opTime=self._gameState.opTime, starDate=self._gameState.starDate, shipCondition=self._gameState.shipCondition)
         self.updateTime(elapsedTime=elapsedTime)
 
     def updateTime(self, elapsedTime: float):
