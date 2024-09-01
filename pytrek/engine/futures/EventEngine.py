@@ -148,22 +148,24 @@ class EventEngine(metaclass=SingletonV3):
 
     def _scheduleRecurringEvents(self, eventType: FutureEventType):
         """
-        TODO:  Use switch statement when we upgrade to 3.10
 
         Args:
             eventType:
         """
         if self._isSchedulable(eventType):
 
-            if eventType == FutureEventType.COMMANDER_ATTACKS_BASE:
-                newEvent: FutureEvent = self._eventCreator.createCommanderAttacksBaseEvent()
-                self.scheduleEvent(newEvent)
-            if eventType == FutureEventType.SUPER_NOVA:
-                superNovaEvent: FutureEvent = self._eventCreator.createSuperNovaEvent()
-                self.scheduleEvent(superNovaEvent)
-            if eventType == FutureEventType.TRACTOR_BEAM:
-                tractorBeamEvent: FutureEvent = self._eventCreator.createTractorBeamEvent()
-                self.scheduleEvent(tractorBeamEvent)
+            match eventType:
+                case FutureEventType.COMMANDER_ATTACKS_BASE:
+                    newEvent: FutureEvent = self._eventCreator.createCommanderAttacksBaseEvent()
+                    self.scheduleEvent(newEvent)
+                case FutureEventType.SUPER_NOVA:
+                    superNovaEvent: FutureEvent = self._eventCreator.createSuperNovaEvent()
+                    self.scheduleEvent(superNovaEvent)
+                case FutureEventType.TRACTOR_BEAM:
+                    tractorBeamEvent: FutureEvent = self._eventCreator.createTractorBeamEvent()
+                    self.scheduleEvent(tractorBeamEvent)
+                case _:
+                    self.logger.warning(f'Unhandled event: {eventType}')
 
     def _setupEventMap(self):
 
