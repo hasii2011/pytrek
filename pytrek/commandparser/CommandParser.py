@@ -138,7 +138,7 @@ class CommandParser:
                 elif len(splitCmd) == 4:    # sector coordinates only
                     parsedCommand.automaticMoveData.sectorCoordinates = self._parseCoordinates(sRow=splitCmd[2], sColumn=splitCmd[3])
                 else:
-                    raise InvalidCommandException(message='Move automatic command improperly specified')
+                    raise InvalidCommandException(message='Move command improperly specified')
         else:
             manualMoveData: ManualMoveData = self._parseManualMoveSubcommand(splitCmd)
             parsedCommand.manualMoveData = manualMoveData

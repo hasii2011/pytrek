@@ -105,6 +105,12 @@ class TestCommandParser(UnitTestBase):
         self.assertEqual(CommandType.Move, parsedCommand.commandType, 'Should be a `move` command')
         self.assertTrue(parsedCommand.manualMove, 'Should be a manual move')
 
+    def testSimplestNegativeManualMove(self):
+        parsedCommand: ParsedCommand = self._processCommand('m m -.1')
+
+        self.assertEqual(CommandType.Move, parsedCommand.commandType, 'Should be a `move` command')
+        self.assertTrue(parsedCommand.manualMove, 'Should be a manual move')
+
     def testMoveAutomaticInQuadrant(self):
         parsedCommand: ParsedCommand = self._processCommand('move auto 4 4')
 

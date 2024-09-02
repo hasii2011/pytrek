@@ -146,10 +146,22 @@ class QuadrantMediator(metaclass=SingletonV3):
             self._soundMachine.playSound(SoundType.UnableToComply)
             self._messageConsole.displayMessage(f'You are not adjacent to base')
 
-    def enterQuadrant(self, quadrant: Quadrant, enterprise):
+    def enterQuadrant(self, quadrant: Quadrant, enterprise, sectorCoordinates: Coordinates = None):
+        """
 
-        currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
+        Args:
+            quadrant:           The quadrant we are entering
+            enterprise:         The enterprise sprite
+            sectorCoordinates:  If specified this was an automatic move
+        """
 
+        if sectorCoordinates is None:
+            currentSectorCoordinates: Coordinates = self._intelligence.generateSectorCoordinates()
+        else:
+            currentSectorCoordinates = sectorCoordinates
+        #
+        # Debug option override
+        #
         if self._gameSettings.manualPlaceShipInQuadrant is True:
             currentSectorCoordinates = self._gameSettings.manualSectorCoordinates
 

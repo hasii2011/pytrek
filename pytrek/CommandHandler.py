@@ -7,25 +7,27 @@ from logging import getLogger
 
 from pytrek.Constants import CRITICAL_WARP_ENGINE_DAMAGE
 from pytrek.Constants import MAXIMUM_DAMAGED_WARP_FACTOR
+
+from pytrek.commandparser.AutomaticMoveData import AutomaticMoveData
 from pytrek.commandparser.CommandParser import CommandParser
 from pytrek.commandparser.ManualMoveData import ManualMoveData
 from pytrek.commandparser.ParsedCommand import ParsedCommand
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
-from pytrek.engine.devices.DeviceType import DeviceType
 
+from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.DeviceManager import DeviceManager
 
-from pytrek.gui.HelpView import HelpView
+from pytrek.engine.GameEngine import GameEngine
 
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
 from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
-from pytrek.engine.GameEngine import GameEngine
-
 from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
+
+from pytrek.gui.HelpView import HelpView
 
 from pytrek.GameState import GameState
 
@@ -45,7 +47,7 @@ class CommandHandler:
         self._gameEngine:         GameEngine         = GameEngine()
         self._galaxyMediator:     GalaxyMediator     = GalaxyMediator()
         self._galaxy:             Galaxy             = Galaxy()
-        self._devices:            DeviceManager            = DeviceManager()
+        self._deviceManager:      DeviceManager            = DeviceManager()
 
         self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
 
@@ -94,7 +96,7 @@ class CommandHandler:
 
     def _setWarpFactor(self, parsedCommand: ParsedCommand):
 
-        warpEngineDamage: float = self._devices.getDeviceDamage(deviceType=DeviceType.WarpEngines)
+        warpEngineDamage: float = self._deviceManager.getDeviceDamage(deviceType=DeviceType.WarpEngines)
         warpFactor:       int   = parsedCommand.warpFactor
 
         if warpEngineDamage > CRITICAL_WARP_ENGINE_DAMAGE:
@@ -112,7 +114,9 @@ class CommandHandler:
             manualMoveData: ManualMoveData = parsedCommand.manualMoveData
             self._enterpriseMediator.manualMove(quadrant=quadrant, deltaX=manualMoveData.deltaX, deltaY=manualMoveData.deltaY)
         else:
-            pass
+            assert parsedCommand.manualMove is False, 'Cannot assume it is automatic'
+            moveData: AutomaticMoveData = parsedCommand.automaticMoveData
+            self._enterpriseMediator.automaticMove(quadrantCoordinates=moveData.quadrantCoordinates, sectorCoordinates=moveData.sectorCoordinates)
 
     def _displayHelp(self):
         """

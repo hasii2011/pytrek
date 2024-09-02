@@ -125,11 +125,16 @@ class QuadrantSection(BaseSection):
             if x < QUADRANT_GRID_WIDTH and y >= CONSOLE_SECTION_HEIGHT:
                 self._enterpriseMediator.doDeveloperImpulseMove(quadrant=self._quadrant, arcadePoint=arcadePoint)
 
-    def _enterpriseHasWarped(self, destinationCoordinates: Coordinates):
+    def _enterpriseHasWarped(self, quadrantCoordinates: Coordinates, sectorCoordinates: Coordinates):
+        """
+
+        Args:
+            quadrantCoordinates: Destination quadrant coordinates
+            sectorCoordinates:   Optional sector coordinates (for automatic move)
+        """
 
         currentCoordinates: Coordinates = self._quadrant.coordinates
 
-        self._galaxyMediator.doWarp(currentCoordinates=currentCoordinates, destinationCoordinates=destinationCoordinates)
-        self._quadrant = self._galaxy.getQuadrant(quadrantCoordinates=destinationCoordinates)
-        self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise)
-
+        self._galaxyMediator.doWarp(currentCoordinates=currentCoordinates, destinationCoordinates=quadrantCoordinates)
+        self._quadrant = self._galaxy.getQuadrant(quadrantCoordinates=quadrantCoordinates)
+        self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=self._enterprise, sectorCoordinates=sectorCoordinates)

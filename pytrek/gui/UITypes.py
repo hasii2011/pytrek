@@ -7,6 +7,6 @@ from arcade import Texture
 
 from pytrek.model.Coordinates import Coordinates
 
-WarpTravelCallbackV2 = Callable[[Coordinates], None]
+WarpTravelCallbackV2 = Callable[[Coordinates, Coordinates], None]
 
 TextureList = NewType('TextureList', List[Texture])

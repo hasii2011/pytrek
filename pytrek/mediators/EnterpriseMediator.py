@@ -5,7 +5,6 @@ from logging import Logger
 from logging import getLogger
 
 from arcade import SpriteList
-# from arcade import View
 
 from arcade import schedule
 from arcade import unschedule
@@ -62,9 +61,11 @@ class EnterpriseMediator(MissesMediator):
         self.logger:                  Logger       = getLogger(__name__)
         self._soundMachine:           SoundMachine = SoundMachine()
         self._warpSpeed:              float        = 0.0
-        self._destinationCoordinates: Coordinates  = cast(Coordinates, None)
+
+        self._destinationQuadrantsCoordinates: Coordinates  = cast(Coordinates, None)
+        self._destinationSectorCoordinates:    Coordinates  = cast(Coordinates, None)
         """
-        Use to store the warp coordinates use after the warp effect is compete
+        Use to store the warp coordinates use after the warp effect is complete
         """
 
     def _setWarpEffectSection(self, newValue: WarpEffectSection):
@@ -126,13 +127,27 @@ class EnterpriseMediator(MissesMediator):
     def manualMove(self, quadrant: Quadrant, deltaX: float, deltaY: float):
 
         # Impulse move ?
-        if 0.0 < deltaX < 1.0:
+        if 0.1 < deltaX < 1.0:
+            self._doManualImpulseMove(deltaX, deltaY, quadrant)
+        elif -0.1 >= deltaX and deltaX <= -0.9:
             self._doManualImpulseMove(deltaX, deltaY, quadrant)
         else:
             self._doManualWarpMove(int(deltaX), int(deltaY))
 
-    def automaticMove(self, quadrant: Quadrant, quadrantCoordinates: Coordinates, sectorCoordinates: Coordinates):
-        pass
+    def automaticMove(self, quadrantCoordinates: Coordinates, sectorCoordinates: Coordinates):
+        """
+
+        Args:
+            quadrantCoordinates:    The quadrant coordinates where we are going
+            sectorCoordinates:      The sector within the quadrant
+
+        """
+        self._destinationQuadrantsCoordinates = quadrantCoordinates
+        self._destinationSectorCoordinates    = sectorCoordinates
+        self._warpEffectSection.setup()
+        self._warpEffectSection.enabled = True
+
+        schedule(function_pointer=self._checkEffectComplete, interval=1.0)  # type: ignore
 
     def _doManualImpulseMove(self, deltaX, deltaY, quadrant):
 
@@ -172,7 +187,7 @@ class EnterpriseMediator(MissesMediator):
                                   minY=MIN_QUADRANT_Y_COORDINATE,
                                   maxY=MAX_QUADRANT_Y_COORDINATE)
 
-        self._destinationCoordinates = targetQuadrantCoordinates
+        self._destinationQuadrantsCoordinates = targetQuadrantCoordinates
         self._warpEffectSection.setup()
         self._warpEffectSection.enabled = True
 
@@ -280,7 +295,7 @@ class EnterpriseMediator(MissesMediator):
             print('Warp effect is done')
             unschedule(self._checkEffectComplete)
             self._warpEffectSection.enabled = False
-            self._warpTravelCallback(self._destinationCoordinates)
+            self._warpTravelCallback(self._destinationQuadrantsCoordinates, self._destinationSectorCoordinates)
 
     def _validateCoordinates(self, coordinate: Coordinates, minX: int, maxX: int, minY: int, maxY: int):
         """
