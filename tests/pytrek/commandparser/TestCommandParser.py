@@ -13,6 +13,7 @@ from codeallybasic.UnitTestBase import UnitTestBase
 from pytrek.commandparser.CommandParser import CommandParser
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.ManualMoveData import ManualMoveData
+from pytrek.commandparser.ManualMoveData import ManualMoveType
 from pytrek.commandparser.ParsedCommand import ParsedCommand
 
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
@@ -89,27 +90,33 @@ class TestCommandParser(UnitTestBase):
     def testInvalidCommandValue(self):
         self.assertRaises(InvalidCommandValueException, lambda: self._processCommand('rest q'))
 
-    def testMoveManualPositiveDisplacement(self):
-        parsedCommand: ParsedCommand = self._processCommand('MovE manual 5 5')
+    def testMoveManualQuadrantPositiveDisplacement(self):
 
-        self.assertEqual(CommandType.Move, parsedCommand.commandType, 'Should be a `move` command')
-
-        expectedMoveData: ManualMoveData = ManualMoveData(deltaX=5, deltaY=5)
+        parsedCommand:    ParsedCommand  = self._processCommand('MovE manual 5 5')
+        expectedMoveData: ManualMoveData = ManualMoveData(deltaX=5, deltaY=5, moveType=ManualMoveType.QuadrantMove)
 
         self.assertEqual(expectedMoveData, parsedCommand.manualMoveData, '')
-        self.assertTrue(parsedCommand.manualMove, 'Should be a manual move')
 
-    def testSimplestManualMove(self):
-        parsedCommand: ParsedCommand = self._processCommand('m m .1')
+    def testMoveManualQuadrantNegativeDisplacement(self):
 
-        self.assertEqual(CommandType.Move, parsedCommand.commandType, 'Should be a `move` command')
-        self.assertTrue(parsedCommand.manualMove, 'Should be a manual move')
+        parsedCommand:    ParsedCommand  = self._processCommand('MovE manual -5 5')
+        expectedMoveData: ManualMoveData = ManualMoveData(deltaX=-5, deltaY=5, moveType=ManualMoveType.QuadrantMove)
 
-    def testSimplestNegativeManualMove(self):
-        parsedCommand: ParsedCommand = self._processCommand('m m -.1')
+        self.assertEqual(expectedMoveData, parsedCommand.manualMoveData, '')
 
-        self.assertEqual(CommandType.Move, parsedCommand.commandType, 'Should be a `move` command')
-        self.assertTrue(parsedCommand.manualMove, 'Should be a manual move')
+    def testSimplestManualSectorMove(self):
+
+        parsedCommand:    ParsedCommand  = self._processCommand('m m .1')
+        expectedMoveData: ManualMoveData = ManualMoveData(deltaX=0.1, deltaY=0.0, moveType=ManualMoveType.SectorMove)
+
+        self.assertEqual(expectedMoveData, parsedCommand.manualMoveData, 'Should be a simple sector`move` command')
+
+    def testSimplestNegativeManualSectorMove(self):
+
+        parsedCommand:   ParsedCommand   = self._processCommand('m m -0.1')
+        expectedMoveData: ManualMoveData = ManualMoveData(deltaX=-0.1, deltaY=0.0, moveType=ManualMoveType.SectorMove)
+
+        self.assertEqual(expectedMoveData, parsedCommand.manualMoveData, 'Should be negative sector move')
 
     def testMoveAutomaticInQuadrant(self):
         parsedCommand: ParsedCommand = self._processCommand('move auto 4 4')

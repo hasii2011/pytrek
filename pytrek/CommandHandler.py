@@ -11,6 +11,7 @@ from pytrek.Constants import MAXIMUM_DAMAGED_WARP_FACTOR
 from pytrek.commandparser.AutomaticMoveData import AutomaticMoveData
 from pytrek.commandparser.CommandParser import CommandParser
 from pytrek.commandparser.ManualMoveData import ManualMoveData
+from pytrek.commandparser.ManualMoveData import ManualMoveType
 from pytrek.commandparser.ParsedCommand import ParsedCommand
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
@@ -112,7 +113,11 @@ class CommandHandler:
 
         if parsedCommand.manualMove is True:
             manualMoveData: ManualMoveData = parsedCommand.manualMoveData
-            self._enterpriseMediator.manualMove(quadrant=quadrant, deltaX=manualMoveData.deltaX, deltaY=manualMoveData.deltaY)
+            inSectorMove: bool = False
+            if manualMoveData.moveType == ManualMoveType.SectorMove:
+                inSectorMove = True
+
+            self._enterpriseMediator.manualMove(quadrant=quadrant, deltaX=manualMoveData.deltaX, deltaY=manualMoveData.deltaY, inSectorMove=inSectorMove)
         else:
             assert parsedCommand.manualMove is False, 'Cannot assume it is automatic'
             moveData: AutomaticMoveData = parsedCommand.automaticMoveData

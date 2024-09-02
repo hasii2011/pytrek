@@ -15,6 +15,7 @@ from pytrek.Constants import MINIMUM_COORDINATE
 
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.ManualMoveData import ManualMoveData
+from pytrek.commandparser.ManualMoveData import ManualMoveType
 from pytrek.commandparser.ParsedCommand import ParsedCommand
 
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
@@ -128,21 +129,24 @@ class CommandParser:
         if match is None:
             match = regExSearch(MOVE_AUTOMATIC_MODE_PATTERN, modeStr)
             if match is None:
-                raise InvalidCommandException(message='Move subcommand must be manual or auto')
+                raise InvalidCommandException(message='Move subcommand must be Manual or Automatic')
             else:
 
                 if len(splitCmd) == 6:      # full auto command
-                    parsedCommand.automaticMoveData.quadrantCoordinates = self._parseCoordinates(sRow=splitCmd[2], sColumn=splitCmd[3])
-                    parsedCommand.automaticMoveData.sectorCoordinates   = self._parseCoordinates(sRow=splitCmd[4], sColumn=splitCmd[5])
+                    parsedCommand.automaticMoveData.quadrantCoordinates = self._parseCoordinates(potentialX=splitCmd[2], potentialY=splitCmd[3])
+                    parsedCommand.automaticMoveData.sectorCoordinates   = self._parseCoordinates(potentialX=splitCmd[4], potentialY=splitCmd[5])
                     parsedCommand.automaticMoveData.sectorMove = False
                 elif len(splitCmd) == 4:    # sector coordinates only
-                    parsedCommand.automaticMoveData.sectorCoordinates = self._parseCoordinates(sRow=splitCmd[2], sColumn=splitCmd[3])
+                    parsedCommand.automaticMoveData.sectorCoordinates = self._parseCoordinates(potentialX=splitCmd[2], potentialY=splitCmd[3])
                 else:
                     raise InvalidCommandException(message='Move command improperly specified')
+                parsedCommand.manualMove = False
         else:
             manualMoveData: ManualMoveData = self._parseManualMoveSubcommand(splitCmd)
             parsedCommand.manualMoveData = manualMoveData
-            parsedCommand.manualMove     = True
+            parsedCommand.manualMove = True
+
+            assert manualMoveData.moveType != ManualMoveType.NotSet, f'Should be either {ManualMoveType.QuadrantMove} or {ManualMoveType.SectorMove}'
 
         return parsedCommand
 
@@ -219,26 +223,49 @@ class CommandParser:
         return integerValue
 
     def _parseManualMoveSubcommand(self, splitCmd: List[str]) -> ManualMoveData:
+        """
+        Manual move commands examples:
+
+        m m -.1         Quadrant move 1 sector left
+        m m -.1 .1      Quadrant move 1 sector left, and 1 sector down
+        m m 1           Move 1 quadrant right
+        m m -1 -1       Move 1 quadrant left and 1 quadrant up
+
+        Args:
+            splitCmd:
+
+        Returns:
+        """
 
         manualMoveData: ManualMoveData = ManualMoveData()
         try:
             manualMoveData.deltaX = float(splitCmd[2])
             if len(splitCmd) == 4:
                 manualMoveData.deltaY = float(splitCmd[3])
+            manualMoveData = self._determineManualMoveType(manualMoveData)
+
         except ValueError as e:
             self.logger.error(f'{e=}')
             raise InvalidCommandValueException(message=f'Invalid manual move values: {e}')
 
         return manualMoveData
 
-    def _parseCoordinates(self, sRow: str, sColumn: str) -> Coordinates:
+    def _parseCoordinates(self, potentialX: str, potentialY: str) -> Coordinates:
+        """
+
+        Args:
+            potentialX:
+            potentialY:
+
+        Returns: Valid coordinates or passes through an exception from validation
+        """
 
         xCoordinate: int = -1
         yCoordinate: int = -1
-        if (self._validCoordinate(coordinate=sRow, errorMsg='Invalid X Coordinate') is True and
-                self._validCoordinate(coordinate=sColumn, errorMsg='Invalid Y Coordinate') is True):
-            xCoordinate = int(sRow)
-            yCoordinate = int(sColumn)
+        if (self._validCoordinate(coordinate=potentialX, errorMsg='Invalid X Coordinate') is True and
+                self._validCoordinate(coordinate=potentialY, errorMsg='Invalid Y Coordinate') is True):
+            xCoordinate = int(potentialX)
+            yCoordinate = int(potentialY)
 
         return Coordinates(x=xCoordinate, y=yCoordinate)
 
@@ -251,7 +278,6 @@ class CommandParser:
             errorMsg:    Error message to put in exception if not valid
 
         Returns:  True if coordinate is value;  Else raises exception
-
         """
         valid: bool = True
 
@@ -265,3 +291,22 @@ class CommandParser:
             raise InvalidCommandValueException(message=errorMsg)
 
         return valid
+
+    def _determineManualMoveType(self, manualMoveData: ManualMoveData) -> ManualMoveData:
+
+        deltaX: float = manualMoveData.deltaX
+        deltaY: float = manualMoveData.deltaY
+        if self._inSectorRange(deltaX) and self._inSectorRange(deltaY) is True:
+            manualMoveData.moveType = ManualMoveType.SectorMove
+        else:
+            manualMoveData.moveType = ManualMoveType.QuadrantMove
+
+        return manualMoveData
+
+    def _inSectorRange(self, deltaValue: float) -> bool:
+
+        inRange: bool = False
+        if -0.1 <= deltaValue <= 0.9:
+            inRange = True
+
+        return inRange

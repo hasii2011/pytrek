@@ -124,12 +124,9 @@ class EnterpriseMediator(MissesMediator):
         # StarTrekScreen.quitIfTimeExpired()
         # self._dockIfAdjacentToStarBase()
 
-    def manualMove(self, quadrant: Quadrant, deltaX: float, deltaY: float):
+    def manualMove(self, quadrant: Quadrant, deltaX: float, deltaY: float, inSectorMove: bool):
 
-        # Impulse move ?
-        if 0.1 < deltaX < 1.0:
-            self._doManualImpulseMove(deltaX, deltaY, quadrant)
-        elif -0.1 >= deltaX and deltaX <= -0.9:
+        if inSectorMove is True:
             self._doManualImpulseMove(deltaX, deltaY, quadrant)
         else:
             self._doManualWarpMove(int(deltaX), int(deltaY))

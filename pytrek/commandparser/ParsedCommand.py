@@ -26,10 +26,10 @@ class ParsedCommand:
     """
     commandType: CommandType = CommandType.NoCommand
 
-    manualMove:         bool = False
     restInterval:       int  = 0
     warpFactor:         int  = 0
     phaserAmountToFire: int  = 0
+    manualMove:         bool = False
 
     manualMoveData:    ManualMoveData    = field(default_factory=manualMoveDataFactory)
     automaticMoveData: AutomaticMoveData = field(default_factory=automaticMoveDataFactory)
