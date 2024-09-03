@@ -2,13 +2,14 @@
 from logging import Logger
 from logging import getLogger
 
+from arcade import Texture
 from arcade.color import RED
 from arcade.color import WHITE
 from arcade.color import YELLOW
 
 from arcade import draw_text
 from arcade import draw_line
-from arcade import start_render
+from arcade import load_texture
 
 from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
@@ -16,6 +17,8 @@ from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.DeviceManager import DeviceManager
 
 from pytrek.gui.BaseSection import BaseSection
+
+from pytrek.LocateResources import LocateResources
 
 ColorType = tuple[int, int, int]
 
@@ -53,18 +56,27 @@ class DeviceStatusSection(BaseSection):
     """
     Self sizing and positioning within the game window
     """
+    BACKGROUND_WIDTH: int  = 320
+    BACKGROUND_HEIGHT: int = 320
+
     def __init__(self, modal: bool = True, **kwargs):
 
-        left:   int = self.window.width * 0.40
+        left:   int = 0
         bottom: int = SECTION_HEIGHT
-        width:  int = self.window.width * 0.60
+        width:  int = self.window.width
         height: int = SECTION_HEIGHT
 
         super().__init__(left=left, bottom=bottom, width=width, height=height, modal=modal, **kwargs)
 
         self.logger: Logger = getLogger(__name__)
 
-        self._devices:   DeviceManager   = DeviceManager()
+        fqFileName: str = LocateResources.getImagePath(bareFileName='MediumDarkGrayPanel.png')
+
+        self._texture: Texture = load_texture(fqFileName)
+        self._devices: DeviceManager   = DeviceManager()
+
+        self._graphicCenterX: float = (self.top / 2) - HEADER_MARGIN_LEFT
+        self._graphicCenterY: float = self.bottom + ((self.top - self.bottom) // 2)
 
         self._deviceTypeHeaderX:   int = self.left + HEADER_MARGIN_LEFT
         self._deviceTypeHeaderY:   int = self.bottom + self.height - TEXT_TOP_OFFSET
@@ -79,6 +91,12 @@ class DeviceStatusSection(BaseSection):
         self._lineEndY:   int = self._lineStartY
 
     def on_draw(self):
+        self._texture.draw_sized(center_x=self._graphicCenterX,
+                                 center_y=self._graphicCenterY,
+                                 width=self.width + HEADER_MARGIN_LEFT,
+                                 height=self.height,
+                                 alpha=255)
+
         self._drawHeader()
         self._drawDevicesStatus()
 

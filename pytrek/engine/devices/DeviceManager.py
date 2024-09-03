@@ -68,20 +68,14 @@ class DeviceManager(metaclass=SingletonV3):
             device: Device = self.getDevice(devType)
             if device.deviceType != DeviceType.DeathRay and device.damage > 0.0:
                 device.damage = device.damage - repair
+                self._reportRepair(device=device, repairUnits=repair)
             elif device.deviceType == DeviceType.DeathRay and shipCondition == ShipCondition.Docked:
                 device.damage = device.damage - repair
+                self._reportRepair(device=device, repairUnits=repair)
 
             if device.damage <= 0:
                 device.damage = 0
                 device.deviceStatus = DeviceStatus.Up
-                msg: str = f'Device: {device.deviceType.name} repaired'
-                #
-                # Simplify unit testing
-                if self._messageConsole.initialized is False:
-                    self.logger.warning(f'Message console not initialized')
-                else:
-                    self._messageConsole.displayMessage(msg)
-                self.logger.info(msg)
 
     def getDevice(self, deviceType: DeviceType):
 
@@ -102,6 +96,17 @@ class DeviceManager(metaclass=SingletonV3):
 
         self.logger.debug(f"set damage deviceType: {deviceType}, damageValue: {damageValue}")
         self.deviceMap[deviceType].damage = damageValue
+
+    def _reportRepair(self, device: Device, repairUnits: float):
+
+        msg: str = f'Device: {device.deviceType.name} repaired, by {repairUnits} units'
+        #
+        # Simplify unit testing
+        if self._messageConsole.initialized is False:
+            self.logger.warning(f'Message console not initialized')
+        else:
+            self._messageConsole.displayMessage(msg)
+        self.logger.info(msg)
 
     def __repr__(self):
 
