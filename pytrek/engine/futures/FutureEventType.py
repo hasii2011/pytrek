@@ -14,6 +14,7 @@ class FutureEventType(Enum):
     SUPER_COMMANDER_MOVES           = 'SCmdr Moves'             # Super Commander moves (might attack base)       FSCMOVE
     SUPER_COMMANDER_DESTROYS_BASE   = 'SCmdr Destroys Base'     # Super Commander destroys base                   FSCDBAS
     MOVE_DEEP_SPACE_PROBE           = 'Move Deep Space Probe'   # Move deep space probe                           FDSPROB
+    NOT_SET                         = 'Not Set'                 # Used to indicate a no value
 
     def __str__(self):
         return self.name

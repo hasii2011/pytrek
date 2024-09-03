@@ -121,6 +121,7 @@ SECTION_DEBUG: Section = Section(
         ConfigurationNameValue(name=PropertyName('debugSmoothMotion'),                        defaultValue='False'),
         ConfigurationNameValue(name=PropertyName('debugSmoothMotionInterval'),                defaultValue='5'),
         ConfigurationNameValue(name=PropertyName('drawSectionBoundaries'),                    defaultValue='False'),
+        ConfigurationNameValue(name=PropertyName('debugEvents'),                              defaultValue='False'),
     ]
 )
 
@@ -659,6 +660,16 @@ class GameSettings(ConfigurationProperties, metaclass=SingletonV3):
     @drawSectionBoundaries.setter
     @configurationSetter(sectionName=DEBUG_SECTION_NAME)
     def drawSectionBoundaries(self, value: bool):
+        pass
+
+    @property
+    @configurationGetter(sectionName=DEBUG_SECTION_NAME, deserializeFunction=SecureConversions.secureBoolean)
+    def debugEvents(self) -> bool:
+        return False        # never used
+
+    @debugEvents.setter
+    @configurationSetter(sectionName=DEBUG_SECTION_NAME)
+    def debugEvents(self, value: bool):
         pass
 
     def _toStr(self, optionString: str) -> str:

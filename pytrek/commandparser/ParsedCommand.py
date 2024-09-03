@@ -5,6 +5,7 @@ from dataclasses import field
 from pytrek.commandparser.AutomaticMoveData import AutomaticMoveData
 from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.ManualMoveData import ManualMoveData
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
 
 def manualMoveDataFactory() -> ManualMoveData:
@@ -35,3 +36,4 @@ class ParsedCommand:
     automaticMoveData: AutomaticMoveData = field(default_factory=automaticMoveDataFactory)
 
     numberOfPhotonTorpedoesToFire: int = 0
+    eventToTrigger:                FutureEventType = FutureEventType.NOT_SET

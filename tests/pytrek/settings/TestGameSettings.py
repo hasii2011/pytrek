@@ -340,6 +340,17 @@ class TestGameSettings(ProjectTestBase):
 
         self.assertEqual(0.75, setValue, 'Not correctly set')
 
+    def testGetSetDebugEvents(self):
+        gameSettings: GameSettings = GameSettings()
+
+        saveDebugEvents: bool = gameSettings.debugEvents
+
+        gameSettings.debugEvents = False
+
+        self.assertFalse(gameSettings.debugEvents, 'Should be off')
+
+        gameSettings.debugEvents = saveDebugEvents
+
 
 def suite() -> TestSuite:
     """You need to change the name of the test class here also."""

@@ -20,6 +20,8 @@ from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.DeviceManager import DeviceManager
 
 from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.futures.EventEngine import EventEngine
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
 from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
 from pytrek.mediators.GalaxyMediator import GalaxyMediator
@@ -48,7 +50,8 @@ class CommandHandler:
         self._gameEngine:         GameEngine         = GameEngine()
         self._galaxyMediator:     GalaxyMediator     = GalaxyMediator()
         self._galaxy:             Galaxy             = Galaxy()
-        self._deviceManager:      DeviceManager            = DeviceManager()
+        self._deviceManager:      DeviceManager      = DeviceManager()
+        self._eventEngine:        EventEngine        = EventEngine()
 
         self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
 
@@ -89,6 +92,8 @@ class CommandHandler:
             case CommandType.Dock:
                 self._quadrantMediator.dock(quadrant)
                 self._gameEngine.resetOperationTime()
+            case CommandType.Event:
+                self._triggerEvent(parsedCommand.eventToTrigger)
             case CommandType.Save:
                 self._saveGame()
             case _:
@@ -135,6 +140,9 @@ class CommandHandler:
     def _saveGame(self):
         self._gameState.saveState()
         self._view.messageConsoleSection.displayMessage('Game saved !!')
+
+    def _triggerEvent(self, eventToTrigger: FutureEventType):
+        self._eventEngine.debugFireEvent(eventType=eventToTrigger)
 
     def _switchViewBack(self):
         self._view.window.show_view(self._view)

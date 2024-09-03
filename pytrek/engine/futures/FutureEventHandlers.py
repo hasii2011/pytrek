@@ -88,10 +88,11 @@ class FutureEventHandlers:
             tractorBeamComputation: TractorBeamComputation = self._intelligence.computeTractorBeamFactors(energy=self._gameState.energy)
             self._messageConsole.displayMessage(f'Warp factor set to {tractorBeamComputation.warpFactor:.2f}',
                                                 messageType=ConsoleMessageType.Warning)
-            quadrant: Quadrant = self._galaxy.currentQuadrant
-            self._galaxyMediator.doWarp(currentCoordinates=quadrant.coordinates, destinationCoordinates=cmdrCoordinates)
+            currentQuadrant: Quadrant = self._galaxy.currentQuadrant
+            self._galaxyMediator.doWarp(currentCoordinates=currentQuadrant.coordinates, destinationCoordinates=cmdrCoordinates)
 
-            self._quadrantMediator.enterQuadrant(quadrant=quadrant, enterprise=self._gameState.enterprise)
+            cmdrQuadrant: Quadrant = self._galaxy.getQuadrant(quadrantCoordinates=cmdrCoordinates)
+            self._quadrantMediator.enterQuadrant(quadrant=cmdrQuadrant, enterprise=self._gameState.enterprise)
 
         else:
             from pytrek.engine.futures.EventEngine import EventEngine

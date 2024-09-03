@@ -17,10 +17,13 @@ from pytrek.commandparser.CommandType import CommandType
 from pytrek.commandparser.ManualMoveData import ManualMoveData
 from pytrek.commandparser.ManualMoveData import ManualMoveType
 from pytrek.commandparser.ParsedCommand import ParsedCommand
-
 from pytrek.commandparser.InvalidCommandException import InvalidCommandException
 from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
+from pytrek.engine.futures.FutureEventType import FutureEventType
+
 from pytrek.model.Coordinates import Coordinates
+
+from pytrek.settings.GameSettings import GameSettings
 
 CommandPattern = NewType('CommandPattern', str)
 
@@ -36,6 +39,11 @@ HELP_CMD:    CommandPattern = CommandPattern('^help')
 DOCK_CMD:    CommandPattern = CommandPattern('^d|^dock')
 SAVE_CMD:    CommandPattern = CommandPattern('^sa|^save')
 LOAD_CMD:    CommandPattern = CommandPattern('^lo|^load')
+#
+# The following is for debugging events;  Requires that the debugEvents key
+# in GameSettings (pytrek.ini) be set to 'True'
+#
+EVENT_CMD:    CommandPattern = CommandPattern('^event -')
 
 # These are 'move' subcommands
 MOVE_MANUAL_MODE_PATTERN:    str = '^m|^manual'
@@ -53,7 +61,8 @@ PatternToCommandType: Dict[CommandPattern, CommandType] = {
     CHART_CMD:   CommandType.Chart,
     HELP_CMD:    CommandType.Help,
     DOCK_CMD:    CommandType.Dock,
-    SAVE_CMD:    CommandType.Save
+    SAVE_CMD:    CommandType.Save,
+    EVENT_CMD:   CommandType.Event,
 }
 
 
@@ -76,6 +85,8 @@ class CommandParser:
 
         self._asciiMode:  bool   = asciiMode
         self._commandStr: str    = ''
+
+        self._gameSettings: GameSettings = GameSettings()
 
     def parseCommand(self, commandStr: str) -> ParsedCommand:
 
@@ -104,8 +115,11 @@ class CommandParser:
                 pass            # nothing else to do
             case CommandType.Save:
                 pass            # nothing else to do
+            case CommandType.Event:
+                if self._gameSettings.debugEvents is True:
+                    self._parseEventCommand(parsedCommand=parsedCommand)
             case _:
-                # self.logger.error(f'Invalid command: {self._commandStr}')
+                self.logger.error(f'Invalid command: {self._commandStr}')
                 raise InvalidCommandException(message=f'Invalid command: {self._commandStr}')
 
         return parsedCommand
@@ -186,6 +200,19 @@ class CommandParser:
     def _parseWarpCommand(self, parsedCommand: ParsedCommand) -> ParsedCommand:
 
         parsedCommand.warpFactor = self._getSingleIntegerValue(self._commandStr, errorMessage='Invalid warp factor')
+
+        return parsedCommand
+
+    def _parseEventCommand(self, parsedCommand: ParsedCommand) -> ParsedCommand:
+
+        self.logger.info(f'{parsedCommand=}')
+        splitCmd:  List[str] = self._commandStr.split('-')
+        eventName: str       = splitCmd[1].title().strip()
+        try:
+            eventType: FutureEventType = FutureEventType(eventName)
+            parsedCommand.eventToTrigger = eventType
+        except Exception as e:
+            self.logger.error(f'{e=}')
 
         return parsedCommand
 

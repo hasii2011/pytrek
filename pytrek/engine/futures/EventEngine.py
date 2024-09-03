@@ -11,10 +11,9 @@ from arcade import schedule
 from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.engine.Intelligence import Intelligence
-from pytrek.engine.devices.Device import Device
-from pytrek.engine.devices.DeviceStatus import DeviceStatus
-from pytrek.engine.devices.DeviceType import DeviceType
+
 from pytrek.engine.devices.DeviceManager import DeviceManager
+
 from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.FutureEvent import EventCallback
 from pytrek.engine.futures.FutureEvent import FutureEvent
@@ -82,7 +81,7 @@ class EventEngine(metaclass=SingletonV3):
 
         eventType: FutureEventType = futureEvent.type
 
-        futureEvent = self._debugActions(futureEvent=futureEvent)
+        futureEvent = self._debugTurnOffEvent(futureEvent=futureEvent)
         self._eventMap[eventType] = futureEvent
 
     def unScheduleEvent(self, eventType: FutureEventType):
@@ -107,6 +106,19 @@ class EventEngine(metaclass=SingletonV3):
 
         self._eventMap[eventType] = futureEvent
 
+    def debugFireEvent(self, eventType: FutureEventType):
+        """
+        This is a debug entry point.
+
+        The following is for debugging events;  Requires that the debugEvents key
+        in GameSettings (pytrek.ini) be set to 'True'
+
+        Args:
+            eventType:
+        """
+        eventToFire: FutureEvent = self.getEvent(eventType=eventType)
+        self._fireEvent(eventToFire=eventToFire)
+
     def _doEventChecking(self, deltaTime: float):
         """
         This is the periodic method that periodically fires
@@ -122,7 +134,8 @@ class EventEngine(metaclass=SingletonV3):
 
     def _checkEvents(self, currentStarDate: float):
         """
-        Check to see if any events need to fire off
+        Check to see if any events need to fire
+
         Args:
             currentStarDate:  The current star date;
 
@@ -182,7 +195,7 @@ class EventEngine(metaclass=SingletonV3):
         ans: bool = self._eventMap[eventType].schedulable
         return ans
 
-    def _debugActions(self, futureEvent: FutureEvent) -> FutureEvent:
+    def _debugTurnOffEvent(self, futureEvent: FutureEvent) -> FutureEvent:
         """
         Set the appropriate flag to False to avoid scheduling certain events.  In normal mode (True)
         we schedule events
@@ -190,10 +203,9 @@ class EventEngine(metaclass=SingletonV3):
         Args:
             futureEvent:  The current event
 
-        Returns:  Updated if we are going to unschedule it
+        Returns:  Updated event set to schedulable = False
 
         """
-
         if futureEvent.type == FutureEventType.SUPER_NOVA and self._gameSettings.scheduleSuperNova is False:
             futureEvent.starDate = 0.0
             futureEvent.quadrantCoordinates = cast(Coordinates, None)

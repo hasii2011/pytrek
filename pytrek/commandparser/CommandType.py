@@ -40,4 +40,5 @@ class CommandType(Enum):
     ShortScan      = 'ShortRangeScan'
     LongRangeScan  = 'LongRangeScan'
     EmergencyExit  = 'EmergencyExit'
+    Event          = 'Event'
     NoCommand      = 'NoCommand'
