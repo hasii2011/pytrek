@@ -9,6 +9,7 @@ from codeallybasic.SingletonV3 import SingletonV3
 
 from pytrek.Constants import GALAXY_COLUMNS
 from pytrek.Constants import GALAXY_ROWS
+from pytrek.Constants import SUPER_NOVA_INDICATOR
 
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.Computer import Computer
@@ -17,10 +18,12 @@ from pytrek.model.Coordinates import Coordinates
 from pytrek.model.Galaxy import Galaxy
 from pytrek.model.Quadrant import Quadrant
 
+SUPER_NOVA_X_ADJUSTMENT: int = 10
+
 
 class GalaxyViewMediator(metaclass=SingletonV3):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
 
@@ -41,12 +44,18 @@ class GalaxyViewMediator(metaclass=SingletonV3):
                         arcadeX: float = arcadePoint.x + 2
                         arcadeY: float = arcadePoint.y + 2
                     else:
-                        contents = self._computer.createValueString(klingonCount=quadrant.klingonCount,
-                                                                    commanderCount=quadrant.commanderCount,
-                                                                    hasStarBase=quadrant.hasStarBase)
+                        if quadrant.hasSuperNova is True:
+                            contents = SUPER_NOVA_INDICATOR
+                        else:
+                            contents = self._computer.createValueString(klingonCount=quadrant.klingonCount,
+                                                                        commanderCount=quadrant.commanderCount,
+                                                                        hasStarBase=quadrant.hasStarBase)
 
                         arcadePoint = Computer.gamePositionToScreenPoint(coordinates)
                         arcadeX = arcadePoint.x
                         arcadeY = arcadePoint.y
+
+                        if contents == SUPER_NOVA_INDICATOR:
+                            arcadeX -= SUPER_NOVA_X_ADJUSTMENT
 
                     draw_text(contents, arcadeX, arcadeY, color.WHITE, 14)

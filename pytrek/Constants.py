@@ -62,3 +62,5 @@ CRITICAL_WARP_ENGINE_DAMAGE: float = 10.0
 
 
 MILLISECONDS: float = 1000.0       # milliseconds in a second, duh !!
+
+SUPER_NOVA_INDICATOR:    str  = '1000'

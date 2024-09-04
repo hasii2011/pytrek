@@ -12,6 +12,7 @@ from arcade import draw_text
 
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
+from pytrek.Constants import SUPER_NOVA_INDICATOR
 
 from pytrek.engine.Computer import Computer
 from pytrek.engine.Direction import Direction
@@ -116,8 +117,14 @@ class LongRangeSensorScanMediator(metaclass=SingletonV3):
         quadrant: Quadrant = self._galaxy.getQuadrant(quadrantCoordinates=scanCoordinates.coordinates)
 
         quadrant.scanned = True
+        if quadrant.hasSuperNova is True:
+            contents: str = SUPER_NOVA_INDICATOR
+        else:
+            contents = self._computer.createValueString(klingonCount=quadrant.klingonCount,
+                                                        commanderCount=quadrant.commanderCount,
+                                                        hasStarBase=quadrant.hasStarBase)
 
-        contents: str = self._computer.createValueString(klingonCount=quadrant.klingonCount,
-                                                         commanderCount=quadrant.commanderCount,
-                                                         hasStarBase=quadrant.hasStarBase)
+        if contents == SUPER_NOVA_INDICATOR:
+            drawX -= 12
+
         draw_text(contents, drawX, drawY, color.WHITE, LR_SCAN_FONT_SIZE)
