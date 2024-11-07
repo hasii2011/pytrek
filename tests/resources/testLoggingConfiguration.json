@@ -154,6 +154,10 @@
         "codeallybasic.UnitTestBase": {
             "level":     "WARNING",
             "propagate": "False"
+        },
+        "pytrek.engine.futures.EventCreator": {
+            "level":     "INFO",
+            "propagate": "False"
         }
 
     }

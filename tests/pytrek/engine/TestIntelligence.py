@@ -528,7 +528,7 @@ class TestIntelligence(ProjectTestBase):
             if x > TestIntelligence.BASE_ATTACK_INTERVAL_MAX_CALLS:
                 break
             initialGameTime: float = self.smarty.generateInitialGameTime()
-            interval:        float = self.smarty.computeBaseAttackInterval(inTime=initialGameTime)
+            interval:        float = self.smarty.computeBaseAttackInterval(remainingGameTime=initialGameTime)
             intervals.append(interval)
 
         medianStatistic: float = median(intervals)
@@ -633,8 +633,7 @@ def suite() -> TestSuite:
     import unittest
 
     testSuite: TestSuite = TestSuite()
-    # noinspection PyUnresolvedReferences
-    testSuite.addTest(unittest.makeSuite(TestIntelligence))
+    testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestIntelligence))
 
     return testSuite
 

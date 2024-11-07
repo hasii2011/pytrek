@@ -224,7 +224,7 @@ class TestFutureEventHandlers(ProjectTestBase):
 
         fEvent: FutureEvent = self._generateArtificialEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
 
-        self._eventHandlers.commanderAttacksBaseEventHandler(futureEvent=fEvent)
+        self._eventHandlers.commanderAttacksBaseEventHandler(currentEvent=fEvent)
 
     def _generateArtificialEvent(self, eventType: FutureEventType) -> FutureEvent:
 

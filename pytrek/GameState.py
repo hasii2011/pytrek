@@ -47,7 +47,6 @@ class GameState(metaclass=SingletonV3):
         self._torpedoCount: int        = gameSettings.initialTorpedoCount
         self._warpFactor:   int        = gameSettings.defaultWarpFactor
         self._starDate:     float      = intelligence.generateInitialStarDate()
-        self._inTime:       float      = intelligence.generateInitialGameTime()
         self._opTime:       float      = 0.0
 
         self._remainingGameTime:   float = intelligence.generateInitialGameTime()
@@ -68,13 +67,13 @@ class GameState(metaclass=SingletonV3):
         else:
             self._remainingSuperCommanders = 0
 
-        self._shipCondition:             ShipCondition  = ShipCondition.Green
-        self.currentQuadrantCoordinates: Coordinates    = cast(Coordinates, None)
-        self.currentSectorCoordinates:   Coordinates    = cast(Coordinates, None)
+        self._shipCondition:             ShipCondition = ShipCondition.Green
+        self._baseAttackUnderway:        bool          = False
+
+        self._currentQuadrantCoordinates: Coordinates    = cast(Coordinates, None)
+        self._currentSectorCoordinates:   Coordinates    = cast(Coordinates, None)
 
         self._enterprise: Enterprise = Enterprise()
-
-        self.gameActive:    bool = True
 
         self._configurationLocator: ConfigurationLocator = ConfigurationLocator()
 
@@ -107,14 +106,6 @@ class GameState(metaclass=SingletonV3):
     @shieldEnergy.setter
     def shieldEnergy(self, theNewValue: float):
         self._shieldEnergy = theNewValue
-
-    @property
-    def inTime(self) -> float:
-        return self._inTime
-
-    @inTime.setter
-    def inTime(self, theNewValue: float):
-        self._inTime = theNewValue
 
     @property
     def opTime(self) -> float:
@@ -182,6 +173,14 @@ class GameState(metaclass=SingletonV3):
     @shipCondition.setter
     def shipCondition(self, theNewValue: ShipCondition):
         self._shipCondition = theNewValue
+
+    @property
+    def baseAttackUnderway(self) -> bool:
+        return self._baseAttackUnderway
+
+    @baseAttackUnderway.setter
+    def baseAttackUnderway(self, newValue: bool):
+        self._baseAttackUnderway = newValue
 
     @property
     def playerType(self) -> PlayerType:
@@ -268,14 +267,10 @@ class GameState(metaclass=SingletonV3):
 
             self.fromDictionary(gStateDict=gStateDict)
 
-    def resetStatistics(self):
-        self.gameActive = True
-
     def toJson(self):
         return {
             'energy':                     self.energy,
             'shieldEnergy':               self.shieldEnergy,
-            'inTime':                     self.inTime,
             'opTime':                     self.opTime,
             'starDate':                   self.starDate,
             'remainingGameTime':          self.remainingGameTime,
@@ -295,7 +290,6 @@ class GameState(metaclass=SingletonV3):
     def fromDictionary(self, gStateDict):
         self.energy                     = float(gStateDict['energy'])
         self.shieldEnergy               = float(gStateDict['shieldEnergy'])
-        self.inTime                     = float(gStateDict['inTime'])
         self.opTime                     = float(gStateDict['opTime'])
         self.starDate                   = float(gStateDict['starDate'])
         self.remainingGameTime          = float(gStateDict['remainingGameTime'])

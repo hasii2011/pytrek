@@ -27,8 +27,7 @@ class EventCreator:
         self._gameState:    GameState    = GameState()
         self._galaxy:       Galaxy       = Galaxy()
 
-        self._messageConsole:      MessageConsoleProxy = messageConsole
-        self._futureEventHandlers: FutureEventHandlers = FutureEventHandlers(self._messageConsole)
+        self._futureEventHandlers: FutureEventHandlers = FutureEventHandlers(messageConsole)
 
     def createSuperNovaEvent(self) -> FutureEvent:
         # noinspection SpellCheckingInspection
@@ -38,7 +37,7 @@ class EventCreator:
         ```
         """
 
-        elapsedStarDates:    float       = self._intelligence.exponentialRandom(0.5 * self._gameState.inTime)
+        elapsedStarDates:    float       = self._intelligence.exponentialRandom(0.5 * self._gameState.remainingGameTime)
         eventStarDate:       float       = self._gameState.starDate + elapsedStarDates
         quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
 
@@ -53,14 +52,21 @@ class EventCreator:
         schedule(FBATTAK, tk.expran(0.3*game.intime));
         ```
         """
-
-        elapsedStarDates: float       = self._intelligence.exponentialRandom(0.3 * self._gameState.inTime)
+        self.logger.info(f'{self._gameState.remainingGameTime=}')
+        elapsedStarDates: float       = self._intelligence.exponentialRandom(0.3 * self._gameState.remainingGameTime)
         eventStarDate:    float       = self._gameState.starDate + elapsedStarDates
         coordinates:      Coordinates = self._galaxy.getStarBaseCoordinates()
 
         futureEvent: FutureEvent = FutureEvent(type=FutureEventType.COMMANDER_ATTACKS_BASE, starDate=eventStarDate, quadrantCoordinates=coordinates)
 
         futureEvent.callback = EventCallback(self._futureEventHandlers.commanderAttacksBaseEventHandler)
+
+        return futureEvent
+
+    def createCommanderDestroysBase(self, coordinates: Coordinates) -> FutureEvent:
+
+        futureEvent: FutureEvent = FutureEvent(type=FutureEventType.COMMANDER_DESTROYS_BASE)
+        futureEvent.quadrantCoordinates = coordinates
 
         return futureEvent
 
@@ -71,7 +77,7 @@ class EventCreator:
         schedule(FTBEAM, tk.expran(1.5 * (game.intime / game.state.remcom)));
         ```
         """
-        inTime:              float       = self._gameState.inTime
+        inTime:              float       = self._gameState.remainingGameTime
         remainingCommanders: int         = self._gameState.remainingCommanders
 
         if remainingCommanders == 0:

@@ -26,7 +26,7 @@ from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.DeviceManager import DeviceManager
-from pytrek.engine.futures.EventCreator import EventCreator
+# from pytrek.engine.futures.EventCreator import EventCreator
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
@@ -111,7 +111,7 @@ class AppTestEventScheduler(View):
 
         self.section_manager.add_section(self._messageConsole)
 
-        self._createInitialEvents()
+        # self._createInitialEvents()
 
     def setup(self):
         pass
@@ -211,16 +211,16 @@ class AppTestEventScheduler(View):
         elif self._wasNumberPressed(releasedKey=releasedKey) is True:
             self._gameEngine.updateTime(elapsedTime=self._keyToValue(releasedKey))
 
-    def _createInitialEvents(self):
-
-        eventCreator: EventCreator = EventCreator(self._messageConsoleProxy)
-        superNovaEvent:           FutureEvent = eventCreator.createSuperNovaEvent()
-        commanderAttackBaseEvent: FutureEvent = eventCreator.createCommanderAttacksBaseEvent()
-        tractorBeamEvent:         FutureEvent = eventCreator.createTractorBeamEvent()
-
-        self._eventEngine.scheduleEvent(futureEvent=superNovaEvent)
-        self._eventEngine.scheduleEvent(futureEvent=commanderAttackBaseEvent)
-        self._eventEngine.scheduleEvent(futureEvent=tractorBeamEvent)
+    # def _createInitialEvents(self):
+    #
+    #     eventCreator: EventCreator = EventCreator(self._messageConsoleProxy)
+    #     superNovaEvent:           FutureEvent = eventCreator.createSuperNovaEvent()
+    #     commanderAttackBaseEvent: FutureEvent = eventCreator.createCommanderAttacksBaseEvent()
+    #     tractorBeamEvent:         FutureEvent = eventCreator.createTractorBeamEvent()
+    #
+    #     self._eventEngine.scheduleEvent(futureEvent=superNovaEvent)
+    #     self._eventEngine.scheduleEvent(futureEvent=commanderAttackBaseEvent)
+    #     self._eventEngine.scheduleEvent(futureEvent=tractorBeamEvent)
 
     def _wasNumberPressed(self, releasedKey: int) -> bool:
         """

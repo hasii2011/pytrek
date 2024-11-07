@@ -6,7 +6,7 @@ from typing import NewType
 from logging import getLogger
 from logging import Logger
 
-from arcade import schedule
+from arcade import schedule as arcadeSchedule
 
 from codeallybasic.SingletonV3 import SingletonV3
 
@@ -53,18 +53,18 @@ class EventEngine(metaclass=SingletonV3):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._intelligence: Intelligence = Intelligence()
-        self._gameState:    GameState    = GameState()
-        self._gameSettings: GameSettings = GameSettings()
-        self._devices:      DeviceManager      = DeviceManager()
+        self._intelligence: Intelligence  = Intelligence()
+        self._gameState:    GameState     = GameState()
+        self._gameSettings: GameSettings  = GameSettings()
+        self._devices:      DeviceManager = DeviceManager()
 
         self._eventMap:     EventMap = cast(EventMap, None)
         self._setupEventMap()
 
         self._messageConsole: MessageConsoleProxy = args[0]
-        self._eventCreator:   EventCreator = EventCreator(self._messageConsole)
+        self._eventCreator:   EventCreator        = EventCreator(self._messageConsole)
 
-        self.logger.debug(f"{self._gameState.inTime=} eventMap: {self.__repr__()}")
+        self.logger.debug(f"{self._gameState.remainingGameTime=} eventMap: {self.__repr__()}")
 
         # TODO Put in debug option that allows selectively scheduling these
         self._scheduleRecurringEvents(eventType=FutureEventType.COMMANDER_ATTACKS_BASE)
@@ -72,7 +72,7 @@ class EventEngine(metaclass=SingletonV3):
         self._scheduleRecurringEvents(eventType=FutureEventType.SUPER_NOVA)
 
         # I do not know what a Number is; Tell mypy so
-        schedule(function_pointer=self._doEventChecking, interval=EventEngine.EVENT_CHECK_INTERVAL)  # type: ignore
+        arcadeSchedule(function_pointer=self._doEventChecking, interval=EventEngine.EVENT_CHECK_INTERVAL)  # type: ignore
 
     def getEvent(self, eventType: FutureEventType) -> FutureEvent:
         return self._eventMap[eventType]

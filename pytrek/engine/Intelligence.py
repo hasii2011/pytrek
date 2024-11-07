@@ -54,9 +54,9 @@ class Intelligence(metaclass=SingletonV3):
     def __init__(self):
         """
         """
-        self.logger:        Logger       = getLogger(__name__)
-        self._gameSettings: GameSettings = GameSettings()
-        self._devices:      DeviceManager      = DeviceManager()
+        self.logger:        Logger        = getLogger(__name__)
+        self._gameSettings: GameSettings  = GameSettings()
+        self._devices:      DeviceManager = DeviceManager()
 
     def getTorpedoSpeeds(self, playerType: PlayerType) -> TorpedoSpeeds:
         """
@@ -344,8 +344,8 @@ class Intelligence(metaclass=SingletonV3):
 
         return PlanetType(planetName)
 
-    def computeBaseAttackInterval(self, inTime: float) -> float:
-        interval: float = self.exponentialRandom(0.3 * inTime)
+    def computeBaseAttackInterval(self, remainingGameTime: float) -> float:
+        interval: float = self.exponentialRandom(0.3 * remainingGameTime)
         return interval
 
     def computeBaseDestroyedInterval(self) -> float:

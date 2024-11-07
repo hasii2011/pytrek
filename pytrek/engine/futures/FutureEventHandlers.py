@@ -7,6 +7,7 @@ from pytrek.GameState import GameState
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.Intelligence import TractorBeamComputation
 
+from pytrek.engine.futures.FutureEvent import EventCallback
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
 
@@ -102,19 +103,50 @@ class FutureEventHandlers:
             eventEngine.unScheduleEvent(FutureEventType.TRACTOR_BEAM)
             eventEngine.makeUnSchedulable(FutureEventType.TRACTOR_BEAM)
 
-    def commanderAttacksBaseEventHandler(self, futureEvent: FutureEvent):
+    def commanderAttacksBaseEventHandler(self, currentEvent: FutureEvent):
+        """
+        Don't schedule another command attacks base until the destroy base event fires
+
+        Args:
+            currentEvent:  The event that just occurred
+        """
+        from pytrek.engine.futures.EventEngine import EventEngine
 
         if self._canCommanderAttackAStarBase() is True:
-            self._standardAnnouncement(futureEvent.starDate)
-            self._messageConsole.displayMessage(f'Commander attacking StarBase in {futureEvent.quadrantCoordinates}',
+            self._standardAnnouncement(currentEvent.starDate)
+            self._messageConsole.displayMessage(f'Commander attacking StarBase in {currentEvent.quadrantCoordinates}',
                                                 messageType=ConsoleMessageType.Warning)
+            newEvent: FutureEvent = FutureEvent()
+            newEvent.callback            = EventCallback(self.commanderDestroysBaseEventHandler)
+            newEvent.type                = FutureEventType.COMMANDER_DESTROYS_BASE
+            newEvent.quadrantCoordinates = currentEvent.quadrantCoordinates
+            newEvent.starDate            = self._gameState.starDate + self._intelligence.computeBaseDestroyedInterval()
+            eventEngine: EventEngine = EventEngine()
+            eventEngine.scheduleEvent(futureEvent=newEvent)
         else:
-            from pytrek.engine.futures.EventEngine import EventEngine
 
             self.logger.info(f'Out of StarBases or all commanders are dead.  So no attacking StarBases')
-            eventEngine: EventEngine = EventEngine()
+            eventEngine = EventEngine()
             eventEngine.unScheduleEvent(FutureEventType.COMMANDER_ATTACKS_BASE)
             eventEngine.makeUnSchedulable(FutureEventType.COMMANDER_ATTACKS_BASE)
+
+    def commanderDestroysBaseEventHandler(self, futureEvent: FutureEvent):
+        from pytrek.engine.futures.EventEngine import EventEngine
+
+        self._messageConsole.displayMessage(f'Commander destroyed StarBase in {futureEvent.quadrantCoordinates}',
+                                            messageType=ConsoleMessageType.Warning)
+
+        quadrant: Quadrant = self._galaxy.getQuadrant(futureEvent.quadrantCoordinates)
+
+        assert quadrant.hasStarBase is True, 'Whoa!!  We do not have a quadrant'
+
+        #
+        # Dispose of the starbase
+        #
+        quadrant.hasStarBase = False
+        self._gameState.starBaseCount -= 1
+        eventEngine: EventEngine = EventEngine()
+        eventEngine.unScheduleEvent(FutureEventType.COMMANDER_DESTROYS_BASE)
 
     def _decrementEnemyCount(self, quadrant: Quadrant, enemyName: str):
         """
@@ -162,4 +194,4 @@ class FutureEventHandlers:
             return True
 
     def _standardAnnouncement(self, starDate: float):
-        self._messageConsole.displayMessage(f'Message from Starfleet Command    Stardate {starDate:.2f}')
+        self._messageConsole.displayMessage(f'Message from Starfleet Command Stardate {starDate:.2f}')
