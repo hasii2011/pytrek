@@ -23,6 +23,12 @@ DATA_FILES = [
     ('pytrek/resources/fonts', ['pytrek/resources/fonts/MonoFonto.ttf']),
     ('pytrek/resources/fonts', ['pytrek/resources/fonts/UniverseCondensed.ttf']),
 
+    ('pytrek/resources/images', ['pytrek/resources/images/ArrowDown.png']),
+    ('pytrek/resources/images', ['pytrek/resources/images/ArrowDownHovered.png']),
+    ('pytrek/resources/images', ['pytrek/resources/images/ArrowDownPressed.png']),
+    ('pytrek/resources/images', ['pytrek/resources/images/ArrowUpPressed.png']),
+    ('pytrek/resources/images', ['pytrek/resources/images/ArrowUp.png']),
+    ('pytrek/resources/images', ['pytrek/resources/images/ArrowUpHovered.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/CancelButton.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/CancelButtonPressed.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/Commander.png']),
@@ -33,6 +39,10 @@ DATA_FILES = [
     ('pytrek/resources/images', ['pytrek/resources/images/EmptySpace.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/EnterpriseD.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/GalaxyScanBackground.png']),
+    ('pytrek/resources/images', ['pytrek/resources/images/GreyPanel.png']),
+    ('pytrek/resources/images', ['pytrek/resources/images/HelpOkButton.png']),
+    ('pytrek/resources/images', ['pytrek/resources/images/HelpOkButtonHovered.png']),
+    ('pytrek/resources/images', ['pytrek/resources/images/HelpOkButtonPressed.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/KlingonD7.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/KlingonTorpedo.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/KlingonTorpedoExplosionBlue.png']),
@@ -43,6 +53,7 @@ DATA_FILES = [
     ('pytrek/resources/images', ['pytrek/resources/images/KlingonTorpedoMiss.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/LongRangeSensorBackground.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/Mars.png']),
+    ('pytrek/resources/images', ['pytrek/resources/images/MediumDarkGrayPanel.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/Mercury.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/OkButton.png']),
     ('pytrek/resources/images', ['pytrek/resources/images/OkButtonPressed.png']),
@@ -84,6 +95,7 @@ DATA_FILES = [
     ('pytrek/resources/sounds', ['pytrek/resources/sounds/Warp.wav']),
 
     ('pytrek/resources', ['pytrek/resources/loggingConfiguration.json']),
+    ('pytrek/resources', ['pytrek/resources/Help.txt']),
 ]
 OPTIONS = {}
 
@@ -94,6 +106,7 @@ setup(
     data_files=DATA_FILES,
     packages=[
         'pytrek',
+        'pytrek.commandparser',
         'pytrek.engine',
         'pytrek.engine.devices', 'pytrek.engine.futures',
         'pytrek.exceptions',
@@ -101,7 +114,6 @@ setup(
         'pytrek.gui.dialogs',
         'pytrek.gui.gamepieces',
         'pytrek.gui.gamepieces.base', 'pytrek.gui.gamepieces.commander', 'pytrek.gui.gamepieces.klingon', 'pytrek.gui.gamepieces.supercommander',
-        'pytrek.guiv2',
         'pytrek.mediators',
         'pytrek.mediators.base',
         'pytrek.model',
