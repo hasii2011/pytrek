@@ -6,8 +6,8 @@ py2app==0.28.8
 html-testRunner~=1.2.1
 mypy==1.11.1
 
-buildlackey==1.6.3
-codeallybasic==1.4.0
+buildlackey==1.7.0
+codeallybasic==1.7.0
 
 arcade~=2.6.17
 shapely==2.0.4
