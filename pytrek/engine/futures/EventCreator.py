@@ -5,7 +5,6 @@ from logging import getLogger
 from pytrek.GameState import GameState
 
 from pytrek.engine.Intelligence import Intelligence
-from pytrek.engine.futures.FutureEvent import EventCallback
 
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
@@ -42,7 +41,7 @@ class EventCreator:
         quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
 
         futureEvent: FutureEvent = FutureEvent(type=FutureEventType.SUPER_NOVA, starDate=eventStarDate, quadrantCoordinates=quadrantCoordinates)
-        futureEvent.callback = EventCallback(self._futureEventHandlers.superNovaEventHandler)
+        futureEvent.callback = self._futureEventHandlers.superNovaEventHandler
         return futureEvent
 
     def createCommanderAttacksBaseEvent(self) -> FutureEvent:
@@ -59,7 +58,7 @@ class EventCreator:
 
         futureEvent: FutureEvent = FutureEvent(type=FutureEventType.COMMANDER_ATTACKS_BASE, starDate=eventStarDate, quadrantCoordinates=coordinates)
 
-        futureEvent.callback = EventCallback(self._futureEventHandlers.commanderAttacksBaseEventHandler)
+        futureEvent.callback = self._futureEventHandlers.commanderAttacksBaseEventHandler
 
         return futureEvent
 
@@ -90,6 +89,6 @@ class EventCreator:
 
             futureEvent = FutureEvent(type=FutureEventType.TRACTOR_BEAM, starDate=eventStarDate, quadrantCoordinates=coordinates)
 
-            futureEvent.callback = EventCallback(self._futureEventHandlers.tractorBeamEventHandler)
+            futureEvent.callback = self._futureEventHandlers.tractorBeamEventHandler
 
         return futureEvent

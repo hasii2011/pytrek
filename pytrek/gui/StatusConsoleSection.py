@@ -98,7 +98,7 @@ class StatusConsoleSection(BaseSection):
         Remember arcade's 0,0 origin is lower left corner
         """
 
-        statusConsoleLabelX = self.left + TITLE_MARGIN_X
+        statusConsoleLabelX: int = round(self.left + TITLE_MARGIN_X)
         statusConsoleLabelY = (QUADRANT_GRID_HEIGHT + CONSOLE_SECTION_HEIGHT + COMMAND_SECTION_HEIGHT) - TITLE_FONT_OFFSET_Y - TITLE_MARGIN_Y
 
         draw_text("Status Console", statusConsoleLabelX, statusConsoleLabelY, color=STATUS_TEXT_COLOR,

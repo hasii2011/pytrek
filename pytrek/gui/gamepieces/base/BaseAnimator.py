@@ -19,7 +19,7 @@ class BaseAnimator(Sprite):
         # Prime the pump
         self.texture          = self._textures[0]
 
-    def update(self):
+    def update(self, delta_time: float = 1 / 60, *args, **kwargs):
 
         # Update to the next frame of the animation. If we are at the end
         # of our frames, then delete this sprite.

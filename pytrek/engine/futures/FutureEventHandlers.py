@@ -7,7 +7,6 @@ from pytrek.GameState import GameState
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.Intelligence import TractorBeamComputation
 
-from pytrek.engine.futures.FutureEvent import EventCallback
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
 
@@ -117,7 +116,7 @@ class FutureEventHandlers:
             self._messageConsole.displayMessage(f'Commander attacking StarBase in {currentEvent.quadrantCoordinates}',
                                                 messageType=ConsoleMessageType.Warning)
             newEvent: FutureEvent = FutureEvent()
-            newEvent.callback            = EventCallback(self.commanderDestroysBaseEventHandler)
+            newEvent.callback            = self.commanderDestroysBaseEventHandler
             newEvent.type                = FutureEventType.COMMANDER_DESTROYS_BASE
             newEvent.quadrantCoordinates = currentEvent.quadrantCoordinates
             newEvent.starDate            = self._gameState.starDate + self._intelligence.computeBaseDestroyedInterval()

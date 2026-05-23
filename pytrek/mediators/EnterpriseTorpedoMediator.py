@@ -7,9 +7,8 @@ from logging import getLogger
 
 from arcade import Sprite
 from arcade import SpriteList
+from arcade import SpriteSheet
 from arcade import check_for_collision_with_list
-
-from arcade import load_spritesheet
 
 from pytrek.SoundMachine import SoundMachine
 from pytrek.SoundMachine import SoundType
@@ -193,9 +192,15 @@ class EnterpriseTorpedoMediator(MissesMediator):
         bareFileName: str = f'PhotonTorpedoExplosionSpriteSheet.png'
         fqFileName:   str = LocateResources.getImagePath(bareFileName=bareFileName)
 
-        explosions: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
+        sheet: SpriteSheet = SpriteSheet(fqFileName)
 
-        return explosions
+        explosions = sheet.get_texture_grid(
+            size=(spriteWidth, spriteHeight),
+            columns=nColumns,
+            count=tileCount
+        )
+
+        return TextureList(explosions)
 
     def _doWeHaveLineOfSight(self, quadrant: Quadrant, startingPoint: ArcadePoint, endPoint: ArcadePoint) -> LineOfSightResponse:
         """

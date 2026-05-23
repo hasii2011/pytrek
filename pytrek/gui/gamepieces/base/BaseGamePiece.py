@@ -2,6 +2,8 @@
 from typing import cast
 
 from arcade import Sprite
+from arcade import Texture
+from arcade import load_texture
 
 from pytrek.LocateResources import LocateResources
 
@@ -14,7 +16,8 @@ class BaseGamePiece(Sprite):
 
         fqFileName: str = LocateResources.getImagePath(bareFileName=filename)
 
-        super().__init__(filename=fqFileName, scale=scale)
+        texture: Texture = load_texture(fqFileName)
+        super().__init__(texture, scale=scale)
 
         self._gameCoordinates: Coordinates = cast(Coordinates, None)
 

@@ -75,7 +75,7 @@ class BaseEnemyTorpedo(GamePiece, SmoothMotion):
         """
         self._followers = newValues
 
-    def update(self):
+    def update(self, delta_time: float = 1 / 60, *args, **kwargs):
 
         if self.inMotion is True:
             radianInfo: RadianInfo = self.computeArcadeMotion(currentPoint=ArcadePoint(x=self.center_x, y=self.center_y),

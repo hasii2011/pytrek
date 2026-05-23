@@ -9,6 +9,7 @@ from logging import Logger
 from logging import getLogger
 
 from arcade import MOUSE_BUTTON_LEFT
+from arcade import SectionManager
 
 from arcade import Sprite
 from arcade import SpriteList
@@ -112,6 +113,7 @@ class AppTestShooting(View):
 
         self.logger: Logger = getLogger(AppTestShooting.MADE_UP_PRETTY_MAIN_NAME)
 
+        self.section_manager: SectionManager = SectionManager(self)
         set_background_color(color.WHITE)
 
         self.background:  Texture    = cast(Texture, None)
@@ -266,7 +268,7 @@ class AppTestShooting(View):
 
                 for paletteSprite in clickedPaletteSprites:
                     paletteSprite.color = color.BLACK
-                    self._selectedGamePiece = paletteSprite
+                    self._selectedGamePiece = cast(GamePiece, paletteSprite)
             else:
                 # A palette sprite is selected
                 self._placeSpriteOnBoard(x=x, y=y)
@@ -337,7 +339,7 @@ class AppTestShooting(View):
     def __fireEnemyTorpedo(self, torpedoMediator: BaseTorpedoMediator, enemySprites: SpriteList, rotationAngle: int = 0):
 
         for sprite in enemySprites:
-            enemy: Enemy = cast(Enemy, sprite)
+            enemy: Enemy = sprite
             # noinspection PyProtectedMember
             torpedoMediator._pointAtEnterprise(enemy=enemy, enterprise=self._enterprise, rotationAngle=rotationAngle)
             # noinspection PyProtectedMember

@@ -1,7 +1,6 @@
 
 from typing import List
 from typing import NewType
-from typing import Tuple
 
 from logging import Logger
 from logging import getLogger
@@ -12,6 +11,7 @@ from arcade.color import RED
 from arcade.color import WHITE
 
 from arcade import draw_text
+from arcade.types import Color
 
 from pytrek.Constants import COMMAND_SECTION_HEIGHT
 from pytrek.Constants import CONSOLE_SECTION_HEIGHT
@@ -24,7 +24,7 @@ from pytrek.gui.BaseSection import BaseSection
 @dataclass
 class MessageLine:
     message: str = ''
-    textColor: Tuple[int, int, int] = WHITE
+    textColor: Color = WHITE
 
 
 MessageLines = NewType('MessageLines', List[MessageLine])
@@ -74,7 +74,8 @@ class MessageConsoleSection(BaseSection):
         for msg in self._statusLines:
             draw_text(msg.message, MessageConsoleSection.X_FIXED, runningY,
                       color=msg.textColor,
-                      font_size=MessageConsoleSection.CONSOLE_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+                      font_size=MessageConsoleSection.CONSOLE_FONT_SIZE,
+                      font_name=FIXED_WIDTH_FONT_NAME)
 
             runningY -= MessageConsoleSection.Y_DECREMENT
 

@@ -2,18 +2,24 @@
 from logging import Logger
 from logging import getLogger
 
+from arcade import Rect
 from arcade import Section
 from arcade import Texture
 from arcade import load_texture
-from arcade import start_render
+from arcade import draw_texture_rect
 
-from pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from pytrek.Constants import QUADRANT_GRID_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
+from pytrek.Constants import QUADRANT_GRID_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+
 from pytrek.GameState import GameState
+
 from pytrek.LocateResources import LocateResources
+
 from pytrek.engine.GameEngine import GameEngine
+
 from pytrek.mediators.LongRangeSensorScanMediator import LongRangeSensorScanMediator
+
 from pytrek.model.Coordinates import Coordinates
 
 
@@ -50,12 +56,18 @@ class LongRangeSensorScanSection(Section):
         The mediator interacts with the game engine and the game state which are non-graphical
         elements
         """
-        start_render()
 
-        self._texture.draw_sized(center_x=self._graphicCenterX,
-                                 center_y=self._graphicCenterY,
-                                 width=LongRangeSensorScanSection.BACKGROUND_WIDTH,
-                                 height=LongRangeSensorScanSection.BACKGROUND_HEIGHT)
+        # self._texture.draw_sized(center_x=self._graphicCenterX,
+        #                          center_y=self._graphicCenterY,
+        #                          width=LongRangeSensorScanSection.BACKGROUND_WIDTH,
+        #                          height=LongRangeSensorScanSection.BACKGROUND_HEIGHT)
+
+        rect: Rect = Rect.from_kwargs(x=self._graphicCenterX,
+                                      y=self._graphicCenterY,
+                                      width=LongRangeSensorScanSection.BACKGROUND_WIDTH,
+                                      height=LongRangeSensorScanSection.BACKGROUND_HEIGHT
+                                      )
+        draw_texture_rect(self._texture, rect)
 
         coordinates: Coordinates = self._gameState.currentQuadrantCoordinates
         self._mediator.draw(coordinates)

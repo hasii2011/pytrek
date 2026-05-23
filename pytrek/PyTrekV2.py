@@ -7,16 +7,18 @@ from logging import getLogger
 # noinspection PyPackageRequirements
 from PIL import ImageFont
 
-from arcade import Texture
 from arcade import View
 from arcade import Window
+from arcade import Texture
+from arcade import SectionManager
 
 from arcade import run as arcadeRun
 
-from arcade import start_render
 
 from pytrek.CommandHandler import CommandHandler
+
 from pytrek.GameState import GameState
+
 from pytrek.LocateResources import LocateResources
 
 from pytrek.Constants import COMMAND_SECTION_HEIGHT
@@ -68,6 +70,8 @@ class PyTrekV2(View):
         self.logger: Logger = getLogger(__name__)
         super().__init__()
 
+        self._sectionManager: SectionManager = SectionManager(self)
+
         self.background:  Texture    = cast(Texture, None)
         self._enterprise: Enterprise = cast(Enterprise, None)
 
@@ -99,7 +103,18 @@ class PyTrekV2(View):
         self._commandHandler.enterpriseMediator  = self._enterpriseMediator
 
     def on_draw(self):
-        start_render()
+        self.clear()
+
+    def on_show_view(self):
+        self._sectionManager.enable()
+
+        self.galaxySection.enabled = False
+        self.longRangeSensorScanSection.enabled = False
+        self.warpEffectSection.enabled = False
+        self.deviceStatusSection.enabled = False
+
+    def on_hide_view(self):
+        self._sectionManager.disable()
 
     def _setupGame(self):
         """
@@ -130,24 +145,24 @@ class PyTrekV2(View):
         #
         # Message console is public because sub sections use it to send messages
         #
-        self.messageConsoleSection = MessageConsoleSection(left=0, bottom=COMMAND_SECTION_HEIGHT, height=CONSOLE_SECTION_HEIGHT, width=SCREEN_WIDTH, accept_keyboard_events=False)
+        self.messageConsoleSection = MessageConsoleSection(left=0, bottom=COMMAND_SECTION_HEIGHT, height=CONSOLE_SECTION_HEIGHT, width=SCREEN_WIDTH, accept_keyboard_keys=False)
         # Create proxy and inject the console
         self._messageConsoleProxy = MessageConsoleProxy()
         self._messageConsoleProxy.console = self.messageConsoleSection
 
         self._statusConsole = StatusConsoleSection(left=QUADRANT_GRID_WIDTH, bottom=SCREEN_HEIGHT - QUADRANT_GRID_HEIGHT,
                                                    height=QUADRANT_GRID_HEIGHT + CONSOLE_SECTION_HEIGHT, width=STATUS_VIEW_WIDTH,
-                                                   accept_keyboard_events=False)
+                                                   accept_keyboard_keys=False)
 
         self._enterpriseMediator = EnterpriseMediator()
 
         self._quadrantSection = QuadrantSection(left=0, bottom=SCREEN_HEIGHT - QUADRANT_GRID_HEIGHT,
                                                 height=QUADRANT_GRID_HEIGHT, width=QUADRANT_GRID_WIDTH,
-                                                accept_keyboard_events=False)
+                                                accept_keyboard_keys=False)
 
         self._quadrantSection.enterpriseMediator = self._enterpriseMediator
 
-        self._commandInputSection = VatoLocoTextSection(left=0, bottom=0, callback=self._handleCommands, accept_keyboard_events=True)
+        self._commandInputSection = VatoLocoTextSection(left=0, bottom=0, callback=self._handleCommands, accept_keyboard_keys=True)
         #
         # These sections are not enabled by default and disabled externally to here;  So make them public
         #
@@ -163,17 +178,21 @@ class PyTrekV2(View):
 
         self.warpEffectSection:   WarpEffectSection   = WarpEffectSection(width=viewWidth, height=viewHeight)
         self.deviceStatusSection: DeviceStatusSection = DeviceStatusSection(enabled=False)
+
         #
         # Make the sections available
         #
-        self.section_manager.add_section(self._quadrantSection)
-        self.section_manager.add_section(self._statusConsole)
-        self.section_manager.add_section(self.messageConsoleSection)
-        self.section_manager.add_section(self.galaxySection)
-        self.section_manager.add_section(self.longRangeSensorScanSection)
-        self.section_manager.add_section(self.warpEffectSection)
-        self.section_manager.add_section(self._commandInputSection)
-        self.section_manager.add_section(self.deviceStatusSection)
+        self._sectionManager.add_section(self._quadrantSection)
+        self._sectionManager.add_section(self._statusConsole)
+        self._sectionManager.add_section(self.messageConsoleSection)
+        self._sectionManager.add_section(self._commandInputSection)
+        #
+        #   These will be disabled in .on_show_view()
+        #
+        self._sectionManager.add_section(self.galaxySection)
+        self._sectionManager.add_section(self.longRangeSensorScanSection)
+        self._sectionManager.add_section(self.warpEffectSection)
+        self._sectionManager.add_section(self.deviceStatusSection)
 
     def _handleCommands(self, commandStr: str):
         try:

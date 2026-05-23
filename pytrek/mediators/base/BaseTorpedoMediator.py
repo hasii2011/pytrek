@@ -64,7 +64,7 @@ class BaseTorpedoMediator(MissesMediator):
 
         self._torpedoes:        SpriteList = SpriteList()
         self._explosions:       SpriteList = SpriteList()
-        self._torpedoFollowers: SpriteList = SpriteList(is_static=True)
+        self._torpedoFollowers: SpriteList = SpriteList()
         self._misses:           SpriteList = SpriteList()
 
         self._lastTimeCheck:  float = self._gameEngine.gameClock / MILLISECONDS
@@ -238,7 +238,7 @@ class BaseTorpedoMediator(MissesMediator):
 
         followersToRemove: List[BaseTorpedoFollower] = []
         for sprite in self.torpedoFollowers:
-            follower: BaseTorpedoFollower = cast(BaseTorpedoFollower, sprite)
+            follower: BaseTorpedoFollower = sprite
             if follower.following == enemyTorpedo.id:
                 self._baseTorpedoMediatorLogger.debug(f'Removing follower: {follower.id}')
                 followersToRemove.append(follower)

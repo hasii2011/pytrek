@@ -7,11 +7,12 @@ from arcade import Window
 from arcade import color
 from arcade import draw_line
 from arcade import draw_text
+from arcade import SectionManager
 
 from arcade import run as arcadeRun
 from arcade import key as arcadeKey
 from arcade import exit as arcadeExit
-from arcade import start_render
+from arcade.types import Color
 
 from pytrek.Constants import COMMAND_SECTION_HEIGHT
 from pytrek.Constants import CONSOLE_SECTION_HEIGHT
@@ -26,7 +27,7 @@ from pytrek.engine.devices.Device import Device
 from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
 from pytrek.engine.devices.DeviceManager import DeviceManager
-# from pytrek.engine.futures.EventCreator import EventCreator
+
 from pytrek.engine.futures.EventEngine import EventEngine
 from pytrek.engine.futures.FutureEvent import FutureEvent
 from pytrek.engine.futures.FutureEventType import FutureEventType
@@ -45,8 +46,8 @@ from tests.ProjectTestBase import ProjectTestBase
 
 SCREEN_TITLE: str = 'Test Event Scheduler'
 
-DEVICE_HEADER_FONT_SIZE: int = 12
-DEVICE_HEADER_COLOR:     tuple[int, int, int]  = color.WHITE
+DEVICE_HEADER_FONT_SIZE: int    = 12
+DEVICE_HEADER_COLOR:     Color  = color.WHITE
 X_MARGIN:        float = 10.0
 Y_MARGIN:        float = 24.0
 DEVICE_Y:        float = SCREEN_HEIGHT - Y_MARGIN
@@ -54,8 +55,8 @@ DEVICE_TYPE_X:   float = X_MARGIN
 DEVICE_DAMAGE_X: float = DEVICE_TYPE_X + 210
 DEVICE_STATUS_X: float = DEVICE_DAMAGE_X + 100
 
-DEVICE_DETAIL_COLOR:     tuple[int, int, int] = color.WHITE
-DEVICE_DETAIL_FONT_SIZE: int = 10
+DEVICE_DETAIL_COLOR:     Color = color.WHITE
+DEVICE_DETAIL_FONT_SIZE: int   = 10
 
 EVENT_TYPE_X:           float = DEVICE_STATUS_X + 120
 EVENT_DATE_X:           float = EVENT_TYPE_X    + 210
@@ -63,10 +64,10 @@ EVENT_COORDINATES_X:    float = EVENT_DATE_X + 100
 HEADER_Y:               float = DEVICE_Y - 10
 EVENT_TYPE_Y:           float = DEVICE_Y
 
-EVENT_HEADER_COLOR:     tuple[int, int, int] = color.WHITE
+EVENT_HEADER_COLOR:     Color = color.WHITE
 EVENT_HEADER_FONT_SIZE: int = 12
 
-EVENT_DETAIL_COLOR:     tuple[int, int, int] = color.WHITE
+EVENT_DETAIL_COLOR:     Color = color.WHITE
 EVENT_DETAIL_FONT_SIZE: int = 10
 
 HELP_SEPARATOR_Y: int = 300
@@ -81,6 +82,8 @@ class AppTestEventScheduler(View):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
+        self._sectionManager: SectionManager = SectionManager(self)
+
         self._gameSettings: GameSettings = GameSettings()
         self._gameState:    GameState    = GameState()
         self._gameEngine:   GameEngine   = GameEngine()
@@ -93,7 +96,7 @@ class AppTestEventScheduler(View):
                                                                               bottom=COMMAND_SECTION_HEIGHT,
                                                                               height=CONSOLE_SECTION_HEIGHT,
                                                                               width=SCREEN_WIDTH,
-                                                                              accept_keyboard_events=False
+                                                                              accept_keyboard_keys=False
                                                                               )
         self._messageConsoleProxy: MessageConsoleProxy = MessageConsoleProxy()
         self._messageConsoleProxy.console = self._messageConsole
@@ -109,7 +112,7 @@ class AppTestEventScheduler(View):
 
         self._quadrantMediator.enterQuadrant(quadrant=self._quadrant, enterprise=enterprise)
 
-        self.section_manager.add_section(self._messageConsole)
+        self._sectionManager.add_section(self._messageConsole)
 
         # self._createInitialEvents()
 
@@ -117,7 +120,7 @@ class AppTestEventScheduler(View):
         pass
 
     def on_draw(self):
-        start_render()
+        self.clear()
         # def draw_line(start_x: float, start_y: float, end_x: float, end_y: float, color: Color, line_width: float = 1)
         self._drawHeader()
         self._drawDevicesStatus()
@@ -125,9 +128,15 @@ class AppTestEventScheduler(View):
         self._drawGameState()
         self._drawHelpText()
 
+    def on_show_view(self):
+        self._sectionManager.enable()
+
+    def on_hide_view(self):
+        self._sectionManager.disable()
+
     def _drawHeader(self):
         # Header
-        draw_text(f'Event Type', EVENT_TYPE_X, EVENT_TYPE_Y, EVENT_HEADER_COLOR, EVENT_HEADER_FONT_SIZE)
+        draw_text(f'Event Type', EVENT_TYPE_X, EVENT_TYPE_Y, EVENT_HEADER_COLOR.rgb, EVENT_HEADER_FONT_SIZE)
         # Separator line
         draw_line(start_x=EVENT_TYPE_X, end_x=SCREEN_WIDTH - (2 * X_MARGIN),
                   start_y=HEADER_Y, end_y=HEADER_Y,
@@ -136,9 +145,9 @@ class AppTestEventScheduler(View):
     def _drawDevicesStatus(self):
 
         # Header
-        draw_text(f'Device type', DEVICE_TYPE_X, DEVICE_Y, DEVICE_HEADER_COLOR, DEVICE_HEADER_FONT_SIZE)
-        draw_text(f'Damage',      DEVICE_DAMAGE_X, DEVICE_Y, DEVICE_HEADER_COLOR, DEVICE_HEADER_FONT_SIZE)
-        draw_text(f'Status',      DEVICE_STATUS_X, DEVICE_Y, DEVICE_HEADER_COLOR, DEVICE_HEADER_FONT_SIZE)
+        draw_text(f'Device type', DEVICE_TYPE_X, DEVICE_Y, DEVICE_HEADER_COLOR.rgb, DEVICE_HEADER_FONT_SIZE)
+        draw_text(f'Damage',      DEVICE_DAMAGE_X, DEVICE_Y, DEVICE_HEADER_COLOR.rgb, DEVICE_HEADER_FONT_SIZE)
+        draw_text(f'Status',      DEVICE_STATUS_X, DEVICE_Y, DEVICE_HEADER_COLOR.rgb, DEVICE_HEADER_FONT_SIZE)
 
         # Separator line
         draw_line(start_x=DEVICE_TYPE_X, end_x=(SCREEN_WIDTH / 2) - (2 * X_MARGIN),
@@ -153,9 +162,9 @@ class AppTestEventScheduler(View):
             device: Device = self._devices.getDevice(deviceType=deviceType)
             damage: float = device.damage
             deviceStatus: DeviceStatus = device.deviceStatus
-            draw_text(f' {deviceType}', DEVICE_TYPE_X, y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
-            draw_text(f' {damage:.2f}', DEVICE_DAMAGE_X, y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
-            draw_text(f' {deviceStatus}', DEVICE_STATUS_X, y, DEVICE_DETAIL_COLOR, DEVICE_DETAIL_FONT_SIZE)
+            draw_text(f' {deviceType}', DEVICE_TYPE_X, y, DEVICE_DETAIL_COLOR.rgb, DEVICE_DETAIL_FONT_SIZE)
+            draw_text(f' {damage:.2f}', DEVICE_DAMAGE_X, y, DEVICE_DETAIL_COLOR.rgb, DEVICE_DETAIL_FONT_SIZE)
+            draw_text(f' {deviceStatus}', DEVICE_STATUS_X, y, DEVICE_DETAIL_COLOR.rgb, DEVICE_DETAIL_FONT_SIZE)
 
         footerY: float = y - 5
         endX:    float = SCREEN_WIDTH - (2 * X_MARGIN)
@@ -169,9 +178,9 @@ class AppTestEventScheduler(View):
                 y -= 20
                 event: FutureEvent = self._eventEngine.getEvent(eventType=eventType)
 
-                draw_text(f'{event.type.value}', EVENT_TYPE_X, y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
-                draw_text(f'{event.starDate:.2f}', EVENT_DATE_X, y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
-                draw_text(f'{event.quadrantCoordinates}', EVENT_COORDINATES_X, y, EVENT_DETAIL_COLOR, EVENT_DETAIL_FONT_SIZE)
+                draw_text(f'{event.type.value}', EVENT_TYPE_X, y, EVENT_DETAIL_COLOR.rgb, EVENT_DETAIL_FONT_SIZE)
+                draw_text(f'{event.starDate:.2f}', EVENT_DATE_X, y, EVENT_DETAIL_COLOR.rgb, EVENT_DETAIL_FONT_SIZE)
+                draw_text(f'{event.quadrantCoordinates}', EVENT_COORDINATES_X, y, EVENT_DETAIL_COLOR.rgb, EVENT_DETAIL_FONT_SIZE)
 
     def _drawGameState(self):
         starDate: float = self._gameState.starDate

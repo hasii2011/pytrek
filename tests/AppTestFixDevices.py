@@ -5,7 +5,7 @@ from logging import getLogger
 from arcade import View
 from arcade import Window
 from arcade import draw_text
-from arcade import start_render
+from arcade import SectionManager
 
 from arcade.color import BLACK
 from arcade.color import WHITE
@@ -19,6 +19,7 @@ from pytrek.Constants import COMMAND_SECTION_HEIGHT
 from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
+
 from pytrek.engine.Intelligence import Intelligence
 from pytrek.engine.ShipCondition import ShipCondition
 
@@ -60,28 +61,27 @@ class InputSection(BaseSection):
 
     def on_draw(self):
 
-        start_render()
-        operationTimeValueX: int = self.left + 10
-        operationTimeValueY: int = self.top  - 20
+        operationTimeValueX: int = round(self.left + 10)
+        operationTimeValueY: int = round(self.top  - 20)
 
-        draw_text(f'Operation time: {self._opTime} ', start_x=operationTimeValueX, start_y=operationTimeValueY, color=WHITE, font_size=12)
+        draw_text(f'Operation time: {self._opTime} ', x=operationTimeValueX, y=operationTimeValueY, color=WHITE, font_size=12)
 
         startDateX: float = self.left + 10
         startDateY: float = self.top  - 40
 
-        draw_text(f'Star date: {self._starDate} ', start_x=startDateX, start_y=startDateY, color=WHITE, font_size=12)
+        draw_text(f'Star date: {self._starDate} ', x=startDateX, y=startDateY, color=WHITE, font_size=12)
 
-        startX: int = self.left + 10
-        startY: int = self.bottom + 15
-        draw_text(f'(Q)uit ', start_x=startX, start_y=startY, color=WHITE, font_size=12)
+        startX: int = round(self.left + 10)
+        startY: int = round(self.bottom + 15)
+        draw_text(f'(Q)uit ', x=startX, y=startY, color=WHITE, font_size=12)
 
         opTimeX: int = startX + 80
         opTimeY: int = startY
-        draw_text(f'opTime (1-9)', start_x=opTimeX, start_y=opTimeY, color=WHITE, font_size=12)
+        draw_text(f'opTime (1-9)', x=opTimeX, y=opTimeY, color=WHITE, font_size=12)
 
         fixCmdX: int = opTimeX + 140
         fixCmdY: int = opTimeY
-        draw_text(f'(F)ix', start_x=fixCmdX, start_y=fixCmdY, color=WHITE, font_size=12)
+        draw_text(f'(F)ix', x=fixCmdX, y=fixCmdY, color=WHITE, font_size=12)
 
         self.drawDebug()
 
@@ -131,11 +131,14 @@ class TestView(View):
     """
 
     def __init__(self):
+
         super().__init__()
+
+        self._sectionManager: SectionManager = SectionManager(self)
 
         self._messageConsoleSection: MessageConsoleSection = MessageConsoleSection(left=0, bottom=COMMAND_SECTION_HEIGHT,
                                                                                    height=CONSOLE_SECTION_HEIGHT, width=SCREEN_WIDTH,
-                                                                                   accept_keyboard_events=False
+                                                                                   accept_keyboard_keys=False
                                                                                    )
 
         # Create proxy and inject the console
@@ -145,9 +148,9 @@ class TestView(View):
         self._deviceStatusSection:   DeviceStatusSection = DeviceStatusSection(modal=False)
         self._inputSection:          InputSection        = InputSection()
 
-        self.section_manager.add_section(self._inputSection)
-        self.section_manager.add_section(self._messageConsoleSection)
-        self.section_manager.add_section(self._deviceStatusSection)
+        self._sectionManager.add_section(self._inputSection)
+        self._sectionManager.add_section(self._messageConsoleSection)
+        self._sectionManager.add_section(self._deviceStatusSection)
 
         #
         # Set these to test status colors:
@@ -164,7 +167,13 @@ class TestView(View):
         self._devices.setDeviceDamage(deviceType=DeviceType.DeathRay, damageValue=2.0)
 
     def on_draw(self):
-        pass
+        self.clear()
+
+    def on_show_view(self):
+        self._sectionManager.enable()
+
+    def on_hide_view(self):
+        self._sectionManager.disable()
 
 
 def main():

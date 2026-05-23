@@ -3,6 +3,7 @@ from typing import Callable
 
 from arcade.gui import UIManager
 from arcade.gui import UIMessageBox
+from arcade.gui import UIOnActionEvent
 
 OK_BUTTON_TEXT:     str = 'Ok'
 CANCEL_BUTTON_TEXT: str = 'Cancel'
@@ -30,6 +31,10 @@ class StdConfirmationDialog:
             height=200,
             message_text=msg,
             buttons=(OK_BUTTON_TEXT, CANCEL_BUTTON_TEXT),
-            callback=callback
         )
+
+        @messageBox.event("on_action")
+        def on_action(event: UIOnActionEvent):
+            callback(event.action)
+
         uiManager.add(messageBox)

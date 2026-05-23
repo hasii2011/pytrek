@@ -111,3 +111,6 @@ class Coordinates:
                 return False
         else:
             return False
+
+def coordinateFactory() -> Coordinates:
+    return Coordinates(0, 0)

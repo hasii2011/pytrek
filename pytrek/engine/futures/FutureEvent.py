@@ -1,7 +1,6 @@
 
-from typing import Callable
-from typing import NewType
 from typing import cast
+from typing import Callable
 
 from dataclasses import dataclass
 
@@ -10,7 +9,7 @@ from pytrek.engine.futures.FutureEventType import FutureEventType
 from pytrek.model.Coordinates import Coordinates
 
 
-EventCallback = NewType('EventCallback', Callable[['FutureEvent'], None])  # type: ignore
+EventCallback = Callable[['FutureEvent'], None]
 
 
 @dataclass
@@ -24,7 +23,7 @@ class FutureEvent:
     """
     type:                FutureEventType = cast(FutureEventType, None)
     quadrantCoordinates: Coordinates     = cast(Coordinates, None)
-    starDate:            float           = 0.0
+    starDate:            float    = 0.0
     callback:            EventCallback   = cast(EventCallback, None)
     schedulable:         bool            = True
 

@@ -6,7 +6,7 @@ from logging import getLogger
 
 from arcade import Sprite
 from arcade import SpriteList
-from arcade import load_spritesheet
+from arcade import SpriteSheet
 
 from pytrek.GameState import GameState
 
@@ -16,7 +16,6 @@ from pytrek.SoundMachine import SoundType
 from pytrek.engine.ArcadePoint import ArcadePoint
 from pytrek.engine.GameEngine import GameEngine
 
-# from pytrek.gui.MessageConsole import MessageConsole
 
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 from pytrek.gui.gamepieces.GamePieceTypes import Enemies
@@ -117,7 +116,14 @@ class EnterprisePhaserMediator(BaseMediator):
         bareFileName: str = f'PhaserSpriteSheet.png'
         fqFileName:   str = LocateResources.getImagePath(bareFileName=bareFileName)
 
-        textureList: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
+        # textureList: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
+
+        sheet: SpriteSheet = SpriteSheet(fqFileName)
+        textureList = cast(TextureList, sheet.get_texture_grid(
+            size=(spriteWidth, spriteHeight),
+            columns=nColumns,
+            count=tileCount
+        ))
 
         return textureList
 

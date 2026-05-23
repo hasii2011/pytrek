@@ -7,6 +7,7 @@ from logging import getLogger
 
 from arcade import SpriteSolidColor
 from arcade import Text
+from arcade import draw_sprite
 
 from arcade import draw_text
 
@@ -150,14 +151,15 @@ class VatoLocoTextSection(BaseSection):
             self._label.draw_debug()
 
         self._label.draw()
-        self._collisionDetector.draw()
+        # self._collisionDetector.draw()
+        draw_sprite(self._collisionDetector)
         if self._hasFocus is True:
             self._collisionDetector.draw_hit_box(color=RED)
 
         # Draw the input value on top of the sprite
         draw_text(self._value,
-                  start_x=self._collisionDetector.left + TEXT_LEFT_MARGIN,
-                  start_y=(self._collisionDetector.bottom - TEXT_TOP_MARGIN) + self._collisionDetector.height / 2,
+                  x=self._collisionDetector.left + TEXT_LEFT_MARGIN,
+                  y=(self._collisionDetector.bottom - TEXT_TOP_MARGIN) + self._collisionDetector.height / 2,
                   width=int(self._collisionDetector.width),
                   color=BLACK)
 
@@ -201,7 +203,7 @@ class VatoLocoTextSection(BaseSection):
         Returns: Our collision detecting immovable sprite
         """
 
-        inputWidth  = self.width // 3
+        inputWidth: int  = round(self.width // 3)
         inputHeight = COMMAND_INPUT_HEIGHT
         collisionDetector: SpriteSolidColor = SpriteSolidColor(width=inputWidth, height=inputHeight, color=WHITE)
 
@@ -211,6 +213,6 @@ class VatoLocoTextSection(BaseSection):
 
         labelY: float = labelAndTextY - TEXT_TOP_MARGIN
         width:  int   = LABEL_FONT_SIZE * len(LABEL_TEXT)
-        label: Text = Text(text=LABEL_TEXT, start_x=labelX, start_y=labelY, width=width, color=WHITE)
+        label: Text = Text(text=LABEL_TEXT, x=labelX, y=labelY, width=width, color=WHITE)
 
         return label

@@ -1,8 +1,11 @@
 
+from dataclasses import field
 from dataclasses import dataclass
 
 from pytrek.engine.Direction import Direction
+
 from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import coordinateFactory
 
 
 @dataclass
@@ -14,5 +17,5 @@ class LRScanCoordinates:
 
     """
 
-    coordinates: Coordinates = Coordinates(x=0, y=0)
+    coordinates: Coordinates = field(default_factory=coordinateFactory)
     direction:   Direction   = Direction.North

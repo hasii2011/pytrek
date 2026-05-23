@@ -1,4 +1,4 @@
-
+from arcade import SectionManager
 from arcade import View
 from arcade import Window
 from arcade.color import BLACK
@@ -27,10 +27,12 @@ class TestView(View):
     def __init__(self):
         super().__init__()
 
+        self.sectionManager: SectionManager = SectionManager(self)
+
         self._drawTextSection:     DrawTextSection     = DrawTextSection(enabled=True)
         self._deviceStatusSection: DeviceStatusSection = DeviceStatusSection(enabled=True)
-        self.section_manager.add_section(self._drawTextSection)
-        self.section_manager.add_section(self._deviceStatusSection)
+        self.sectionManager.add_section(self._drawTextSection)
+        self.sectionManager.add_section(self._deviceStatusSection)
 
         #
         # Set these to test status colors:
@@ -44,7 +46,13 @@ class TestView(View):
         self._devices.setDeviceDamage(deviceType=DeviceType.Transporter, damageValue=100)
 
     def on_draw(self):
-        pass
+        self.clear()
+
+    def on_show_view(self):
+        self.sectionManager.enable()
+
+    def on_hide_view(self):
+        self.sectionManager.disable()
 
 
 def main():

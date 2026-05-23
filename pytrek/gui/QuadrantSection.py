@@ -8,7 +8,6 @@ from arcade import MOUSE_BUTTON_LEFT
 from arcade import Texture
 
 from arcade import load_texture
-from arcade import start_render
 
 from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import QUADRANT_GRID_WIDTH
@@ -92,8 +91,6 @@ class QuadrantSection(BaseSection):
         """
         # This command should happen before we start drawing. It will clear
         # the screen to the background color, and erase what we drew last frame.
-
-        start_render()
 
         drawQuadrantGrid(background=self.background)
         self._quadrantMediator.draw(quadrant=self._quadrant)

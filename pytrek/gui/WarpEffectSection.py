@@ -5,21 +5,17 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from random import choice as randomChoice
-
 # noinspection PyPackageRequirements
 import pyglet.media as media
 
-from arcade import Emitter
-from arcade import EmitterIntervalWithTime
-from arcade import LifetimeParticle
-
 from arcade import color
-from arcade import draw_text
-from arcade import load_spritesheet
-from arcade import rand_on_circle
+from arcade import Text
+
+from arcade import SpriteSheet
 from arcade import set_background_color
-from arcade import start_render
+
+from arcade.particles import Emitter
+from arcade.particles import make_interval_emitter
 
 from pytrek.LocateResources import LocateResources
 
@@ -34,7 +30,8 @@ PARTICLE_SPEED_FAST:       float = 1.0
 DEFAULT_EMIT_INTERVAL:     float = 0.003
 DEFAULT_EMIT_DURATION:     float = 1.5
 DEFAULT_SCALE:             float = 1.0
-DEFAULT_PARTICLE_LIFETIME: float = 3.0
+DEFAULT_PARTICLE_LIFETIME_MIN: float = 3.0
+DEFAULT_PARTICLE_LIFETIME_MAX: float = 4.0
 
 DEFAULT_ALPHA: int = 32
 
@@ -49,6 +46,14 @@ class WarpEffectSection(BaseSection):
         self._soundMachine:       SoundMachine        = SoundMachine()
         self._centerPosition:     Tuple[float, float] = (width / 2, height / 2)
         self._warpEffectTextures: TextureList         = self._loadWarpEffectTextures()
+
+        self._warpingText: Text = Text(
+            text='Warping: ',
+            x=10,
+            y=30,
+            font_size=12,
+            color=color.PALE_GOLD,
+        )
 
         self._emitter: Emitter      = cast(Emitter, None)
         self._media:   media.Player = cast(media.Player, None)
@@ -73,10 +78,13 @@ class WarpEffectSection(BaseSection):
         """
         # This command should happen before we start drawing. It will clear
         # the screen to the background color, and erase what we drew last frame.
-        start_render()
+        # start_render()
+
         self._emitter.draw()
         if self.isEffectComplete() is False:
-            draw_text("Warping: " + str(self._emitter.get_count()), 10, 30, color.PALE_GOLD, 12)
+            # draw_text("Warping: " + str(self._emitter.get_count()), 10, 30, color.PALE_GOLD, 12)
+            self._warpingText.text = f'Warping: {self._emitter.get_count()}'
+            self._warpingText.draw()
         self.drawDebug()
 
     def on_update(self, delta_time: float):
@@ -94,15 +102,16 @@ class WarpEffectSection(BaseSection):
         texture0 = self._warpEffectTextures[0]
         texture2 = self._warpEffectTextures[2]
 
-        e: Emitter = Emitter(
+        # 3.3.3 way to create a continuous emitter
+        e: Emitter = make_interval_emitter(
             center_xy=self._centerPosition,
-            emit_controller=EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
-            particle_factory=lambda emitter: LifetimeParticle(
-                filename_or_texture=randomChoice((texture0, texture2)),
-                change_xy=rand_on_circle((0.0, 0.0), PARTICLE_SPEED_FAST),
-                lifetime=DEFAULT_PARTICLE_LIFETIME,
-                scale=DEFAULT_SCALE
-            )
+            filenames_and_textures=[texture0, texture2],
+            # filenames_and_textures=self._warpEffectTextures,
+            emit_interval=DEFAULT_EMIT_INTERVAL,
+            emit_duration=DEFAULT_EMIT_DURATION,
+            particle_speed=PARTICLE_SPEED_FAST,
+            particle_lifetime_min=DEFAULT_PARTICLE_LIFETIME_MIN,
+            particle_lifetime_max=DEFAULT_PARTICLE_LIFETIME_MAX
         )
 
         return e
@@ -116,6 +125,11 @@ class WarpEffectSection(BaseSection):
         bareFileName: str = f'WarpEffectSpriteSheet.png'
         fqFileName:   str = LocateResources.getImagePath(bareFileName=bareFileName)
 
-        textureList: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
+        sheet: SpriteSheet = SpriteSheet(fqFileName)
+        textures = sheet.get_texture_grid(
+            size=(spriteWidth, spriteHeight),  # Replaces sprite_width and sprite_height
+            columns=nColumns,  # Same as before
+            count=tileCount  # Replaces tilecount
+        )
 
-        return textureList
+        return TextureList(textures)

@@ -4,7 +4,7 @@ from logging import getLogger
 
 from collections import namedtuple
 
-from arcade import PointList
+from arcade.types import PointList
 from arcade import Sprite
 from arcade import SpriteList
 
@@ -57,7 +57,8 @@ class BaseMediator:
 
         for obstacle in obstacles:
 
-            pointList: PointList = obstacle.get_adjusted_hit_box()
+            # pointList: PointList = obstacle.get_adjusted_hit_box()
+            pointList: PointList = obstacle.hit_box.get_adjusted_points()
             polygon:   Polygon   = Polygon(pointList)
             ans: bool = polygon.crosses(lineOfSight)
             if ans is True:

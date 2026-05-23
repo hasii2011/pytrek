@@ -40,7 +40,7 @@ class PhotonTorpedo(GamePiece, SmoothMotion):
     def firedAt(self, klingonId: EnemyId):
         self._firedAt = klingonId
 
-    def update(self):
+    def update(self, delta_time: float = 1 / 60, *args, **kwargs):
 
         if self.inMotion is True:
 

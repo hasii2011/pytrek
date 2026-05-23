@@ -2,8 +2,10 @@
 from logging import Logger
 from logging import getLogger
 
+from arcade import Rect
 from arcade import Section
 from arcade import Texture
+from arcade import draw_texture_rect
 from arcade import load_texture
 
 from pytrek.Constants import CONSOLE_SECTION_HEIGHT
@@ -35,8 +37,10 @@ class GalaxySection(Section):
         centerX: float = SCREEN_WIDTH / 2
         centerY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_SECTION_HEIGHT
 
-        self._texture.draw_sized(center_x=centerX, center_y=centerY, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT)
+        # self._texture.draw_sized(center_x=centerX, center_y=centerY, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT)
 
+        rect: Rect = Rect.from_kwargs(x=centerX, y=centerY, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT)
+        draw_texture_rect(self._texture, rect)
         self._mediator.draw(centerCoordinates=self._gameState.currentQuadrantCoordinates)
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
@@ -44,4 +48,3 @@ class GalaxySection(Section):
         Check if any button is pressed;  Go back to the main game
         """
         self.enabled = False
-

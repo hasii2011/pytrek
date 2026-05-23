@@ -72,7 +72,7 @@ class EventEngine(metaclass=SingletonV3):
         self._scheduleRecurringEvents(eventType=FutureEventType.SUPER_NOVA)
 
         # I do not know what a Number is; Tell mypy so
-        arcadeSchedule(function_pointer=self._doEventChecking, interval=EventEngine.EVENT_CHECK_INTERVAL)  # type: ignore
+        arcadeSchedule(function_pointer=self._doEventChecking, interval=EventEngine.EVENT_CHECK_INTERVAL)
 
     def getEvent(self, eventType: FutureEventType) -> FutureEvent:
         return self._eventMap[eventType]

@@ -1,9 +1,9 @@
+from arcade import SectionManager
 from arcade import View
 from arcade import Window
 from arcade import color
 
 from arcade import run as arcadeRun
-from arcade import start_render
 
 from pytrek.Constants import SCREEN_HEIGHT
 from pytrek.Constants import SCREEN_WIDTH
@@ -20,16 +20,23 @@ class TestView(View):
 
     def __init__(self):
         super().__init__()
+        self.sectionManager: SectionManager = SectionManager(self)
 
         self._textInputSection: VatoLocoTextSection = VatoLocoTextSection(left=0, bottom=0, callback=self._returnPressedCallback)
 
-        self.section_manager.add_section(self._textInputSection)
+        self.sectionManager.add_section(self._textInputSection)
 
     def _returnPressedCallback(self, value: str):
         print(f'{value=}')
 
     def on_draw(self):
-        start_render()
+        self.clear()
+
+    def on_show_view(self):
+        self.sectionManager.enable()
+
+    def on_hide_view(self):
+        self.sectionManager.disable()
 
 
 def main():

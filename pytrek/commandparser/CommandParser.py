@@ -2,7 +2,6 @@
 from typing import Dict
 from typing import List
 from typing import NewType
-from typing import cast
 
 from logging import Logger
 from logging import getLogger
@@ -228,7 +227,7 @@ class CommandParser:
         parsedCommand: ParsedCommand = ParsedCommand(commandType=CommandType.NoCommand)
 
         for pattern in PatternToCommandType.keys():
-            cmdPattern: CommandPattern    = cast(CommandPattern, pattern)
+            cmdPattern: CommandPattern    = pattern
             match:      regExMatch | None = regExSearch(cmdPattern, commandStr)
 
             if match is not None:

@@ -5,14 +5,15 @@ from logging import getLogger
 from arcade import View
 from arcade import Window
 
-from arcade import set_background_color
-from arcade import start_render
+
 from arcade.color import BLACK
 from arcade.color import WHITE
 
 from arcade.gui import UIManager
 
+from arcade import set_background_color
 from arcade import run as arcadeRun
+
 from arcade import key as arcadeKey
 from arcade import exit as arcadeExit
 
@@ -42,7 +43,7 @@ class AppTestStdConfirmationDialog(View):
         self._uiManager.enable()
 
     def on_draw(self):
-        start_render()
+        self.clear()
         self._uiManager.draw()
 
     def on_key_release(self, releasedKey: int, key_modifiers: int):

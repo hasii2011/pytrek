@@ -1,11 +1,13 @@
 
 from typing import cast
+from typing import Optional
 
 from logging import Logger
 from logging import getLogger
 from logging import DEBUG
 
 from arcade import SpriteList
+from arcade import draw_sprite
 
 from codeallybasic.SingletonV3 import SingletonV3
 
@@ -39,9 +41,9 @@ from pytrek.mediators.EnterpriseTorpedoMediator import EnterpriseTorpedoMediator
 from pytrek.mediators.SuperCommanderMediator import SuperCommanderMediator
 from pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedoMediator
 
-from pytrek.model.Coordinates import Coordinates
-from pytrek.model.Quadrant import Quadrant
 from pytrek.model.Sector import Sector
+from pytrek.model.Quadrant import Quadrant
+from pytrek.model.Coordinates import Coordinates
 from pytrek.model.SectorType import SectorType
 
 from pytrek.settings.GameSettings import GameSettings
@@ -146,7 +148,7 @@ class QuadrantMediator(metaclass=SingletonV3):
             self._soundMachine.playSound(SoundType.UnableToComply)
             self._messageConsole.displayMessage(f'You are not adjacent to base')
 
-    def enterQuadrant(self, quadrant: Quadrant, enterprise, sectorCoordinates: Coordinates = None):
+    def enterQuadrant(self, quadrant: Quadrant, enterprise, sectorCoordinates: Optional[Coordinates] = None):
         """
 
         Args:
@@ -191,9 +193,11 @@ class QuadrantMediator(metaclass=SingletonV3):
         self._ptm.draw(quadrant=quadrant)
         self._epm.draw(quadrant=quadrant)
         if quadrant.hasPlanet is True:
-            quadrant.planet.draw()
+            # quadrant.planet.draw()
+            draw_sprite(quadrant.planet)
         if quadrant.hasStarBase is True:
-            quadrant.starBase.draw()
+            # quadrant.starBase.draw()
+            draw_sprite(quadrant.starBase)
 
     def update(self, quadrant: Quadrant):
 

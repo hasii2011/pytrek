@@ -144,7 +144,8 @@ class EnterpriseMediator(MissesMediator):
         self._warpEffectSection.setup()
         self._warpEffectSection.enabled = True
 
-        schedule(function_pointer=self._checkEffectComplete, interval=1.0)  # type: ignore
+        schedule(function_pointer=self._checkEffectComplete, interval=1.0)
+        schedule(function_pointer=self._checkEffectComplete, interval=1.0)
 
     def _doManualImpulseMove(self, deltaX, deltaY, quadrant):
 
@@ -188,7 +189,7 @@ class EnterpriseMediator(MissesMediator):
         self._warpEffectSection.setup()
         self._warpEffectSection.enabled = True
 
-        schedule(function_pointer=self._checkEffectComplete, interval=1.0)  # type: ignore
+        schedule(function_pointer=self._checkEffectComplete, interval=1.0)
 
     def _doImpulseMove(self, quadrant: Quadrant, enterpriseCoordinates: Coordinates, targetCoordinates: Coordinates):
         """

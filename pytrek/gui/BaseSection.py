@@ -3,7 +3,8 @@ from logging import Logger
 from logging import getLogger
 
 from arcade import Section
-from arcade import draw_lrtb_rectangle_outline
+from arcade import SectionManager
+from arcade import draw_lrbt_rectangle_outline
 
 from arcade.color import GREEN
 
@@ -23,7 +24,14 @@ class BaseSection(Section):
 
     def drawDebug(self, color=GREEN):
         if GameSettings().drawSectionBoundaries is True:
-            draw_lrtb_rectangle_outline(left=self.left+2, right=self.right-2, top=self.top, bottom=self.bottom, color=color, border_width=1)
+            draw_lrbt_rectangle_outline(
+                left=self.left+2,
+                right=self.right-2,
+                top=self.top,
+                bottom=self.bottom,
+                color=color,
+                border_width=1
+                )
 
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
         super().on_mouse_press(x, y, button, modifiers)

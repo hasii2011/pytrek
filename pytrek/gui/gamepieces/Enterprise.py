@@ -23,7 +23,7 @@ class Enterprise(
         GamePiece.__init__(self, filename=Enterprise.FILENAME)
         SmoothMotion.__init__(self, imageRotation=125)
 
-    def update(self):
+    def update(self, delta_time: float = 1 / 60, *args, **kwargs):
 
         if self.inMotion is True:
 

@@ -1,9 +1,12 @@
+
 """
 Used to test sprites that used a time based tiled image sheet to display themselves
 """
 from typing import cast
 
+from arcade import SectionManager
 from arcade import SpriteList
+from arcade import Text
 from arcade import View
 from arcade import Window
 from arcade import color
@@ -11,10 +14,10 @@ from arcade import draw_line
 from arcade import draw_text
 
 from arcade import set_background_color
-from arcade import start_render
 
 from arcade import run as arcadeRun
 from arcade import key as arcadeKey
+
 from arcade.color import WHITE
 
 from pytrek.Constants import COMMAND_SECTION_HEIGHT
@@ -77,13 +80,15 @@ class AppTestExplosions(View):
 
         super().__init__()
 
+        self.sectionManager: SectionManager = SectionManager(self)
+
         set_background_color(color.BLACK)
 
         self._messageConsole:   MessageConsoleSection = MessageConsoleSection(left=0,
                                                                               bottom=COMMAND_SECTION_HEIGHT,
                                                                               height=CONSOLE_SECTION_HEIGHT,
                                                                               width=SCREEN_WIDTH,
-                                                                              accept_keyboard_events=False
+                                                                              accept_keyboard_keys=False
                                                                               )
         self._messageConsoleProxy: MessageConsoleProxy = MessageConsoleProxy()
         self._messageConsoleProxy.console = self._messageConsole
@@ -108,11 +113,19 @@ class AppTestExplosions(View):
         self._stxPoint:        ArcadePoint = cast(ArcadePoint, None)
         self._phaserFirePoint: ArcadePoint = cast(ArcadePoint, None)
 
-    def setup(self):
+        self._titleText: Text = Text(
+            text=EXPLOSION_TITLE,
+            x=TITLE_X,
+            y=TITLE_Y,
+            color=AppTestExplosions.ETX_COLOR,
+            font_size=16
+        )
+        self._helpText: Text = cast(Text, None)
+
+    def setup(self, initial: bool = True):
         """
         Set up the game here. Call this function to restart the game.
         """
-
         enterpriseTorpedoExplosion:     PhotonTorpedoExplosion         = self._getEnterpriseTorpedoExplosion()
         klingonTorpedoExplosion:        KlingonTorpedoExplosion        = self._getKlingonTorpedoExplosion()
         commanderTorpedoExplosion:      CommanderTorpedoExplosion      = self._getCommanderTorpedoExplosion()
@@ -125,7 +138,18 @@ class AppTestExplosions(View):
         self._sprites.append(superCommanderTorpedoExplosion)
         self._sprites.append(phaserFire)
 
-        self.section_manager.add_section(self._messageConsole)
+        if initial:
+            y: float = self.enterpriseTorpedoExplosionPoint.y - HELP_LINE_Y_OFFSET
+            y = y - HELP_TEXT_Y_OFFSET
+
+            self._helpText = Text(
+                text="A - 'A'gain    Q - 'Q'uit",
+                x=HELP_TEXT_X_OFFSET,
+                y=y,
+                color=HELP_TEXT_COLOR
+            )
+
+            self.sectionManager.add_section(self._messageConsole)
 
     @property
     def klingonTorpedoExplosionPoint(self) -> ArcadePoint:
@@ -173,9 +197,10 @@ class AppTestExplosions(View):
         """
         Render the screen.
         """
-        start_render()
-        draw_text(EXPLOSION_TITLE, TITLE_X, TITLE_Y, color=AppTestExplosions.ETX_COLOR, font_size=16)
+        self.clear()
 
+        # draw_text(EXPLOSION_TITLE, TITLE_X, TITLE_Y, color=AppTestExplosions.ETX_COLOR, font_size=16)
+        self._titleText.draw()
         draw_line(start_x=LINE_START_X, start_y=LINE_Y, end_x=LINE_END_X, end_y=LINE_Y, color=WHITE, line_width=2)
 
         self._drawPhaserFireTitle()
@@ -193,7 +218,7 @@ class AppTestExplosions(View):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        self._sprites.update()
+        self._sprites.update(delta_time=delta_time)
 
     def on_key_release(self, releasedKey: int, key_modifiers: int):
         """
@@ -205,7 +230,7 @@ class AppTestExplosions(View):
             # noinspection PyProtectedMember
             os._exit(0)
         elif releasedKey == arcadeKey.A:
-            self.setup()
+            self.setup(initial=False)
 
     def _getEnterpriseTorpedoExplosion(self) -> PhotonTorpedoExplosion:
 
@@ -300,10 +325,7 @@ class AppTestExplosions(View):
 
         draw_line(start_x=LINE_START_X, start_y=y, end_x=LINE_END_X, end_y=y, color=WHITE, line_width=2)
 
-        y = y - HELP_TEXT_Y_OFFSET
-        # noinspection SpellCheckingInspection
-        draw_text("A - 'A'gain    Q - 'Q'uit", start_x=HELP_TEXT_X_OFFSET, start_y=y, color=HELP_TEXT_COLOR)
-
+        self._helpText.draw()
 
 def main():
     """

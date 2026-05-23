@@ -149,7 +149,7 @@ class Computer(metaclass=SingletonV3):
             startCoordinates:
             endCoordinates:
 
-        Returns:  Then angel in radians
+        Returns:  Then angle in radians
         """
         deltas: Deltas = self._computeDeltaXDeltaY(startCoordinates=startCoordinates, endCoordinates=endCoordinates)
         deltaX: int = deltas.deltaX

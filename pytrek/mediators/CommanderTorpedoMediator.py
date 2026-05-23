@@ -4,7 +4,7 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from arcade import load_spritesheet
+from arcade import SpriteSheet
 
 from pytrek.SoundMachine import SoundMachine
 from pytrek.SoundMachine import SoundType
@@ -143,6 +143,15 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
         bareFileName: str = f'CommanderTorpedoExplosionSpriteSheet.png'
         fqFileName:   str = LocateResources.getImagePath(bareFileName=bareFileName)
 
-        textureList: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
+        # textureList: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
+
+        sheet: SpriteSheet = SpriteSheet(fqFileName)
+
+        textureList: TextureList = cast(TextureList, sheet.get_texture_grid(
+            size=(spriteWidth, spriteHeight),
+            columns=nColumns,
+            count=tileCount
+        )
+        )
 
         return textureList
