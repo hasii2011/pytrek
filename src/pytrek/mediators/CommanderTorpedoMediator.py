@@ -1,0 +1,157 @@
+
+from typing import cast
+
+from logging import Logger
+from logging import getLogger
+
+from arcade import SpriteSheet
+
+from src.pytrek.SoundMachine import SoundMachine
+from src.pytrek.SoundMachine import SoundType
+from src.pytrek.engine.ArcadePoint import ArcadePoint
+
+from src.pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
+from src.pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
+from src.pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
+from src.pytrek.gui.gamepieces.base.BaseAnimator import TextureList
+from src.pytrek.gui.gamepieces.commander.Commander import Commander
+
+from src.pytrek.gui.gamepieces.commander.CommanderTorpedo import CommanderTorpedo
+from src.pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion
+from src.pytrek.gui.gamepieces.commander.CommanderTorpedoMiss import CommanderTorpedoMiss
+
+from src.pytrek.gui.gamepieces.Enterprise import Enterprise
+from src.pytrek.gui.gamepieces.GamePieceTypes import Enemy
+
+from src.pytrek.mediators.base.MissesMediator import Misses
+from src.pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
+
+from src.pytrek.model.Quadrant import Quadrant
+
+from src.pytrek.LocateResources import LocateResources
+
+from src.pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+
+
+class CommanderTorpedoMediator(BaseTorpedoMediator):
+
+    def __init__(self):
+
+        self.logger:        Logger       = getLogger(__name__)
+        self._soundMachine: SoundMachine = SoundMachine()
+        super().__init__()
+
+        self._explosionTextures: TextureList = self._loadTorpedoExplosionTextures()
+
+    @property
+    def torpedoExplosionTextures(self) -> TextureList:
+        return self._explosionTextures
+
+    def draw(self):
+        """
+        We must implement this
+        """
+        self.torpedoes.draw()
+        self.torpedoFollowers.draw()
+        self.torpedoDuds.draw()
+        self.torpedoExplosions.draw()
+
+    def update(self, quadrant: Quadrant):
+        """
+        We must implement this
+
+        Args:
+            quadrant:
+        """
+        self._fireTorpedoesAtEnterpriseIfNecessary(quadrant=quadrant, enemies=quadrant.commanders, rotationAngle=Commander.ROTATION_ANGLE)
+        self.torpedoes.update()
+        self.torpedoExplosions.update()
+        self.torpedoFollowers.update()
+
+        self._handleTorpedoHits(quadrant, enemies=quadrant.commanders)
+        self._handleTorpedoMisses(quadrant, enemies=quadrant.commanders)
+        self._handleMissRemoval(quadrant, cast(Misses, self._misses))
+
+    def _getTorpedoToFire(self, enemy: Enemy, enterprise: Enterprise) -> BaseEnemyTorpedo:
+        """
+        Must be implemented by subclass to create correct type of torpedo
+
+        Args:
+            enemy:      The Klingon, Commander, or Super Commander that is firing
+            enterprise: Where Captain Kirk is waiting
+
+        Returns:  A torpedo of the correct kind
+        """
+        klingonPoint:    ArcadePoint = ArcadePoint(x=enemy.center_x, y=enemy.center_y)
+        enterprisePoint: ArcadePoint = ArcadePoint(x=enterprise.center_x, y=enterprise.center_y)
+
+        speeds: TorpedoSpeeds = self._intelligence.getTorpedoSpeeds(playerType=self._gameState.playerType)
+
+        commanderTorpedo: CommanderTorpedo = CommanderTorpedo(speed=speeds.commander)
+
+        commanderTorpedo.center_x = klingonPoint.x
+        commanderTorpedo.center_y = klingonPoint.y
+        commanderTorpedo.inMotion = True
+        commanderTorpedo.destinationPoint  = enterprisePoint
+        commanderTorpedo.firedFromPosition = enemy.gameCoordinates
+        commanderTorpedo.firedBy   = enemy.id
+        commanderTorpedo.followers = self.torpedoFollowers
+
+        return commanderTorpedo
+
+    def _getTorpedoExplosion(self) -> BaseTorpedoExplosion:
+        """
+        Must be implemented by subclass to create correct type of torpedo explosion
+
+        Returns: An explosion of the correct type
+
+        """
+        return CommanderTorpedoExplosion(textureList=self._explosionTextures)
+
+    def _getTorpedoMiss(self) -> BaseMiss:
+        """
+        Implement empty base class method
+
+        Returns:  An appropriate 'miss' sprite
+        """
+        return CommanderTorpedoMiss(placedTime=self._gameEngine.gameClock)
+
+    def _playCannotFireSound(self):
+        """
+        We must implement this
+        """
+        self._soundMachine.playSound(SoundType.CommanderCannotFire)
+
+    def _playTorpedoFiredSound(self):
+        """
+        We must implement this
+        """
+        self._soundMachine.playSound(SoundType.CommanderTorpedo)
+
+    def _playTorpedoExplodedSound(self):
+        """
+        We must implement this
+        """
+        pass
+
+    def _loadTorpedoExplosionTextures(self) -> TextureList:
+
+        nColumns:  int = 5
+        tileCount: int = 23
+        spriteWidth:  int = 64
+        spriteHeight: int = 64
+        bareFileName: str = f'CommanderTorpedoExplosionSpriteSheet.png'
+        fqFileName:   str = LocateResources.getImagePath(bareFileName=bareFileName)
+
+        # textureList: TextureList = cast(TextureList, load_spritesheet(fqFileName, spriteWidth, spriteHeight, nColumns, tileCount))
+
+        sheet: SpriteSheet = SpriteSheet(fqFileName)
+
+        textureList: TextureList = cast(TextureList, sheet.get_texture_grid(
+            size=(spriteWidth, spriteHeight),
+            columns=nColumns,
+            count=tileCount
+        )
+        )
+
+        return textureList

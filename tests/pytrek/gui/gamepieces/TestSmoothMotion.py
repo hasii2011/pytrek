@@ -5,12 +5,12 @@ from math import degrees
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.engine.ArcadePoint import ArcadePoint
+from src.pytrek.engine.ArcadePoint import ArcadePoint
 
 from tests.ProjectTestBase import ProjectTestBase
 
 
-from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
+from src.pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
 
 class TestSmoothMotion(ProjectTestBase):

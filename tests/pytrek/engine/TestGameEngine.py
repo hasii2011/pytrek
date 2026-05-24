@@ -4,21 +4,21 @@ from typing import NewType
 
 from math import degrees
 
-from pytrek.engine.Computer import Computer
-from pytrek.engine.Direction import Direction
-from pytrek.engine.DirectionData import DirectionData
-from pytrek.engine.PlayerType import PlayerType
-from pytrek.engine.ShieldHitData import ShieldHitData
-from pytrek.engine.GameEngine import GameEngine
-from pytrek.engine.devices.DeviceStatus import DeviceStatus
-from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.devices.DeviceManager import DeviceManager
+from src.pytrek.engine.Computer import Computer
+from src.pytrek.engine.Direction import Direction
+from src.pytrek.engine.DirectionData import DirectionData
+from src.pytrek.engine.PlayerType import PlayerType
+from src.pytrek.engine.ShieldHitData import ShieldHitData
+from src.pytrek.engine.GameEngine import GameEngine
+from src.pytrek.engine.devices import DeviceStatus
+from src.pytrek.engine.devices.DeviceType import DeviceType
+from src.pytrek.engine.devices import DeviceManager
 
-from pytrek.model.Coordinates import Coordinates
+from src.pytrek.model.Coordinates import Coordinates
 
-from pytrek.settings.GameSettings import GameSettings
+from src.pytrek.settings.GameSettings import GameSettings
 
-from pytrek.GameState import GameState
+from src.pytrek.GameState import GameState
 
 from unittest import TestSuite
 from unittest import main as unitTestMain

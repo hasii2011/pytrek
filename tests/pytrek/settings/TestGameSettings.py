@@ -2,12 +2,12 @@
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.engine.GameType import GameType
-from pytrek.engine.PlayerType import PlayerType
-from pytrek.model.Coordinates import Coordinates
-from pytrek.settings.GameSettings import GameSettings
-from pytrek.settings.SoundVolume import SoundVolume
-from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+from src.pytrek.engine.GameType import GameType
+from src.pytrek.engine.PlayerType import PlayerType
+from src.pytrek.model.Coordinates import Coordinates
+from src.pytrek.settings.GameSettings import GameSettings
+from src.pytrek.settings.SoundVolume import SoundVolume
+from src.pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 from tests.ProjectTestBase import ProjectTestBase
 

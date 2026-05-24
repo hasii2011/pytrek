@@ -5,13 +5,13 @@ from arcade.color import BLACK
 
 from arcade import run as arcadeRun
 
-from pytrek.Constants import SCREEN_HEIGHT
-from pytrek.Constants import SCREEN_WIDTH
-from pytrek.engine.devices.DeviceStatus import DeviceStatus
-from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.devices.DeviceManager import DeviceManager
+from src.pytrek.Constants import SCREEN_HEIGHT
+from src.pytrek.Constants import SCREEN_WIDTH
+from src.pytrek.engine.devices import DeviceStatus
+from src.pytrek.engine.devices.DeviceType import DeviceType
+from src.pytrek.engine.devices import DeviceManager
 
-from pytrek.gui.DeviceStatusSection import DeviceStatusSection
+from src.pytrek.gui.DeviceStatusSection import DeviceStatusSection
 from tests.DrawTextSection import DrawTextSection
 
 from tests.ProjectTestBase import ProjectTestBase

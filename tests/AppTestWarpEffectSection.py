@@ -10,10 +10,10 @@ from arcade import SectionManager
 
 from arcade import run as arcadeRun
 
-from pytrek.Constants import SCREEN_HEIGHT
-from pytrek.Constants import SCREEN_WIDTH
+from src.pytrek.Constants import SCREEN_HEIGHT
+from src.pytrek.Constants import SCREEN_WIDTH
 
-from pytrek.gui.WarpEffectSection import WarpEffectSection
+from src.pytrek.gui.WarpEffectSection import WarpEffectSection
 from tests.DrawTextSection import DrawTextSection
 
 from tests.ProjectTestBase import ProjectTestBase

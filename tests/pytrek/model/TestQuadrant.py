@@ -2,10 +2,10 @@
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.model.Coordinates import Coordinates
-from pytrek.model.Sector import Sector
-from pytrek.model.SectorType import SectorType
-from pytrek.model.Quadrant import Quadrant
+from src.pytrek.model.Coordinates import Coordinates
+from src.pytrek.model.Sector import Sector
+from src.pytrek.model.SectorType import SectorType
+from src.pytrek.model.Quadrant import Quadrant
 
 from tests.ProjectTestBase import ProjectTestBase
 

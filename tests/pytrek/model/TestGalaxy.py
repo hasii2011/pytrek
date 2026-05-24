@@ -7,12 +7,12 @@ from itertools import count
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.settings.GameSettings import GameSettings
-from pytrek.GameState import GameState
+from src.pytrek.settings.GameSettings import GameSettings
+from src.pytrek.GameState import GameState
 
-from pytrek.model.Coordinates import Coordinates
-from pytrek.model.Quadrant import Quadrant
-from pytrek.model.Galaxy import Galaxy
+from src.pytrek.model.Coordinates import Coordinates
+from src.pytrek.model.Quadrant import Quadrant
+from src.pytrek.model import Galaxy
 
 
 from tests.ProjectTestBase import ProjectTestBase

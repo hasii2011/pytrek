@@ -4,22 +4,22 @@ from typing import cast
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.engine.GameEngine import GameEngine
-from pytrek.engine.Intelligence import Intelligence
+from src.pytrek.engine.GameEngine import GameEngine
+from src.pytrek.engine.Intelligence import Intelligence
 
-from pytrek.engine.devices.DeviceManager import DeviceManager
+from src.pytrek.engine.devices import DeviceManager
 
-from pytrek.engine.futures.EventEngine import EventEngine
-from pytrek.engine.futures.FutureEvent import FutureEvent
-from pytrek.engine.futures.FutureEventType import FutureEventType
-from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
-from pytrek.gui.MessageConsoleSection import MessageConsoleSection
+from src.pytrek.engine.futures.EventEngine import EventEngine
+from src.pytrek.engine.futures.FutureEvent import FutureEvent
+from src.pytrek.engine.futures.FutureEventType import FutureEventType
+from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from src.pytrek.gui.MessageConsoleSection import MessageConsoleSection
 
-from pytrek.model.Galaxy import Galaxy
+from src.pytrek.model import Galaxy
 
-from pytrek.settings.GameSettings import GameSettings
+from src.pytrek.settings.GameSettings import GameSettings
 
-from pytrek.GameState import GameState
+from src.pytrek.GameState import GameState
 
 from tests.ProjectTestBase import ProjectTestBase
 

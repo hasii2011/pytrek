@@ -3,13 +3,13 @@ from unittest import TestSuite
 
 from unittest import main as unitTestMain
 
-from pytrek.engine.Intelligence import Intelligence
-from pytrek.engine.ShipCondition import ShipCondition
+from src.pytrek.engine.Intelligence import Intelligence
+from src.pytrek.engine import ShipCondition
 
-from pytrek.engine.devices.Device import Device
-from pytrek.engine.devices.DeviceStatus import DeviceStatus
-from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.devices.DeviceManager import DeviceManager
+from src.pytrek.engine.devices.Device import Device
+from src.pytrek.engine.devices import DeviceStatus
+from src.pytrek.engine.devices.DeviceType import DeviceType
+from src.pytrek.engine.devices import DeviceManager
 
 from tests.ProjectTestBase import ProjectTestBase
 

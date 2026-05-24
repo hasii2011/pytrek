@@ -4,7 +4,7 @@ from unittest import main as unitTestMain
 
 from tests.ProjectTestBase import ProjectTestBase
 
-from pytrek.gui.MessageConsoleSection import MessageConsoleSection
+from src.pytrek.gui.MessageConsoleSection import MessageConsoleSection
 
 
 class TestMessageConsoleSection(ProjectTestBase):

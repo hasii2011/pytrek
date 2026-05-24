@@ -17,9 +17,9 @@ from arcade import run as arcadeRun
 from arcade import key as arcadeKey
 from arcade import exit as arcadeExit
 
-from pytrek.LocateResources import LocateResources
+from src.pytrek.LocateResources import LocateResources
 
-from pytrek.gui.dialogs.StdConfirmationDialog import StdConfirmationDialog
+from src.pytrek.gui.dialogs.StdConfirmationDialog import StdConfirmationDialog
 
 SCREEN_WIDTH = 400
 SCREEN_HEIGHT = 300

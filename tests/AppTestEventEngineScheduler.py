@@ -14,32 +14,32 @@ from arcade import key as arcadeKey
 from arcade import exit as arcadeExit
 from arcade.types import Color
 
-from pytrek.Constants import COMMAND_SECTION_HEIGHT
-from pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from pytrek.Constants import SCREEN_HEIGHT
-from pytrek.Constants import SCREEN_WIDTH
-from pytrek.GameState import GameState
+from src.pytrek.Constants import COMMAND_SECTION_HEIGHT
+from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from src.pytrek.Constants import SCREEN_HEIGHT
+from src.pytrek.Constants import SCREEN_WIDTH
+from src.pytrek.GameState import GameState
 
-from pytrek.engine.Computer import Computer
-from pytrek.engine.GameEngine import GameEngine
-from pytrek.engine.Intelligence import Intelligence
-from pytrek.engine.devices.Device import Device
-from pytrek.engine.devices.DeviceStatus import DeviceStatus
-from pytrek.engine.devices.DeviceType import DeviceType
-from pytrek.engine.devices.DeviceManager import DeviceManager
+from src.pytrek.engine.Computer import Computer
+from src.pytrek.engine.GameEngine import GameEngine
+from src.pytrek.engine.Intelligence import Intelligence
+from src.pytrek.engine.devices.Device import Device
+from src.pytrek.engine.devices import DeviceStatus
+from src.pytrek.engine.devices.DeviceType import DeviceType
+from src.pytrek.engine.devices import DeviceManager
 
-from pytrek.engine.futures.EventEngine import EventEngine
-from pytrek.engine.futures.FutureEvent import FutureEvent
-from pytrek.engine.futures.FutureEventType import FutureEventType
-from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
-from pytrek.gui.MessageConsoleSection import MessageConsoleSection
-from pytrek.mediators.QuadrantMediator import QuadrantMediator
+from src.pytrek.engine.futures.EventEngine import EventEngine
+from src.pytrek.engine.futures.FutureEvent import FutureEvent
+from src.pytrek.engine.futures.FutureEventType import FutureEventType
+from src.pytrek.gui.gamepieces.Enterprise import Enterprise
+from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from src.pytrek.gui.MessageConsoleSection import MessageConsoleSection
+from src.pytrek.mediators.QuadrantMediator import QuadrantMediator
 
-from pytrek.model.Galaxy import Galaxy
-from pytrek.model.Quadrant import Quadrant
+from src.pytrek.model import Galaxy
+from src.pytrek.model.Quadrant import Quadrant
 
-from pytrek.settings.GameSettings import GameSettings
+from src.pytrek.settings.GameSettings import GameSettings
 
 
 from tests.ProjectTestBase import ProjectTestBase

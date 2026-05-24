@@ -1,0 +1,121 @@
+
+from typing import Dict
+
+from logging import Logger
+from logging import getLogger
+
+
+from codeallybasic.SingletonV3 import SingletonV3
+
+from src.pytrek.engine.ShipCondition import ShipCondition
+
+from src.pytrek.engine.devices.Device import Device
+from src.pytrek.engine.devices.DeviceType import DeviceType
+from src.pytrek.engine.devices.DeviceStatus import DeviceStatus
+
+from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+
+
+class DeviceManager(metaclass=SingletonV3):
+
+    def __init__(self):
+
+        self.logger: Logger = getLogger(__name__)
+
+        self.deviceMap:  Dict[DeviceType, Device] = {}
+
+        for deviceType in DeviceType:
+
+            device: Device = Device(deviceType=deviceType, deviceStatus=DeviceStatus.Up)
+            self.deviceMap[deviceType] = device
+
+        self.logger.debug(f"Created {len(self.deviceMap):3} devices")
+
+        self._messageConsole: MessageConsoleProxy = MessageConsoleProxy()
+
+    def fixDevices(self, starDate: float, opTime: float, shipCondition: ShipCondition):
+        # noinspection SpellCheckingInspection
+        """
+        // time taken by current operation
+        double fintim = d.date + Time
+        datemin = fintim;
+
+        // d.date is current stardate
+
+        xtime = datemin-d.date;
+
+        repair = xtime;
+
+        /* Don't fix Deathray here */
+        for (l=1; l<=ndevice; l++)
+            if (damage[l] > 0.0 && l != DDRAY)
+                damage[l] -= (damage[l]-repair > 0.0 ? repair : damage[l]);
+
+        /* Fix Deathray if docked */
+        if (damage[DDRAY] > 0.0 && condit == IHDOCKED)
+            damage[DDRAY] -= (damage[l] - xtime > 0.0 ? xtime : damage[DDRAY]);
+
+        /* If radio repaired, update star chart and attack reports */
+
+        """
+        self.logger.info(f"Attempting to repair devices")
+        finishTime:  float = starDate + opTime
+        dateMinimum: float = finishTime
+        extraTime:   float = dateMinimum - starDate
+        repair:      float = extraTime
+
+        for devType in DeviceType:
+            device: Device = self.getDevice(devType)
+            if device.deviceType != DeviceType.DeathRay and device.damage > 0.0:
+                device.damage = device.damage - repair
+                self._reportRepair(device=device, repairUnits=repair)
+            elif device.deviceType == DeviceType.DeathRay and shipCondition == ShipCondition.Docked:
+                device.damage = device.damage - repair
+                self._reportRepair(device=device, repairUnits=repair)
+
+            if device.damage <= 0:
+                device.damage = 0
+                device.deviceStatus = DeviceStatus.Up
+
+    def getDevice(self, deviceType: DeviceType):
+
+        return self.deviceMap[deviceType]
+
+    def getDeviceStatus(self, deviceType: DeviceType) -> DeviceStatus:
+        return self.deviceMap[deviceType].deviceStatus
+
+    def setDeviceStatus(self, deviceType: DeviceType, deviceStatus: DeviceStatus):
+
+        self.logger.debug(f"set status deviceType: {deviceType}, deviceStatus: {deviceStatus}")
+        self.deviceMap[deviceType].deviceStatus = deviceStatus
+
+    def getDeviceDamage(self, deviceType: DeviceType) -> float:
+        return self.deviceMap[deviceType].damage
+
+    def setDeviceDamage(self, deviceType: DeviceType, damageValue: float):
+
+        self.logger.debug(f"set damage deviceType: {deviceType}, damageValue: {damageValue}")
+        self.deviceMap[deviceType].damage = damageValue
+
+    def _reportRepair(self, device: Device, repairUnits: float):
+
+        msg: str = f'Device: {device.deviceType.name} repaired, by {repairUnits} units'
+        #
+        # Simplify unit testing
+        if self._messageConsole.initialized is False:
+            self.logger.warning(f'Message console not initialized')
+        else:
+            self._messageConsole.displayMessage(msg)
+        self.logger.info(msg)
+
+    def __repr__(self):
+
+        myRep = "\n"
+        for deviceType, device in self.deviceMap.items():
+            devRep = (
+                f"deviceType: {deviceType:27} "
+                f"deviceStatus: {device.deviceStatus:7} "
+                f"damage: {device.damage:4.4} \n"
+            )
+            myRep += devRep
+        return myRep

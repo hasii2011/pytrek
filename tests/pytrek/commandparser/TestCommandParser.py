@@ -10,15 +10,15 @@ from unittest import main as unitTestMain
 
 from codeallybasic.UnitTestBase import UnitTestBase
 
-from pytrek.commandparser.CommandParser import CommandParser
-from pytrek.commandparser.CommandType import CommandType
-from pytrek.commandparser.ManualMoveData import ManualMoveData
-from pytrek.commandparser.ManualMoveData import ManualMoveType
-from pytrek.commandparser.ParsedCommand import ParsedCommand
+from src.pytrek.commandparser.CommandParser import CommandParser
+from src.pytrek.commandparser.CommandType import CommandType
+from src.pytrek.commandparser.ManualMoveData import ManualMoveData
+from src.pytrek.commandparser.ManualMoveData import ManualMoveType
+from src.pytrek.commandparser.ParsedCommand import ParsedCommand
 
-from pytrek.commandparser.InvalidCommandException import InvalidCommandException
-from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
-from pytrek.model.Coordinates import Coordinates
+from src.pytrek.commandparser.InvalidCommandException import InvalidCommandException
+from src.pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
+from src.pytrek.model.Coordinates import Coordinates
 
 KeyStrokes = NewType('KeyStrokes', List[int])
 

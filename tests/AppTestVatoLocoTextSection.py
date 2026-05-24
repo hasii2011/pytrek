@@ -5,9 +5,9 @@ from arcade import color
 
 from arcade import run as arcadeRun
 
-from pytrek.Constants import SCREEN_HEIGHT
-from pytrek.Constants import SCREEN_WIDTH
-from pytrek.gui.VatoLocoTextSection import VatoLocoTextSection
+from src.pytrek.Constants import SCREEN_HEIGHT
+from src.pytrek.Constants import SCREEN_WIDTH
+from src.pytrek.gui.VatoLocoTextSection import VatoLocoTextSection
 from tests.ProjectTestBase import ProjectTestBase
 
 SCREEN_TITLE:  str = "Test Vato Loco"

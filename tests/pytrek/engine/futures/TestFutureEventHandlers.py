@@ -4,29 +4,29 @@ from typing import cast
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.GameState import GameState
+from src.pytrek.GameState import GameState
 
-from pytrek.engine.Computer import Computer
-from pytrek.engine.GameEngine import GameEngine
-from pytrek.engine.Intelligence import Intelligence
-from pytrek.engine.futures.EventEngine import EventEngine
-from pytrek.engine.futures.FutureEvent import FutureEvent
-from pytrek.engine.futures.FutureEventType import FutureEventType
-from pytrek.gui.gamepieces.Enterprise import Enterprise
-from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
-from pytrek.gui.MessageConsoleSection import MessageConsoleSection
-from pytrek.mediators.GalaxyMediator import GalaxyMediator
-from pytrek.mediators.QuadrantMediator import QuadrantMediator
+from src.pytrek.engine.Computer import Computer
+from src.pytrek.engine.GameEngine import GameEngine
+from src.pytrek.engine.Intelligence import Intelligence
+from src.pytrek.engine.futures.EventEngine import EventEngine
+from src.pytrek.engine.futures.FutureEvent import FutureEvent
+from src.pytrek.engine.futures.FutureEventType import FutureEventType
+from src.pytrek.gui.gamepieces.Enterprise import Enterprise
+from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from src.pytrek.gui.MessageConsoleSection import MessageConsoleSection
+from src.pytrek.mediators.GalaxyMediator import GalaxyMediator
+from src.pytrek.mediators.QuadrantMediator import QuadrantMediator
 
-from pytrek.model.Coordinates import Coordinates
-from pytrek.model.Galaxy import Galaxy
-from pytrek.model.Quadrant import Quadrant
+from src.pytrek.model.Coordinates import Coordinates
+from src.pytrek.model import Galaxy
+from src.pytrek.model.Quadrant import Quadrant
 
-from pytrek.settings.GameSettings import GameSettings
+from src.pytrek.settings.GameSettings import GameSettings
 
 from tests.ProjectTestBase import ProjectTestBase
 
-from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
+from src.pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
 
 
 class TestFutureEventHandlers(ProjectTestBase):

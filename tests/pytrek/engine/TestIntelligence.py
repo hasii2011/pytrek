@@ -12,18 +12,18 @@ from statistics import mode
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.GameState import GameState
-from pytrek.engine.GameEngine import GameEngine
-from pytrek.engine.GameType import GameType
-from pytrek.engine.Intelligence import Intelligence
-from pytrek.engine.Intelligence import TractorBeamComputation
-from pytrek.engine.PlayerType import PlayerType
-from pytrek.gui.gamepieces.PlanetType import PlanetType
+from src.pytrek.GameState import GameState
+from src.pytrek.engine.GameEngine import GameEngine
+from src.pytrek.engine.GameType import GameType
+from src.pytrek.engine.Intelligence import Intelligence
+from src.pytrek.engine.Intelligence import TractorBeamComputation
+from src.pytrek.engine.PlayerType import PlayerType
+from src.pytrek.gui.gamepieces.PlanetType import PlanetType
 
-from pytrek.model.Coordinates import Coordinates
-from pytrek.model.DataTypes import LRScanCoordinatesList
-from pytrek.settings.GameSettings import GameSettings
-from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+from src.pytrek.model.Coordinates import Coordinates
+from src.pytrek.model.DataTypes import LRScanCoordinatesList
+from src.pytrek.settings.GameSettings import GameSettings
+from src.pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 from tests.ProjectTestBase import ProjectTestBase
 

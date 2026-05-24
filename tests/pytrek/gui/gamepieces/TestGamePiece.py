@@ -2,9 +2,9 @@
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.engine.ArcadePoint import ArcadePoint
-from pytrek.gui.gamepieces.GamePiece import GamePiece
-from pytrek.model.Coordinates import Coordinates
+from src.pytrek.engine.ArcadePoint import ArcadePoint
+from src.pytrek.gui.gamepieces.GamePiece import GamePiece
+from src.pytrek.model.Coordinates import Coordinates
 
 from tests.ProjectTestBase import ProjectTestBase
 

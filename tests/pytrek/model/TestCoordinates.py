@@ -2,10 +2,10 @@
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pytrek.Constants import MAX_SECTOR_X_COORDINATE
-from pytrek.Constants import MAX_SECTOR_Y_COORDINATE
-from pytrek.engine.Direction import Direction
-from pytrek.model.Coordinates import Coordinates
+from src.pytrek.Constants import MAX_SECTOR_X_COORDINATE
+from src.pytrek.Constants import MAX_SECTOR_Y_COORDINATE
+from src.pytrek.engine.Direction import Direction
+from src.pytrek.model.Coordinates import Coordinates
 
 from tests.ProjectTestBase import ProjectTestBase
 

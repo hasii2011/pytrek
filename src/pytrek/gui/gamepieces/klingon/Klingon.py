@@ -1,0 +1,47 @@
+from src.pytrek.engine.ArcadePoint import ArcadePoint
+from src.pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
+from src.pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
+from src.pytrek.gui.gamepieces.GamePiece import GamePiece
+
+from src.pytrek.model.Coordinates import Coordinates
+
+
+class Klingon(BaseEnemy):
+
+    FILENAME:       str = 'KlingonD7.png'
+    ROTATION_ANGLE: int = 125   # Orientation of sprite
+
+    def __init__(self, coordinates: Coordinates, moveInterval: int = 0):
+        """
+
+        Args:
+            coordinates:   Current Game Position
+            moveInterval:  Only set at advanced game levels
+        """
+        super().__init__(filename=Klingon.FILENAME, coordinates=coordinates)
+
+        self.id           = EnemyId(f'Klingon-{self.gameCoordinates}')
+        self.moveInterval = moveInterval
+        # Compute at creation;  Mediator will move the Klingon at advance game conditions
+        arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(coordinates)
+
+        self.center_x = arcadePoint.x
+        self.center_y = arcadePoint.y
+
+    def __str__(self):
+
+        lookAtMe: str = f'{self.id=}'
+        return lookAtMe
+
+    def __repr__(self):
+
+        devMe: str = (
+            f'Klingon['
+            f'{self.id=} '
+            f'power={self.power:.3f} '
+            f'firingInterval={self.firingInterval} '
+            f'{self.gameCoordinates=}'
+            ']'
+        )
+
+        return devMe

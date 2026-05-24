@@ -4,7 +4,7 @@ from unittest import main as unitTestMain
 
 from tests.ProjectTestBase import ProjectTestBase
 
-from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+from src.pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class TestTorpedoSpeeds(ProjectTestBase):
