@@ -9,10 +9,10 @@ from arcade import Texture
 
 from arcade import draw_texture_rect
 
-from src.pytrek.Constants import COMMAND_SECTION_HEIGHT
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from src.pytrek.Constants import QUADRANT_GRID_HEIGHT
-from src.pytrek.Constants import SCREEN_WIDTH
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import QUADRANT_GRID_HEIGHT
+from pytrek.Constants import SCREEN_WIDTH
 
 
 def drawQuadrantGrid(background: Texture):

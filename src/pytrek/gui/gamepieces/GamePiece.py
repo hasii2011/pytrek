@@ -1,16 +1,16 @@
 
-from src.pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
-from src.pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
-from src.pytrek.Constants import QUADRANT_PIXEL_HEIGHT
-from src.pytrek.Constants import QUADRANT_PIXEL_WIDTH
-from src.pytrek.Constants import QUADRANT_ROWS
-from src.pytrek.Constants import QUADRANT_Y_ADJUSTMENT
+from pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
+from pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
+from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
+from pytrek.Constants import QUADRANT_PIXEL_WIDTH
+from pytrek.Constants import QUADRANT_ROWS
+from pytrek.Constants import QUADRANT_Y_ADJUSTMENT
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.ArcadePoint import ArcadePoint
 
-from src.pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
+from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 class GamePiece(BaseGamePiece):

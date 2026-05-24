@@ -11,14 +11,14 @@ from codeallybasic.SecureConversions import SecureConversions
 from codeallybasic.DynamicConfiguration import DynamicConfiguration
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.Constants import APPLICATION_NAME
-from src.pytrek.Constants import GAME_SETTINGS_FILE_NAME
+from pytrek.Constants import APPLICATION_NAME
+from pytrek.Constants import GAME_SETTINGS_FILE_NAME
 
-from src.pytrek.engine.GameType import GameType
-from src.pytrek.engine.PlayerType import PlayerType
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.settings.SoundVolume import SoundVolume
-from src.pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+from pytrek.engine.GameType import GameType
+from pytrek.engine.PlayerType import PlayerType
+from pytrek.model.Coordinates import Coordinates
+from pytrek.settings.SoundVolume import SoundVolume
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 SECTION_LIMITS: ValueDescriptions = ValueDescriptions(
     {

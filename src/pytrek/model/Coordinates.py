@@ -3,9 +3,9 @@ from typing import List
 
 from dataclasses import dataclass
 
-from src.pytrek.Constants import MAXIMUM_COORDINATE
-from src.pytrek.Constants import MINIMUM_COORDINATE
-from src.pytrek.engine.Direction import Direction
+from pytrek.Constants import MAXIMUM_COORDINATE
+from pytrek.Constants import MINIMUM_COORDINATE
+from pytrek.engine.Direction import Direction
 
 
 @dataclass

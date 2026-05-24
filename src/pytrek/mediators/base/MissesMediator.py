@@ -5,30 +5,30 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.GameEngine import GameEngine
-from src.pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.Intelligence import Intelligence
 
-from src.pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
 
-from src.pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
-from src.pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
+from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
+from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
-from src.pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
-from src.pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.gamepieces.klingon.KlingonTorpedo import KlingonTorpedo
+from pytrek.gui.gamepieces.klingon.KlingonTorpedoMiss import KlingonTorpedoMiss
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Quadrant import Quadrant
-from src.pytrek.model.Sector import Sector
-from src.pytrek.model.SectorType import SectorType
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Quadrant import Quadrant
+from pytrek.model.Sector import Sector
+from pytrek.model.SectorType import SectorType
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
-from src.pytrek.mediators.base.BaseMediator import BaseMediator
+from pytrek.mediators.base.BaseMediator import BaseMediator
 
 Torpedoes            = List[SmoothMotion]
 Misses               = List[BaseMiss]

@@ -12,35 +12,35 @@ from arcade import Sprite
 from arcade import SpriteList
 from arcade import check_for_collision_with_list
 
-from src.pytrek.GameState import GameState
-from src.pytrek.SoundMachine import SoundMachine
-from src.pytrek.SoundMachine import SoundType
+from pytrek.GameState import GameState
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.ShieldHitData import ShieldHitData
-from src.pytrek.engine.ShipCondition import ShipCondition
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.ShieldHitData import ShieldHitData
+from pytrek.engine.ShipCondition import ShipCondition
 
-from src.pytrek.engine.devices.DeviceManager import DeviceManager
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
-from src.pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
-from src.pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
-from src.pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
-from src.pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
-from src.pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
-from src.pytrek.gui.gamepieces.base.BaseTorpedoFollower import BaseTorpedoFollower
-from src.pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
+from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
+from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
+from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+from pytrek.gui.gamepieces.base.BaseTorpedoFollower import BaseTorpedoFollower
+from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 
-from src.pytrek.gui.gamepieces.Enterprise import Enterprise
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemies
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
-from src.pytrek.mediators.base.BaseMediator import LineOfSightResponse
-from src.pytrek.mediators.base.MissesMediator import MissesMediator
-from src.pytrek.mediators.base.MissesMediator import Torpedoes
+from pytrek.mediators.base.BaseMediator import LineOfSightResponse
+from pytrek.mediators.base.MissesMediator import MissesMediator
+from pytrek.mediators.base.MissesMediator import Torpedoes
 
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Quadrant import Quadrant
 
-from src.pytrek.Constants import MILLISECONDS
+from pytrek.Constants import MILLISECONDS
 
 
 class MyMetaBaseMediator(ABCMeta, type(MissesMediator)):        # type: ignore

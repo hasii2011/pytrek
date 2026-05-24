@@ -5,9 +5,9 @@ from arcade import Sprite
 from arcade import Texture
 from arcade import load_texture
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 class BaseGamePiece(Sprite):

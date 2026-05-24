@@ -16,27 +16,27 @@ from math import log
 
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.Constants import GALAXY_COLUMNS
-from src.pytrek.Constants import GALAXY_ROWS
-from src.pytrek.Constants import MINIMUM_SAFE_WARP_FACTOR
-from src.pytrek.Constants import QUADRANT_COLUMNS
-from src.pytrek.Constants import QUADRANT_ROWS
+from pytrek.Constants import GALAXY_COLUMNS
+from pytrek.Constants import GALAXY_ROWS
+from pytrek.Constants import MINIMUM_SAFE_WARP_FACTOR
+from pytrek.Constants import QUADRANT_COLUMNS
+from pytrek.Constants import QUADRANT_ROWS
 
-from src.pytrek.engine.Direction import Direction
-from src.pytrek.engine.GameType import GameType
-from src.pytrek.engine.LRScanCoordinates import LRScanCoordinates
-from src.pytrek.engine.PlayerType import PlayerType
-from src.pytrek.engine.devices.DeviceStatus import DeviceStatus
-from src.pytrek.engine.devices.DeviceType import DeviceType
-from src.pytrek.engine.devices.DeviceManager import DeviceManager
+from pytrek.engine.Direction import Direction
+from pytrek.engine.GameType import GameType
+from pytrek.engine.LRScanCoordinates import LRScanCoordinates
+from pytrek.engine.PlayerType import PlayerType
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
-from src.pytrek.gui.gamepieces.PlanetType import PlanetType
+from pytrek.gui.gamepieces.PlanetType import PlanetType
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.DataTypes import LRScanCoordinatesList
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.DataTypes import LRScanCoordinatesList
 
-from src.pytrek.settings.GameSettings import GameSettings
-from src.pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+from pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 TractorBeamComputation = namedtuple('TractorBeamComputation', 'warpFactor, distance, wSquared')
 

@@ -8,15 +8,15 @@ from arcade import Texture
 from arcade import draw_texture_rect
 from arcade import load_texture
 
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from src.pytrek.Constants import QUADRANT_GRID_HEIGHT
-from src.pytrek.Constants import SCREEN_WIDTH
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import QUADRANT_GRID_HEIGHT
+from pytrek.Constants import SCREEN_WIDTH
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.mediators.GalaxyViewMediator import GalaxyViewMediator
+from pytrek.mediators.GalaxyViewMediator import GalaxyViewMediator
 
 
 class GalaxySection(Section):

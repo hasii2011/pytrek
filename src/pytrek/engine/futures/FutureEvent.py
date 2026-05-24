@@ -4,9 +4,9 @@ from typing import Callable
 
 from dataclasses import dataclass
 
-from src.pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 EventCallback = Callable[['FutureEvent'], None]

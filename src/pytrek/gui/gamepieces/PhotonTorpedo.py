@@ -2,13 +2,13 @@ from logging import Logger
 from logging import getLogger
 from typing import cast
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
 
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
-from src.pytrek.gui.gamepieces.GamePieceTypes import PhotonTorpedoId
-from src.pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
-from src.pytrek.gui.gamepieces.SmoothMotion import RadianInfo
+from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePieceTypes import PhotonTorpedoId
+from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
+from pytrek.gui.gamepieces.SmoothMotion import RadianInfo
 
 
 class PhotonTorpedo(GamePiece, SmoothMotion):

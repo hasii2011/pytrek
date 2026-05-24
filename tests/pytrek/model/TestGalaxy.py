@@ -7,12 +7,12 @@ from itertools import count
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from src.pytrek.settings.GameSettings import GameSettings
-from src.pytrek.GameState import GameState
+from pytrek.settings.GameSettings import GameSettings
+from pytrek.GameState import GameState
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Quadrant import Quadrant
-from src.pytrek.model import Galaxy
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Quadrant import Quadrant
+from pytrek.model.Galaxy import Galaxy
 
 
 from tests.ProjectTestBase import ProjectTestBase
@@ -109,12 +109,10 @@ class TestGalaxy(ProjectTestBase):
 
 
 def suite() -> TestSuite:
-    """You need to change the name of the test class here also."""
     import unittest
 
     testSuite: TestSuite = TestSuite()
-    # noinspection PyUnresolvedReferences
-    testSuite.addTest(unittest.makeSuite(TestGalaxy))
+    testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestGalaxy))
 
     return testSuite
 

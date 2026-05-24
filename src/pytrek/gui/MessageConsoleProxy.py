@@ -6,9 +6,9 @@ from logging import getLogger
 
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.gui.ConsoleMessageType import ConsoleMessageType
+from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 
-from src.pytrek.gui.MessageConsoleSection import MessageConsoleSection
+from pytrek.gui.MessageConsoleSection import MessageConsoleSection
 
 
 class MessageConsoleProxy(metaclass=SingletonV3):

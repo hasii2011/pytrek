@@ -2,15 +2,15 @@ from pathlib import Path
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from src.pytrek.engine import ShipCondition
-from src.pytrek.engine.GameType import GameType
-from src.pytrek.engine.PlayerType import PlayerType
+from pytrek.engine.ShipCondition import ShipCondition
+from pytrek.engine.GameType import GameType
+from pytrek.engine.PlayerType import PlayerType
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 from tests.ProjectTestBase import ProjectTestBase
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
 import json
 

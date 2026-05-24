@@ -2,18 +2,18 @@
 from logging import Logger
 from logging import getLogger
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
-from src.pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.Intelligence import Intelligence
 
-from src.pytrek.engine.futures.FutureEvent import FutureEvent
-from src.pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
-from src.pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.engine.futures.FutureEvent import FutureEvent
+from pytrek.engine.futures.FutureEventHandlers import FutureEventHandlers
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Galaxy import Galaxy
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Galaxy import Galaxy
 
 
 class EventCreator:

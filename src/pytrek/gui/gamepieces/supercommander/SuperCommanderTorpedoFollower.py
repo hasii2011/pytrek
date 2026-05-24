@@ -1,7 +1,7 @@
 
-from src.pytrek.gui.gamepieces.base.BaseTorpedoFollower import BaseTorpedoFollower
+from pytrek.gui.gamepieces.base.BaseTorpedoFollower import BaseTorpedoFollower
 
-from src.pytrek.gui.gamepieces.GamePieceTypes import EnemyFollowerId
+from pytrek.gui.gamepieces.GamePieceTypes import EnemyFollowerId
 
 
 class SuperCommanderTorpedoFollower(BaseTorpedoFollower):

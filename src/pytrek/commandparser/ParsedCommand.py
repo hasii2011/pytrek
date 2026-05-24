@@ -2,10 +2,10 @@
 from dataclasses import dataclass
 from dataclasses import field
 
-from src.pytrek.commandparser.AutomaticMoveData import AutomaticMoveData
-from src.pytrek.commandparser.CommandType import CommandType
-from src.pytrek.commandparser.ManualMoveData import ManualMoveData
-from src.pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.commandparser.AutomaticMoveData import AutomaticMoveData
+from pytrek.commandparser.CommandType import CommandType
+from pytrek.commandparser.ManualMoveData import ManualMoveData
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
 
 def manualMoveDataFactory() -> ManualMoveData:

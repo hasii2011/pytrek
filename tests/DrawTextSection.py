@@ -4,9 +4,9 @@ from arcade import Text
 from arcade.color import GREEN
 from arcade.color import WHITE
 
-from src.pytrek.Constants import FIXED_WIDTH_FONT_NAME
+from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 
-from src.pytrek.gui.BaseSection import BaseSection
+from pytrek.gui.BaseSection import BaseSection
 
 
 class DrawTextSection(BaseSection):

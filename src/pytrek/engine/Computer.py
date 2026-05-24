@@ -14,18 +14,18 @@ from dataclasses import dataclass
 
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.Constants import COMMAND_SECTION_HEIGHT
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from src.pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
-from src.pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
-from src.pytrek.Constants import QUADRANT_PIXEL_HEIGHT
-from src.pytrek.Constants import QUADRANT_PIXEL_WIDTH
-from src.pytrek.Constants import QUADRANT_ROWS
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import HALF_QUADRANT_PIXEL_HEIGHT
+from pytrek.Constants import HALF_QUADRANT_PIXEL_WIDTH
+from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
+from pytrek.Constants import QUADRANT_PIXEL_WIDTH
+from pytrek.Constants import QUADRANT_ROWS
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.Intelligence import Intelligence
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 @dataclass

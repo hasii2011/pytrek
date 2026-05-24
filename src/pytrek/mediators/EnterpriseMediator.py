@@ -9,39 +9,39 @@ from arcade import SpriteList
 from arcade import schedule
 from arcade import unschedule
 
-from src.pytrek.Constants import MAX_QUADRANT_X_COORDINATE
-from src.pytrek.Constants import MAX_QUADRANT_Y_COORDINATE
-from src.pytrek.Constants import MAX_SECTOR_X_COORDINATE
-from src.pytrek.Constants import MAX_SECTOR_Y_COORDINATE
-from src.pytrek.Constants import MIN_QUADRANT_X_COORDINATE
-from src.pytrek.Constants import MIN_QUADRANT_Y_COORDINATE
-from src.pytrek.Constants import MIN_SECTOR_X_COORDINATE
-from src.pytrek.Constants import MIN_SECTOR_Y_COORDINATE
+from pytrek.Constants import MAX_QUADRANT_X_COORDINATE
+from pytrek.Constants import MAX_QUADRANT_Y_COORDINATE
+from pytrek.Constants import MAX_SECTOR_X_COORDINATE
+from pytrek.Constants import MAX_SECTOR_Y_COORDINATE
+from pytrek.Constants import MIN_QUADRANT_X_COORDINATE
+from pytrek.Constants import MIN_QUADRANT_Y_COORDINATE
+from pytrek.Constants import MIN_SECTOR_X_COORDINATE
+from pytrek.Constants import MIN_SECTOR_Y_COORDINATE
 
-from src.pytrek.SoundMachine import SoundMachine
-from src.pytrek.SoundMachine import SoundType
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 
-from src.pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
+from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.DirectionData import DirectionData
-from src.pytrek.engine.ShipCondition import ShipCondition
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.DirectionData import DirectionData
+from pytrek.engine.ShipCondition import ShipCondition
 
-from src.pytrek.gui.UITypes import WarpTravelCallbackV2
+from pytrek.gui.UITypes import WarpTravelCallbackV2
 
-from src.pytrek.gui.WarpEffectSection import WarpEffectSection
+from pytrek.gui.WarpEffectSection import WarpEffectSection
 
-from src.pytrek.mediators.base.MissesMediator import MissesMediator
-from src.pytrek.mediators.base.BaseMediator import LineOfSightResponse
+from pytrek.mediators.base.MissesMediator import MissesMediator
+from pytrek.mediators.base.BaseMediator import LineOfSightResponse
 
-from src.pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
-from src.pytrek.gui.gamepieces.Enterprise import Enterprise
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Quadrant import Quadrant
-from src.pytrek.model.Sector import Sector
-from src.pytrek.model.SectorType import SectorType
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Quadrant import Quadrant
+from pytrek.model.Sector import Sector
+from pytrek.model.SectorType import SectorType
 
 
 class EnterpriseMediator(MissesMediator):

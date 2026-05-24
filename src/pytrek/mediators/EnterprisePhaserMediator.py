@@ -8,28 +8,28 @@ from arcade import Sprite
 from arcade import SpriteList
 from arcade import SpriteSheet
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
-from src.pytrek.LocateResources import LocateResources
-from src.pytrek.SoundMachine import SoundMachine
-from src.pytrek.SoundMachine import SoundType
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.GameEngine import GameEngine
+from pytrek.LocateResources import LocateResources
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.GameEngine import GameEngine
 
 
-from src.pytrek.gui.gamepieces.Enterprise import Enterprise
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemies
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemy
-from src.pytrek.gui.gamepieces.PhaserBolt import PhaserBolt
-from src.pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.PhaserBolt import PhaserBolt
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
-from src.pytrek.mediators.base.BaseMediator import BaseMediator
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.mediators.base.BaseMediator import BaseMediator
+from pytrek.model.Coordinates import Coordinates
 
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Quadrant import Quadrant
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 
 class EnterprisePhaserMediator(BaseMediator):

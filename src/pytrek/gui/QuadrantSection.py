@@ -9,35 +9,35 @@ from arcade import Texture
 
 from arcade import load_texture
 
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from src.pytrek.Constants import QUADRANT_GRID_WIDTH
-from src.pytrek.GameState import GameState
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import QUADRANT_GRID_WIDTH
+from pytrek.GameState import GameState
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundMachine
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.Computer import Computer
-from src.pytrek.engine.GameEngine import GameEngine
-from src.pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.Computer import Computer
+from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.Intelligence import Intelligence
 
-from src.pytrek.engine.futures.EventEngine import EventEngine
+from pytrek.engine.futures.EventEngine import EventEngine
 
-from src.pytrek.gui.gamepieces.Enterprise import Enterprise
-from src.pytrek.gui.BaseSection import BaseSection
-from src.pytrek.gui.Common import drawQuadrantGrid
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.BaseSection import BaseSection
+from pytrek.gui.Common import drawQuadrantGrid
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
-from src.pytrek.mediators.EnterpriseMediator import EnterpriseMediator
-from src.pytrek.mediators.GalaxyMediator import GalaxyMediator
-from src.pytrek.mediators.QuadrantMediator import QuadrantMediator
+from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
+from pytrek.mediators.GalaxyMediator import GalaxyMediator
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Galaxy import Galaxy
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 
 class QuadrantSection(BaseSection):

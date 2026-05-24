@@ -7,7 +7,7 @@ from arcade import draw_lrbt_rectangle_outline
 
 from arcade.color import GREEN
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 
 class BaseSection(Section):

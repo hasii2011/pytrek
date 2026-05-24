@@ -19,10 +19,10 @@ from arcade import key as arcadeKey
 
 from arcade.gui import UIManager
 
-from src.pytrek.Constants import COMMAND_INPUT_HEIGHT
-from src.pytrek.Constants import COMMAND_SECTION_HEIGHT
-from src.pytrek.gui.BaseSection import BaseSection
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.Constants import COMMAND_INPUT_HEIGHT
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.gui.BaseSection import BaseSection
+from pytrek.settings.GameSettings import GameSettings
 
 # Section Margins
 LEFT_MARGIN:   int = 10

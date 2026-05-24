@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 from dataclasses import field
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 def coordinateFactory() -> Coordinates:

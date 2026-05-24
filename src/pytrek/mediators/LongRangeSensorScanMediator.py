@@ -10,19 +10,19 @@ from arcade import View
 from arcade import color
 from arcade import draw_text
 
-from src.pytrek.Constants import QUADRANT_PIXEL_HEIGHT
-from src.pytrek.Constants import QUADRANT_PIXEL_WIDTH
-from src.pytrek.Constants import SUPER_NOVA_INDICATOR
+from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
+from pytrek.Constants import QUADRANT_PIXEL_WIDTH
+from pytrek.Constants import SUPER_NOVA_INDICATOR
 
-from src.pytrek.engine.Computer import Computer
-from src.pytrek.engine.Direction import Direction
-from src.pytrek.engine.Intelligence import Intelligence
-from src.pytrek.engine.LRScanCoordinates import LRScanCoordinates
+from pytrek.engine.Computer import Computer
+from pytrek.engine.Direction import Direction
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.LRScanCoordinates import LRScanCoordinates
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.DataTypes import LRScanCoordinatesList
-from src.pytrek.model.Galaxy import Galaxy
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.DataTypes import LRScanCoordinatesList
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
 
 LR_SCAN_FONT_SIZE: int = 14
 TITLE_FONT_SIZE:   int = 18

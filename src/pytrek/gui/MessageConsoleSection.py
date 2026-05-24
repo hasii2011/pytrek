@@ -13,12 +13,12 @@ from arcade.color import WHITE
 from arcade import draw_text
 from arcade.types import Color
 
-from src.pytrek.Constants import COMMAND_SECTION_HEIGHT
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from src.pytrek.Constants import FIXED_WIDTH_FONT_NAME
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 
-from src.pytrek.gui.ConsoleMessageType import ConsoleMessageType
-from src.pytrek.gui.BaseSection import BaseSection
+from pytrek.gui.ConsoleMessageType import ConsoleMessageType
+from pytrek.gui.BaseSection import BaseSection
 
 
 @dataclass

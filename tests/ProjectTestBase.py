@@ -1,19 +1,19 @@
 
 from codeallybasic.UnitTestBase import UnitTestBase
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
-from src.pytrek.engine.GameEngine import GameEngine
-from src.pytrek.engine.Intelligence import Intelligence
-from src.pytrek.engine.devices import DeviceManager
-from src.pytrek.engine.futures.EventEngine import EventEngine
+from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.devices.DeviceManager import DeviceManager
+from pytrek.engine.futures.EventEngine import EventEngine
 
-from src.pytrek.mediators.GalaxyMediator import GalaxyMediator
-from src.pytrek.mediators.QuadrantMediator import QuadrantMediator
+from pytrek.mediators.GalaxyMediator import GalaxyMediator
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
-from src.pytrek.model import Galaxy
+from pytrek.model.Galaxy import Galaxy
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 
 class ProjectTestBase(UnitTestBase):

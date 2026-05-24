@@ -20,28 +20,28 @@ from arcade import key as arcadeKey
 
 from arcade.color import WHITE
 
-from src.pytrek.Constants import COMMAND_SECTION_HEIGHT
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from src.pytrek.Constants import SCREEN_HEIGHT
-from src.pytrek.Constants import SCREEN_WIDTH
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import SCREEN_HEIGHT
+from pytrek.Constants import SCREEN_WIDTH
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.ArcadePoint import ArcadePoint
 
-from src.pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
-from src.pytrek.gui.gamepieces.PhaserBolt import PhaserBolt
-from src.pytrek.gui import PhotonTorpedoExplosion
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+from pytrek.gui.gamepieces.PhaserBolt import PhaserBolt
+from pytrek.gui.gamepieces.PhotonTorpedoExplosion import PhotonTorpedoExplosion
 
-from src.pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion
-from src.pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosion import KlingonTorpedoExplosion
-from src.pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedoExplosion import SuperCommanderTorpedoExplosion
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
-from src.pytrek.gui.MessageConsoleSection import MessageConsoleSection
+from pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion
+from pytrek.gui.gamepieces.klingon.KlingonTorpedoExplosion import KlingonTorpedoExplosion
+from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedoExplosion import SuperCommanderTorpedoExplosion
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleSection import MessageConsoleSection
 
-from src.pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
-from src.pytrek.mediators.EnterprisePhaserMediator import EnterprisePhaserMediator
-from src.pytrek.mediators.EnterpriseTorpedoMediator import EnterpriseTorpedoMediator
-from src.pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
-from src.pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedoMediator
+from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
+from pytrek.mediators.EnterprisePhaserMediator import EnterprisePhaserMediator
+from pytrek.mediators.EnterpriseTorpedoMediator import EnterpriseTorpedoMediator
+from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
+from pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedoMediator
 
 from tests.ProjectTestBase import ProjectTestBase
 

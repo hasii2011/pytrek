@@ -20,7 +20,7 @@ from arcade.gui import UITextureButton
 
 from arcade import load_texture
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
 
 class HelpView(View):

@@ -11,9 +11,9 @@ from codeallybasic.SingletonV3 import SingletonV3
 
 from arcade import Sound
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 
 class SoundType(Enum):
@@ -46,6 +46,7 @@ SoundDictionary = NewType('SoundDictionary', Dict[SoundType, Sound])
 
 class SoundMachine(metaclass=SingletonV3):
 
+    # noinspection PyUnusedLocal
     def __init__(self, *args, **kwargs):
 
         self.logger: Logger = getLogger(__name__)

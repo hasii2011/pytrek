@@ -4,7 +4,7 @@ from arcade import color
 
 from arcade import run as arcadeRun
 
-from src.pytrek.gui.HelpView import HelpView
+from pytrek.gui.HelpView import HelpView
 
 
 from tests.ProjectTestBase import ProjectTestBase

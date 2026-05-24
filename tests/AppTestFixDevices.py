@@ -15,22 +15,22 @@ from arcade import key as arcadeKey
 from arcade import exit as arcadeExit
 
 
-from src.pytrek.Constants import COMMAND_SECTION_HEIGHT
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from src.pytrek.Constants import SCREEN_HEIGHT
-from src.pytrek.Constants import SCREEN_WIDTH
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import SCREEN_HEIGHT
+from pytrek.Constants import SCREEN_WIDTH
 
-from src.pytrek.engine.Intelligence import Intelligence
-from src.pytrek.engine import ShipCondition
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.ShipCondition import ShipCondition
 
-from src.pytrek.engine.devices import DeviceStatus
-from src.pytrek.engine.devices.DeviceType import DeviceType
-from src.pytrek.engine.devices import DeviceManager
-from src.pytrek.gui.BaseSection import BaseSection
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceManager import DeviceManager
+from pytrek.gui.BaseSection import BaseSection
 
-from src.pytrek.gui.DeviceStatusSection import DeviceStatusSection
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
-from src.pytrek.gui.MessageConsoleSection import MessageConsoleSection
+from pytrek.gui.DeviceStatusSection import DeviceStatusSection
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleSection import MessageConsoleSection
 
 from tests.ProjectTestBase import ProjectTestBase
 

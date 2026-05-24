@@ -1,5 +1,5 @@
 
-from src.pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
+from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
 
 
 class SuperCommanderTorpedoMiss(BaseMiss):

@@ -17,14 +17,14 @@ from arcade import set_background_color
 from arcade.particles import Emitter
 from arcade.particles import make_interval_emitter
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.SoundMachine import SoundMachine
-from src.pytrek.SoundMachine import SoundType
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 
-from src.pytrek.gui.UITypes import TextureList
+from pytrek.gui.UITypes import TextureList
 
-from src.pytrek.gui.BaseSection import BaseSection
+from pytrek.gui.BaseSection import BaseSection
 
 PARTICLE_SPEED_FAST:       float = 1.0
 DEFAULT_EMIT_INTERVAL:     float = 0.003

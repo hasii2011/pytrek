@@ -1,9 +1,9 @@
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
-from src.pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
+from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 class Klingon(BaseEnemy):

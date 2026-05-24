@@ -7,16 +7,16 @@ from arcade import draw_text
 
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.Constants import GALAXY_COLUMNS
-from src.pytrek.Constants import GALAXY_ROWS
-from src.pytrek.Constants import SUPER_NOVA_INDICATOR
+from pytrek.Constants import GALAXY_COLUMNS
+from pytrek.Constants import GALAXY_ROWS
+from pytrek.Constants import SUPER_NOVA_INDICATOR
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.Computer import Computer
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.Computer import Computer
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Galaxy import Galaxy
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
 
 SUPER_NOVA_X_ADJUSTMENT: int = 10
 

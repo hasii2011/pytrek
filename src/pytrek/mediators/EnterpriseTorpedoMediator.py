@@ -10,31 +10,31 @@ from arcade import SpriteList
 from arcade import SpriteSheet
 from arcade import check_for_collision_with_list
 
-from src.pytrek.SoundMachine import SoundMachine
-from src.pytrek.SoundMachine import SoundType
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 
-from src.pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
-from src.pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
-from src.pytrek.gui.gamepieces.Enterprise import Enterprise
-from src.pytrek.gui.gamepieces.PhotonTorpedoExplosion import PhotonTorpedoExplosion
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemies
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemy
-from src.pytrek.gui.gamepieces.PhotonTorpedo import PhotonTorpedo
-from src.pytrek.gui.gamepieces.PhotonTorpedoMiss import PhotonTorpedoMiss
+from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.PhotonTorpedoExplosion import PhotonTorpedoExplosion
+from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.PhotonTorpedo import PhotonTorpedo
+from pytrek.gui.gamepieces.PhotonTorpedoMiss import PhotonTorpedoMiss
 
-from src.pytrek.mediators.base.BaseMediator import LineOfSightResponse
-from src.pytrek.mediators.base.MissesMediator import MissesMediator
-from src.pytrek.mediators.base.MissesMediator import Misses
-from src.pytrek.mediators.base.MissesMediator import Torpedoes
+from pytrek.mediators.base.BaseMediator import LineOfSightResponse
+from pytrek.mediators.base.MissesMediator import MissesMediator
+from pytrek.mediators.base.MissesMediator import Misses
+from pytrek.mediators.base.MissesMediator import Torpedoes
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.ArcadePoint import ArcadePoint
 
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Quadrant import Quadrant
 
-from src.pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class EnterpriseTorpedoMediator(MissesMediator):
@@ -248,9 +248,9 @@ class EnterpriseTorpedoMediator(MissesMediator):
             self._decrementAppropriateEnemyCount(enemy)
 
     def _decrementAppropriateEnemyCount(self, enemy):
-        from src.pytrek.gui.gamepieces.klingon.Klingon import Klingon
-        from src.pytrek.gui.gamepieces.commander.Commander import Commander
-        from src.pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
+        from pytrek.gui.gamepieces.klingon.Klingon import Klingon
+        from pytrek.gui.gamepieces.commander.Commander import Commander
+        from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
         if isinstance(enemy, Klingon) is True:
             self._gameState.remainingKlingons -= 1

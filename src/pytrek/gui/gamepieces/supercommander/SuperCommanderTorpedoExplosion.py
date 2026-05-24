@@ -1,6 +1,6 @@
 
-from src.pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
-from src.pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import TextureList
 
 
 class SuperCommanderTorpedoExplosion(BaseTorpedoExplosion):

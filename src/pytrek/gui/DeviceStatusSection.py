@@ -15,14 +15,14 @@ from arcade import draw_line
 from arcade import load_texture
 from arcade.types import Color
 
-from src.pytrek.engine.devices.Device import Device
-from src.pytrek.engine.devices.DeviceStatus import DeviceStatus
-from src.pytrek.engine.devices.DeviceType import DeviceType
-from src.pytrek.engine.devices.DeviceManager import DeviceManager
+from pytrek.engine.devices.Device import Device
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
-from src.pytrek.gui.BaseSection import BaseSection
+from pytrek.gui.BaseSection import BaseSection
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
 
 EVENT_HEADER_COLOR:      Color = WHITE

@@ -20,6 +20,7 @@ HERE = Path(__file__).parent
 # without requiring PYTHONPATH to be set externally
 path.insert(0, str(HERE / "src"))
 
+# noinspection PyPep8
 from pytrek import __version__
 
 APP = ['src/pytrek/PyTrekV2.py']

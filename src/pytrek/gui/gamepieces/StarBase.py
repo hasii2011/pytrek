@@ -1,13 +1,13 @@
 from logging import Logger
 from logging import getLogger
 
-from src.pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
+from pytrek.gui.gamepieces.base.BaseGamePiece import BaseGamePiece
 
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.ArcadePoint import ArcadePoint
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 class StarBase(BaseGamePiece):

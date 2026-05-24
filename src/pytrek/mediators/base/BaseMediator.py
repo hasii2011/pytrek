@@ -13,10 +13,10 @@ from shapely.geometry import LineString
 # noinspection PyPackageRequirements
 from shapely.geometry import Polygon
 
-from src.pytrek.GameState import GameState
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.Computer import Computer
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.GameState import GameState
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.Computer import Computer
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 
 LineOfSightResponse = namedtuple('LineOfSightResponse', 'answer, obstacle')
 

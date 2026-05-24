@@ -9,20 +9,20 @@ from logging import getLogger
 from re import Match as regExMatch
 from re import search as regExSearch
 
-from src.pytrek.Constants import MAXIMUM_COORDINATE
-from src.pytrek.Constants import MINIMUM_COORDINATE
+from pytrek.Constants import MAXIMUM_COORDINATE
+from pytrek.Constants import MINIMUM_COORDINATE
 
-from src.pytrek.commandparser.CommandType import CommandType
-from src.pytrek.commandparser.ManualMoveData import ManualMoveData
-from src.pytrek.commandparser.ManualMoveData import ManualMoveType
-from src.pytrek.commandparser.ParsedCommand import ParsedCommand
-from src.pytrek.commandparser.InvalidCommandException import InvalidCommandException
-from src.pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
-from src.pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.commandparser.CommandType import CommandType
+from pytrek.commandparser.ManualMoveData import ManualMoveData
+from pytrek.commandparser.ManualMoveData import ManualMoveType
+from pytrek.commandparser.ParsedCommand import ParsedCommand
+from pytrek.commandparser.InvalidCommandException import InvalidCommandException
+from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 CommandPattern = NewType('CommandPattern', str)
 

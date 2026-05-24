@@ -4,7 +4,7 @@ from unittest import main as unitTestMain
 
 from tests.ProjectTestBase import ProjectTestBase
 
-from src.pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class TestTorpedoSpeeds(ProjectTestBase):
@@ -40,8 +40,7 @@ def suite() -> TestSuite:
     import unittest
 
     testSuite: TestSuite = TestSuite()
-    # noinspection PyUnresolvedReferences
-    testSuite.addTest(unittest.makeSuite(TestTorpedoSpeeds))
+    testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestTorpedoSpeeds))
 
     return testSuite
 

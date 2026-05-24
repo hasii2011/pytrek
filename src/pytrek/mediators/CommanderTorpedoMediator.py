@@ -6,31 +6,31 @@ from logging import getLogger
 
 from arcade import SpriteSheet
 
-from src.pytrek.SoundMachine import SoundMachine
-from src.pytrek.SoundMachine import SoundType
-from src.pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
+from pytrek.engine.ArcadePoint import ArcadePoint
 
-from src.pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
-from src.pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
-from src.pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
-from src.pytrek.gui.gamepieces.base.BaseAnimator import TextureList
-from src.pytrek.gui.gamepieces.commander.Commander import Commander
+from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.base.BaseMiss import BaseMiss
+from pytrek.gui.gamepieces.base.BaseTorpedoExplosion import BaseTorpedoExplosion
+from pytrek.gui.gamepieces.base.BaseAnimator import TextureList
+from pytrek.gui.gamepieces.commander.Commander import Commander
 
-from src.pytrek.gui.gamepieces.commander.CommanderTorpedo import CommanderTorpedo
-from src.pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion
-from src.pytrek.gui.gamepieces.commander.CommanderTorpedoMiss import CommanderTorpedoMiss
+from pytrek.gui.gamepieces.commander.CommanderTorpedo import CommanderTorpedo
+from pytrek.gui.gamepieces.commander.CommanderTorpedoExplosion import CommanderTorpedoExplosion
+from pytrek.gui.gamepieces.commander.CommanderTorpedoMiss import CommanderTorpedoMiss
 
-from src.pytrek.gui.gamepieces.Enterprise import Enterprise
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
-from src.pytrek.mediators.base.MissesMediator import Misses
-from src.pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
+from pytrek.mediators.base.MissesMediator import Misses
+from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Quadrant import Quadrant
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class CommanderTorpedoMediator(BaseTorpedoMediator):

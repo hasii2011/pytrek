@@ -1,23 +1,24 @@
-from math import degrees
+
 from math import floor
+from math import degrees
 
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from src.pytrek.Constants import MAX_QUADRANT_X_COORDINATE
-from src.pytrek.Constants import MAX_QUADRANT_Y_COORDINATE
-from src.pytrek.Constants import MAX_SECTOR_X_COORDINATE
-from src.pytrek.Constants import MAX_SECTOR_Y_COORDINATE
-from src.pytrek.Constants import MIN_QUADRANT_X_COORDINATE
-from src.pytrek.Constants import MIN_SECTOR_X_COORDINATE
-from src.pytrek.Constants import MIN_SECTOR_Y_COORDINATE
-from src.pytrek.Constants import QUADRANT_GRID_WIDTH
-from src.pytrek.Constants import SCREEN_HEIGHT
+from pytrek.Constants import MAX_QUADRANT_X_COORDINATE
+from pytrek.Constants import MAX_QUADRANT_Y_COORDINATE
+from pytrek.Constants import MAX_SECTOR_X_COORDINATE
+from pytrek.Constants import MAX_SECTOR_Y_COORDINATE
+from pytrek.Constants import MIN_QUADRANT_X_COORDINATE
+from pytrek.Constants import MIN_SECTOR_X_COORDINATE
+from pytrek.Constants import MIN_SECTOR_Y_COORDINATE
+from pytrek.Constants import QUADRANT_GRID_WIDTH
+from pytrek.Constants import SCREEN_HEIGHT
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.Computer import Computer
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.Computer import Computer
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 from tests.ProjectTestBase import ProjectTestBase
@@ -373,12 +374,10 @@ class TestComputer(ProjectTestBase):
 
 
 def suite() -> TestSuite:
-    """You need to change the name of the test class here also."""
     import unittest
 
     testSuite: TestSuite = TestSuite()
-    # noinspection PyUnresolvedReferences
-    testSuite.addTest(unittest.makeSuite(TestComputer))
+    testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestComputer))
 
     return testSuite
 

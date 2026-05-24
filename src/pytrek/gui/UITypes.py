@@ -5,7 +5,7 @@ from typing import NewType
 
 from arcade import Texture
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 WarpTravelCallbackV2 = Callable[[Coordinates, Coordinates], None]
 

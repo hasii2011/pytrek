@@ -3,13 +3,13 @@ from unittest import TestSuite
 
 from unittest import main as unitTestMain
 
-from src.pytrek.engine.Intelligence import Intelligence
-from src.pytrek.engine import ShipCondition
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.ShipCondition import ShipCondition
 
-from src.pytrek.engine.devices.Device import Device
-from src.pytrek.engine.devices import DeviceStatus
-from src.pytrek.engine.devices.DeviceType import DeviceType
-from src.pytrek.engine.devices import DeviceManager
+from pytrek.engine.devices.Device import Device
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
 from tests.ProjectTestBase import ProjectTestBase
 
@@ -126,8 +126,7 @@ def suite() -> TestSuite:
     import unittest
 
     testSuite: TestSuite = TestSuite()
-    # noinspection PyUnresolvedReferences
-    testSuite.addTest(unittest.makeSuite(TestDeviceManager))
+    testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestDeviceManager))
 
     return testSuite
 

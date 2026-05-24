@@ -8,19 +8,19 @@ from arcade import Texture
 from arcade import load_texture
 from arcade import draw_texture_rect
 
-from src.pytrek.Constants import SCREEN_WIDTH
-from src.pytrek.Constants import QUADRANT_GRID_HEIGHT
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import SCREEN_WIDTH
+from pytrek.Constants import QUADRANT_GRID_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.GameEngine import GameEngine
 
-from src.pytrek.mediators.LongRangeSensorScanMediator import LongRangeSensorScanMediator
+from pytrek.mediators.LongRangeSensorScanMediator import LongRangeSensorScanMediator
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 class LongRangeSensorScanSection(Section):

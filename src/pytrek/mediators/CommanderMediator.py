@@ -2,13 +2,13 @@
 from logging import Logger
 from logging import getLogger
 
-from src.pytrek.SoundMachine import SoundMachine
-from src.pytrek.SoundMachine import SoundType
-from src.pytrek.gui.gamepieces.commander.Commander import Commander
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
+from pytrek.gui.gamepieces.commander.Commander import Commander
 
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Quadrant import Quadrant
 
-from src.pytrek.mediators.base.BaseEnemyMediator import BaseEnemyMediator
+from pytrek.mediators.base.BaseEnemyMediator import BaseEnemyMediator
 
 
 class CommanderMediator(BaseEnemyMediator):
