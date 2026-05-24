@@ -5,12 +5,11 @@ from math import degrees
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.ArcadePoint import ArcadePoint
 
 from tests.ProjectTestBase import ProjectTestBase
 
-
-from src.pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
+from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
 
 
 class TestSmoothMotion(ProjectTestBase):
@@ -84,12 +83,11 @@ class TestSmoothMotion(ProjectTestBase):
 
 
 def suite() -> TestSuite:
-    """You need to change the name of the test class here also."""
+
     import unittest
 
     testSuite: TestSuite = TestSuite()
-    # noinspection PyUnresolvedReferences
-    testSuite.addTest(unittest.makeSuite(TestSmoothMotion))
+    testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestSmoothMotion))
 
     return testSuite
 

@@ -8,25 +8,43 @@ from arcade import Texture
 from arcade import load_texture
 from arcade import draw_texture_rect
 
-from src.pytrek.Constants import SCREEN_WIDTH
-from src.pytrek.Constants import QUADRANT_GRID_HEIGHT
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import SCREEN_WIDTH
+from pytrek.Constants import QUADRANT_GRID_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.GameEngine import GameEngine
+from pytrek.gui.Common import dimBackgroundForView
 
-from src.pytrek.mediators.LongRangeSensorScanMediator import LongRangeSensorScanMediator
+from pytrek.mediators.LongRangeSensorScanMediator import LongRangeSensorScanMediator
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 class LongRangeSensorScanSection(Section):
     """
-    Displays a long range sensor scan.  Essentially, only the quadrant adjacent to the on the Enterprise is in
+    The LongRangeSensorScanSection class displays a pop-up overlay scan containing sensor data for the quadrants
+    immediately adjacent to the Enterprise's current position.
+
+    Functionality:
+
+    1. State & Overlay Setup:
+    - Initialized as a modal section (`modal=True`) that starts disabled (`enabled=False`).
+    - Renders a custom overlay background loaded from `LongRangeSensorBackground.png` centered horizontally and vertically on the quadrant grid area.
+
+    2. Long-Range Data Rendering:
+    - Delegates scan drawing to the LongRangeSensorScanMediator.
+    - Passes the current quadrant coordinates (`self._gameState.currentQuadrantCoordinates`)
+    to the mediator during `on_draw` to populate adjacent quadrant details.
+
+    3. User Interaction:
+    - Listens to any mouse click (`on_mouse_press`) to set `self.enabled = False`, which
+    immediately closes/dismisses the overlay scanner and returns the user to the active quadrant view.
     """
+
     BACKGROUND_WIDTH: int  = 321
     BACKGROUND_HEIGHT: int = 322
 
@@ -57,10 +75,7 @@ class LongRangeSensorScanSection(Section):
         elements
         """
 
-        # self._texture.draw_sized(center_x=self._graphicCenterX,
-        #                          center_y=self._graphicCenterY,
-        #                          width=LongRangeSensorScanSection.BACKGROUND_WIDTH,
-        #                          height=LongRangeSensorScanSection.BACKGROUND_HEIGHT)
+        dimBackgroundForView(windowWidth=self.window.width, windowHeight=self.window.height)
 
         rect: Rect = Rect.from_kwargs(x=self._graphicCenterX,
                                       y=self._graphicCenterY,

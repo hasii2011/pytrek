@@ -20,7 +20,7 @@ from arcade.gui import UITextureButton
 
 from arcade import load_texture
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
 
 class HelpView(View):
@@ -36,8 +36,6 @@ class HelpView(View):
         self._completeCallback: Callable = completeCallback
 
         self._uiManager: UIManager = UIManager()
-
-        self._uiManager.enable()
 
         title:              UILabel    = self._createLabel(text='PyArcadeStarTrek Help', height=24, fontSize=18)
         self._helpTextArea: UITextArea = self._createHelpTextArea()
@@ -70,6 +68,12 @@ class HelpView(View):
         """
         self.clear()
         self._uiManager.draw()
+
+    def on_show_view(self):
+        self._uiManager.enable()
+
+    def on_hide_view(self):
+        self._uiManager.disable()
 
     def _createLabel(self, text: str = '', height: int = 16, fontSize: int = 12) -> UILabel:
 

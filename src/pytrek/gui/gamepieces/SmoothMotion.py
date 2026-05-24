@@ -14,11 +14,11 @@ from math import degrees
 from math import cos
 from math import sin
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.ArcadePoint import ArcadePoint
 
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 RadianInfo = namedtuple('RadianInfo', 'actualAngleRadians, angleDiffRadians')
 

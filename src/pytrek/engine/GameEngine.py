@@ -11,27 +11,27 @@ from random import choice
 
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.engine.Computer import Computer
-from src.pytrek.engine.Direction import Direction
-from src.pytrek.engine.DirectionData import DirectionData
-from src.pytrek.engine.devices.DeviceStatus import DeviceStatus
-from src.pytrek.engine.devices.DeviceType import DeviceType
-from src.pytrek.engine.devices.DeviceManager import DeviceManager
-from src.pytrek.engine.Intelligence import Intelligence
-from src.pytrek.engine.ShieldHitData import ShieldHitData
+from pytrek.engine.Computer import Computer
+from pytrek.engine.Direction import Direction
+from pytrek.engine.DirectionData import DirectionData
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceManager import DeviceManager
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.ShieldHitData import ShieldHitData
 
-from src.pytrek.gui.gamepieces.Enterprise import Enterprise
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemy
-from src.pytrek.gui.gamepieces.commander.Commander import Commander
-from src.pytrek.gui.gamepieces.klingon.Klingon import Klingon
-from src.pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.commander.Commander import Commander
+from pytrek.gui.gamepieces.klingon.Klingon import Klingon
+from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Quadrant import Quadrant
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
 
 class GameEngine(metaclass=SingletonV3):

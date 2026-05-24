@@ -1,29 +1,37 @@
 
+from typing import cast
+from typing import NewType
+
 from logging import Logger
 from logging import getLogger
+
+from dataclasses import dataclass
 
 from arcade import Rect
 from arcade import Texture
 from arcade import XYWH
+from arcade import Text
+from arcade import draw_line
+
+from arcade import load_texture
 from arcade import draw_texture_rect
+
 from arcade.color import RED
 from arcade.color import WHITE
 from arcade.color import YELLOW
 
-from arcade import draw_text
-from arcade import draw_line
-from arcade import load_texture
 from arcade.types import Color
 
-from src.pytrek.engine.devices.Device import Device
-from src.pytrek.engine.devices.DeviceStatus import DeviceStatus
-from src.pytrek.engine.devices.DeviceType import DeviceType
-from src.pytrek.engine.devices.DeviceManager import DeviceManager
+from pytrek.engine.devices.Device import Device
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
-from src.pytrek.gui.BaseSection import BaseSection
+from pytrek.gui.BaseSection import BaseSection
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.gui.Common import dimBackgroundForView
 
+from pytrek.LocateResources import LocateResources
 
 EVENT_HEADER_COLOR:      Color = WHITE
 DEVICE_HEADER_COLOR:     Color = WHITE
@@ -55,9 +63,31 @@ DAMAGE_HEADER:      str = 'Damage'
 STATUS_HEADER:      str = 'Status'
 
 
+@dataclass
+class DeviceTextRow:
+    typeText: Text
+    damageText: Text
+    statusText: Text
+
+
+DeviceTextRows = NewType('DeviceTextRows', dict[DeviceType, DeviceTextRow])
+
+
 class DeviceStatusSection(BaseSection):
     """
-    Self sizing and positioning within the game window
+    Represents a self-sizing overlay section that displays the status, damage levels, and operational
+    states of the Enterprise's devices.
+
+    Functionality:
+    1. Status Board Display:
+       - Renders a semi-transparent dark gray panel overlay.
+       - Displays columns for Device Type, Damage, and Status, bounded by horizontal separator lines.
+    2. Device Information Formatting:
+       - Queries the DeviceManager for all device types.
+       - Renders each device's numeric damage level formatted to two decimal places.
+       - Colors the status value dynamically based on its state: white for Normal (Up), yellow for Damaged, and red for Down.
+    3. Interaction:
+       - Closes/dismisses the status display overlay when the user clicks anywhere in the section.
     """
     BACKGROUND_WIDTH: int  = 320
     BACKGROUND_HEIGHT: int = 320
@@ -75,8 +105,8 @@ class DeviceStatusSection(BaseSection):
 
         fqFileName: str = LocateResources.getImagePath(bareFileName='MediumDarkGrayPanel.png')
 
-        self._texture: Texture = load_texture(fqFileName)
-        self._devices: DeviceManager   = DeviceManager()
+        self._texture: Texture       = load_texture(fqFileName)
+        self._devices: DeviceManager = DeviceManager()
 
         self._graphicCenterX: float = (self.top / 2) - HEADER_MARGIN_LEFT
         self._graphicCenterY: float = self.bottom + ((self.top - self.bottom) // 2)
@@ -88,18 +118,26 @@ class DeviceStatusSection(BaseSection):
         self._deviceStatusHeaderX: int | float = self._deviceDamageHeaderX + (len(DAMAGE_HEADER) * DEVICE_HEADER_FONT_SIZE) + STATUS_HEADER_X_GAP
         self._deviceStatusHeaderY: int | float = self._deviceTypeHeaderY
 
+        self._deviceTypeHeaderText: Text = cast(Text, None)     # noqa
+        self._damageHeaderText:     Text = cast(Text, None)     # noqa
+        self._statusHeaderText:     Text = cast(Text, None)     # noqa
+
+        self._initializeDeviceHeaderRow()
+
         self._lineStartX: int | float = self.left + LINE_MARGIN_LEFT
         self._lineStartY: int | float = self.bottom + self.height - TOP_LINE_TOP_OFFSET
         self._lineEndX:   int | float = self.left + self.width - LINE_MARGIN_RIGHT
         self._lineEndY:   int | float = self._lineStartY
 
+        self._deviceTextRows: DeviceTextRows = self._initializeDeviceTextRows(lineStartY=self._lineStartY)
+
+        y: float = self._lineStartY - (len(DeviceType) * DEVICE_STATUS_LINE_GAP)
+        self._footerLineY: float = y - FOOTER_GAP
+
     def on_draw(self):
 
-        # self._texture.draw_sized(center_x=self._graphicCenterX,
-        #                          center_y=self._graphicCenterY,
-        #                          width=self.width + HEADER_MARGIN_LEFT,
-        #                          height=self.height,
-        #                          alpha=255)
+        dimBackgroundForView(windowWidth=self.window.width, windowHeight=self.window.height)
+
         rect: Rect = XYWH(x=self._graphicCenterX,
                           y=self._graphicCenterY,
                           width=self.width + HEADER_MARGIN_LEFT,
@@ -122,18 +160,9 @@ class DeviceStatusSection(BaseSection):
 
     def _drawHeader(self):
 
-        deviceTypeHeaderX: int | float = self._deviceTypeHeaderX
-        deviceTypeHeaderY: int | float = self._deviceTypeHeaderY
-
-        deviceDamageHeaderX: int | float = self._deviceDamageHeaderX
-        deviceDamageHeaderY: int | float = self._deviceDamageHeaderY
-
-        deviceStatusHeaderX: int | float = self._deviceStatusHeaderX
-        deviceStatusHeaderY: int | float = self._deviceStatusHeaderY
-
-        draw_text(DEVICE_TYPE_HEADER, deviceTypeHeaderX,   deviceTypeHeaderY,   DEVICE_HEADER_COLOR.rgb, DEVICE_HEADER_FONT_SIZE)
-        draw_text(DAMAGE_HEADER,      deviceDamageHeaderX, deviceDamageHeaderY, DEVICE_HEADER_COLOR.rgb, DEVICE_HEADER_FONT_SIZE)
-        draw_text(STATUS_HEADER,      deviceStatusHeaderX, deviceStatusHeaderY, DEVICE_HEADER_COLOR.rgb, DEVICE_HEADER_FONT_SIZE)
+        self._deviceTypeHeaderText.draw()
+        self._damageHeaderText.draw()
+        self._statusHeaderText.draw()
 
         lineStartX: int | float = self._lineStartX
         lineStartY: int | float = self._lineStartY
@@ -144,16 +173,10 @@ class DeviceStatusSection(BaseSection):
 
     def _drawDevicesStatus(self):
 
-        y: float = self._lineStartY
-
         for deviceType in DeviceType:
-            y -= DEVICE_STATUS_LINE_GAP
-            device:       Device       = self._devices.getDevice(deviceType=deviceType)
-            damage:       float        = device.damage
-            deviceStatus: DeviceStatus = device.deviceStatus
-
-            draw_text(f' {deviceType}',   self._deviceTypeHeaderX,   y, DEVICE_DETAIL_COLOR.rgb, DEVICE_DETAIL_FONT_SIZE)
-            draw_text(f' {damage:.2f}',   self._deviceDamageHeaderX, y, DEVICE_DETAIL_COLOR.rgb, DEVICE_DETAIL_FONT_SIZE)
+            device:       Device        = self._devices.getDevice(deviceType=deviceType)
+            damage:       float = device.damage
+            deviceStatus: DeviceStatus  = device.deviceStatus
 
             if deviceStatus == DeviceStatus.Up:
                 statusColor: Color = STATUS_NORMAL_COLOR
@@ -164,11 +187,81 @@ class DeviceStatusSection(BaseSection):
             else:
                 assert False, f'Unknown device status {deviceStatus}'
 
-            draw_text(f' {deviceStatus}', self._deviceStatusHeaderX, y, statusColor.rgb, DEVICE_DETAIL_FONT_SIZE)
+            textRow: DeviceTextRow = self._deviceTextRows[deviceType]
+            textRow.damageText.text = f' {damage:.2f}'
+            textRow.statusText.text = f' {deviceStatus}'
+            textRow.statusText.color = statusColor
 
-        footerY: float = y - FOOTER_GAP
-        draw_line(start_x=self._lineStartX, end_x=self._lineEndX, start_y=footerY, end_y=footerY, color=WHITE, line_width=2)
+            textRow.typeText.draw()
+            textRow.damageText.draw()
+            textRow.statusText.draw()
+
+        draw_line(start_x=self._lineStartX, end_x=self._lineEndX, start_y=self._footerLineY, end_y=self._footerLineY, color=WHITE, line_width=2)
 
     def _yRelativeToTop(self, topPosition: int):
 
         return self.window.height - topPosition
+
+    def _initializeDeviceHeaderRow(self):
+        """
+        Initializes the appropriate instance variables
+        """
+
+        self._deviceTypeHeaderText = Text(
+            text=DEVICE_TYPE_HEADER,
+            x=self._deviceTypeHeaderX,
+            y=self._deviceTypeHeaderY,
+            color=DEVICE_HEADER_COLOR.rgb,
+            font_size=DEVICE_HEADER_FONT_SIZE
+        )
+        self._damageHeaderText = Text(
+            text=DAMAGE_HEADER,
+            x=self._deviceDamageHeaderX,
+            y=self._deviceDamageHeaderY,
+            color=DEVICE_HEADER_COLOR.rgb,
+            font_size=DEVICE_HEADER_FONT_SIZE
+        )
+        self._statusHeaderText = Text(
+            text=STATUS_HEADER,
+            x=self._deviceStatusHeaderX,
+            y=self._deviceStatusHeaderY,
+            color=DEVICE_HEADER_COLOR.rgb,
+            font_size=DEVICE_HEADER_FONT_SIZE
+        )
+
+    def _initializeDeviceTextRows(self, lineStartY) -> DeviceTextRows:
+
+        deviceTextRows: DeviceTextRows = DeviceTextRows({})
+        # y:              float  = self._lineStartY
+        y:              float  = lineStartY
+
+        for deviceType in DeviceType:
+            y -= DEVICE_STATUS_LINE_GAP
+            typeText: Text = Text(
+                text=f' {deviceType}',
+                x=self._deviceTypeHeaderX,
+                y=y,
+                color=DEVICE_DETAIL_COLOR.rgb,
+                font_size=DEVICE_DETAIL_FONT_SIZE
+            )
+            damageText: Text = Text(
+                text='',
+                x=self._deviceDamageHeaderX,
+                y=y,
+                color=DEVICE_DETAIL_COLOR.rgb,
+                font_size=DEVICE_DETAIL_FONT_SIZE
+            )
+            statusText: Text = Text(
+                text='',
+                x=self._deviceStatusHeaderX,
+                y=y,
+                color=STATUS_NORMAL_COLOR.rgb,
+                font_size=DEVICE_DETAIL_FONT_SIZE
+            )
+            deviceTextRows[deviceType] = DeviceTextRow(
+                typeText=typeText,
+                damageText=damageText,
+                statusText=statusText
+            )
+
+        return deviceTextRows

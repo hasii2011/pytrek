@@ -10,22 +10,22 @@ from arcade import schedule as arcadeSchedule
 
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.Intelligence import Intelligence
 
-from src.pytrek.engine.devices.DeviceManager import DeviceManager
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
-from src.pytrek.engine.futures.EventCreator import EventCreator
-from src.pytrek.engine.futures.FutureEvent import EventCallback
-from src.pytrek.engine.futures.FutureEvent import FutureEvent
-from src.pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.engine.futures.EventCreator import EventCreator
+from pytrek.engine.futures.FutureEvent import EventCallback
+from pytrek.engine.futures.FutureEvent import FutureEvent
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 EventMap = NewType('EventMap', Dict[FutureEventType, FutureEvent])
 

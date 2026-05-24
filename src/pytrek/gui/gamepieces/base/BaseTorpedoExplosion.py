@@ -1,7 +1,7 @@
 
 
-from src.pytrek.gui.gamepieces.base.BaseAnimator import BaseAnimator
-from src.pytrek.gui.gamepieces.base.BaseAnimator import TextureList
+from pytrek.gui.gamepieces.base.BaseAnimator import BaseAnimator
+from pytrek.gui.gamepieces.base.BaseAnimator import TextureList
 
 
 class BaseTorpedoExplosion(BaseAnimator):

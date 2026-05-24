@@ -11,14 +11,20 @@ from codeallybasic.SecureConversions import SecureConversions
 from codeallybasic.DynamicConfiguration import DynamicConfiguration
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.Constants import APPLICATION_NAME
-from src.pytrek.Constants import GAME_SETTINGS_FILE_NAME
+from pytrek.Constants import APPLICATION_NAME
+from pytrek.Constants import GAME_SETTINGS_FILE_NAME
 
-from src.pytrek.engine.GameType import GameType
-from src.pytrek.engine.PlayerType import PlayerType
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.settings.SoundVolume import SoundVolume
-from src.pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+from pytrek.engine.GameType import GameType
+from pytrek.engine.PlayerType import PlayerType
+
+from pytrek.gui.Common import PyTrekColor
+
+from pytrek.model.Coordinates import Coordinates
+
+from pytrek.settings.SoundVolume import SoundVolume
+from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+
+DEFAULT_DIM_RGB_VALUE: PyTrekColor = PyTrekColor(r=20, g=40, b=75, alpha=160)
 
 SECTION_LIMITS: ValueDescriptions = ValueDescriptions(
     {
@@ -96,6 +102,7 @@ SECTION_DEVELOPER: ValueDescriptions = ValueDescriptions(
     {
         KeyName('maxStarbaseSearches'):  ValueDescription(defaultValue='128', deserializer=SecureConversions.secureInteger),
         KeyName('maxCommanderSearches'): ValueDescription(defaultValue='128', deserializer=SecureConversions.secureInteger),
+        KeyName('viewDimRGBA'):          ValueDescription(defaultValue=str(DEFAULT_DIM_RGB_VALUE), deserializer=PyTrekColor.deSerialize),
     }
 )
 

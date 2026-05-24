@@ -12,16 +12,16 @@ from json import loads as jsonLoads
 from codeallybasic.ConfigurationLocator import ConfigurationLocator
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.Constants import APPLICATION_NAME
-from src.pytrek.engine.Intelligence import Intelligence
-from src.pytrek.gui.gamepieces.Enterprise import Enterprise
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.Constants import APPLICATION_NAME
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.model.Coordinates import Coordinates
 
-from src.pytrek.engine.PlayerType import PlayerType
-from src.pytrek.engine.GameType import GameType
-from src.pytrek.engine.ShipCondition import ShipCondition
+from pytrek.engine.PlayerType import PlayerType
+from pytrek.engine.GameType import GameType
+from pytrek.engine.ShipCondition import ShipCondition
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 GAME_STATE_FILE_NAME: str = 'GameState.json'
 

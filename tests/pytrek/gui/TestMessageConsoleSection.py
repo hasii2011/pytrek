@@ -4,7 +4,7 @@ from unittest import main as unitTestMain
 
 from tests.ProjectTestBase import ProjectTestBase
 
-from src.pytrek.gui.MessageConsoleSection import MessageConsoleSection
+from pytrek.gui.MessageConsoleSection import MessageConsoleSection
 
 
 class TestMessageConsoleSection(ProjectTestBase):
@@ -28,8 +28,7 @@ def suite() -> TestSuite:
     import unittest
 
     testSuite: TestSuite = TestSuite()
-    # noinspection PyUnresolvedReferences
-    testSuite.addTest(unittest.makeSuite(TestMessageConsoleSection))
+    testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestMessageConsoleSection))
 
     return testSuite
 

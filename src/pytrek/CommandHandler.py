@@ -5,37 +5,39 @@ from typing import TYPE_CHECKING
 from logging import Logger
 from logging import getLogger
 
-from src.pytrek.Constants import CRITICAL_WARP_ENGINE_DAMAGE
-from src.pytrek.Constants import MAXIMUM_DAMAGED_WARP_FACTOR
+from arcade import exit as arcadeExit
 
-from src.pytrek.commandparser.AutomaticMoveData import AutomaticMoveData
-from src.pytrek.commandparser.CommandParser import CommandParser
-from src.pytrek.commandparser.ManualMoveData import ManualMoveData
-from src.pytrek.commandparser.ManualMoveData import ManualMoveType
-from src.pytrek.commandparser.ParsedCommand import ParsedCommand
-from src.pytrek.commandparser.CommandType import CommandType
-from src.pytrek.commandparser.InvalidCommandException import InvalidCommandException
+from pytrek.Constants import CRITICAL_WARP_ENGINE_DAMAGE
+from pytrek.Constants import MAXIMUM_DAMAGED_WARP_FACTOR
 
-from src.pytrek.engine.devices.DeviceType import DeviceType
-from src.pytrek.engine.devices.DeviceManager import DeviceManager
+from pytrek.commandparser.AutomaticMoveData import AutomaticMoveData
+from pytrek.commandparser.CommandParser import CommandParser
+from pytrek.commandparser.ManualMoveData import ManualMoveData
+from pytrek.commandparser.ManualMoveData import ManualMoveType
+from pytrek.commandparser.ParsedCommand import ParsedCommand
+from pytrek.commandparser.CommandType import CommandType
+from pytrek.commandparser.InvalidCommandException import InvalidCommandException
 
-from src.pytrek.engine.GameEngine import GameEngine
-from src.pytrek.engine.futures.EventEngine import EventEngine
-from src.pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceManager import DeviceManager
 
-from src.pytrek.mediators.EnterpriseMediator import EnterpriseMediator
-from src.pytrek.mediators.GalaxyMediator import GalaxyMediator
-from src.pytrek.mediators.QuadrantMediator import QuadrantMediator
+from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.futures.EventEngine import EventEngine
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
-from src.pytrek.model.Galaxy import Galaxy
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
+from pytrek.mediators.GalaxyMediator import GalaxyMediator
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
-from src.pytrek.gui.HelpView import HelpView
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
 
-from src.pytrek.GameState import GameState
+from pytrek.gui.HelpView import HelpView
+
+from pytrek.GameState import GameState
 
 if TYPE_CHECKING:
-    from src.pytrek.PyTrekV2 import PyTrekV2
+    from pytrek.PyTrekV2 import PyTrekV2
 
 
 class CommandHandler:
@@ -53,7 +55,7 @@ class CommandHandler:
         self._deviceManager:      DeviceManager      = DeviceManager()
         self._eventEngine:        EventEngine        = EventEngine()
 
-        self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
+        self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)   # noqa
 
     def _setEnterpriseMediator(self, newValue: EnterpriseMediator):
         self._enterpriseMediator = newValue
@@ -96,6 +98,8 @@ class CommandHandler:
                 self._triggerEvent(parsedCommand.eventToTrigger)
             case CommandType.Save:
                 self._saveGame()
+            case CommandType.Quit:
+                arcadeExit()
             case _:
                 self.logger.error(f'Invalid command: {commandStr}')
                 raise InvalidCommandException(message=f'Invalid command: {commandStr}')
@@ -116,7 +120,7 @@ class CommandHandler:
 
     def _doMove(self, quadrant: Quadrant, parsedCommand: ParsedCommand):
 
-        if parsedCommand.manualMove is True:
+        if parsedCommand.manualMove:
             manualMoveData: ManualMoveData = parsedCommand.manualMoveData
             inSectorMove: bool = False
             if manualMoveData.moveType == ManualMoveType.SectorMove:

@@ -6,28 +6,28 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from src.pytrek.Constants import QUADRANT_COLUMNS
-from src.pytrek.Constants import QUADRANT_ROWS
+from pytrek.Constants import QUADRANT_COLUMNS
+from pytrek.Constants import QUADRANT_ROWS
 
-from src.pytrek.gui.gamepieces.StarBase import StarBase
-from src.pytrek.gui.gamepieces.commander.Commander import Commander
-from src.pytrek.gui.gamepieces.Enterprise import Enterprise
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemies
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.StarBase import StarBase
+from pytrek.gui.gamepieces.commander.Commander import Commander
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
 
-from src.pytrek.gui.gamepieces.klingon.Klingon import Klingon
-from src.pytrek.gui.gamepieces.Planet import Planet
-from src.pytrek.gui.gamepieces.PlanetType import PlanetType
-from src.pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
+from pytrek.gui.gamepieces.klingon.Klingon import Klingon
+from pytrek.gui.gamepieces.Planet import Planet
+from pytrek.gui.gamepieces.PlanetType import PlanetType
+from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Sector import Sector
-from src.pytrek.model.SectorType import SectorType
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Sector import Sector
+from pytrek.model.SectorType import SectorType
 
-from src.pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.Intelligence import Intelligence
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 SectorRow    = NewType('SectorRow', List[Sector])
 QuadrantGrid = NewType('QuadrantGrid', List[SectorRow])
@@ -42,7 +42,7 @@ class Quadrant:
         """
             Initialize a quadrant
         """
-        from src.pytrek.engine.GameEngine import GameEngine     # Avoid recursion
+        from pytrek.engine.GameEngine import GameEngine     # Avoid recursion
 
         self.logger:       Logger       = getLogger(__name__)
         self._coordinates: Coordinates  = coordinates

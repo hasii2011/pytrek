@@ -1,5 +1,7 @@
 
 from typing import cast
+from typing import Dict
+from typing import NewType
 
 from logging import Logger
 from logging import getLogger
@@ -8,38 +10,41 @@ from codeallybasic.SingletonV3 import SingletonV3
 
 from arcade import View
 from arcade import color
-from arcade import draw_text
+from arcade import Text
 
-from src.pytrek.Constants import QUADRANT_PIXEL_HEIGHT
-from src.pytrek.Constants import QUADRANT_PIXEL_WIDTH
-from src.pytrek.Constants import SUPER_NOVA_INDICATOR
+from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
+from pytrek.Constants import QUADRANT_PIXEL_WIDTH
+from pytrek.Constants import SUPER_NOVA_INDICATOR
 
-from src.pytrek.engine.Computer import Computer
-from src.pytrek.engine.Direction import Direction
-from src.pytrek.engine.Intelligence import Intelligence
-from src.pytrek.engine.LRScanCoordinates import LRScanCoordinates
+from pytrek.engine.Computer import Computer
+from pytrek.engine.Direction import Direction
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.LRScanCoordinates import LRScanCoordinates
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.DataTypes import LRScanCoordinatesList
-from src.pytrek.model.Galaxy import Galaxy
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.DataTypes import LRScanCoordinatesList
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
 
 LR_SCAN_FONT_SIZE: int = 14
 TITLE_FONT_SIZE:   int = 18
 
+DirectionToQuadrant = NewType('DirectionToQuadrant', Dict[Direction, Text])
 
 class LongRangeSensorScanMediator(metaclass=SingletonV3):
 
     def __init__(self, **kwargs):
         """
         Accepts the following keyword arguments:
+
         * view The arcade view for the long range scan
-        * graphicCenterX  The background center X position
-        * graphicCenterY  The background center Y position
+        * graphicCenterX  The background center X arcade point
+        * graphicCenterY  The background center Y arcade point
+
         Args:
 
             **kwargs:
-
+                Currently, we accept graphicCenterX and graphicCenterY keyword arguments
         """
 
         self.logger: Logger = getLogger(__name__)
@@ -48,25 +53,50 @@ class LongRangeSensorScanMediator(metaclass=SingletonV3):
         self._computer:     Computer     = Computer()
         self._galaxy:       Galaxy       = Galaxy()
 
-        self.view: View = cast(View, None)
+        self.view: View = cast(View, None)          # noqa
+
         self.graphicCenterX: float = 0
         self.graphicCenterY: float = 0
 
         self._setKeywordParameters(**kwargs)
 
+        self._title: Text = Text(
+            text='',
+            x=self.graphicCenterX - (QUADRANT_PIXEL_WIDTH * 2)  - (QUADRANT_PIXEL_WIDTH / 2),
+            y=self.graphicCenterY + ((QUADRANT_PIXEL_HEIGHT * 2) + (QUADRANT_PIXEL_HEIGHT / 2)) + TITLE_FONT_SIZE,
+            color=color.WHITE,
+            font_size=TITLE_FONT_SIZE
+        )
+
+        self._enterprise: Text = Text(
+            text="E",
+            x=self.graphicCenterX - 4,
+            y=self.graphicCenterY - 8,
+            color=color.YELLOW,
+            font_size=LR_SCAN_FONT_SIZE
+        )
+
+        self._scannedQuadrants: DirectionToQuadrant = self._initializedScannedCoordinates()
+
     def draw(self, centerCoordinates: Coordinates):
+        """
+
+        Args:
+            centerCoordinates:   The game coordinates
+
+        """
 
         coordinatesList: LRScanCoordinatesList = self._intelligence.generateAdjacentCoordinates(centerCoordinates=centerCoordinates)
 
         graphicCenterX: float = self.graphicCenterX
         graphicCenterY: float = self.graphicCenterY
 
-        titleX: float = graphicCenterX - (QUADRANT_PIXEL_WIDTH * 2)  - (QUADRANT_PIXEL_WIDTH / 2)
-        titleY: float = graphicCenterY + ((QUADRANT_PIXEL_HEIGHT * 2) + (QUADRANT_PIXEL_HEIGHT / 2)) + TITLE_FONT_SIZE
         title:  str = f'Long Range Scan Quadrant ({centerCoordinates.x},{centerCoordinates.y})'
-        draw_text(title,  titleX, titleY, color.WHITE, TITLE_FONT_SIZE)
+        
+        self._title.text = title
+        self._title.draw()
 
-        draw_text("E", graphicCenterX - 4, graphicCenterY - 8, color.YELLOW, LR_SCAN_FONT_SIZE)    # Adjust for font size
+        self._enterprise.draw()
 
         for scanCoordinates in coordinatesList:
             self.logger.debug(f'{scanCoordinates=}')
@@ -117,7 +147,7 @@ class LongRangeSensorScanMediator(metaclass=SingletonV3):
         quadrant: Quadrant = self._galaxy.getQuadrant(quadrantCoordinates=scanCoordinates.coordinates)
 
         quadrant.scanned = True
-        if quadrant.hasSuperNova is True:
+        if quadrant.hasSuperNova:
             contents: str = SUPER_NOVA_INDICATOR
         else:
             contents = self._computer.createValueString(klingonCount=quadrant.klingonCount,
@@ -127,4 +157,26 @@ class LongRangeSensorScanMediator(metaclass=SingletonV3):
         if contents == SUPER_NOVA_INDICATOR:
             drawX -= 12
 
-        draw_text(contents, drawX, drawY, color.WHITE, LR_SCAN_FONT_SIZE)
+        text_obj = self._scannedQuadrants[scanCoordinates.direction]
+        if text_obj.text != contents:
+            text_obj.text = contents
+        text_obj.x = drawX
+        text_obj.y = drawY
+        text_obj.draw()
+
+    def _initializedScannedCoordinates(self) -> DirectionToQuadrant:
+
+        scannedQuadrants: DirectionToQuadrant = DirectionToQuadrant({})
+        for direction in [
+            Direction.North, Direction.South, Direction.West, Direction.East,
+            Direction.NorthEast, Direction.NorthWest, Direction.SouthWest, Direction.SouthEast
+        ]:
+            scannedQuadrants[direction] = Text(
+                text='',
+                x=0.0,
+                y=0.0,
+                color=color.WHITE,
+                font_size=LR_SCAN_FONT_SIZE
+            )
+
+        return scannedQuadrants

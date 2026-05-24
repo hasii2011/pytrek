@@ -10,15 +10,15 @@ from dataclasses import dataclass
 from arcade.color import RED
 from arcade.color import WHITE
 
-from arcade import draw_text
+from arcade import Text
 from arcade.types import Color
 
-from src.pytrek.Constants import COMMAND_SECTION_HEIGHT
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from src.pytrek.Constants import FIXED_WIDTH_FONT_NAME
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 
-from src.pytrek.gui.ConsoleMessageType import ConsoleMessageType
-from src.pytrek.gui.BaseSection import BaseSection
+from pytrek.gui.ConsoleMessageType import ConsoleMessageType
+from pytrek.gui.BaseSection import BaseSection
 
 
 @dataclass
@@ -29,8 +29,14 @@ class MessageLine:
 
 MessageLines = NewType('MessageLines', List[MessageLine])
 
+TextObjects = NewType('TextObjects', List[Text])
+
 
 class MessageConsoleSection(BaseSection):
+    """
+    This section caches the messages in a buffer.  It uses a set of prebuilt
+    text object to display them
+    """
 
     MAX_LINES:                 int = 13
 
@@ -51,9 +57,25 @@ class MessageConsoleSection(BaseSection):
 
         self._statusLines: MessageLines = MessageLines([])
 
+        self._textObjects: TextObjects = self._preCreateTextObjects()
+
+        # runningY: int = MessageConsoleSection.FIRST_LINE_Y
+        # for _ in range(MessageConsoleSection.MAX_LINES):
+        #     textObj = Text(
+        #         text='',
+        #         x=MessageConsoleSection.X_FIXED,
+        #         y=runningY,
+        #         color=WHITE,
+        #         font_size=MessageConsoleSection.CONSOLE_FONT_SIZE,
+        #         font_name=FIXED_WIDTH_FONT_NAME
+        #     )
+        #     self._textObjects.append(textObj)
+        #     runningY -= MessageConsoleSection.Y_DECREMENT
+
     def displayMessage(self, message: str, messageType: ConsoleMessageType = ConsoleMessageType.Normal):
         """
         Simply adds the new message to the message buffer
+
         Args:
             message:  New message to display
             messageType: How to display the message
@@ -68,15 +90,33 @@ class MessageConsoleSection(BaseSection):
         self._statusLines.append(msgLine)
 
     def on_draw(self):
+        """
+        Simply apply the current messages to the prebuilt text objects
+        """
 
-        # super().on_draw()
-        runningY: int = MessageConsoleSection.FIRST_LINE_Y
-        for msg in self._statusLines:
-            draw_text(msg.message, MessageConsoleSection.X_FIXED, runningY,
-                      color=msg.textColor,
-                      font_size=MessageConsoleSection.CONSOLE_FONT_SIZE,
-                      font_name=FIXED_WIDTH_FONT_NAME)
-
-            runningY -= MessageConsoleSection.Y_DECREMENT
+        for index, msg in enumerate(self._statusLines):
+            textObj = self._textObjects[index]
+            textObj.text = msg.message
+            textObj.color = msg.textColor
+            textObj.draw()
 
         self.drawDebug()
+
+    def _preCreateTextObjects(self) -> TextObjects:
+
+        textObjects: TextObjects = TextObjects([])
+        runningY:   int          = MessageConsoleSection.FIRST_LINE_Y
+
+        for _ in range(MessageConsoleSection.MAX_LINES):
+            textObj = Text(
+                text='',
+                x=MessageConsoleSection.X_FIXED,
+                y=runningY,
+                color=WHITE,
+                font_size=MessageConsoleSection.CONSOLE_FONT_SIZE,
+                font_name=FIXED_WIDTH_FONT_NAME
+            )
+            textObjects.append(textObj)
+            runningY -= MessageConsoleSection.Y_DECREMENT
+
+        return textObjects

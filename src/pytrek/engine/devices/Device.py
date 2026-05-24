@@ -3,8 +3,8 @@ from typing import cast
 
 from dataclasses import dataclass
 
-from src.pytrek.engine.devices.DeviceType import DeviceType
-from src.pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
 
 
 @dataclass

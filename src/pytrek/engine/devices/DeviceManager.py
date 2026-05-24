@@ -7,13 +7,13 @@ from logging import getLogger
 
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.engine.ShipCondition import ShipCondition
+from pytrek.engine.ShipCondition import ShipCondition
 
-from src.pytrek.engine.devices.Device import Device
-from src.pytrek.engine.devices.DeviceType import DeviceType
-from src.pytrek.engine.devices.DeviceStatus import DeviceStatus
+from pytrek.engine.devices.Device import Device
+from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
 
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
 
 class DeviceManager(metaclass=SingletonV3):

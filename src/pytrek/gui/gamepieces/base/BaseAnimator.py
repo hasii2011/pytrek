@@ -1,7 +1,7 @@
 
 from arcade import Sprite
 
-from src.pytrek.gui.UITypes import TextureList
+from pytrek.gui.UITypes import TextureList
 
 
 class BaseAnimator(Sprite):

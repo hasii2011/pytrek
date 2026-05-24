@@ -10,18 +10,18 @@ from logging import getLogger
 
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.Constants import GALAXY_COLUMNS
-from src.pytrek.Constants import GALAXY_ROWS
+from pytrek.Constants import GALAXY_COLUMNS
+from pytrek.Constants import GALAXY_ROWS
 
-from src.pytrek.engine.GameEngine import GameEngine
-from src.pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.Intelligence import Intelligence
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Quadrant import Quadrant
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
 QuadrantRow = NewType('QuadrantRow', List[Quadrant])
 GalaxyGrid  = NewType('GalaxyGrid',  List[QuadrantRow])

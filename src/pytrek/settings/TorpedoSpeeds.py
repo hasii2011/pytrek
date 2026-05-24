@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from src.pytrek.engine.PlayerType import PlayerType
+from pytrek.engine.PlayerType import PlayerType
 
 
 @dataclass

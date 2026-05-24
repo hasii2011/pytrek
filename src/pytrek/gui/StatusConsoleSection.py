@@ -2,14 +2,14 @@
 from typing import Union
 from typing import List
 from typing import NewType
+from typing import cast
 
 from logging import Logger
 from logging import getLogger
 
 from enum import Enum
 
-
-from arcade import draw_text
+from arcade import Text
 from arcade.color import BLUE
 from arcade.color import GREEN
 from arcade.color import RED
@@ -17,25 +17,25 @@ from arcade.color import RED
 from arcade.color import WHITE
 from arcade.color import YELLOW
 
-from src.pytrek.Constants import COMMAND_SECTION_HEIGHT
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from src.pytrek.Constants import FIXED_WIDTH_FONT_NAME
-from src.pytrek.Constants import QUADRANT_GRID_HEIGHT
-from src.pytrek.Constants import QUADRANT_GRID_WIDTH
-from src.pytrek.GameState import GameState
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import FIXED_WIDTH_FONT_NAME
+from pytrek.Constants import QUADRANT_GRID_HEIGHT
 
-from src.pytrek.engine.ShipCondition import ShipCondition
+from pytrek.GameState import GameState
 
-from src.pytrek.engine.futures.EventEngine import EventEngine
-from src.pytrek.engine.futures.FutureEvent import FutureEvent
-from src.pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.engine.ShipCondition import ShipCondition
 
-from src.pytrek.gui.BaseSection import BaseSection
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.engine.futures.EventEngine import EventEngine
+from pytrek.engine.futures.FutureEvent import FutureEvent
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.gui.BaseSection import BaseSection
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.model.Coordinates import Coordinates
+
+from pytrek.settings.GameSettings import GameSettings
 
 
 SECTION_LABEL_FONT_SIZE: int = 16
@@ -53,8 +53,29 @@ STATUS_VALUE_X_OFFSET: int = 100
 PropertyName  = NewType('PropertyName', str)
 PropertyNames = NewType('PropertyNames', List[PropertyName])
 
+LabelTextObjects = NewType('LabelTextObjects', List[Text])
+ValueTextObjects = NewType('ValueTextObjects', List[Text])
 
 class StatusConsoleSection(BaseSection):
+    """
+    Renders real-time ship and game status information in the game's UI console.
+
+    Key functionality:
+    1. Structured Layout & Drawing:
+       - Renders a sidebar header titled "Status Console".
+       - Displays a vertical list of status parameters positioned relative to the top right of the game screen.
+       - Draws pre-allocated static labels and dynamically updates value text objects using arcade.Text.
+    2. Standard Status Indicators:
+       Renders current values bound to the GameState singleton, including:
+       - Condition (Green, Yellow, Red, or Docked) dynamically colored to match the state.
+       - Stardate & Remaining Game Time.
+       - Current Coordinates: Both Quadrant and Sector coordinates (formatted as (x,y)).
+       - Ship Resources: Current Energy levels, Shield strength, and Torpedo count.
+       - Enemy Counts: Remaining Klingons and Klingon Commanders in the galaxy.
+    3. Debugging / Internal Developer Values:
+       - If consoleShowInternals is set to True in GameSettings, it displays additional debugging values.
+       - Displays internal metrics like operation execution time (OpTime) and scheduled stardates for future events.
+    """
 
     statusLabels: List[str] = [
         'Condition:',
@@ -77,61 +98,68 @@ class StatusConsoleSection(BaseSection):
         self._gameSettings: GameSettings = GameSettings()
         self._gameState:    GameState    = GameState()
 
-        assert MessageConsoleProxy().initialized is True, 'The console proxy should have set up at game startup'
-        self._eventEngine:  EventEngine  = EventEngine(MessageConsoleProxy())
+        assert MessageConsoleProxy().initialized is True, 'The console proxy should have been set up at game startup'
 
-        self._statusProperties: PropertyNames = PropertyNames([])
+        self._eventEngine:      EventEngine   = EventEngine(MessageConsoleProxy())
+        self._statusProperties: PropertyNames = self._createStatusPropertyNameList()
 
-        self._statusProperties.append(PropertyName('shipCondition'))
-        self._statusProperties.append(PropertyName('starDate'))
-        self._statusProperties.append(PropertyName('currentQuadrantCoordinates'))
-        self._statusProperties.append(PropertyName('currentSectorCoordinates'))
-        self._statusProperties.append(PropertyName('energy'))
-        self._statusProperties.append(PropertyName('shieldEnergy'))
-        self._statusProperties.append(PropertyName('remainingGameTime'))
-        self._statusProperties.append(PropertyName('remainingKlingons'))
-        self._statusProperties.append(PropertyName('remainingCommanders'))
-        self._statusProperties.append(PropertyName('torpedoCount'))
+        # --- Reusable Text Object Setup ---
+        statusConsoleLabelX: int = round(self.left + TITLE_MARGIN_X)
+        statusConsoleLabelY: int = (QUADRANT_GRID_HEIGHT + CONSOLE_SECTION_HEIGHT + COMMAND_SECTION_HEIGHT) - TITLE_FONT_OFFSET_Y - TITLE_MARGIN_Y
+
+        self._titleText: Text = Text(
+            text="Status Console",
+            x=statusConsoleLabelX,
+            y=statusConsoleLabelY,
+            color=STATUS_TEXT_COLOR,
+            font_size=SECTION_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+
+        self._labelTextObjects: LabelTextObjects = self._createStaticLabelTextObjects(statusConsoleLabelX=statusConsoleLabelX, statusConsoleLabelY=statusConsoleLabelY)
+        self._valueTextObjects: ValueTextObjects = self._createDynamicValueTextObjects(statusConsoleLabelX=statusConsoleLabelX, statusConsoleLabelY=statusConsoleLabelY)
+
+        self._opTimeLabelText:  Text = cast(Text, None)     # noqa
+        self._opTimeValueText:  Text = cast(Text, None)     # noqa
+        self._tBeamLabelText:   Text = cast(Text, None)     # noqa
+        self._tBeamValueText:   Text = cast(Text, None)     # noqa
+        self._sNovaLabelText:   Text = cast(Text, None)     # noqa
+        self._sNovaValueText:   Text = cast(Text, None)     # noqa
+        self._cAttackLabelText: Text = cast(Text, None)     # noqa
+        self._cAttackValueText: Text = cast(Text, None)     # noqa
+
+        if self._gameSettings.consoleShowInternals is True:
+            internalY: int = statusConsoleLabelY + START_STATUS_OFFSET + len(self._statusProperties) * INLINE_STATUS_OFFSET
+            self._createInternalTextObjects(labelX=statusConsoleLabelX, runningY=internalY)
 
     def on_draw(self):
         """
         Remember arcade's 0,0 origin is lower left corner
         """
-
-        statusConsoleLabelX: int = round(self.left + TITLE_MARGIN_X)
-        statusConsoleLabelY = (QUADRANT_GRID_HEIGHT + CONSOLE_SECTION_HEIGHT + COMMAND_SECTION_HEIGHT) - TITLE_FONT_OFFSET_Y - TITLE_MARGIN_Y
-
-        draw_text("Status Console", statusConsoleLabelX, statusConsoleLabelY, color=STATUS_TEXT_COLOR,
-                  font_size=SECTION_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-
-        labelX:   int = statusConsoleLabelX
-        runningY: int = statusConsoleLabelY + START_STATUS_OFFSET
-
-        self.drawStatusLabels(labelX, runningY)
-
-        runningY = statusConsoleLabelY + START_STATUS_OFFSET    # reset it
-        statusX: int = labelX + STATUS_VALUE_X_OFFSET
-
-        self.drawStatusValues(statusX=statusX, runningY=runningY)
-
+        self._titleText.draw()
+        self.drawStatusLabels()
+        self.drawStatusValues()
         self.drawDebug()
 
-    def drawStatusLabels(self, labelX: int, runningY: int):
+    def drawStatusLabels(self,):
         """
-
-        Args:
-            labelX:   The fixed X location for all the labels
-            runningY: The y position for the labels that we update as we move down the label list
+        Draws the pre-instantiated static labels.
         """
-        for label in StatusConsoleSection.statusLabels:
-            draw_text(label, labelX, runningY, color=STATUS_TEXT_COLOR, font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-            runningY = runningY + INLINE_STATUS_OFFSET
+        for textObject in self._labelTextObjects:
+            textObject.draw()
 
-    def drawStatusValues(self, statusX: int, runningY: int):
+    def drawStatusValues(self):
+        """
+        Keep track of runningY so if we want to show internal values the appear below the regular values
+        Additionally, if the status console grows or shrinks the internal values move
+        """
+        statusConsoleLabelY: int = (QUADRANT_GRID_HEIGHT + CONSOLE_SECTION_HEIGHT + COMMAND_SECTION_HEIGHT) - TITLE_FONT_OFFSET_Y - TITLE_MARGIN_Y
 
-        statusProperties: PropertyNames = self._statusProperties
+        runningY: int = statusConsoleLabelY + START_STATUS_OFFSET
 
-        for propertyName in statusProperties:
+        statusPropertyNames: PropertyNames = self._statusProperties
+
+        for index, propertyName in enumerate(statusPropertyNames):
 
             propertyValue: Union[Enum, float, int, str] = getattr(self._gameState, propertyName)
             propertyStr: str = ''
@@ -147,12 +175,16 @@ class StatusConsoleSection(BaseSection):
             elif isinstance(propertyValue, Coordinates):
                 propertyStr = self._formatCoordinates(coordinates=propertyValue)
 
-            draw_text(propertyStr, statusX, runningY, color=baseTextColor,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+            # Get the pre-instantiated text object for this index
+            textObject: Text = self._valueTextObjects[index]
+            textObject.text = propertyStr
+            textObject.color = baseTextColor
+            textObject.draw()
 
             runningY = runningY + INLINE_STATUS_OFFSET
 
-        self._showInternalValues(runningY, statusX)
+        if self._gameSettings.consoleShowInternals is True:
+            self._showInternalValues()
 
     def _getStatusColor(self, shipCondition: ShipCondition):
 
@@ -177,46 +209,174 @@ class StatusConsoleSection(BaseSection):
         """
         return f'({coordinates.x},{coordinates.y})'
 
-    def _showInternalValues(self, runningY: int, statusX: int):
+    def _createStatusPropertyNameList(self) -> PropertyNames:
 
-        labelX:      int = QUADRANT_GRID_WIDTH + TITLE_MARGIN_X
-        compressedX: int = statusX - 16
+        statusPropertyNames: PropertyNames = PropertyNames([])
+
+        statusPropertyNames.append(PropertyName('shipCondition'))
+        statusPropertyNames.append(PropertyName('starDate'))
+        statusPropertyNames.append(PropertyName('currentQuadrantCoordinates'))
+        statusPropertyNames.append(PropertyName('currentSectorCoordinates'))
+        statusPropertyNames.append(PropertyName('energy'))
+        statusPropertyNames.append(PropertyName('shieldEnergy'))
+        statusPropertyNames.append(PropertyName('remainingGameTime'))
+        statusPropertyNames.append(PropertyName('remainingKlingons'))
+        statusPropertyNames.append(PropertyName('remainingCommanders'))
+        statusPropertyNames.append(PropertyName('torpedoCount'))
+
+        return statusPropertyNames
+
+    def _createStaticLabelTextObjects(self, statusConsoleLabelX: int, statusConsoleLabelY: int) -> LabelTextObjects:
+        """
+        Create static label Text objects
+
+        Args:
+            statusConsoleLabelX:
+            statusConsoleLabelY:
+
+        Returns:    The label text objects
+        """
+
+        labelTextObjects: LabelTextObjects = LabelTextObjects([])
+        runningY:         int              = statusConsoleLabelY + START_STATUS_OFFSET
+
+        for labelText in StatusConsoleSection.statusLabels:
+            textObject: Text = Text(
+                text=labelText,
+                x=statusConsoleLabelX,
+                y=runningY,
+                color=STATUS_TEXT_COLOR,
+                font_size=STATUS_LABEL_FONT_SIZE,
+                font_name=FIXED_WIDTH_FONT_NAME
+            )
+            labelTextObjects.append(textObject)
+            runningY = runningY + INLINE_STATUS_OFFSET
+
+        return labelTextObjects
+
+    def _createDynamicValueTextObjects(self, statusConsoleLabelX: int, statusConsoleLabelY: int) -> ValueTextObjects:
+        """
+
+        Args:
+            statusConsoleLabelX:
+            statusConsoleLabelY:
+
+        Returns:  The dynamic value text objects
+        """
+
+        valueTextObjects: ValueTextObjects = ValueTextObjects([])
+
+        statusX:  int = statusConsoleLabelX + STATUS_VALUE_X_OFFSET
+        runningY: int = statusConsoleLabelY + START_STATUS_OFFSET
+
+        # We are running this loop N times, but we purposefully ignore the loop index.
+        for _ in range(len(self._statusProperties)):
+            textObject: Text = Text(
+                text='',
+                x=statusX,
+                y=runningY,
+                color=STATUS_TEXT_COLOR,
+                font_size=STATUS_LABEL_FONT_SIZE,
+                font_name=FIXED_WIDTH_FONT_NAME
+            )
+            valueTextObjects.append(textObject)
+            runningY = runningY + INLINE_STATUS_OFFSET
+
+        return valueTextObjects
+
+    def _createInternalTextObjects(self, labelX: int, runningY: int):
+
+        compressedX: int = labelX + STATUS_VALUE_X_OFFSET - 16
         currentY:    int = runningY
 
         currentY = currentY + INLINE_STATUS_OFFSET
+        self._opTimeLabelText = Text(
+            text='OpTime:',
+            x=labelX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+        self._opTimeValueText = Text(
+            text='',
+            x=compressedX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
 
-        if self._gameSettings.consoleShowInternals is True:
+        currentY = currentY + INLINE_STATUS_OFFSET
+        self._tBeamLabelText = Text(
+            text='T Beam:',
+            x=labelX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+        self._tBeamValueText = Text(
+            text='',
+            x=compressedX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
 
-            draw_text('OpTime:', labelX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+        currentY = currentY + INLINE_STATUS_OFFSET
+        # noinspection SpellCheckingInspection
+        self._sNovaLabelText = Text(
+            text='SNova:',
+            x=labelX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+        self._sNovaValueText = Text(
+            text='',
+            x=compressedX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
 
-            opTimeStr: str = f'{self._gameState.opTime:.2f}'
-            draw_text(opTimeStr, compressedX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-            #
-            currentY = currentY + INLINE_STATUS_OFFSET
-            draw_text('T Beam:', labelX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+        currentY = currentY + INLINE_STATUS_OFFSET
+        self._cAttackLabelText = Text(
+            text='CAttack:',
+            x=labelX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+        self._cAttackValueText = Text(
+            text='',
+            x=compressedX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
 
-            evtStr: str = self.__getTimeString(FutureEventType.TRACTOR_BEAM)
-            draw_text(evtStr, compressedX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+    def _showInternalValues(self):
 
-            currentY = currentY + INLINE_STATUS_OFFSET
-            draw_text('SNova:', labelX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+        self._opTimeValueText.text = f'{self._gameState.opTime:.2f}'
+        self._tBeamValueText.text = self.__getTimeString(FutureEventType.TRACTOR_BEAM)
+        self._sNovaValueText.text = self.__getTimeString(FutureEventType.SUPER_NOVA)
+        self._cAttackValueText.text = self.__getTimeString(FutureEventType.COMMANDER_ATTACKS_BASE)
 
-            evtStr = self.__getTimeString(FutureEventType.SUPER_NOVA)
-            draw_text(evtStr, compressedX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-
-            currentY = currentY + INLINE_STATUS_OFFSET
-            draw_text('CAttack:', labelX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-
-            evtStr = self.__getTimeString(FutureEventType.COMMANDER_ATTACKS_BASE)
-            draw_text(evtStr, compressedX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
+        self._opTimeLabelText.draw()
+        self._opTimeValueText.draw()
+        self._tBeamLabelText.draw()
+        self._tBeamValueText.draw()
+        self._sNovaLabelText.draw()
+        self._sNovaValueText.draw()
+        self._cAttackLabelText.draw()
+        self._cAttackValueText.draw()
 
     def __getTimeString(self, eventType: FutureEventType):
 

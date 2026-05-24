@@ -17,14 +17,16 @@ from arcade import set_background_color
 from arcade.particles import Emitter
 from arcade.particles import make_interval_emitter
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.SoundMachine import SoundMachine
-from src.pytrek.SoundMachine import SoundType
+from pytrek.SoundMachine import SoundMachine
+from pytrek.SoundMachine import SoundType
 
-from src.pytrek.gui.UITypes import TextureList
+from pytrek.gui.Common import dimBackgroundForView
 
-from src.pytrek.gui.BaseSection import BaseSection
+from pytrek.gui.UITypes import TextureList
+
+from pytrek.gui.BaseSection import BaseSection
 
 PARTICLE_SPEED_FAST:       float = 1.0
 DEFAULT_EMIT_INTERVAL:     float = 0.003
@@ -37,7 +39,30 @@ DEFAULT_ALPHA: int = 32
 
 
 class WarpEffectSection(BaseSection):
+    """
+    ### Synopsis of `WarpEffectSection`
 
+    The `WarpEffectSection` class (inheriting from `BaseSection`) is responsible for managing the visual and auditory
+    particle animation sequence shown when the ship is warping to another quadrant.
+
+    Functionality:
+
+    1. State & Screen Initialization**:
+       - Configured as a full-screen modal section (`modal=True`) that starts disabled (`enabled=False`).
+       - Clears the viewport to a solid black background when active.
+
+    2. Visual Particle Animation:
+       - Uses Arcade's particle engine (`arcade.particles.Emitter`) to create an explosion of stars radiating
+       outwards from the center of the screen.
+       - Loads and slices random star textures from `WarpEffectSpriteSheet.png` using the `SpriteSheet` class.
+       - Restarts the animation lifecycle via a custom `setup()` method that generates a new interval-based emitter.
+       - Displays a pale gold diagnostic label at the bottom left showing the active star count (e.g., `'Warping: 150'`).
+       - Declares `isEffectComplete()` to determine when all particles have faded out and can be reaped.
+
+    3. Sound Effects:
+       - Integrates with the `SoundMachine` singleton to play the warping sound effect (`SoundType.Warp`) as soon as
+       the first update cycle (`on_update`) is triggered.
+    """
     def __init__(self, width: int, height: int):
         self.logger: Logger = getLogger(__name__)
 
@@ -55,8 +80,8 @@ class WarpEffectSection(BaseSection):
             color=color.PALE_GOLD,
         )
 
-        self._emitter: Emitter      = cast(Emitter, None)
-        self._media:   media.Player = cast(media.Player, None)
+        self._emitter: Emitter      = cast(Emitter, None)           # noqa
+        self._media:   media.Player = cast(media.Player, None)      # noqa
 
         self._playing: bool = False
 
@@ -76,13 +101,10 @@ class WarpEffectSection(BaseSection):
         """
         Render the screen.
         """
-        # This command should happen before we start drawing. It will clear
-        # the screen to the background color, and erase what we drew last frame.
-        # start_render()
+        dimBackgroundForView(windowWidth=self.window.width, windowHeight=self.window.height)
 
         self._emitter.draw()
-        if self.isEffectComplete() is False:
-            # draw_text("Warping: " + str(self._emitter.get_count()), 10, 30, color.PALE_GOLD, 12)
+        if not self.isEffectComplete():
             self._warpingText.text = f'Warping: {self._emitter.get_count()}'
             self._warpingText.draw()
         self.drawDebug()
@@ -91,7 +113,7 @@ class WarpEffectSection(BaseSection):
         """
         """
         self._emitter.update()
-        if self._playing is False:
+        if not self._playing:
             self._media = self._soundMachine.playSound(SoundType.Warp)
             self._playing = True
 
@@ -127,9 +149,9 @@ class WarpEffectSection(BaseSection):
 
         sheet: SpriteSheet = SpriteSheet(fqFileName)
         textures = sheet.get_texture_grid(
-            size=(spriteWidth, spriteHeight),  # Replaces sprite_width and sprite_height
-            columns=nColumns,  # Same as before
-            count=tileCount  # Replaces tilecount
+            size=(spriteWidth, spriteHeight),
+            columns=nColumns,
+            count=tileCount
         )
 
         return TextureList(textures)

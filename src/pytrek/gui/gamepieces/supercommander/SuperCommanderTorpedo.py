@@ -2,10 +2,10 @@
 from logging import Logger
 from logging import getLogger
 
-from src.pytrek.gui.gamepieces.GamePieceTypes import EnemyTorpedoId
+from pytrek.gui.gamepieces.GamePieceTypes import EnemyTorpedoId
 
-from src.pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
-from src.pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedoFollower import SuperCommanderTorpedoFollower
+from pytrek.gui.gamepieces.base.BaseEnemyTorpedo import BaseEnemyTorpedo
+from pytrek.gui.gamepieces.supercommander.SuperCommanderTorpedoFollower import SuperCommanderTorpedoFollower
 
 
 class SuperCommanderTorpedo(BaseEnemyTorpedo):

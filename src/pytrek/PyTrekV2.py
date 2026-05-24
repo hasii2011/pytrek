@@ -15,48 +15,49 @@ from arcade import SectionManager
 from arcade import run as arcadeRun
 
 
-from src.pytrek.CommandHandler import CommandHandler
+from pytrek.CommandHandler import CommandHandler
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.Constants import COMMAND_SECTION_HEIGHT
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from src.pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
-from src.pytrek.Constants import QUADRANT_GRID_HEIGHT
-from src.pytrek.Constants import QUADRANT_GRID_WIDTH
-from src.pytrek.Constants import SCREEN_HEIGHT
-from src.pytrek.Constants import SCREEN_WIDTH
-from src.pytrek.Constants import STATUS_VIEW_WIDTH
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import FIXED_WIDTH_FONT_FILENAME
+from pytrek.Constants import QUADRANT_GRID_HEIGHT
+from pytrek.Constants import QUADRANT_GRID_WIDTH
+from pytrek.Constants import SCREEN_HEIGHT
+from pytrek.Constants import SCREEN_WIDTH
+from pytrek.Constants import STATUS_VIEW_WIDTH
 
-from src.pytrek.commandparser.InvalidCommandException import InvalidCommandException
-from src.pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
+from pytrek.commandparser.InvalidCommandException import InvalidCommandException
+from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValueException
 
-from src.pytrek.engine.Computer import Computer
-from src.pytrek.engine.GameEngine import GameEngine
-from src.pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.Computer import Computer
+from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.gui.CommandInputSection import CommandInputSection
 
-from src.pytrek.gui.ConsoleMessageType import ConsoleMessageType
-from src.pytrek.gui.DeviceStatusSection import DeviceStatusSection
-from src.pytrek.gui.GalaxySection import GalaxySection
-from src.pytrek.gui.LongRangeSensorScanSection import LongRangeSensorScanSection
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
-from src.pytrek.gui.MessageConsoleSection import MessageConsoleSection
-from src.pytrek.gui.QuadrantSection import QuadrantSection
-from src.pytrek.gui.StatusConsoleSection import StatusConsoleSection
-from src.pytrek.gui.VatoLocoTextSection import VatoLocoTextSection
-from src.pytrek.gui.WarpEffectSection import WarpEffectSection
-from src.pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.ConsoleMessageType import ConsoleMessageType
+from pytrek.gui.DeviceStatusSection import DeviceStatusSection
+from pytrek.gui.GalaxySection import GalaxySection
+from pytrek.gui.LongRangeSensorScanSection import LongRangeSensorScanSection
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleSection import MessageConsoleSection
+from pytrek.gui.QuadrantSection import QuadrantSection
+from pytrek.gui.StatusConsoleSection import StatusConsoleSection
+# from pytrek.gui.VatoLocoTextSection import VatoLocoTextSection
+from pytrek.gui.WarpEffectSection import WarpEffectSection
+from pytrek.gui.gamepieces.Enterprise import Enterprise
 
-from src.pytrek.mediators.EnterpriseMediator import EnterpriseMediator
-from src.pytrek.mediators.GalaxyMediator import GalaxyMediator
-from src.pytrek.mediators.QuadrantMediator import QuadrantMediator
+from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
+from pytrek.mediators.GalaxyMediator import GalaxyMediator
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
-from src.pytrek.model.Galaxy import Galaxy
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 SCREEN_TITLE:  str = "PyTrekV2"
 
@@ -90,7 +91,9 @@ class PyTrekV2(View):
         self._messageConsoleProxy:       MessageConsoleProxy        = cast(MessageConsoleProxy, None)
         self._statusConsole:             StatusConsoleSection       = cast(StatusConsoleSection, None)
         self._quadrantSection:           QuadrantSection            = cast(QuadrantSection, None)
-        self._commandInputSection:       VatoLocoTextSection        = cast(VatoLocoTextSection, None)
+        # self._commandInputSection:       VatoLocoTextSection        = cast(VatoLocoTextSection, None)
+        self._commandInputSection:       CommandInputSection        = cast(CommandInputSection, None)
+
         self.galaxySection:              GalaxySection              = cast(GalaxySection, None)
         self.longRangeSensorScanSection: LongRangeSensorScanSection = cast(LongRangeSensorScanSection, None)
 
@@ -113,8 +116,13 @@ class PyTrekV2(View):
         self.warpEffectSection.enabled = False
         self.deviceStatusSection.enabled = False
 
+        # Push our custom handler to intercept the window's close event
+        self.window.push_handlers(on_close=self.onWindowClose)
+
     def on_hide_view(self):
         self._sectionManager.disable()
+        # Remove the handler when this view is no longer active
+        self.window.pop_handlers()
 
     def _setupGame(self):
         """
@@ -162,7 +170,8 @@ class PyTrekV2(View):
 
         self._quadrantSection.enterpriseMediator = self._enterpriseMediator
 
-        self._commandInputSection = VatoLocoTextSection(left=0, bottom=0, callback=self._handleCommands, accept_keyboard_keys=True)
+        # self._commandInputSection = VatoLocoTextSection(left=0, bottom=0, callback=self._handleCommands, accept_keyboard_keys=True)
+        self._commandInputSection = CommandInputSection(left=0, bottom=1, commandEnteredCallback=self._handleCommands)
         #
         # These sections are not enabled by default and disabled externally to here;  So make them public
         #
@@ -201,6 +210,14 @@ class PyTrekV2(View):
             self.messageConsoleSection.displayMessage(message=str(ice), messageType=ConsoleMessageType.Warning)
         except InvalidCommandValueException as e:
             self.messageConsoleSection.displayMessage(message=str(e), messageType=ConsoleMessageType.Warning)
+
+    def onWindowClose(self) -> bool:
+        # 1. Perform your view-specific cleanup here
+
+        # 2. Return False/None to let the event propagate to the window's
+        # default handler, which will destroy the window and exit the app.
+        # (Returning True would consume the event and block the window from closing).
+        return False
 
 
 def main():

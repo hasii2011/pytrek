@@ -6,24 +6,24 @@ from logging import getLogger
 
 from codeallybasic.SingletonV3 import SingletonV3
 
-from src.pytrek.Constants import MAXIMUM_DAMAGED_WARP_FACTOR
-from src.pytrek.Constants import MINIMUM_SAFE_WARP_FACTOR
-from src.pytrek.GameState import GameState
+from pytrek.Constants import MAXIMUM_DAMAGED_WARP_FACTOR
+from pytrek.Constants import MINIMUM_SAFE_WARP_FACTOR
+from pytrek.GameState import GameState
 
-from src.pytrek.engine.Computer import Computer
-from src.pytrek.engine.GameEngine import GameEngine
-from src.pytrek.engine.Intelligence import Intelligence
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.engine.Computer import Computer
+from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Galaxy import Galaxy
-from src.pytrek.model.Quadrant import Quadrant
-from src.pytrek.model.Sector import Sector
-from src.pytrek.model.SectorType import SectorType
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
+from pytrek.model.Sector import Sector
+from pytrek.model.SectorType import SectorType
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 
 class GalaxyMediator(metaclass=SingletonV3):
@@ -106,8 +106,8 @@ class GalaxyMediator(metaclass=SingletonV3):
         damage[DWARPEN] = damfac*(3.0*Rand()+1.0);
 
         """
-        from src.pytrek.engine.devices.DeviceManager import DeviceManager
-        from src.pytrek.engine.devices.DeviceType import DeviceType
+        from pytrek.engine.devices.DeviceManager import DeviceManager
+        from pytrek.engine.devices.DeviceType import DeviceType
 
         damageFactor: float = self._gameSettings.damageAdjuster * self._gameState.playerType.value
 

@@ -31,56 +31,56 @@ from arcade import exit as arcadeExit
 from arcade.color import GRAY
 from arcade.color import WHITE
 
-from src.pytrek.Constants import COMMAND_SECTION_HEIGHT
-from src.pytrek.Constants import FIXED_WIDTH_FONT_NAME
-from src.pytrek.Constants import QUADRANT_GRID_WIDTH
-from src.pytrek.Constants import STATUS_VIEW_WIDTH
+from pytrek.Constants import COMMAND_SECTION_HEIGHT
+from pytrek.Constants import FIXED_WIDTH_FONT_NAME
+from pytrek.Constants import QUADRANT_GRID_WIDTH
+from pytrek.Constants import STATUS_VIEW_WIDTH
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.Computer import Computer
-from src.pytrek.engine.GameEngine import GameEngine
-from src.pytrek.engine.Intelligence import Intelligence
-from src.pytrek.engine import ShipCondition
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.Computer import Computer
+from pytrek.engine.GameEngine import GameEngine
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.ShipCondition import ShipCondition
 
 
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemy
-from src.pytrek.gui.gamepieces.base import BaseEnemy
-from src.pytrek.gui.gamepieces.base import EnemyId
-from src.pytrek.gui.gamepieces.commander.Commander import Commander
-from src.pytrek.gui.gamepieces.klingon.Klingon import Klingon
-from src.pytrek.gui.gamepieces.Enterprise import Enterprise
-from src.pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
+from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePieceTypes import Enemy
+from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
+from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
+from pytrek.gui.gamepieces.commander.Commander import Commander
+from pytrek.gui.gamepieces.klingon.Klingon import Klingon
+from pytrek.gui.gamepieces.Enterprise import Enterprise
+from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
-from src.pytrek.gui.Common import drawQuadrantGrid
+from pytrek.gui.Common import drawQuadrantGrid
 
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
-from src.pytrek.gui.MessageConsoleSection import MessageConsoleSection
-from src.pytrek.gui.QuadrantSection import QuadrantSection
-from src.pytrek.gui.StatusConsoleSection import StatusConsoleSection
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleSection import MessageConsoleSection
+from pytrek.gui.QuadrantSection import QuadrantSection
+from pytrek.gui.StatusConsoleSection import StatusConsoleSection
 
-from src.pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
-from src.pytrek.mediators.EnterpriseMediator import EnterpriseMediator
-from src.pytrek.mediators.EnterprisePhaserMediator import EnterprisePhaserMediator
-from src.pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
-from src.pytrek.mediators.QuadrantMediator import QuadrantMediator
-from src.pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedoMediator
-from src.pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
+from pytrek.mediators.CommanderTorpedoMediator import CommanderTorpedoMediator
+from pytrek.mediators.EnterpriseMediator import EnterpriseMediator
+from pytrek.mediators.EnterprisePhaserMediator import EnterprisePhaserMediator
+from pytrek.mediators.KlingonTorpedoMediator import KlingonTorpedoMediator
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
+from pytrek.mediators.SuperCommanderTorpedoMediator import SuperCommanderTorpedoMediator
+from pytrek.mediators.base.BaseTorpedoMediator import BaseTorpedoMediator
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model import Galaxy
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
-from src.pytrek.Constants import SCREEN_WIDTH
-from src.pytrek.Constants import SCREEN_HEIGHT
-from src.pytrek.Constants import CONSOLE_SECTION_HEIGHT
-from src.pytrek.Constants import QUADRANT_GRID_HEIGHT
+from pytrek.Constants import SCREEN_WIDTH
+from pytrek.Constants import SCREEN_HEIGHT
+from pytrek.Constants import CONSOLE_SECTION_HEIGHT
+from pytrek.Constants import QUADRANT_GRID_HEIGHT
 
-from src.pytrek.LocateResources import LocateResources
+from pytrek.LocateResources import LocateResources
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
 from tests.ProjectTestBase import ProjectTestBase
 

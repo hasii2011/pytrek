@@ -6,16 +6,16 @@ from logging import getLogger
 
 from arcade import SpriteList
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.Computer import Computer
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.Computer import Computer
 
-from src.pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
-from src.pytrek.gui.gamepieces.GamePieceTypes import EnemyTorpedoId
-from src.pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
-from src.pytrek.gui.gamepieces.SmoothMotion import RadianInfo
+from pytrek.gui.gamepieces.base.BaseEnemy import EnemyId
+from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.GamePieceTypes import EnemyTorpedoId
+from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
+from pytrek.gui.gamepieces.SmoothMotion import RadianInfo
 
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.model.Coordinates import Coordinates
 
 
 class BaseEnemyTorpedo(GamePiece, SmoothMotion):

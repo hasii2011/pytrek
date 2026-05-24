@@ -7,7 +7,7 @@ from arcade import draw_lrbt_rectangle_outline
 
 from arcade.color import GREEN
 
-from src.pytrek.settings.GameSettings import GameSettings
+from pytrek.settings.GameSettings import GameSettings
 
 
 class BaseSection(Section):
@@ -16,7 +16,7 @@ class BaseSection(Section):
 
         super().__init__(left, bottom, width, height, **kwargs)
 
-        self.logger: Logger = getLogger(__name__)
+        self.bsLogger: Logger = getLogger(__name__)
 
     def on_draw(self):
         pass
@@ -24,8 +24,8 @@ class BaseSection(Section):
     def drawDebug(self, color=GREEN):
         if GameSettings().drawSectionBoundaries is True:
             draw_lrbt_rectangle_outline(
-                left=self.left+2,
-                right=self.right-2,
+                left=self.left,
+                right=self.right,
                 top=self.top,
                 bottom=self.bottom,
                 color=color,

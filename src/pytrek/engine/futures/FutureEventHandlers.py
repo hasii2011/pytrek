@@ -2,25 +2,25 @@
 from logging import Logger
 from logging import getLogger
 
-from src.pytrek.GameState import GameState
+from pytrek.GameState import GameState
 
-from src.pytrek.engine.Intelligence import Intelligence
-from src.pytrek.engine.Intelligence import TractorBeamComputation
+from pytrek.engine.Intelligence import Intelligence
+from pytrek.engine.Intelligence import TractorBeamComputation
 
-from src.pytrek.engine.futures.FutureEvent import FutureEvent
-from src.pytrek.engine.futures.FutureEventType import FutureEventType
+from pytrek.engine.futures.FutureEvent import FutureEvent
+from pytrek.engine.futures.FutureEventType import FutureEventType
 
-from src.pytrek.gui.ConsoleMessageType import ConsoleMessageType
-from src.pytrek.gui.gamepieces.GamePieceTypes import Enemies
+from pytrek.gui.ConsoleMessageType import ConsoleMessageType
+from pytrek.gui.gamepieces.GamePieceTypes import Enemies
 
-from src.pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
+from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 
-from src.pytrek.mediators.GalaxyMediator import GalaxyMediator
-from src.pytrek.mediators.QuadrantMediator import QuadrantMediator
+from pytrek.mediators.GalaxyMediator import GalaxyMediator
+from pytrek.mediators.QuadrantMediator import QuadrantMediator
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Galaxy import Galaxy
-from src.pytrek.model.Quadrant import Quadrant
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Galaxy import Galaxy
+from pytrek.model.Quadrant import Quadrant
 
 
 class FutureEventHandlers:
@@ -95,7 +95,7 @@ class FutureEventHandlers:
             self._quadrantMediator.enterQuadrant(quadrant=cmdrQuadrant, enterprise=self._gameState.enterprise)
 
         else:
-            from src.pytrek.engine.futures.EventEngine import EventEngine
+            from pytrek.engine.futures.EventEngine import EventEngine
 
             self.logger.info(f'All commanders are dead.')
             eventEngine: EventEngine = EventEngine()
@@ -109,7 +109,7 @@ class FutureEventHandlers:
         Args:
             currentEvent:  The event that just occurred
         """
-        from src.pytrek.engine.futures.EventEngine import EventEngine
+        from pytrek.engine.futures.EventEngine import EventEngine
 
         if self._canCommanderAttackAStarBase() is True:
             self._standardAnnouncement(currentEvent.starDate)
@@ -130,7 +130,7 @@ class FutureEventHandlers:
             eventEngine.makeUnSchedulable(FutureEventType.COMMANDER_ATTACKS_BASE)
 
     def commanderDestroysBaseEventHandler(self, futureEvent: FutureEvent):
-        from src.pytrek.engine.futures.EventEngine import EventEngine
+        from pytrek.engine.futures.EventEngine import EventEngine
 
         self._messageConsole.displayMessage(f'Commander destroyed StarBase in {futureEvent.quadrantCoordinates}',
                                             messageType=ConsoleMessageType.Warning)

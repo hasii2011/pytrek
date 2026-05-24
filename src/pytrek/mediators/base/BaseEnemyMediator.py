@@ -6,18 +6,18 @@ from logging import getLogger
 
 from random import choice as randomChoice
 
-from src.pytrek.engine.ArcadePoint import ArcadePoint
-from src.pytrek.engine.Direction import Direction
+from pytrek.engine.ArcadePoint import ArcadePoint
+from pytrek.engine.Direction import Direction
 
-from src.pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.base.BaseEnemy import BaseEnemy
+from pytrek.gui.gamepieces.GamePiece import GamePiece
 
-from src.pytrek.model.Coordinates import Coordinates
-from src.pytrek.model.Quadrant import Quadrant
-from src.pytrek.model.Sector import Sector
-from src.pytrek.model.SectorType import SectorType
+from pytrek.model.Coordinates import Coordinates
+from pytrek.model.Quadrant import Quadrant
+from pytrek.model.Sector import Sector
+from pytrek.model.SectorType import SectorType
 
-from src.pytrek.mediators.base.MissesMediator import MissesMediator
+from pytrek.mediators.base.MissesMediator import MissesMediator
 
 
 class BaseEnemyMediator(MissesMediator):

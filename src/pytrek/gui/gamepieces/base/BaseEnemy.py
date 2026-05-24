@@ -2,9 +2,9 @@
 from typing import NewType
 from typing import cast
 
-from src.pytrek.gui.gamepieces.GamePiece import GamePiece
-from src.pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
-from src.pytrek.model.Coordinates import Coordinates
+from pytrek.gui.gamepieces.GamePiece import GamePiece
+from pytrek.gui.gamepieces.SmoothMotion import SmoothMotion
+from pytrek.model.Coordinates import Coordinates
 
 
 EnemyId = NewType('EnemyId', str)
