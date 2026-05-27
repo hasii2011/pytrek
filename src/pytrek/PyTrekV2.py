@@ -36,6 +36,7 @@ from pytrek.commandparser.InvalidCommandValueException import InvalidCommandValu
 from pytrek.engine.Computer import Computer
 from pytrek.engine.GameEngine import GameEngine
 from pytrek.engine.Intelligence import Intelligence
+from pytrek.gui.CommandInputSection import CommandInputSection
 
 from pytrek.gui.ConsoleMessageType import ConsoleMessageType
 from pytrek.gui.DeviceStatusSection import DeviceStatusSection
@@ -45,7 +46,7 @@ from pytrek.gui.MessageConsoleProxy import MessageConsoleProxy
 from pytrek.gui.MessageConsoleSection import MessageConsoleSection
 from pytrek.gui.QuadrantSection import QuadrantSection
 from pytrek.gui.StatusConsoleSection import StatusConsoleSection
-from pytrek.gui.VatoLocoTextSection import VatoLocoTextSection
+# from pytrek.gui.VatoLocoTextSection import VatoLocoTextSection
 from pytrek.gui.WarpEffectSection import WarpEffectSection
 from pytrek.gui.gamepieces.Enterprise import Enterprise
 
@@ -90,7 +91,9 @@ class PyTrekV2(View):
         self._messageConsoleProxy:       MessageConsoleProxy        = cast(MessageConsoleProxy, None)
         self._statusConsole:             StatusConsoleSection       = cast(StatusConsoleSection, None)
         self._quadrantSection:           QuadrantSection            = cast(QuadrantSection, None)
-        self._commandInputSection:       VatoLocoTextSection        = cast(VatoLocoTextSection, None)
+        # self._commandInputSection:       VatoLocoTextSection        = cast(VatoLocoTextSection, None)
+        self._commandInputSection:       CommandInputSection        = cast(CommandInputSection, None)
+
         self.galaxySection:              GalaxySection              = cast(GalaxySection, None)
         self.longRangeSensorScanSection: LongRangeSensorScanSection = cast(LongRangeSensorScanSection, None)
 
@@ -113,8 +116,13 @@ class PyTrekV2(View):
         self.warpEffectSection.enabled = False
         self.deviceStatusSection.enabled = False
 
+        # Push our custom handler to intercept the window's close event
+        self.window.push_handlers(on_close=self.onWindowClose)
+
     def on_hide_view(self):
         self._sectionManager.disable()
+        # Remove the handler when this view is no longer active
+        self.window.pop_handlers()
 
     def _setupGame(self):
         """
@@ -162,7 +170,8 @@ class PyTrekV2(View):
 
         self._quadrantSection.enterpriseMediator = self._enterpriseMediator
 
-        self._commandInputSection = VatoLocoTextSection(left=0, bottom=0, callback=self._handleCommands, accept_keyboard_keys=True)
+        # self._commandInputSection = VatoLocoTextSection(left=0, bottom=0, callback=self._handleCommands, accept_keyboard_keys=True)
+        self._commandInputSection = CommandInputSection(left=0, bottom=1, commandEnteredCallback=self._handleCommands)
         #
         # These sections are not enabled by default and disabled externally to here;  So make them public
         #
@@ -201,6 +210,14 @@ class PyTrekV2(View):
             self.messageConsoleSection.displayMessage(message=str(ice), messageType=ConsoleMessageType.Warning)
         except InvalidCommandValueException as e:
             self.messageConsoleSection.displayMessage(message=str(e), messageType=ConsoleMessageType.Warning)
+
+    def onWindowClose(self) -> bool:
+        # 1. Perform your view-specific cleanup here
+
+        # 2. Return False/None to let the event propagate to the window's
+        # default handler, which will destroy the window and exit the app.
+        # (Returning True would consume the event and block the window from closing).
+        return False
 
 
 def main():

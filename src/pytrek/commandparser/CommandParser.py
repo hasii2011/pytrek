@@ -38,6 +38,7 @@ HELP_CMD:    CommandPattern = CommandPattern('^help')
 DOCK_CMD:    CommandPattern = CommandPattern('^d|^dock')
 SAVE_CMD:    CommandPattern = CommandPattern('^sa|^save')
 LOAD_CMD:    CommandPattern = CommandPattern('^lo|^load')
+QUIT_CMD:    CommandPattern = CommandPattern('^q|^quit')
 #
 # The following is for debugging events;  Requires that the debugEvents key
 # in GameSettings (pytrek.ini) be set to 'True'
@@ -62,6 +63,7 @@ PatternToCommandType: Dict[CommandPattern, CommandType] = {
     DOCK_CMD:    CommandType.Dock,
     SAVE_CMD:    CommandType.Save,
     EVENT_CMD:   CommandType.Event,
+    QUIT_CMD:    CommandType.Quit
 }
 
 
@@ -113,6 +115,8 @@ class CommandParser:
             case CommandType.Dock:
                 pass            # nothing else to do
             case CommandType.Save:
+                pass            # nothing else to do
+            case CommandType.Quit:
                 pass            # nothing else to do
             case CommandType.Event:
                 if self._gameSettings.debugEvents is True:

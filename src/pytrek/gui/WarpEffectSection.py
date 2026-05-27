@@ -82,7 +82,6 @@ class WarpEffectSection(BaseSection):
 
         self._emitter.draw()
         if self.isEffectComplete() is False:
-            # draw_text("Warping: " + str(self._emitter.get_count()), 10, 30, color.PALE_GOLD, 12)
             self._warpingText.text = f'Warping: {self._emitter.get_count()}'
             self._warpingText.draw()
         self.drawDebug()
