@@ -2,6 +2,7 @@
 from typing import Union
 from typing import List
 from typing import NewType
+from typing import cast
 
 from logging import Logger
 from logging import getLogger
@@ -9,7 +10,6 @@ from logging import getLogger
 from enum import Enum
 
 from arcade import Text
-from arcade import draw_text
 from arcade.color import BLUE
 from arcade.color import GREEN
 from arcade.color import RED
@@ -21,7 +21,7 @@ from pytrek.Constants import COMMAND_SECTION_HEIGHT
 from pytrek.Constants import CONSOLE_SECTION_HEIGHT
 from pytrek.Constants import FIXED_WIDTH_FONT_NAME
 from pytrek.Constants import QUADRANT_GRID_HEIGHT
-from pytrek.Constants import QUADRANT_GRID_WIDTH
+
 from pytrek.GameState import GameState
 
 from pytrek.engine.ShipCondition import ShipCondition
@@ -119,6 +119,19 @@ class StatusConsoleSection(BaseSection):
         self._labelTextObjects: LabelTextObjects = self._createStaticLabelTextObjects(statusConsoleLabelX=statusConsoleLabelX, statusConsoleLabelY=statusConsoleLabelY)
         self._valueTextObjects: ValueTextObjects = self._createDynamicValueTextObjects(statusConsoleLabelX=statusConsoleLabelX, statusConsoleLabelY=statusConsoleLabelY)
 
+        self._opTimeLabelText:  Text = cast(Text, None)     # noqa
+        self._opTimeValueText:  Text = cast(Text, None)     # noqa
+        self._tBeamLabelText:   Text = cast(Text, None)     # noqa
+        self._tBeamValueText:   Text = cast(Text, None)     # noqa
+        self._sNovaLabelText:   Text = cast(Text, None)     # noqa
+        self._sNovaValueText:   Text = cast(Text, None)     # noqa
+        self._cAttackLabelText: Text = cast(Text, None)     # noqa
+        self._cAttackValueText: Text = cast(Text, None)     # noqa
+
+        if self._gameSettings.consoleShowInternals is True:
+            internalY: int = statusConsoleLabelY + START_STATUS_OFFSET + len(self._statusProperties) * INLINE_STATUS_OFFSET
+            self._createInternalTextObjects(labelX=statusConsoleLabelX, runningY=internalY)
+
     def on_draw(self):
         """
         Remember arcade's 0,0 origin is lower left corner
@@ -137,14 +150,11 @@ class StatusConsoleSection(BaseSection):
 
     def drawStatusValues(self):
         """
-        Keep track of runningY so if we want to show internal values the appear below the reguarl values
+        Keep track of runningY so if we want to show internal values the appear below the regular values
         Additionally, if the status console grows or shrinks the internal values move
         """
-        statusConsoleLabelX: int = round(self.left + TITLE_MARGIN_X)
         statusConsoleLabelY: int = (QUADRANT_GRID_HEIGHT + CONSOLE_SECTION_HEIGHT + COMMAND_SECTION_HEIGHT) - TITLE_FONT_OFFSET_Y - TITLE_MARGIN_Y
 
-        labelX:   int = statusConsoleLabelX
-        statusX:  int = labelX + STATUS_VALUE_X_OFFSET
         runningY: int = statusConsoleLabelY + START_STATUS_OFFSET
 
         statusPropertyNames: PropertyNames = self._statusProperties
@@ -173,7 +183,8 @@ class StatusConsoleSection(BaseSection):
 
             runningY = runningY + INLINE_STATUS_OFFSET
 
-        self._showInternalValues(runningY, statusX)
+        if self._gameSettings.consoleShowInternals is True:
+            self._showInternalValues()
 
     def _getStatusColor(self, shipCondition: ShipCondition):
 
@@ -197,47 +208,6 @@ class StatusConsoleSection(BaseSection):
         Returns:  The formatted coordinates
         """
         return f'({coordinates.x},{coordinates.y})'
-
-    def _showInternalValues(self, runningY: int, statusX: int):
-
-        labelX:      int = QUADRANT_GRID_WIDTH + TITLE_MARGIN_X
-        compressedX: int = statusX - 16
-        currentY:    int = runningY
-
-        currentY = currentY + INLINE_STATUS_OFFSET
-
-        if self._gameSettings.consoleShowInternals is True:
-
-            draw_text('OpTime:', labelX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-
-            opTimeStr: str = f'{self._gameState.opTime:.2f}'
-            draw_text(opTimeStr, compressedX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-            #
-            currentY = currentY + INLINE_STATUS_OFFSET
-            draw_text('T Beam:', labelX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-
-            evtStr: str = self.__getTimeString(FutureEventType.TRACTOR_BEAM)
-            draw_text(evtStr, compressedX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-
-            currentY = currentY + INLINE_STATUS_OFFSET
-            draw_text('SNova:', labelX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-
-            evtStr = self.__getTimeString(FutureEventType.SUPER_NOVA)
-            draw_text(evtStr, compressedX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-
-            currentY = currentY + INLINE_STATUS_OFFSET
-            draw_text('CAttack:', labelX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
-
-            evtStr = self.__getTimeString(FutureEventType.COMMANDER_ATTACKS_BASE)
-            draw_text(evtStr, compressedX, currentY, color=RED,
-                      font_size=STATUS_LABEL_FONT_SIZE, font_name=FIXED_WIDTH_FONT_NAME)
 
     def _createStatusPropertyNameList(self) -> PropertyNames:
 
@@ -313,6 +283,100 @@ class StatusConsoleSection(BaseSection):
             runningY = runningY + INLINE_STATUS_OFFSET
 
         return valueTextObjects
+
+    def _createInternalTextObjects(self, labelX: int, runningY: int):
+
+        compressedX: int = labelX + STATUS_VALUE_X_OFFSET - 16
+        currentY:    int = runningY
+
+        currentY = currentY + INLINE_STATUS_OFFSET
+        self._opTimeLabelText = Text(
+            text='OpTime:',
+            x=labelX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+        self._opTimeValueText = Text(
+            text='',
+            x=compressedX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+
+        currentY = currentY + INLINE_STATUS_OFFSET
+        self._tBeamLabelText = Text(
+            text='T Beam:',
+            x=labelX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+        self._tBeamValueText = Text(
+            text='',
+            x=compressedX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+
+        currentY = currentY + INLINE_STATUS_OFFSET
+        # noinspection SpellCheckingInspection
+        self._sNovaLabelText = Text(
+            text='SNova:',
+            x=labelX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+        self._sNovaValueText = Text(
+            text='',
+            x=compressedX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+
+        currentY = currentY + INLINE_STATUS_OFFSET
+        self._cAttackLabelText = Text(
+            text='CAttack:',
+            x=labelX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+        self._cAttackValueText = Text(
+            text='',
+            x=compressedX,
+            y=currentY,
+            color=RED,
+            font_size=STATUS_LABEL_FONT_SIZE,
+            font_name=FIXED_WIDTH_FONT_NAME
+        )
+
+    def _showInternalValues(self):
+
+        self._opTimeValueText.text = f'{self._gameState.opTime:.2f}'
+        self._tBeamValueText.text = self.__getTimeString(FutureEventType.TRACTOR_BEAM)
+        self._sNovaValueText.text = self.__getTimeString(FutureEventType.SUPER_NOVA)
+        self._cAttackValueText.text = self.__getTimeString(FutureEventType.COMMANDER_ATTACKS_BASE)
+
+        self._opTimeLabelText.draw()
+        self._opTimeValueText.draw()
+        self._tBeamLabelText.draw()
+        self._tBeamValueText.draw()
+        self._sNovaLabelText.draw()
+        self._sNovaValueText.draw()
+        self._cAttackLabelText.draw()
+        self._cAttackValueText.draw()
 
     def __getTimeString(self, eventType: FutureEventType):
 
