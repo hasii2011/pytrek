@@ -25,8 +25,25 @@ from pytrek.model.Coordinates import Coordinates
 
 class LongRangeSensorScanSection(Section):
     """
-    Displays a long range sensor scan.  Essentially, only the quadrant adjacent to the on the Enterprise is in
+    The LongRangeSensorScanSection class displays a pop-up overlay scan containing sensor data for the quadrants
+    immediately adjacent to the Enterprise's current position.
+
+    Functionality:
+
+    1. State & Overlay Setup:
+    - Initialized as a modal section (`modal=True`) that starts disabled (`enabled=False`).
+    - Renders a custom overlay background loaded from `LongRangeSensorBackground.png` centered horizontally and vertically on the quadrant grid area.
+
+    2. Long-Range Data Rendering:
+    - Delegates scan drawing to the LongRangeSensorScanMediator.
+    - Passes the current quadrant coordinates (`self._gameState.currentQuadrantCoordinates`)
+    to the mediator during `on_draw` to populate adjacent quadrant details.
+
+    3. User Interaction:
+    - Listens to any mouse click (`on_mouse_press`) to set `self.enabled = False`, which
+    immediately closes/dismisses the overlay scanner and returns the user to the active quadrant view.
     """
+
     BACKGROUND_WIDTH: int  = 321
     BACKGROUND_HEIGHT: int = 322
 

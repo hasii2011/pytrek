@@ -58,7 +58,21 @@ class CommandInputText(UIInputText):
 
 
 class CommandInputSection(BaseSection):
+    """
+    Renders and manages the command input UI section at the bottom of the screen.
 
+    Functionality:
+    1. Text Input and Layout:
+       - Uses CommandInputText (subclass of arcade.gui.UIInputText) and a UILabel containing 'Enter Command'.
+       - Arranges the widgets horizontally using a UIBoxLayout centered vertically within the section area.
+       - Styles the text field with a white background and a black text/caret.
+    2. Input Capture:
+       - Overrides on_event inside the text input to intercept key presses.
+       - When the user presses the Enter or Return key, it extracts the entered command, clears the field, and executes the callback.
+    3. Event and Focus Lifecycle:
+       - Manages an internal UIManager to route window-level input events.
+       - Enables the UIManager and focuses the text field when shown, and disables the UIManager when hidden.
+    """
     def __init__(self, left: int, bottom: int, commandEnteredCallback: CommandEnteredCallback, **kwargs):
         """
 

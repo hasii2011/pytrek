@@ -37,7 +37,30 @@ DEFAULT_ALPHA: int = 32
 
 
 class WarpEffectSection(BaseSection):
+    """
+    ### Synopsis of `WarpEffectSection`
 
+    The `WarpEffectSection` class (inheriting from `BaseSection`) is responsible for managing the visual and auditory
+    particle animation sequence shown when the ship is warping to another quadrant.
+
+    Functionalitye:
+
+    1. State & Screen Initialization**:
+       - Configured as a full-screen modal section (`modal=True`) that starts disabled (`enabled=False`).
+       - Clears the viewport to a solid black background when active.
+
+    2. Visual Particle Animation:
+       - Uses Arcade's particle engine (`arcade.particles.Emitter`) to create an explosion of stars radiating
+       outwards from the center of the screen.
+       - Loads and slices random star textures from `WarpEffectSpriteSheet.png` using the `SpriteSheet` class.
+       - Restarts the animation lifecycle via a custom `setup()` method that generates a new interval-based emitter.
+       - Displays a pale gold diagnostic label at the bottom left showing the active star count (e.g., `'Warping: 150'`).
+       - Declares `isEffectComplete()` to determine when all particles have faded out and can be reaped.
+
+    3. Sound Effects:
+       - Integrates with the `SoundMachine` singleton to play the warping sound effect (`SoundType.Warp`) as soon as
+       the first update cycle (`on_update`) is triggered.
+    """
     def __init__(self, width: int, height: int):
         self.logger: Logger = getLogger(__name__)
 
@@ -76,10 +99,6 @@ class WarpEffectSection(BaseSection):
         """
         Render the screen.
         """
-        # This command should happen before we start drawing. It will clear
-        # the screen to the background color, and erase what we drew last frame.
-        # start_render()
-
         self._emitter.draw()
         if self.isEffectComplete() is False:
             self._warpingText.text = f'Warping: {self._emitter.get_count()}'

@@ -57,7 +57,19 @@ STATUS_HEADER:      str = 'Status'
 
 class DeviceStatusSection(BaseSection):
     """
-    Self sizing and positioning within the game window
+    Represents a self-sizing overlay section that displays the status, damage levels, and operational
+    states of the Enterprise's devices.
+
+    Functionality:
+    1. Status Board Display:
+       - Renders a semi-transparent dark gray panel overlay.
+       - Displays columns for Device Type, Damage, and Status, bounded by horizontal separator lines.
+    2. Device Information Formatting:
+       - Queries the DeviceManager for all device types.
+       - Renders each device's numeric damage level formatted to two decimal places.
+       - Colors the status value dynamically based on its state: white for Normal (Up), yellow for Damaged, and red for Down.
+    3. Interaction:
+       - Closes/dismisses the status display overlay when the user clicks anywhere in the section.
     """
     BACKGROUND_WIDTH: int  = 320
     BACKGROUND_HEIGHT: int = 320

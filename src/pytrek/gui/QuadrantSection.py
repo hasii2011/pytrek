@@ -41,6 +41,23 @@ from pytrek.settings.GameSettings import GameSettings
 
 
 class QuadrantSection(BaseSection):
+    """
+    Represents the main quadrant grid display, coordinating game entity interactions, rendering, and
+    player movements within the current quadrant.
+
+    Functionality:
+    1. Grid & Entity Rendering:
+       - Draws the quadrant grid overlay and delegates drawing of game pieces (Enterprise, Klingons, stars, bases, etc.)
+       to the QuadrantMediator.
+    2. Game State & Clock Updates:
+       - Updates the visual states of game entities via mediators.
+       - Updates the game engine's real-time clock.
+    3. Interaction Handling:
+       - Processes left-click mouse inputs within the quadrant grid to perform developer impulse moves.
+    4. Warp Navigation:
+       - Coordinates warp travel, handling transitions to new quadrant coordinates, triggering
+       warp visual/audio effects via mediators, and initializing the newly entered quadrant.
+    """
 
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
         self.logger: Logger = getLogger(__name__)

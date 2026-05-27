@@ -20,6 +20,19 @@ from pytrek.mediators.GalaxyViewMediator import GalaxyViewMediator
 
 
 class GalaxySection(Section):
+    """
+    Represents a full-screen overlay view of the Galaxy (typically shown when performing a "Galaxy Chart" scan).
+
+    Functionality:
+    1. State & Display Overlay:
+       - Initialized as a modal section (modal=True) that starts disabled (enabled=False).
+       - Renders a custom background texture loaded from GalaxyScanBackground.png centered on the quadrant grid area.
+       - Leverages a GalaxyViewMediator to draw the layout of the galaxy's quadrants, highlighting the Captain's
+         current position (self._gameState.currentQuadrantCoordinates).
+    2. User Interaction:
+       - Responds to any mouse click (on_mouse_press) by setting self.enabled = False. This immediately closes/dismisses
+       the overlay and returns the user to the active quadrant view of the game.
+    """
     def __init__(self, left: int, bottom: int, width: int, height: int):
 
         super().__init__(left, bottom, width, height, modal=True, enabled=False)
@@ -36,8 +49,6 @@ class GalaxySection(Section):
     def on_draw(self):
         centerX: float = SCREEN_WIDTH / 2
         centerY: float = (QUADRANT_GRID_HEIGHT / 2) + CONSOLE_SECTION_HEIGHT
-
-        # self._texture.draw_sized(center_x=centerX, center_y=centerY, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT)
 
         rect: Rect = Rect.from_kwargs(x=centerX, y=centerY, width=SCREEN_WIDTH, height=QUADRANT_GRID_HEIGHT)
         draw_texture_rect(self._texture, rect)

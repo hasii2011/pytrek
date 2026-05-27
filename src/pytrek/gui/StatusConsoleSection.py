@@ -57,6 +57,25 @@ LabelTextObjects = NewType('LabelTextObjects', List[Text])
 ValueTextObjects = NewType('ValueTextObjects', List[Text])
 
 class StatusConsoleSection(BaseSection):
+    """
+    Renders real-time ship and game status information in the game's UI console.
+
+    Key functionality:
+    1. Structured Layout & Drawing:
+       - Renders a sidebar header titled "Status Console".
+       - Displays a vertical list of status parameters positioned relative to the top right of the game screen.
+       - Draws pre-allocated static labels and dynamically updates value text objects using arcade.Text.
+    2. Standard Status Indicators:
+       Renders current values bound to the GameState singleton, including:
+       - Condition (Green, Yellow, Red, or Docked) dynamically colored to match the state.
+       - Stardate & Remaining Game Time.
+       - Current Coordinates: Both Quadrant and Sector coordinates (formatted as (x,y)).
+       - Ship Resources: Current Energy levels, Shield strength, and Torpedo count.
+       - Enemy Counts: Remaining Klingons and Klingon Commanders in the galaxy.
+    3. Debugging / Internal Developer Values:
+       - If consoleShowInternals is set to True in GameSettings, it displays additional debugging values.
+       - Displays internal metrics like operation execution time (OpTime) and scheduled stardates for future events.
+    """
 
     statusLabels: List[str] = [
         'Condition:',
