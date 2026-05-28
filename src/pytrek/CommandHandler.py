@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING
 from logging import Logger
 from logging import getLogger
 
+from arcade import exit as arcadeExit
+
 from pytrek.Constants import CRITICAL_WARP_ENGINE_DAMAGE
 from pytrek.Constants import MAXIMUM_DAMAGED_WARP_FACTOR
 
@@ -53,7 +55,7 @@ class CommandHandler:
         self._deviceManager:      DeviceManager      = DeviceManager()
         self._eventEngine:        EventEngine        = EventEngine()
 
-        self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
+        self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)   # noqa
 
     def _setEnterpriseMediator(self, newValue: EnterpriseMediator):
         self._enterpriseMediator = newValue
@@ -96,6 +98,8 @@ class CommandHandler:
                 self._triggerEvent(parsedCommand.eventToTrigger)
             case CommandType.Save:
                 self._saveGame()
+            case CommandType.Quit:
+                arcadeExit()
             case _:
                 self.logger.error(f'Invalid command: {commandStr}')
                 raise InvalidCommandException(message=f'Invalid command: {commandStr}')
@@ -116,7 +120,7 @@ class CommandHandler:
 
     def _doMove(self, quadrant: Quadrant, parsedCommand: ParsedCommand):
 
-        if parsedCommand.manualMove is True:
+        if parsedCommand.manualMove:
             manualMoveData: ManualMoveData = parsedCommand.manualMoveData
             inSectorMove: bool = False
             if manualMoveData.moveType == ManualMoveType.SectorMove:

@@ -16,9 +16,15 @@ from pytrek.Constants import GAME_SETTINGS_FILE_NAME
 
 from pytrek.engine.GameType import GameType
 from pytrek.engine.PlayerType import PlayerType
+
+from pytrek.gui.Common import PyTrekColor
+
 from pytrek.model.Coordinates import Coordinates
+
 from pytrek.settings.SoundVolume import SoundVolume
 from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
+
+DEFAULT_DIM_RGB_VALUE: PyTrekColor = PyTrekColor(r=20, g=40, b=75, alpha=160)
 
 SECTION_LIMITS: ValueDescriptions = ValueDescriptions(
     {
@@ -96,6 +102,7 @@ SECTION_DEVELOPER: ValueDescriptions = ValueDescriptions(
     {
         KeyName('maxStarbaseSearches'):  ValueDescription(defaultValue='128', deserializer=SecureConversions.secureInteger),
         KeyName('maxCommanderSearches'): ValueDescription(defaultValue='128', deserializer=SecureConversions.secureInteger),
+        KeyName('viewDimRGBA'):          ValueDescription(defaultValue=str(DEFAULT_DIM_RGB_VALUE), deserializer=PyTrekColor.deSerialize),
     }
 )
 

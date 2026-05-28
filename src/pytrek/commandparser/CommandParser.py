@@ -256,10 +256,10 @@ class CommandParser:
         """
         Manual move commands examples:
 
-        m m -.1         Quadrant move 1 sector left
-        m m -.1 .1      Quadrant move 1 sector left, and 1 sector down
-        m m 1           Move 1 quadrant right
-        m m -1 -1       Move 1 quadrant left and 1 quadrant up
+        m m -.1             Quadrant move 1 sector left
+        move manual -.1 .1  Quadrant move 1 sector left, and 1 sector down
+        move manual  1      Move 1 quadrant right
+        move manual -1 -1   Move 1 quadrant left and 1 quadrant up
 
         Args:
             splitCmd:

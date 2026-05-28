@@ -13,7 +13,8 @@ class ManualMoveType(Enum):
 @dataclass
 class ManualMoveData:
     """
-    Less than 1 positive and negative values should be processed as moves within the quadrants (e.g. .1 .1)
+    Less than 1 positive and negative values should be processed as moves within the quadrants
+    (for example .1 .1)
     greater than one moves are deltas within the galaxy
     """
     moveType: ManualMoveType = ManualMoveType.NotSet

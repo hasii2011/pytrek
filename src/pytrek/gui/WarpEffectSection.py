@@ -22,6 +22,8 @@ from pytrek.LocateResources import LocateResources
 from pytrek.SoundMachine import SoundMachine
 from pytrek.SoundMachine import SoundType
 
+from pytrek.gui.Common import dimBackgroundForView
+
 from pytrek.gui.UITypes import TextureList
 
 from pytrek.gui.BaseSection import BaseSection
@@ -43,7 +45,7 @@ class WarpEffectSection(BaseSection):
     The `WarpEffectSection` class (inheriting from `BaseSection`) is responsible for managing the visual and auditory
     particle animation sequence shown when the ship is warping to another quadrant.
 
-    Functionalitye:
+    Functionality:
 
     1. State & Screen Initialization**:
        - Configured as a full-screen modal section (`modal=True`) that starts disabled (`enabled=False`).
@@ -78,8 +80,8 @@ class WarpEffectSection(BaseSection):
             color=color.PALE_GOLD,
         )
 
-        self._emitter: Emitter      = cast(Emitter, None)
-        self._media:   media.Player = cast(media.Player, None)
+        self._emitter: Emitter      = cast(Emitter, None)           # noqa
+        self._media:   media.Player = cast(media.Player, None)      # noqa
 
         self._playing: bool = False
 
@@ -99,8 +101,10 @@ class WarpEffectSection(BaseSection):
         """
         Render the screen.
         """
+        dimBackgroundForView(windowWidth=self.window.width, windowHeight=self.window.height)
+
         self._emitter.draw()
-        if self.isEffectComplete() is False:
+        if not self.isEffectComplete():
             self._warpingText.text = f'Warping: {self._emitter.get_count()}'
             self._warpingText.draw()
         self.drawDebug()
@@ -109,7 +113,7 @@ class WarpEffectSection(BaseSection):
         """
         """
         self._emitter.update()
-        if self._playing is False:
+        if not self._playing:
             self._media = self._soundMachine.playSound(SoundType.Warp)
             self._playing = True
 
@@ -145,9 +149,9 @@ class WarpEffectSection(BaseSection):
 
         sheet: SpriteSheet = SpriteSheet(fqFileName)
         textures = sheet.get_texture_grid(
-            size=(spriteWidth, spriteHeight),  # Replaces sprite_width and sprite_height
-            columns=nColumns,  # Same as before
-            count=tileCount  # Replaces tilecount
+            size=(spriteWidth, spriteHeight),
+            columns=nColumns,
+            count=tileCount
         )
 
         return TextureList(textures)

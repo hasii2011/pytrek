@@ -37,14 +37,14 @@ class GalaxyViewMediator(metaclass=SingletonV3):
                 coordinates: Coordinates = Coordinates(x=x, y=y)
                 quadrant: Quadrant = self._galaxy.getQuadrant(quadrantCoordinates=coordinates)
 
-                if quadrant.scanned is True:
+                if quadrant.scanned:
                     if centerCoordinates == coordinates:
                         contents: str = 'E'
                         arcadePoint: ArcadePoint = Computer.gamePositionToScreenPoint(coordinates)
                         arcadeX: float = arcadePoint.x + 2
                         arcadeY: float = arcadePoint.y + 2
                     else:
-                        if quadrant.hasSuperNova is True:
+                        if quadrant.hasSuperNova:
                             contents = SUPER_NOVA_INDICATOR
                         else:
                             contents = self._computer.createValueString(klingonCount=quadrant.klingonCount,

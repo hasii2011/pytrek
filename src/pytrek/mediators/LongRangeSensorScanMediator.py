@@ -9,6 +9,7 @@ from codeallybasic.SingletonV3 import SingletonV3
 from arcade import View
 from arcade import color
 from arcade import draw_text
+from arcade import Text
 
 from pytrek.Constants import QUADRANT_PIXEL_HEIGHT
 from pytrek.Constants import QUADRANT_PIXEL_WIDTH
@@ -39,7 +40,7 @@ class LongRangeSensorScanMediator(metaclass=SingletonV3):
         Args:
 
             **kwargs:
-
+                Currently, we accept graphicCenterX and graphicCenterY keyword arguments
         """
 
         self.logger: Logger = getLogger(__name__)
@@ -48,11 +49,20 @@ class LongRangeSensorScanMediator(metaclass=SingletonV3):
         self._computer:     Computer     = Computer()
         self._galaxy:       Galaxy       = Galaxy()
 
-        self.view: View = cast(View, None)
+        self.view: View = cast(View, None)          # noqa
+
         self.graphicCenterX: float = 0
         self.graphicCenterY: float = 0
 
         self._setKeywordParameters(**kwargs)
+
+        self._titleText: Text = Text(
+            text='',
+            x=self.graphicCenterX - (QUADRANT_PIXEL_WIDTH * 2)  - (QUADRANT_PIXEL_WIDTH / 2),
+            y=self.graphicCenterY + ((QUADRANT_PIXEL_HEIGHT * 2) + (QUADRANT_PIXEL_HEIGHT / 2)) + TITLE_FONT_SIZE,
+            color=color.WHITE,
+            font_size=TITLE_FONT_SIZE
+        )
 
     def draw(self, centerCoordinates: Coordinates):
 
@@ -61,10 +71,10 @@ class LongRangeSensorScanMediator(metaclass=SingletonV3):
         graphicCenterX: float = self.graphicCenterX
         graphicCenterY: float = self.graphicCenterY
 
-        titleX: float = graphicCenterX - (QUADRANT_PIXEL_WIDTH * 2)  - (QUADRANT_PIXEL_WIDTH / 2)
-        titleY: float = graphicCenterY + ((QUADRANT_PIXEL_HEIGHT * 2) + (QUADRANT_PIXEL_HEIGHT / 2)) + TITLE_FONT_SIZE
         title:  str = f'Long Range Scan Quadrant ({centerCoordinates.x},{centerCoordinates.y})'
-        draw_text(title,  titleX, titleY, color.WHITE, TITLE_FONT_SIZE)
+        
+        self._titleText.text = title
+        self._titleText.draw()
 
         draw_text("E", graphicCenterX - 4, graphicCenterY - 8, color.YELLOW, LR_SCAN_FONT_SIZE)    # Adjust for font size
 
@@ -117,7 +127,7 @@ class LongRangeSensorScanMediator(metaclass=SingletonV3):
         quadrant: Quadrant = self._galaxy.getQuadrant(quadrantCoordinates=scanCoordinates.coordinates)
 
         quadrant.scanned = True
-        if quadrant.hasSuperNova is True:
+        if quadrant.hasSuperNova:
             contents: str = SUPER_NOVA_INDICATOR
         else:
             contents = self._computer.createValueString(klingonCount=quadrant.klingonCount,

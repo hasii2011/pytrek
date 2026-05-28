@@ -10,25 +10,28 @@ from dataclasses import dataclass
 from arcade import Rect
 from arcade import Texture
 from arcade import XYWH
+from arcade import Text
+from arcade import draw_line
+
+from arcade import load_texture
 from arcade import draw_texture_rect
+
 from arcade.color import RED
 from arcade.color import WHITE
 from arcade.color import YELLOW
 
-from arcade import Text
-from arcade import draw_line
-from arcade import load_texture
 from arcade.types import Color
 
 from pytrek.engine.devices.Device import Device
-from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceType import DeviceType
+from pytrek.engine.devices.DeviceStatus import DeviceStatus
 from pytrek.engine.devices.DeviceManager import DeviceManager
 
 from pytrek.gui.BaseSection import BaseSection
 
-from pytrek.LocateResources import LocateResources
+from pytrek.gui.Common import dimBackgroundForView
 
+from pytrek.LocateResources import LocateResources
 
 EVENT_HEADER_COLOR:      Color = WHITE
 DEVICE_HEADER_COLOR:     Color = WHITE
@@ -132,6 +135,8 @@ class DeviceStatusSection(BaseSection):
         self._footerLineY: float = y - FOOTER_GAP
 
     def on_draw(self):
+
+        dimBackgroundForView(windowWidth=self.window.width, windowHeight=self.window.height)
 
         rect: Rect = XYWH(x=self._graphicCenterX,
                           y=self._graphicCenterY,

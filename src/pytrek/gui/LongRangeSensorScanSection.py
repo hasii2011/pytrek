@@ -17,6 +17,7 @@ from pytrek.GameState import GameState
 from pytrek.LocateResources import LocateResources
 
 from pytrek.engine.GameEngine import GameEngine
+from pytrek.gui.Common import dimBackgroundForView
 
 from pytrek.mediators.LongRangeSensorScanMediator import LongRangeSensorScanMediator
 
@@ -74,10 +75,7 @@ class LongRangeSensorScanSection(Section):
         elements
         """
 
-        # self._texture.draw_sized(center_x=self._graphicCenterX,
-        #                          center_y=self._graphicCenterY,
-        #                          width=LongRangeSensorScanSection.BACKGROUND_WIDTH,
-        #                          height=LongRangeSensorScanSection.BACKGROUND_HEIGHT)
+        dimBackgroundForView(windowWidth=self.window.width, windowHeight=self.window.height)
 
         rect: Rect = Rect.from_kwargs(x=self._graphicCenterX,
                                       y=self._graphicCenterY,

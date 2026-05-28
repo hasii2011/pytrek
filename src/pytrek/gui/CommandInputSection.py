@@ -4,8 +4,9 @@ from typing import Callable
 from logging import Logger
 from logging import getLogger
 
+from copy import copy as stdlibCopy
+
 from arcade import color
-from arcade import key as arcadeKey
 
 from arcade.gui import UIEvent
 from arcade.gui import UILabel
@@ -15,16 +16,18 @@ from arcade.gui import UIInputText
 from arcade.gui import UIKeyPressEvent
 from arcade.gui import UIAnchorLayout
 
+from arcade import key as arcadeKey
+
 from pytrek.gui.BaseSection import BaseSection
 
 from pytrek.Constants import COMMAND_SECTION_HEIGHT
 
 
 LABEl_FONT_SIZE: int = 12
-INPUT_HEIGHT:    int = 30
+INPUT_HEIGHT:    int = 32
 INPUT_WIDTH:     int = 200
 
-INPUT_FIELD_BORDER_WIDTH: int = 0
+INPUT_FIELD_BORDER_WIDTH: int = 2
 
 # Margins
 LEFT_MARGIN:  int = 10
@@ -56,6 +59,13 @@ class CommandInputText(UIInputText):
 
         return super().on_event(event)
 
+    def do_render_focus(self, surface):
+        """
+        Override to disable the default white focus outline.
+        Antigravity did some hard work for me to find this;  I do NOT
+        feel as dirty anymore
+        """
+        pass  # Removes the default 4px white focus outline completely
 
 class CommandInputSection(BaseSection):
     """
@@ -98,16 +108,27 @@ class CommandInputSection(BaseSection):
         anchorLayout: UIAnchorLayout = UIAnchorLayout(x=5)
         hBox:         UIBoxLayout    = UIBoxLayout(vertical=False, align='center')
 
-        self._label:      UILabel          = UILabel(text='Enter Command:', font_size=LABEl_FONT_SIZE, text_color=color.WHITE)
+        self._label: UILabel = UILabel(text='Enter Command:', font_size=LABEl_FONT_SIZE, text_color=color.WHITE)
+
+        # Create a copy of the default style for all states
+        customStyle = {
+            state: stdlibCopy(style_obj)
+            for state, style_obj in UIInputText.DEFAULT_STYLE.items()
+        }
+        # Set the border width to 0 for all states in our copy
+        for state_style in customStyle.values():
+            state_style.border_width = 1
+
+        # noinspection SpellCheckingInspection
         self._inputField: CommandInputText = CommandInputText(
             commandEnteredCallback=self._onCommandEntered,
             text='',
             width=INPUT_WIDTH,
-            height=INPUT_HEIGHT,
             text_color=color.WHITE,
             caret_color=color.WHITE,
-            border_width=INPUT_FIELD_BORDER_WIDTH,
-        ).with_background(color=color.BLACK)
+            font_name=('Andale Mono', 'Menlo', 'PT Mono', 'SF Mono'),
+            style=customStyle
+        )
 
         hBox.add(self._label.with_padding(right=20))
         hBox.add(self._inputField)
