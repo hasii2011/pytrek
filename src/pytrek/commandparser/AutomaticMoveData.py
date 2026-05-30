@@ -3,14 +3,14 @@ from dataclasses import dataclass
 from dataclasses import field
 
 from pytrek.model.Coordinates import Coordinates
-
-
-def coordinateFactory() -> Coordinates:
-    return Coordinates()
+from pytrek.model.Coordinates import coordinateFactory
 
 
 @dataclass
 class AutomaticMoveData:
+    """
+    If sector move is True then ignore the quadrant coordinates
+    """
 
     sectorMove: bool = False
 

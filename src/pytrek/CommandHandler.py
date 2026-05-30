@@ -119,6 +119,13 @@ class CommandHandler:
             self._view.messageConsoleSection.displayMessage(f'Warp factor set to: {self._gameState.warpFactor}')
 
     def _doMove(self, quadrant: Quadrant, parsedCommand: ParsedCommand):
+        """
+
+        Args:
+            quadrant:
+            parsedCommand:
+
+        """
 
         if parsedCommand.manualMove:
             manualMoveData: ManualMoveData = parsedCommand.manualMoveData
@@ -129,8 +136,21 @@ class CommandHandler:
             self._enterpriseMediator.manualMove(quadrant=quadrant, deltaX=manualMoveData.deltaX, deltaY=manualMoveData.deltaY, inSectorMove=inSectorMove)
         else:
             assert parsedCommand.manualMove is False, 'Cannot assume it is automatic'
+            #
+            # It is automatic;  Are we warping or just impulse within quadrant
+            #
             moveData: AutomaticMoveData = parsedCommand.automaticMoveData
-            self._enterpriseMediator.automaticMove(quadrantCoordinates=moveData.quadrantCoordinates, sectorCoordinates=moveData.sectorCoordinates)
+            if moveData.sectorMove:
+                self._enterpriseMediator.doImpulseMove(
+                    quadrant=quadrant,
+                    enterpriseCoordinates=self._gameState.currentSectorCoordinates,
+                    targetCoordinates=moveData.sectorCoordinates
+                )
+            else:
+                self._enterpriseMediator.automaticMove(
+                    quadrantCoordinates=moveData.quadrantCoordinates,
+                    sectorCoordinates=moveData.sectorCoordinates
+                )
 
     def _displayHelp(self):
         """

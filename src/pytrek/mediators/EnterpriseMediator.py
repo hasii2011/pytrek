@@ -135,7 +135,7 @@ class EnterpriseMediator(MissesMediator):
 
             results: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant=quadrant, startingPoint=startingPoint, endPoint=endPoint)
             if results.answer is True:
-                self._doImpulseMove(quadrant=quadrant, enterpriseCoordinates=enterpriseCoordinates, targetCoordinates=targetCoordinates)
+                self.doImpulseMove(quadrant=quadrant, enterpriseCoordinates=enterpriseCoordinates, targetCoordinates=targetCoordinates)
             else:
                 self._doBlockedImpulseMove(quadrant=quadrant, enterpriseCoordinates=enterpriseCoordinates, results=results)
 
@@ -165,6 +165,28 @@ class EnterpriseMediator(MissesMediator):
         schedule(function_pointer=self._checkEffectComplete, interval=1.0)
         schedule(function_pointer=self._checkEffectComplete, interval=1.0)
 
+    def doImpulseMove(self, quadrant: Quadrant, enterpriseCoordinates: Coordinates, targetCoordinates: Coordinates):
+        """
+        Handle impulse move if we are not blocked by any obstacles.
+
+        Args:
+            quadrant:               The current quadrant
+            enterpriseCoordinates:  Then enterprise sector coordinates
+            targetCoordinates:      Where the player indicated we were moving
+        """
+
+        self.__updateQuadrant(quadrant=quadrant, currentCoordinates=enterpriseCoordinates, targetCoordinates=targetCoordinates)
+        quadrant.enterprise.destinationPoint = GamePiece.gamePositionToScreenPosition(gameCoordinates=targetCoordinates)
+        quadrant.enterpriseCoordinates = targetCoordinates
+        quadrant.enterprise.inMotion   = True
+
+        self._gameEngine.impulse(newCoordinates=targetCoordinates, quadrant=quadrant, enterprise=quadrant.enterprise)
+        self._soundMachine.playSound(SoundType.Impulse)
+        if quadrant.klingonCount > 0 or quadrant.commanderCount > 0 or quadrant.superCommanderCount > 0:
+            self._gameState.shipCondition = ShipCondition.Red
+        else:
+            self._gameState.shipCondition = ShipCondition.Green
+
     def _doManualImpulseMove(self, deltaX, deltaY, quadrant):
 
         enterpriseSectorCoordinates: Coordinates = self._gameState.currentSectorCoordinates
@@ -186,7 +208,7 @@ class EnterpriseMediator(MissesMediator):
 
             results: LineOfSightResponse = self._doWeHaveLineOfSight(quadrant=quadrant, startingPoint=startingPoint, endPoint=endPoint)
             if results.answer is True:
-                self._doImpulseMove(quadrant=quadrant, enterpriseCoordinates=enterpriseSectorCoordinates, targetCoordinates=targetSector)
+                self.doImpulseMove(quadrant=quadrant, enterpriseCoordinates=enterpriseSectorCoordinates, targetCoordinates=targetSector)
             else:
                 self._doBlockedImpulseMove(quadrant=quadrant, enterpriseCoordinates=enterpriseSectorCoordinates, results=results)
 
@@ -208,28 +230,6 @@ class EnterpriseMediator(MissesMediator):
         self._warpEffectSection.enabled = True
 
         schedule(function_pointer=self._checkEffectComplete, interval=1.0)
-
-    def _doImpulseMove(self, quadrant: Quadrant, enterpriseCoordinates: Coordinates, targetCoordinates: Coordinates):
-        """
-        Handle impulse move if we are not blocked by any obstacles.
-
-        Args:
-            quadrant:               The current quadrant
-            enterpriseCoordinates:  Then enterprise sector coordinates
-            targetCoordinates:      Where the player indicated we were moving
-        """
-
-        self.__updateQuadrant(quadrant=quadrant, currentCoordinates=enterpriseCoordinates, targetCoordinates=targetCoordinates)
-        quadrant.enterprise.destinationPoint = GamePiece.gamePositionToScreenPosition(gameCoordinates=targetCoordinates)
-        quadrant.enterpriseCoordinates = targetCoordinates
-        quadrant.enterprise.inMotion   = True
-
-        self._gameEngine.impulse(newCoordinates=targetCoordinates, quadrant=quadrant, enterprise=quadrant.enterprise)
-        self._soundMachine.playSound(SoundType.Impulse)
-        if quadrant.klingonCount > 0 or quadrant.commanderCount > 0 or quadrant.superCommanderCount > 0:
-            self._gameState.shipCondition = ShipCondition.Red
-        else:
-            self._gameState.shipCondition = ShipCondition.Green
 
     def _doBlockedImpulseMove(self, quadrant: Quadrant, enterpriseCoordinates: Coordinates, results: LineOfSightResponse):
         """

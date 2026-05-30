@@ -135,6 +135,15 @@ class TestCommandParser(UnitTestBase):
 
         self.assertEqual(expectedQuadrantCoordinates, parsedCommand.automaticMoveData.quadrantCoordinates, 'Invalid Quadrant')
         self.assertEqual(expectedSectorCoordinates,   parsedCommand.automaticMoveData.sectorCoordinates, 'Invalid Sector')
+        self.assertFalse(parsedCommand.automaticMoveData.sectorMove, 'This is NOT a sector move')
+
+    def testMoveAutoWithinQuadrant(self):
+
+        parsedCommand: ParsedCommand = self._processCommand('move automatic 3 7')
+
+        expectedSectorCoordinates:   Coordinates = Coordinates(x=3, y=7)
+        self.assertEqual(expectedSectorCoordinates,   parsedCommand.automaticMoveData.sectorCoordinates, 'Invalid Sector')
+        self.assertTrue(parsedCommand.automaticMoveData.sectorMove, 'This IS a sector move')
 
     def _processCommand(self, commandStr: str) -> ParsedCommand:
 

@@ -149,12 +149,13 @@ class CommandParser:
                 raise InvalidCommandException(message='Move subcommand must be Manual or Automatic')
             else:
 
-                if len(splitCmd) == 6:      # full auto command
+                if len(splitCmd) == 6:      # full auto command;  move to new quadrant
                     parsedCommand.automaticMoveData.quadrantCoordinates = self._parseCoordinates(potentialX=splitCmd[2], potentialY=splitCmd[3])
                     parsedCommand.automaticMoveData.sectorCoordinates   = self._parseCoordinates(potentialX=splitCmd[4], potentialY=splitCmd[5])
                     parsedCommand.automaticMoveData.sectorMove = False
-                elif len(splitCmd) == 4:    # may be quadrant or sector coordinates
+                elif len(splitCmd) == 4:    # are sector coordinates
                     parsedCommand.automaticMoveData.sectorCoordinates = self._parseCoordinates(potentialX=splitCmd[2], potentialY=splitCmd[3])
+                    parsedCommand.automaticMoveData.sectorMove = True
                 else:
                     raise InvalidCommandException(message='Move command improperly specified')
                 parsedCommand.manualMove = False
