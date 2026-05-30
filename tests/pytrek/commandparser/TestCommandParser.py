@@ -123,7 +123,8 @@ class TestCommandParser(UnitTestBase):
 
         expectedSectorCoordinates: Coordinates = Coordinates(x=4, y=4)
 
-        self.assertEqual(expectedSectorCoordinates, parsedCommand.automaticMoveData.sectorCoordinates, 'Invalid quadrant move')
+        self.assertEqual(expectedSectorCoordinates, parsedCommand.automaticMoveData.sectorCoordinates, 'Invalid in quadrant move')
+        self.assertFalse(parsedCommand.manualMove, 'Cannot be manual')
 
     def testMoveAutomaticToQuadrant(self):
 

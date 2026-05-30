@@ -153,7 +153,7 @@ class CommandParser:
                     parsedCommand.automaticMoveData.quadrantCoordinates = self._parseCoordinates(potentialX=splitCmd[2], potentialY=splitCmd[3])
                     parsedCommand.automaticMoveData.sectorCoordinates   = self._parseCoordinates(potentialX=splitCmd[4], potentialY=splitCmd[5])
                     parsedCommand.automaticMoveData.sectorMove = False
-                elif len(splitCmd) == 4:    # sector coordinates only
+                elif len(splitCmd) == 4:    # may be quadrant or sector coordinates
                     parsedCommand.automaticMoveData.sectorCoordinates = self._parseCoordinates(potentialX=splitCmd[2], potentialY=splitCmd[3])
                 else:
                     raise InvalidCommandException(message='Move command improperly specified')

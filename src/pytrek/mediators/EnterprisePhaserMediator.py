@@ -33,6 +33,19 @@ from pytrek.settings.GameSettings import GameSettings
 
 
 class EnterprisePhaserMediator(BaseMediator):
+    """
+    Handles phaser firing, damage calculations, visual rendering, and audio
+    feedback for the USS Enterprise's phaser weapons.
+
+    This mediator:
+    - Preloads and coordinates phaser fire
+    - Manages the lifecycle, updating, and drawing of active phaser bolts.
+    - Resolves phaser firing targeting for all enemies within the current quadrant.
+    - Calculates
+        * Distance-based phaser hit damage
+        * Updates enemy energy
+        * Processes enemy destruction and removal from the quadrant.
+    """
 
     def __init__(self):
 

@@ -47,7 +47,25 @@ from pytrek.model.SectorType import SectorType
 class EnterpriseMediator(MissesMediator):
     """
     This is not a singleton.
-    It requires 2 properties to be injected at appropriate times
+    It requires the injection of 2 properties at appropriate times
+
+    The Enterprise Mediator class coordinate movement, warp effects, and navigation for the USS Enterprise.
+
+    This class orchestrates manual and autopilot navigation systems (warp and impulse drives)
+    for the player's starship.
+
+    It manages
+        * Coordinate validation
+        * Collision avoidance/line-of-sight checks against stellar obstacles (planets, stars, star-bases, and enemy ships)
+        * Triggers ship state transitions (Red/Green conditions)
+        * Updates quadrant sectors
+        * Schedules/unschedules callback events for the visual warp effect overlays
+        * Plays navigation sound effects.
+
+    Note:
+        This class is not a singleton and requires `warpTravelCallback` and `warpEffectSection`
+        to be injected externally at initialization.
+
     """
 
     def __init__(self):
@@ -55,15 +73,15 @@ class EnterpriseMediator(MissesMediator):
         """
         super().__init__()
 
-        self._warpTravelCallback: WarpTravelCallbackV2 = cast(WarpTravelCallbackV2, None)
-        self._warpEffectSection:  WarpEffectSection    = cast(WarpEffectSection,    None)
+        self._warpTravelCallback: WarpTravelCallbackV2 = cast(WarpTravelCallbackV2, None)   # noqa
+        self._warpEffectSection:  WarpEffectSection    = cast(WarpEffectSection,    None)   # noqa
 
         self.logger:                  Logger       = getLogger(__name__)
         self._soundMachine:           SoundMachine = SoundMachine()
         self._warpSpeed:              float        = 0.0
 
-        self._destinationQuadrantsCoordinates: Coordinates  = cast(Coordinates, None)
-        self._destinationSectorCoordinates:    Coordinates  = cast(Coordinates, None)
+        self._destinationQuadrantsCoordinates: Coordinates  = cast(Coordinates, None)   # noqa
+        self._destinationSectorCoordinates:    Coordinates  = cast(Coordinates, None)   # noqa
         """
         Use to store the warp coordinates use after the warp effect is complete
         """
@@ -86,7 +104,7 @@ class EnterpriseMediator(MissesMediator):
         arcadePoint: ArcadePoint = GamePiece.gamePositionToScreenPosition(quadrant.enterpriseCoordinates)
         arcadeX:     float       = arcadePoint.x
         arcadeY:     float       = arcadePoint.y
-        if enterprise.inMotion is True:
+        if enterprise.inMotion:
 
             self.logger.debug(f'Enterprise arcade position: ({arcadeX},{arcadeY})')
             enterprise.destinationPoint = ArcadePoint(x=arcadeX, y=arcadeY)
@@ -126,7 +144,7 @@ class EnterpriseMediator(MissesMediator):
 
     def manualMove(self, quadrant: Quadrant, deltaX: float, deltaY: float, inSectorMove: bool):
 
-        if inSectorMove is True:
+        if inSectorMove:
             self._doManualImpulseMove(deltaX, deltaY, quadrant)
         else:
             self._doManualWarpMove(int(deltaX), int(deltaY))
@@ -251,7 +269,7 @@ class EnterpriseMediator(MissesMediator):
         Returns:  `True` if no obstructions, else `False`
         """
         obstacles: SpriteList = SpriteList()
-        if quadrant.hasPlanet is True:
+        if quadrant.hasPlanet:
             obstacles.append(quadrant.planet)
         obstacles.extend(quadrant.klingons)
         obstacles.extend(quadrant.commanders)
@@ -289,7 +307,7 @@ class EnterpriseMediator(MissesMediator):
             deltaTime:
         """
         effectComplete: bool = self._warpEffectSection.isEffectComplete()
-        if effectComplete is True:
+        if effectComplete:
             print('Warp effect is done')
             unschedule(self._checkEffectComplete)
             self._warpEffectSection.enabled = False
@@ -337,6 +355,6 @@ class EnterpriseMediator(MissesMediator):
         currentSector.type = SectorType.EMPTY
         targetSector.type  = SectorType.ENTERPRISE
         targetSector.sprite = currentSector.sprite
-        currentSector.sprite = cast(GamePiece, None)
+        currentSector.sprite = cast(GamePiece, None)       # noqa
 
         return quadrant

@@ -40,8 +40,8 @@ class Galaxy(metaclass=SingletonV3):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._currentQuadrant: Quadrant   = cast(Quadrant, None)
-        self.quadrants:        GalaxyGrid = GalaxyGrid([])  # 2D array aka python list
+        self._currentQuadrant: Quadrant   = cast(Quadrant, None)    # noqa
+        self.quadrants:        GalaxyGrid = GalaxyGrid([])          # 2D array aka python list
 
         self._createGalaxy()
 
@@ -110,10 +110,10 @@ class Galaxy(metaclass=SingletonV3):
             potentialCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
             quadrant:             Quadrant    = self.getQuadrant(quadrantCoordinates=potentialCoordinates)
 
-            if quadrant.hasStarBase is True:
+            if quadrant.hasStarBase:
                 return potentialCoordinates
 
-        return cast(Coordinates, None)
+        return cast(Coordinates, None)  # noqa
 
     def getCommanderCoordinates(self) -> Coordinates:
 
@@ -121,14 +121,14 @@ class Galaxy(metaclass=SingletonV3):
 
         for x in count():
             if x > maxCommanderSearches:
-                self.logger.warning(f'There appear to be no live Commander`s in the galaxy')
+                self.logger.warning(f"There appear to be no live Commander's in the galaxy")
                 break
             potentialCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
             quadrant:             Quadrant    = self.getQuadrant(quadrantCoordinates=potentialCoordinates)
             if quadrant.commanderCount > 0:
                 return potentialCoordinates
 
-        return cast(Coordinates, None)
+        return cast(Coordinates, None)  # noqa
 
     def getQuadrant(self, quadrantCoordinates: Coordinates) -> Quadrant:
 
@@ -144,10 +144,10 @@ class Galaxy(metaclass=SingletonV3):
             quadrantRow = self.quadrants[y]
             for x in range(GALAXY_COLUMNS):
                 quadrant: Quadrant = quadrantRow[x]
-                if quadrant.hasStarBase is True:
+                if quadrant.hasStarBase:
                     return quadrant.coordinates
 
-        return cast(Coordinates, None)
+        return cast(Coordinates, None)      # noqa
 
     def _createGalaxy(self):
 
@@ -203,7 +203,7 @@ class Galaxy(metaclass=SingletonV3):
         while starBaseCount != 0:
             quadrantCoordinates: Coordinates = self._intelligence.generateQuadrantCoordinates()
             quadrant:            Quadrant  = self.getQuadrant(quadrantCoordinates)
-            while quadrant.hasStarBase is False:
+            while not quadrant.hasStarBase:
                 # TODO this code seems wrong
                 quadrantCoordinates = self._intelligence.generateQuadrantCoordinates()
                 quadrant            = self.getQuadrant(quadrantCoordinates)

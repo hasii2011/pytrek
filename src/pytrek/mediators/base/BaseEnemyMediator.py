@@ -21,7 +21,20 @@ from pytrek.mediators.base.MissesMediator import MissesMediator
 
 
 class BaseEnemyMediator(MissesMediator):
+    """
+    A base mediator class that orchestrates movement and tactical evasion for enemy ships.
 
+    This class provides common control routines for managing active movement of enemy
+    game pieces (such as Klingon Commanders or Super Commanders) within a local quadrant.
+
+    Functionality
+        * Checks stardate-based movement intervals
+        * Generates valid random evasion coordinates to avoid collisions
+        * Updates sector occupancy in the quadrant model
+        * Translates coordinates to Arcade display points
+        * Triggers movement sound effects via subclass hooks.
+
+    """
     def __init__(self):
 
         self._baseEnemyMediatorLogger: Logger = getLogger(__name__)
@@ -64,7 +77,7 @@ class BaseEnemyMediator(MissesMediator):
         oldSector: Sector = quadrant.getSector(sectorCoordinates=oldSectorCoordinates)
 
         oldSector.type   = SectorType.EMPTY
-        oldSector.sprite = cast(GamePiece, None)
+        oldSector.sprite = cast(GamePiece, None)    # noqa
 
         newSector: Sector = quadrant.getSector(sectorCoordinates=newSectorCoordinates)
 

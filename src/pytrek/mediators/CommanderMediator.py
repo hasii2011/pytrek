@@ -12,6 +12,15 @@ from pytrek.mediators.base.BaseEnemyMediator import BaseEnemyMediator
 
 
 class CommanderMediator(BaseEnemyMediator):
+    """
+    Handles movement updates, tactical evasions, and sound effect triggers
+    specifically for Klingon Commander enemy ships.
+
+    This mediator:
+    - Periodically triggers Klingon Commander ship relocation within the current quadrant.
+    - Delegates path validation and obstacle checking logic to its base enemy mediator class.
+    - Triggers the unique Commander movement sound when the ship repositions.
+    """
 
     def __init__(self):
 

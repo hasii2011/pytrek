@@ -32,6 +32,17 @@ TITLE_FONT_SIZE:   int = 18
 DirectionToQuadrant = NewType('DirectionToQuadrant', Dict[Direction, Text])
 
 class LongRangeSensorScanMediator(metaclass=SingletonV3):
+    """
+    This class manages long-range sensor scans, mapping and rendering adjacent quadrant
+    data on the game view.
+
+    This mediator:
+    - Generates adjacent coordinates and updates the scanned states of surrounding quadrants.
+    - Formats game status strings indicating counts of Klingons, Commanders, and StarBases.
+    - Resolves visual layout offsets and renders text labels for the scanned directions
+      (North, South, East, West, and diagonals) relative to the quadrant that the Enterprise is in
+    - Detects and visually represents supernova sectors using a super-duper specialized indicator.
+    """
 
     def __init__(self, **kwargs):
         """

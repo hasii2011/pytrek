@@ -505,7 +505,7 @@ class GameEngine(metaclass=SingletonV3):
         elif isinstance(enemy, SuperCommander):
             self._gameState.remainingSuperCommanders -= 1
 
-    def shipAdjacentToBase(self, shipPosition: Coordinates, basePosition: Coordinates) -> bool:
+    def isEnterpriseAdjacentToBase(self, shipPosition: Coordinates, basePosition: Coordinates) -> bool:
         """
         ```Java
             adjacent = ((int) Math.abs(sc.x-game.base.x) <= 1) &&  ( (int) Math.abs(sc.y-game.base.y) <= 1);

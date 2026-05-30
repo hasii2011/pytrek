@@ -22,9 +22,17 @@ LineOfSightResponse = namedtuple('LineOfSightResponse', 'answer, obstacle')
 
 
 class BaseMediator:
-
     """
     Has common stuff to handle pointing and shooting pre-checks
+
+    This class serves as the base class for mediators that handle
+        * combat
+        * targeting,
+        * weapon fire
+    It manages:
+    - Calculation and orientation adjustments for aiming at targets.
+    - Custom line-of-sight validation utilizing Shapely geometry to identify specific
+      intersecting obstacle sprites.
     """
     def __init__(self):
         self._baseMediatorLogger: Logger    = getLogger(__name__)
@@ -57,11 +65,11 @@ class BaseMediator:
 
         for obstacle in obstacles:
 
-            # pointList: PointList = obstacle.get_adjusted_hit_box()
             pointList: PointList = obstacle.hit_box.get_adjusted_points()
             polygon:   Polygon   = Polygon(pointList)
-            ans: bool = polygon.crosses(lineOfSight)
-            if ans is True:
+
+            obstacleInLineOfSight: bool = polygon.crosses(lineOfSight)
+            if obstacleInLineOfSight:
                 return LineOfSightResponse(answer=False, obstacle=obstacle)
 
         return LineOfSightResponse(answer=True, obstacle=None)

@@ -34,7 +34,6 @@ QuadrantGrid = NewType('QuadrantGrid', List[SectorRow])
 
 
 class Quadrant:
-
     """
     Quadrant Management
     """
@@ -64,12 +63,12 @@ class Quadrant:
         self._commanders:      Enemies = Enemies([])
         self._superCommanders: Enemies = Enemies([])
 
-        self._planet:   Planet = cast(Planet, None)
-        self._starBase: StarBase = cast(StarBase, None)
+        self._planet:   Planet = cast(Planet, None)         # noqa
+        self._starBase: StarBase = cast(StarBase, None)     # noqa
 
-        self._enterprise:            Enterprise  = cast(Enterprise, None)
-        self._enterpriseCoordinates: Coordinates = cast(Coordinates, None)
-        self._starBaseCoordinates:   Coordinates = cast(Coordinates, None)
+        self._enterprise:            Enterprise  = cast(Enterprise, None)       # noqa
+        self._enterpriseCoordinates: Coordinates = cast(Coordinates, None)      # noqa
+        self._starBaseCoordinates:   Coordinates = cast(Coordinates, None)      # noqa
 
         self._createQuadrant()
 
@@ -88,7 +87,7 @@ class Quadrant:
             oldEnterpriseRow = self._sectors[coordinates.y]
             oldSector: Sector = oldEnterpriseRow[self._enterpriseCoordinates.x]
             oldSector.type = SectorType.EMPTY
-            oldSector.sprite = cast(GamePiece, None)
+            oldSector.sprite = cast(GamePiece, None)        # noqa
 
         self.logger.debug(f"Placing enterprise @quadrant: {coordinates}")
 
@@ -237,7 +236,7 @@ class Quadrant:
 
     def addKlingon(self) -> Klingon:
         """
-        Returns the added klingon for use by our testing/debugging code
+        Returns the added Klingon for use by our testing/debugging code
 
         Returns:  The 'added' Klingon
         """
@@ -348,9 +347,9 @@ class Quadrant:
         Args:
             enemy:  The enemy we just whacked
         """
-        if isinstance(enemy, Klingon) is True:
+        if isinstance(enemy, Klingon):
             self._klingonCount -= 1
-        elif isinstance(enemy, Commander) is True:
+        elif isinstance(enemy, Commander):
             self._commanderCount -= 1
         elif isinstance(enemy, SuperCommander):
             self._superCommanderCount -= 1
@@ -438,7 +437,7 @@ class Quadrant:
             for x in range(QUADRANT_COLUMNS):
 
                 coordinates: Coordinates = Coordinates(x=x, y=y)
-                sector: Sector = Sector(sprite=cast(GamePiece, None), type=SectorType.EMPTY, coordinates=coordinates)
+                sector: Sector = Sector(sprite=cast(GamePiece, None), type=SectorType.EMPTY, coordinates=coordinates)   # noqa
                 row.append(sector)
                 self.logger.debug(f'Created empty sector ({x},{y})')
             self._sectors.append(row)

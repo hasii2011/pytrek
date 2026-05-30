@@ -52,6 +52,29 @@ from pytrek.settings.GameSettings import GameSettings
 class QuadrantMediator(metaclass=SingletonV3):
     """
     This class avoids having us implement UI logic (arcade) in the model Quadrant class.
+
+    It acts as the central coordinator for local quadrant graphics and game operations,
+    mediating between the Quadrant model and the Arcade UI view.
+
+    This mediator:
+    - Maintains and updates visual sprite lists for players, enemies, and bases.
+    - Delegates weapons handling to specific sub-mediators for
+        * Enterprise torpedoes
+        * Enterprise phaser
+        * Enemy torpedo systems.
+    - Manages quadrant initialization including
+        * Placing the Enterprise
+        * Populating enemy sprites,
+        * Handling debug configuration overrides.
+    - Coordinates
+        * Docking to StarBases
+        * Replenishing energy
+        * Triggering state and sound changes.
+    - Updates
+        * Local sector states
+        * Tracking movements
+        * Updating ship condition colors.
+
     """
     def __init__(self):
 
@@ -133,13 +156,13 @@ class QuadrantMediator(metaclass=SingletonV3):
             quadrant:
         """
 
-        if quadrant.hasStarBase is False:
+        if not quadrant.hasStarBase:
             self._soundMachine.playSound(soundType=SoundType.UnableToComply)
             self._messageConsole.displayMessage(f'No Star Base in quadrant')
             return
         shipPosition: Coordinates = quadrant.enterprise.gameCoordinates
         basePosition: Coordinates = quadrant.starBase.gameCoordinates
-        if self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition) is True:
+        if self._gameEngine.isEnterpriseAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition):
             self._gameState.shipCondition = ShipCondition.Docked
             self._gameEngine.resetEnergyLevels()
             self._messageConsole.displayMessage(f'Docked.')
@@ -192,10 +215,10 @@ class QuadrantMediator(metaclass=SingletonV3):
         self._stm.draw()
         self._ptm.draw(quadrant=quadrant)
         self._epm.draw(quadrant=quadrant)
-        if quadrant.hasPlanet is True:
+        if quadrant.hasPlanet:
             # quadrant.planet.draw()
             draw_sprite(quadrant.planet)
-        if quadrant.hasStarBase is True:
+        if quadrant.hasStarBase:
             # quadrant.starBase.draw()
             draw_sprite(quadrant.starBase)
 
@@ -230,16 +253,16 @@ class QuadrantMediator(metaclass=SingletonV3):
                 if sectorType != SectorType.EMPTY:
                     if sectorType == SectorType.KLINGON:
                         self._km.update(quadrant=quadrant, klingon=cast(Klingon, gamePiece))
-                    elif self._noUpdateSector(sectorType=sectorType) is True:
-                        pass
                     elif sectorType == SectorType.COMMANDER:
                         self._cm.update(quadrant=quadrant, commander=cast(Commander, gamePiece))
                     elif sectorType == SectorType.SUPER_COMMANDER:
                         self._scm.update(quadrant=quadrant, superCommander=cast(SuperCommander, gamePiece))
+                    elif self._doNotUpdateSector(sectorType=sectorType):
+                        pass
                     else:
                         assert False, 'Bad Game Piece'
 
-    def _noUpdateSector(self, sectorType: SectorType) -> bool:
+    def _doNotUpdateSector(self, sectorType: SectorType) -> bool:
         """
         Some sector have sprites that do not move or are transient and handled by the mediators;
         Args:

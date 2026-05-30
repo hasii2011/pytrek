@@ -38,7 +38,17 @@ from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class EnterpriseTorpedoMediator(MissesMediator):
+    """
+    Handles photon torpedo firing, damage resolution, line-of-sight checks,
+    and visual explosion animations for the USS Enterprise's torpedo systems.
 
+    This mediator:
+    - Preloads and manages photon torpedo explosion sprite sheets and textures.
+    - Manages the lifecycles of active torpedo sprites, explosion animations, and miss markers.
+    - Resolves multi-target torpedo firing sequences against all enemies in the current quadrant.
+    - Assesses line-of-sight obstructions (e.g., planets, star-bases)
+    - Applies hit calculations to damage or destroy targets and updates remaining enemy counts.
+    """
     def __init__(self):
 
         self.logger:        Logger       = getLogger(__name__)
@@ -66,7 +76,7 @@ class EnterpriseTorpedoMediator(MissesMediator):
         self._explosions.update()
         self._handleTorpedoHits(quadrant=quadrant)
         self._handleTorpedoMisses(quadrant=quadrant)
-        self._handleMissRemoval(quadrant, cast(Misses, self._misses))
+        self._handleMissRemoval(quadrant, cast(Misses, self._misses))   # noqa
 
     def fireEnterpriseTorpedoesAtKlingons(self, quadrant: Quadrant):
 
@@ -144,10 +154,10 @@ class EnterpriseTorpedoMediator(MissesMediator):
 
     def _handleTorpedoMisses(self, quadrant: Quadrant):
 
-        torpedoDuds: List[BaseEnemyTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self._torpedoes))
+        torpedoDuds: List[BaseEnemyTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self._torpedoes))     # noqa
 
         for baseTorpedo in torpedoDuds:
-            torpedoDud: PhotonTorpedo = cast(PhotonTorpedo, baseTorpedo)
+            torpedoDud: PhotonTorpedo = cast(PhotonTorpedo, baseTorpedo)    # noqa
             self._messageConsole.displayMessage(f'{torpedoDud.id} missed {torpedoDud.firedAt} !!!!')
 
             miss: PhotonTorpedoMiss = PhotonTorpedoMiss(placedTime=self._gameEngine.gameClock)
@@ -213,9 +223,9 @@ class EnterpriseTorpedoMediator(MissesMediator):
         Returns:  `True` if no obstructions, else `False`
         """
         obstacles: SpriteList = SpriteList()
-        if quadrant.hasPlanet is True:
+        if quadrant.hasPlanet:
             obstacles.append(quadrant.planet)
-        if quadrant.hasStarBase is True:
+        if quadrant.hasStarBase:
             obstacles.append(quadrant.starBase)
 
         results: LineOfSightResponse = self._hasLineOfSight(startingPoint=startingPoint, endPoint=endPoint, obstacles=obstacles)
@@ -252,11 +262,11 @@ class EnterpriseTorpedoMediator(MissesMediator):
         from pytrek.gui.gamepieces.commander.Commander import Commander
         from pytrek.gui.gamepieces.supercommander.SuperCommander import SuperCommander
 
-        if isinstance(enemy, Klingon) is True:
+        if isinstance(enemy, Klingon):
             self._gameState.remainingKlingons -= 1
-        elif isinstance(enemy, Commander) is True:
+        elif isinstance(enemy, Commander):
             self._gameState.remainingCommanders -= 1
-        elif isinstance(enemy, SuperCommander) is True:
+        elif isinstance(enemy, SuperCommander):
             self._gameState.remainingSuperCommanders -= 1
         else:
             assert False, f'Unknown enemy type: {enemy.id}'

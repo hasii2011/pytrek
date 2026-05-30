@@ -94,7 +94,7 @@ class TestIntelligence(ProjectTestBase):
 
         damagedCounter: int = 0
         for x in range(10000):
-            damaged: bool = self.smarty.determineIfWarpEngineAreDamaged(warpFactor=8, distance=8)
+            damaged: bool = self.smarty.areWarpEngineAreDamaged(warpFactor=8, distance=8)
             if damaged is True:
                 damagedCounter += 1
 

@@ -34,6 +34,18 @@ from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class CommanderTorpedoMediator(BaseTorpedoMediator):
+    """
+    Handles photon torpedo combat operations initiated by Klingon Commander
+    ships targeting the USS Enterprise.
+
+    This mediator:
+    - Preloads and grid-aligns Commander torpedo explosion texture sheets.
+    - Determines if Commanders in the current quadrant need to fire torpedoes.
+    - Manages the drawing, updating, and lifecycle of active Commander torpedoes,
+      torpedo follower trails, explosions, and miss indicators.
+    - Instantiates specific Commander torpedo, explosion, and miss game piece sprites.
+    - Plays audio cues for Commander torpedo firing attempts and execution.
+    """
 
     def __init__(self):
 
@@ -70,7 +82,7 @@ class CommanderTorpedoMediator(BaseTorpedoMediator):
 
         self._handleTorpedoHits(quadrant, enemies=quadrant.commanders)
         self._handleTorpedoMisses(quadrant, enemies=quadrant.commanders)
-        self._handleMissRemoval(quadrant, cast(Misses, self._misses))
+        self._handleMissRemoval(quadrant, cast(Misses, self._misses))   # noqa
 
     def _getTorpedoToFire(self, enemy: Enemy, enterprise: Enterprise) -> BaseEnemyTorpedo:
         """

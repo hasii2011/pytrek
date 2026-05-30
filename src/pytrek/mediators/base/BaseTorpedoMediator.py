@@ -43,15 +43,23 @@ from pytrek.model.Quadrant import Quadrant
 from pytrek.Constants import MILLISECONDS
 
 
-class MyMetaBaseMediator(ABCMeta, type(MissesMediator)):        # type: ignore
-    """
-    I have know idea why this works:
-    https://stackoverflow.com/questions/66591752/metaclass-conflict-when-trying-to-create-a-python-abstract-class-that-also-subcl
-    """
-    pass
 
+class BaseTorpedoMediator(MissesMediator, metaclass=ABCMeta):
+    """
+    An abstract base mediator class managing enemy torpedo fire and collision behaviors.
 
-class BaseTorpedoMediator(MissesMediator):
+    This class provides the core lifecycle and animation management routines for 
+    torpedoes fired by enemy ships (Klingons, Commanders, and Super Commanders) 
+    toward the USS Enterprise. It coordinates:
+
+    - Tracking active torpedoes, misses/duds, followers, and explosions.
+    - Determining line of sight and target alignment (pointing at the Enterprise).
+    - Executing collision checks using Arcade's collision detection.
+    - Computing damage and shield degradation from impact hits.
+    - Delegating kind-specific asset creation (torpedoes, misses, explosions, sounds) 
+      to specialized subclasses.
+
+    """
 
     def __init__(self):
 
@@ -129,7 +137,7 @@ class BaseTorpedoMediator(MissesMediator):
 
         Returns:  A torpedo of the correct kind
         """
-        return cast(BaseEnemyTorpedo, None)
+        return cast(BaseEnemyTorpedo, None)     # noqa
 
     def _loadTorpedoExplosionTextures(self) -> TextureList:
         """
@@ -137,7 +145,7 @@ class BaseTorpedoMediator(MissesMediator):
 
         Returns:  The textures (images) that display an explosion
         """
-        return cast(TextureList, None)
+        return cast(TextureList, None)      # noqa
 
     def _getTorpedoExplosion(self) -> BaseTorpedoExplosion:
         """
@@ -146,7 +154,7 @@ class BaseTorpedoMediator(MissesMediator):
         Returns: An explosion of the correct type
 
         """
-        return cast(BaseTorpedoExplosion, None)
+        return cast(BaseTorpedoExplosion, None) # noqa
 
     def _getTorpedoMiss(self) -> BaseMiss:
         """
@@ -154,7 +162,7 @@ class BaseTorpedoMediator(MissesMediator):
 
         Returns:  An appropriate 'miss' sprite
         """
-        return cast(BaseMiss, None)
+        return cast(BaseMiss, None)     # noqa
 
     def _playCannotFireSound(self):
         """
@@ -204,7 +212,7 @@ class BaseTorpedoMediator(MissesMediator):
     def _fireTorpedo(self, enemy: Enemy, enterprise: Enterprise):
         """
         Args:
-            enemy:      Who is firing it
+            enemy:      Who is firing the torpedo
             enterprise: The poor lowly enterprise is the target
         """
 
@@ -220,7 +228,7 @@ class BaseTorpedoMediator(MissesMediator):
 
     def _handleTorpedoMisses(self, quadrant: Quadrant, enemies: Enemies):
 
-        torpedoDuds: List[BaseEnemyTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self.torpedoes))
+        torpedoDuds: List[BaseEnemyTorpedo] = self._findTorpedoMisses(cast(Torpedoes, self.torpedoes))      # noqa
 
         for torpedoDud in torpedoDuds:
             self._removeTorpedoFollowers(enemyTorpedo=torpedoDud)
@@ -258,9 +266,9 @@ class BaseTorpedoMediator(MissesMediator):
         startingPoint: ArcadePoint = ArcadePoint(x=shooter.center_x, y=shooter.center_y)
         obstacles:     SpriteList  = SpriteList()
 
-        if quadrant.hasPlanet is True:
+        if quadrant.hasPlanet:
             obstacles.append(quadrant.planet)
-        if quadrant.hasStarBase is True:
+        if quadrant.hasStarBase:
             obstacles.append(quadrant.starBase)
 
         otherEnemies: Enemies = self.__buildEligibleEnemyObstacles(shooter=shooter, enemies=quadrant.klingons)
@@ -282,7 +290,7 @@ class BaseTorpedoMediator(MissesMediator):
         Returns:  May return 'None' if the Enterprise killed him
         """
 
-        fndEnemy: Enemy = cast(Enemy, None)
+        fndEnemy: Enemy = cast(Enemy, None)     # noqa
         for enemy in enemies:
             # enemy: Enemy = cast(Enemy, enemy)
             if enemy.id == enemyId:

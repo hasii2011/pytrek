@@ -179,7 +179,7 @@ class TestGameEngine(ProjectTestBase):
         shipPosition: Coordinates = Coordinates(x=4, y=5)
         basePosition: Coordinates = Coordinates(x=5, y=5)
 
-        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+        adjacent: bool = self._gameEngine.isEnterpriseAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
 
         self.assertTrue(adjacent, 'We are directly north')
 
@@ -188,7 +188,7 @@ class TestGameEngine(ProjectTestBase):
         shipPosition: Coordinates = Coordinates(x=5, y=5)
         basePosition: Coordinates = Coordinates(x=6, y=5)
 
-        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+        adjacent: bool = self._gameEngine.isEnterpriseAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
 
         self.assertTrue(adjacent, 'We are directly south')
 
@@ -197,7 +197,7 @@ class TestGameEngine(ProjectTestBase):
         shipPosition: Coordinates = Coordinates(x=6, y=5)
         basePosition: Coordinates = Coordinates(x=5, y=5)
 
-        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+        adjacent: bool = self._gameEngine.isEnterpriseAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
 
         self.assertTrue(adjacent, 'We are directly east')
 
@@ -206,7 +206,7 @@ class TestGameEngine(ProjectTestBase):
         shipPosition: Coordinates = Coordinates(x=4, y=5)
         basePosition: Coordinates = Coordinates(x=5, y=5)
 
-        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+        adjacent: bool = self._gameEngine.isEnterpriseAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
 
         self.assertTrue(adjacent, 'We are directly west')
 
@@ -215,7 +215,7 @@ class TestGameEngine(ProjectTestBase):
         shipPosition: Coordinates = Coordinates(x=4, y=6)
         basePosition: Coordinates = Coordinates(x=5, y=5)
 
-        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+        adjacent: bool = self._gameEngine.isEnterpriseAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
 
         self.assertTrue(adjacent, 'We are directly NorthEast')
 
@@ -224,7 +224,7 @@ class TestGameEngine(ProjectTestBase):
         shipPosition: Coordinates = Coordinates(x=4, y=4)
         basePosition: Coordinates = Coordinates(x=5, y=5)
 
-        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+        adjacent: bool = self._gameEngine.isEnterpriseAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
 
         self.assertTrue(adjacent, 'We are directly NorthWest')
 
@@ -233,7 +233,7 @@ class TestGameEngine(ProjectTestBase):
         shipPosition: Coordinates = Coordinates(x=6, y=6)
         basePosition: Coordinates = Coordinates(x=5, y=5)
 
-        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+        adjacent: bool = self._gameEngine.isEnterpriseAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
 
         self.assertTrue(adjacent, 'We are directly SouthEast')
 
@@ -242,7 +242,7 @@ class TestGameEngine(ProjectTestBase):
         shipPosition: Coordinates = Coordinates(x=6, y=4)
         basePosition: Coordinates = Coordinates(x=5, y=5)
 
-        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+        adjacent: bool = self._gameEngine.isEnterpriseAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
 
         self.assertTrue(adjacent, 'We are directly SouthWest')
 
@@ -251,7 +251,7 @@ class TestGameEngine(ProjectTestBase):
         shipPosition: Coordinates = Coordinates(x=7, y=7)
         basePosition: Coordinates = Coordinates(x=5, y=5)
 
-        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+        adjacent: bool = self._gameEngine.isEnterpriseAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
 
         self.assertFalse(adjacent, 'We are pretty close but not adjacent')
 
@@ -260,7 +260,7 @@ class TestGameEngine(ProjectTestBase):
         shipPosition: Coordinates = Coordinates(x=9, y=9)
         basePosition: Coordinates = Coordinates(x=5, y=5)
 
-        adjacent: bool = self._gameEngine.shipAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
+        adjacent: bool = self._gameEngine.isEnterpriseAdjacentToBase(shipPosition=shipPosition, basePosition=basePosition)
 
         self.assertFalse(adjacent, 'We are very far and not adjacent')
 

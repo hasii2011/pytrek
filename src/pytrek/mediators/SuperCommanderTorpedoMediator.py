@@ -34,6 +34,18 @@ from pytrek.LocateResources import LocateResources
 
 
 class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
+    """
+    Handles photon torpedo combat operations initiated by Klingon Super Commander
+    ships targeting the USS Enterprise.
+
+    This mediator:
+    - Preloads and grid-aligns Super Commander torpedo explosions
+    - Determines if Super Commanders in the current quadrant need to fire torpedoes.
+    - Manages the drawing, updating, and lifecycle of active Super Commander torpedoes,
+      torpedo follower trails, explosions, and miss indicators.
+    - Instantiates specific Super Commander torpedo, explosion, and miss game piece sprites.
+    - Plays audio cues for Super Commander torpedo firing attempts and execution.
+    """
 
     def __init__(self):
 
@@ -70,7 +82,7 @@ class SuperCommanderTorpedoMediator(BaseTorpedoMediator):
 
         self._handleTorpedoHits(quadrant, enemies=quadrant.superCommanders)
         self._handleTorpedoMisses(quadrant, enemies=quadrant.superCommanders)
-        self._handleMissRemoval(quadrant, cast(Misses, self._misses))
+        self._handleMissRemoval(quadrant, cast(Misses, self._misses))       # noqa
 
     def _getTorpedoToFire(self, enemy: Enemy, enterprise: Enterprise) -> BaseEnemyTorpedo:
         """

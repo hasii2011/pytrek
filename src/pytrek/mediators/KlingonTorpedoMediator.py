@@ -36,6 +36,20 @@ from pytrek.settings.TorpedoSpeeds import TorpedoSpeeds
 
 
 class KlingonTorpedoMediator(BaseTorpedoMediator):
+    """
+    This class handles the Klingon photon torpedo combat operations initiated by Klingon
+    ships targeting the USS Enterprise.
+
+    This mediator:
+    - Preloads and caches colored Klingon torpedo explosions.
+    - It determines if Klingons in the current quadrant need to fire torpedoes.
+    - It manages the drawing, updating, and lifecycle of active
+        * Klingon torpedoes
+        * Torpedo follower trails
+        * Explosions, and
+        * Miss indicators
+    - It plays audio cues for Klingon torpedo firing attempts and execution.
+    """
 
     def __init__(self):
 
@@ -65,7 +79,7 @@ class KlingonTorpedoMediator(BaseTorpedoMediator):
 
         self._handleTorpedoHits(quadrant, enemies=quadrant.klingons)
         self._handleTorpedoMisses(quadrant, enemies=quadrant.klingons)
-        self._handleMissRemoval(quadrant, cast(Misses, self._misses))
+        self._handleMissRemoval(quadrant, cast(Misses, self._misses))   # noqa
 
     def _playCannotFireSound(self):
         """

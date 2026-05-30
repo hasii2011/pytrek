@@ -387,7 +387,7 @@ class Intelligence(metaclass=SingletonV3):
         return tractorBeamComputation
 
     # noinspection SpellCheckingInspection
-    def determineIfWarpEngineAreDamaged(self, warpFactor: float, distance: float) -> bool:
+    def areWarpEngineAreDamaged(self, warpFactor: float, distance: float) -> bool:
         """
         double prob = dist*(6.0-warpfac)*(6.0-warpfac)/66.666666666;
 

@@ -23,7 +23,7 @@ class Coordinates:
         Returns:    The min/max values should match what is in Constants
         """
         ans: bool = False
-        # if self.x >= 0 and self.x <= 9 and self.y >=0 and self.y <= 9:
+
         if MINIMUM_COORDINATE <= self.x <= MAXIMUM_COORDINATE and MINIMUM_COORDINATE <= self.y <= MAXIMUM_COORDINATE:
             ans = True
 
@@ -91,7 +91,7 @@ class Coordinates:
         y: int = int(valueList[1])
 
         coordinates: Coordinates = Coordinates(x=x, y=y)
-        if coordinates.valid() is False:
+        if not coordinates.valid():
             coordinates = Coordinates(x=0, y=0)
 
         return coordinates

@@ -28,7 +28,19 @@ from pytrek.settings.GameSettings import GameSettings
 
 class GalaxyMediator(metaclass=SingletonV3):
     """
-    This class aids in updating the Galaxy model and the game state
+    This class updates the Galaxy model and the game state
+
+    it MMediates warp travel operations, coordinating changes between the Galaxy
+    model and the GameState.
+
+    This mediator:
+
+    - Facilitates warp transitions of the USS Enterprise between different quadrants.
+    - Calculates galactic travel distances and corresponding engine energy consumption.
+    - Monitors high-warp speed risks and handles warp engine damage incidents,
+      consequently reducing maximum allowable warp factor and alerting the crew.
+    - Updates sector occupancy states when departing and entering quadrants.
+
     """
 
     def __init__(self):
@@ -61,7 +73,9 @@ class GalaxyMediator(metaclass=SingletonV3):
             #
             # See if we damaged our engines
             #
-            if self._intelligence.determineIfWarpEngineAreDamaged(warpFactor=warpFactor, distance=travelDistance) is True:
+            # noinspection PySimplifyBooleanCheck
+
+            if self._intelligence.areWarpEngineAreDamaged(warpFactor=warpFactor, distance=travelDistance) is True:
                 self._damageTheEngines()
                 damagedTravelDistance:  float       = self._intelligence.randomFloat() * travelDistance
                 direction:              float       = self._computer.computeGameTravelDirection(startCoordinates=currentCoordinates, endCoordinates=destinationCoordinates)
@@ -86,7 +100,7 @@ class GalaxyMediator(metaclass=SingletonV3):
         oldSector:         Sector      = currentQuadrant.getSector(sectorCoordinates=sectorCoordinates)
 
         oldSector.type   = SectorType.EMPTY
-        oldSector.sprite = cast(GamePiece, None)
+        oldSector.sprite = cast(GamePiece, None)    # noqa
         #
         # Set up new quadrant
         #
@@ -118,6 +132,6 @@ class GalaxyMediator(metaclass=SingletonV3):
 
         self._messageConsoleProxy.displayMessage(f'Engineering to bridge - -')
         self._messageConsoleProxy.displayMessage(f'  Scott here.  The warp engines were damaged.')
-        self._messageConsoleProxy.displayMessage(f'  We`ll have to reduce speed to warp {MAXIMUM_DAMAGED_WARP_FACTOR}.')
+        self._messageConsoleProxy.displayMessage(f'  We will have to reduce speed to warp {MAXIMUM_DAMAGED_WARP_FACTOR}.')
         self._gameState.warpFactor = MAXIMUM_DAMAGED_WARP_FACTOR
 

@@ -35,10 +35,17 @@ Misses               = List[BaseMiss]
 
 
 class MissesMediator(BaseMediator):
+    """
+    Has the common stuff to handle torpedo misses
+
+    This class coordinates how torpedo misses (duds) are positioned, displayed,
+    and eventually cleaned up in the game interface. It
+      * tracks misses from both enemy and player game pieces,
+      * handles stardate-based expiration timers for miss indicators,
+      * updates sector states on the quadrant map.
 
     """
-    Has common stuff to handle torpedo misses
-    """
+
     def __init__(self):
 
         self._missesMediatorLogger: Logger = getLogger(__name__)
@@ -58,7 +65,7 @@ class MissesMediator(BaseMediator):
         torpedoDuds: List[BaseEnemyTorpedo] = []
         for smoothMotion in torpedoes:
             torpedo: KlingonTorpedo = cast(KlingonTorpedo, smoothMotion)
-            if torpedo.inMotion is False:
+            if not torpedo.inMotion:
                 torpedoDuds.append(torpedo)
         return torpedoDuds
 
@@ -68,7 +75,7 @@ class MissesMediator(BaseMediator):
         displayInterval: int   = self._gameSettings.basicMissDisplayInterval
 
         for miss in misses:
-            dud: BaseMiss = cast(BaseMiss, miss)
+            dud: BaseMiss = miss
             deltaTime: float = currentTime - dud.placedTime
             if deltaTime >= displayInterval:
                 gameCoordinates: Coordinates = dud.gameCoordinates
