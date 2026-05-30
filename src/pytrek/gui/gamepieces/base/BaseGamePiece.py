@@ -19,7 +19,7 @@ class BaseGamePiece(Sprite):
         texture: Texture = load_texture(fqFileName)
         super().__init__(texture, scale=scale)
 
-        self._gameCoordinates: Coordinates = cast(Coordinates, None)
+        self._gameCoordinates: Coordinates = cast(Coordinates, None)    # noqa
 
     @property
     def gameCoordinates(self) -> Coordinates:

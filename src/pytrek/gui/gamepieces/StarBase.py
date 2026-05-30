@@ -20,7 +20,7 @@ class StarBase(BaseGamePiece):
 
         self.logger: Logger = getLogger(__name__)
 
-        super().__init__(filename=StarBase.FILENAME, scale=0.25)
+        super().__init__(filename=StarBase.FILENAME, scale=0.05)
 
         # Compute these once since StarBase's don't move
         self.gameCoordinates     = sectorCoordinates
