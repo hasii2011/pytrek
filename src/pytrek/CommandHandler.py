@@ -37,7 +37,7 @@ from pytrek.gui.HelpView import HelpView
 from pytrek.GameState import GameState
 
 if TYPE_CHECKING:
-    from pytrek.PyTrekV2 import PyTrekV2
+    from pytrek.PyTrek import PyTrekV2
 
 
 class CommandHandler:

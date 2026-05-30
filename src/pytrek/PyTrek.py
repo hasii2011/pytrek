@@ -59,7 +59,7 @@ from pytrek.model.Quadrant import Quadrant
 
 from pytrek.settings.GameSettings import GameSettings
 
-SCREEN_TITLE:  str = "PyTrekV2"
+SCREEN_TITLE:  str = "PyTrek"
 
 
 class PyTrekV2(View):
@@ -73,31 +73,30 @@ class PyTrekV2(View):
 
         self._sectionManager: SectionManager = SectionManager(self)
 
-        self.background:  Texture    = cast(Texture, None)
-        self._enterprise: Enterprise = cast(Enterprise, None)
+        self.background:  Texture    = cast(Texture, None)      # noqa
+        self._enterprise: Enterprise = cast(Enterprise, None)   # noqa
 
-        self._intelligence: Intelligence             = cast(Intelligence, None)
-        self._computer:     Computer                 = cast(Computer, None)
-        self._gameEngine:   GameEngine               = cast(GameEngine, None)
-        self._gameState:    GameState                = cast(GameState, None)
-        self._gameSettings: GameSettings             = cast(GameSettings, None)
-        self._galaxy:       Galaxy                   = cast(Galaxy, None)
-        self._quadrant:     Quadrant                 = cast(Quadrant, None)
+        self._intelligence: Intelligence             = cast(Intelligence, None)     # noqa
+        self._computer:     Computer                 = cast(Computer, None)         # noqa
+        self._gameEngine:   GameEngine               = cast(GameEngine, None)       # noqa
+        self._gameState:    GameState                = cast(GameState, None)        # noqa
+        self._gameSettings: GameSettings             = cast(GameSettings, None)     # noqa
+        self._galaxy:       Galaxy                   = cast(Galaxy, None)           # noqa
+        self._quadrant:     Quadrant                 = cast(Quadrant, None)         # noqa
 
-        self._quadrantMediator:   QuadrantMediator   = cast(QuadrantMediator, None)
-        self._galaxyMediator:     GalaxyMediator     = cast(GalaxyMediator, None)
+        self._quadrantMediator:   QuadrantMediator   = cast(QuadrantMediator, None)     # noqa
+        self._galaxyMediator:     GalaxyMediator     = cast(GalaxyMediator, None)       # noqa
 
-        self.messageConsoleSection:      MessageConsoleSection      = cast(MessageConsoleSection, None)
-        self._messageConsoleProxy:       MessageConsoleProxy        = cast(MessageConsoleProxy, None)
-        self._statusConsole:             StatusConsoleSection       = cast(StatusConsoleSection, None)
-        self._quadrantSection:           QuadrantSection            = cast(QuadrantSection, None)
-        # self._commandInputSection:       VatoLocoTextSection        = cast(VatoLocoTextSection, None)
-        self._commandInputSection:       CommandInputSection        = cast(CommandInputSection, None)
+        self.messageConsoleSection:      MessageConsoleSection      = cast(MessageConsoleSection, None)     # noqa
+        self._messageConsoleProxy:       MessageConsoleProxy        = cast(MessageConsoleProxy, None)       # noqa
+        self._statusConsole:             StatusConsoleSection       = cast(StatusConsoleSection, None)      # noqa
+        self._quadrantSection:           QuadrantSection            = cast(QuadrantSection, None)           # noqa
+        self._commandInputSection:       CommandInputSection        = cast(CommandInputSection, None)       # noqa
+        self.galaxySection:              GalaxySection              = cast(GalaxySection, None)             # noqa
 
-        self.galaxySection:              GalaxySection              = cast(GalaxySection, None)
-        self.longRangeSensorScanSection: LongRangeSensorScanSection = cast(LongRangeSensorScanSection, None)
+        self.longRangeSensorScanSection: LongRangeSensorScanSection = cast(LongRangeSensorScanSection, None)    # noqa
+        self._enterpriseMediator:        EnterpriseMediator         = cast(EnterpriseMediator, None)            # noqa
 
-        self._enterpriseMediator: EnterpriseMediator = cast(EnterpriseMediator, None)
         self._setupGame()
         self._setupUI()
         self._enterpriseMediator.warpEffectSection = self.warpEffectSection
@@ -151,7 +150,7 @@ class PyTrekV2(View):
         Message console has to be setup first, because the enterprise mediator is a MissesMediator
         """
         #
-        # Message console is public because sub sections use it to send messages
+        # Message console is public because subsections use it to send messages
         #
         self.messageConsoleSection = MessageConsoleSection(left=0, bottom=COMMAND_SECTION_HEIGHT, height=CONSOLE_SECTION_HEIGHT, width=SCREEN_WIDTH, accept_keyboard_keys=False)
         # Create proxy and inject the console
