@@ -23,7 +23,7 @@ path.insert(0, str(HERE / "src"))
 # noinspection PyPep8
 from pytrek import __version__
 
-APP = ['src/pytrek/PyTrekV2.py']
+APP = ['src/pytrek/PyTrek.py']
 
 README = (HERE / "README.md").read_text()
 LICENSE = (HERE / 'LICENSE').read_text()
@@ -112,7 +112,7 @@ PY2APP_OPTIONS: Dict[str, Any] = {
     'plist': {
         'NSRequiresAquaSystemAppearance': 'False',
         'CFBundleGetInfoString': 'Plays Star Trek 1975',
-        'CFBundleIdentifier': 'umldiagrammer',
+        'CFBundleIdentifier': 'game',
         'CFBundleShortVersionString': __version__,
         'CFBundleDocumentTypes': [
             {
@@ -120,7 +120,7 @@ PY2APP_OPTIONS: Dict[str, Any] = {
                 'CFBundleTypeRole': 'Game'
             }
         ],
-        'LSMinimumSystemVersion': '12',
+        'LSMinimumSystemVersion': '26.5',
         'LSEnvironment': {
             'APP_MODE': 'True',
             'PYTHONOPTIMIZE': '1',
