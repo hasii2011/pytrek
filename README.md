@@ -128,7 +128,6 @@ Written by <a href="mailto:humberto.a.sanchez.ii@gmail.com?subject=Hello Humbert
 
 ---
 
-## Note
 For all kind of problems, requests, enhancements, bug reports, etc., please drop me an e-mail.
 
 
