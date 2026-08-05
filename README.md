@@ -124,3 +124,12 @@ Space is filled with dynamic hazards and resources:
 # Notes
 Written in Python 3 using the arcade library by [Humberto A. Sanchez II](https://www.linkedin.com/in/hasii/)
 
+Written by <a href="mailto:humberto.a.sanchez.ii@gmail.com?subject=Hello Humberto">Humberto A. Sanchez II</a>  (C) 2026
+
+---
+
+## Note
+For all kind of problems, requests, enhancements, bug reports, etc., please drop me an e-mail.
+
+
+[Copilot Statement](https://github.com/hasii2011/code-ally-basic/wiki/GitHub-Copilot).
